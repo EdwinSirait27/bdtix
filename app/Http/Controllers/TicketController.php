@@ -269,10 +269,36 @@ public function store(Request $request)
                 'ticket_id' => $ticket->id
             ]);
 
-            Http::timeout(15)->post('http://127.0.0.1:3000/send-message', [
-                'group_id' => '120363405189832865@g.us',
-                'text'     => "*New Ticket*\nQueue: {$ticket->queue_number}\nTitle: {$ticket->title}\n{$ticket->attachment_url}",
-            ]);
+            // Http::timeout(15)->post('http://127.0.0.1:3000/send-message', [
+            //     'group_id' => '120363405189832865@g.us',
+            //     'text'     => "*New Ticket*\nQueue: {$ticket->queue_number}\nTitle: {$ticket->title}\n{$ticket->attachment_url}",
+            // ]);
+            $formattedDate = $ticket->created_at
+    ->timezone('Asia/Makassar')
+    ->format('d-m-Y H:i');
+
+$userName = auth()->user()->employee->employee_name
+    ?? auth()->user()->employee->store->name
+    ?? auth()->user()->username;
+
+$message =
+    "*New Ticket*\n" .
+    "Queue: {$ticket->queue_number}\n" .
+    "Date: {$formattedDate}\n" .
+    "Title: {$ticket->title}\n" .
+    "Category: {$ticket->category}\n" .
+    "Description: {$ticket->description}\n" .
+    "User: {$userName}";
+
+if (!empty($ticket->attachment_url)) {
+    $message .= "\nAttachments:\n{$ticket->attachment_url}";
+}
+
+Http::timeout(15)->post('http://127.0.0.1:3000/send-message', [
+    'group_id' => '120363405189832865@g.us',
+    'text'     => $message,
+]);
+
 
             Log::info('WA_SEND_SUCCESS');
         } catch (\Throwable $e) {
