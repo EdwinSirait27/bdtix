@@ -23,20 +23,22 @@
             </div>
         </div>
         {{-- Form --}}
-        <form method="POST" action="#" enctype="multipart/form-data" class="space-y-5">
+        {{-- <form method="POST" action="#" enctype="multipart/form-data" class="space-y-5"> --}}
             {{-- <form method="POST" action="{{ route('tickets.store') }}" enctype="multipart/form-data" class="space-y-5"> --}}
-            @csrf
+            {{-- @csrf --}}
             {{-- Ticket Title --}}
+            <form action="{{ route('updateusers', request()->route('hash')) }}" method="POST">
+    @csrf
             <div>
                 <label for="title" class="block text-sm font-semibold text-slate-300 mb-2 flex items-center space-x-2">
                     <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" />
                     </svg>
-                    <span>Edit for Users {{$}}</span>
+                    <span>Edit for Users {{$user->employee->employee_name}}</span>
                     <span class="text-red-400">*</span>
                 </label>
-                <input type="text" id="title" name="title" required
+                {{-- <input type="text" id="title" name="title" required
                     placeholder="Example: Laptop cannot connect to WiFi"
                     class="w-full px-4 py-3.5 bg-slate-800 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
                     value="{{ old('title') }}">
@@ -49,36 +51,38 @@
                         </svg>
                         <span>{{ $message }}</span>
                     </p>
-                @enderror
+                @enderror --}}
             </div>
             {{-- Category --}}
             <div>
-                <label for="category" class="block text-sm font-semibold text-slate-300 mb-2 flex items-center space-x-2">
+                <label for="roles" class="block text-sm font-semibold text-slate-300 mb-2 flex items-center space-x-2">
                     <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
                     </svg>
-                    <span>Categories</span>
+                    <span>Roles</span>
                     <span class="text-red-400">*</span>
                 </label>
                 <div class="relative">
-                    <select id="category" name="category" required
-                        class="w-full px-4 py-3.5 bg-slate-800 border border-slate-700 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 appearance-none cursor-pointer">
-                        <option value="" class="bg-slate-800">Choose Categories...</option>
-                        <option value="hardware" class="bg-slate-800">🖥️ Hardware</option>
-                        <option value="software" class="bg-slate-800">💻 Software</option>
-                        <option value="network" class="bg-slate-800">🌐 Network</option>
-                        <option value="account" class="bg-slate-800">👤 Account & Access</option>
-                        <option value="email" class="bg-slate-800">📧 Email</option>
-                        <option value="other" class="bg-slate-800">📦 Others</option>
-                    </select>
+                   @foreach ($roles as $role)
+            <div class="form-check">
+                <input class="form-check-input"
+                       type="checkbox"
+                       name="roles[]"
+                       value="{{ $role->name }}"
+                       {{ in_array($role->name, $userRoles) ? 'checked' : '' }}>
+                <label class="form-check-label">
+                    {{ ucfirst($role->name) }}
+                </label>
+            </div>
+        @endforeach
                     <div class="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none">
                         <svg class="w-5 h-5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                         </svg>
                     </div>
                 </div>
-                @error('category')
+                @error('roles')
                     <p class="mt-2 text-sm text-red-400 flex items-center space-x-1">
                         <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                             <path fill-rule="evenodd"
@@ -90,7 +94,7 @@
                 @enderror
             </div>
             {{-- Priority --}}
-            <div>
+            {{-- <div>
                 <label class="block text-sm font-semibold text-slate-300 mb-3 flex items-center space-x-2">
                     <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -135,9 +139,9 @@
                         <span>{{ $message }}</span>
                     </p>
                 @enderror
-            </div>
+            </div> --}}
             {{-- Description --}}
-            <div>
+            {{-- <div>
                 <label for="description"
                     class="block text-sm font-semibold text-slate-300 mb-2 flex items-center space-x-2">
                     <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -167,7 +171,7 @@
                         <span>{{ $message }}</span>
                     </p>
                 @enderror
-            </div>
+            </div> --}}
             {{-- File Attachment --}}
             {{-- <div>
                 <label for="attachment"
@@ -207,7 +211,7 @@
                     </p>
                 @enderror
             </div> --}}
-            <div>
+            {{-- <div>
                 <label class="block text-sm font-semibold text-slate-300 mb-2 flex items-center space-x-2">
                     <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -238,7 +242,7 @@
                 @error('attachments')
                     <p class="mt-2 text-sm text-red-400">{{ $message }}</p>
                 @enderror
-            </div>
+            </div> --}}
             {{-- Action Buttons --}}
             <div class="flex space-x-3 pt-4">
                 <a href="{{ route('dashboard') }}"
@@ -253,208 +257,10 @@
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                     </svg>
-                    <span>Send Ticket</span>
+                    <span>Update</span>
                 </button>
             </div>
         </form>
     </div>
-    <script>
-        // Character counter for description
-        const description = document.getElementById('description');
-        const charCount = document.getElementById('charCount');
-        description.addEventListener('input', function() {
-            charCount.textContent = this.value.length;
-        });
-        // File name display
-        // function updateFileName(input) {
-        //     const fileName = document.getElementById('fileName');
-        //     if (input.files && input.files[0]) {
-        //         fileName.textContent = input.files[0].name;
-        //     } else {
-        //         fileName.textContent = 'Klik untuk upload file';
-        //     }
-        // }
-        //         let attachmentCount = 0;
-        // const maxAttachment = 3;
-        // const minAttachment = 1;
-        // function addAttachment() {
-        //     if (attachmentCount >= maxAttachment) return;
-        //     attachmentCount++;
-        //     const id = "attachment_" + attachmentCount;
-        //     // HTML input sesuai desain kamu
-        //     const html = `
-    //         <div class="relative mb-3">
-    //             <input type="file" 
-    //                 id="${id}" 
-    //                 name="attachments[]" 
-    //                 accept="image/*,.pdf,.doc,.docx"
-    //                 class="hidden" 
-    //                 onchange="updateFileName('${id}')">
-    //             <label for="${id}"
-    //                 class="flex items-center justify-center w-full px-4 py-8 bg-slate-800 border-2 border-dashed border-slate-700 rounded-xl cursor-pointer hover:border-blue-500 hover:bg-slate-800/50 transition-all duration-200 group">
-    //                 <div class="text-center">
-    //                     <svg class="w-12 h-12 mx-auto mb-3 text-slate-600 group-hover:text-blue-500" 
-    //                         fill="none" stroke="currentColor" viewBox="0 0 24 24">
-    //                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-    //                             d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-    //                     </svg>
-    //                     <p id="fileName_${id}" 
-    //                         class="text-sm font-medium text-slate-400 group-hover:text-blue-400">
-    //                         Klik untuk upload file
-    //                     </p>
-    //                     <p class="text-xs text-slate-600 mt-1">
-    //                         PNG, JPG, PDF, DOC (Max. 5MB)
-    //                     </p>
-    //                 </div>
-    //             </label>
-    //         </div>
-    //     `;
-        //     document.getElementById("attachmentContainer").insertAdjacentHTML("beforeend", html);
-        //     // Disable tombol jika sudah 3
-        //     if (attachmentCount >= maxAttachment) {
-        //         document.getElementById("btnAddAttachment").disabled = true;
-        //         document.getElementById("btnAddAttachment").classList.add("opacity-50", "cursor-not-allowed");
-
-        //         // Tampilkan pesan limit
-        //         document.getElementById("limitMessage").classList.remove("hidden");
-        //     }
-        // }
-        // function updateFileName(id) {
-        //     const input = document.getElementById(id);
-        //     const label = document.getElementById("fileName_" + id);
-        //     label.textContent = input.files.length > 0
-        //         ? input.files[0].name
-        //         : "Klik untuk upload file";
-        // }
-        let attachmentCount = 0;
-        const maxAttachment = 3;
-        const minAttachment = 1;
-        // Jalankan saat halaman selesai load
-        document.addEventListener("DOMContentLoaded", function() {
-            initAttachment();
-        });
-        // Tambahkan 1 attachment default
-        function initAttachment() {
-            if (attachmentCount < minAttachment) {
-                addAttachment();
-            }
-        }
-        function addAttachment() {
-            if (attachmentCount >= maxAttachment) return;
-
-            attachmentCount++;
-
-            const id = "attachment_" + attachmentCount;
-
-            // HTML input sesuai desain kamu
-            const html = `
-        <div class="relative mb-3" id="wrap_${id}">
-            <input type="file" 
-                id="${id}" 
-                name="attachments[]" 
-                accept="image/*,.pdf,.doc,.docx"
-                class="hidden" 
-                onchange="updateFileName('${id}')">
-
-            <label for="${id}"
-                class="flex items-center justify-center w-full px-4 py-8 bg-slate-800 border-2 border-dashed border-slate-700 rounded-xl cursor-pointer hover:border-blue-500 hover:bg-slate-800/50 transition-all duration-200 group">
-                <div class="text-center">
-                    <svg class="w-12 h-12 mx-auto mb-3 text-slate-600 group-hover:text-blue-500" 
-                        fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-                    </svg>
-                    <p id="fileName_${id}" 
-                        class="text-sm font-medium text-slate-400 group-hover:text-blue-400">
-                        Click to upload file
-                    </p>
-
-                    <p class="text-xs text-slate-600 mt-1">
-                        PNG, JPG, PDF, DOC (Max. 5MB)
-                    </p>
-                </div>
-            </label>
-        </div>
-    `;
-            document.getElementById("attachmentContainer").insertAdjacentHTML("beforeend", html);
-            // Disable tombol jika mencapai batas maksimum
-            if (attachmentCount >= maxAttachment) {
-                document.getElementById("btnAddAttachment").disabled = true;
-                document.getElementById("btnAddAttachment").classList.add("opacity-50", "cursor-not-allowed");
-                // Tampilkan pesan limit
-                document.getElementById("limitMessage").classList.remove("hidden");
-            }
-        }
-        // function eraseAttachment() {
-        //     if (attachmentCount >= maxAttachment) return;
-        //     attachmentCount++;
-        //     const id = "attachment_" + attachmentCount;
-        //     // HTML input sesuai desain kamu
-        //     const html = `
-    //         <div class="relative mb-3" id="wrap_${id}">
-    //             <input type="file" 
-    //                 id="${id}" 
-    //                 name="attachments[]" 
-    //                 accept="image/*,.pdf,.doc,.docx"
-    //                 class="hidden" 
-    //                 onchange="updateFileName('${id}')">
-
-    //             <label for="${id}"
-    //                 class="flex items-center justify-center w-full px-4 py-8 bg-slate-800 border-2 border-dashed border-slate-700 rounded-xl cursor-pointer hover:border-blue-500 hover:bg-slate-800/50 transition-all duration-200 group">
-    //                 <div class="text-center">
-    //                     <svg class="w-12 h-12 mx-auto mb-3 text-slate-600 group-hover:text-blue-500" 
-    //                         fill="none" stroke="currentColor" viewBox="0 0 24 24">
-    //                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-    //                             d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-    //                     </svg>
-
-    //                     <p id="fileName_${id}" 
-    //                         class="text-sm font-medium text-slate-400 group-hover:text-blue-400">
-    //                         Klik untuk upload file
-    //                     </p>
-
-    //                     <p class="text-xs text-slate-600 mt-1">
-    //                         PNG, JPG, PDF, DOC (Max. 5MB)
-    //                     </p>
-    //                 </div>
-    //             </label>
-    //         </div>
-    //     `;
-        //     document.getElementById("attachmentContainer").insertAdjacentHTML("beforeend", html);
-
-        //     // Disable tombol jika mencapai batas maksimum
-        //     if (attachmentCount >= maxAttachment) {
-        //         document.getElementById("btnAddAttachment").disabled = true;
-        //         document.getElementById("btnAddAttachment").classList.add("opacity-50", "cursor-not-allowed");
-        //         // Tampilkan pesan limit
-        //         document.getElementById("limitMessage").classList.remove("hidden");
-        //     }
-        // }
-        function eraseAttachment() {
-            // Tidak boleh hapus kalau sudah minimum 1
-            if (attachmentCount <= minAttachment) return;
-            // Hapus attachment terakhir
-            const lastId = "wrap_attachment_" + attachmentCount;
-            const lastElement = document.getElementById(lastId);
-            if (lastElement) {
-                lastElement.remove();
-                attachmentCount--;
-            }
-            // Re-enable tombol Add Attachment jika sebelumnya disabled
-            if (attachmentCount < maxAttachment) {
-                const btnAdd = document.getElementById("btnAddAttachment");
-                btnAdd.disabled = false;
-                btnAdd.classList.remove("opacity-50", "cursor-not-allowed");
-                // Sembunyikan pesan limit
-                document.getElementById("limitMessage").classList.add("hidden");
-            }
-        }
-        function updateFileName(id) {
-            const input = document.getElementById(id);
-            const label = document.getElementById("fileName_" + id);
-            label.textContent = input.files.length > 0 ?
-                input.files[0].name :
-                "Click to upload file";
-        }
-    </script>
+  
 @endsection

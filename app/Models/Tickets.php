@@ -6,8 +6,7 @@ class Tickets extends Model
 {
     protected $table = 'ticket_tables';
     public $incrementing = false;
-        protected $connection = 'mysql';
-
+    protected $connection = 'mysql';
     protected $keyType = 'string';
     protected $fillable = [
         'id',
@@ -18,8 +17,13 @@ class Tickets extends Model
         'category',
         'description',
         'status',
-         'attachment_folder',
-    'attachment_url',
+        'attachment_folder',
+        'attachment_url',
+        'executor',
+        'priority',
+        'notes_executor',
+        'finished',
+        'estimation',
     ];
     protected static function booted()
     {
@@ -31,9 +35,16 @@ class Tickets extends Model
     {
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
-
+    public function executor()
+    {
+        return $this->belongsTo(User::class, 'executor', 'id');
+    }
+    // public function attachments()
+    // {
+    //     return $this->hasMany(Ticketattachments::class);
+    // }
     public function attachments()
     {
-        return $this->hasMany(Ticketattachments::class);
+        return $this->hasMany(Ticketattachments::class, 'ticket_id', 'id');
     }
 }

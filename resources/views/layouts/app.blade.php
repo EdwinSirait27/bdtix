@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="id">
-
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -9,22 +8,14 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.8/css/dataTables.bootstrap5.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.bootstrap5.min.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet">
-
-    {{-- Tailwind --}}
     @vite('resources/css/app.css')
-    {{-- PWA --}}
     <meta name="theme-color" content="#0F172A">
-    {{-- CSRF --}}
     <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
-
 <body class="bg-slate-100 dark:bg-slate-950 text-slate-800 dark:text-gray-100 transition-colors duration-300">
-
-    {{-- DESKTOP SIDEBAR (Hidden on mobile) --}}
     <aside class="hidden lg:fixed lg:inset-y-0 lg:left-0 lg:z-50 lg:flex lg:w-72 lg:flex-col">
         <div
             class="flex grow flex-col gap-y-5 overflow-y-auto bg-dark dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 px-6 pb-4">
-            {{-- Logo & Company --}}
             <div class="flex h-24 shrink-0 items-center border-b border-slate-200 dark:border-slate-800">
                 <img src="https://cloud.mjm-bali.co.id/index.php/s/7ixWakyMn8JCe9F/download"
                     class="h-12 w-12 select-none pointer-events-none" draggable="false" alt="icon">
@@ -33,8 +24,6 @@
                     <p class="text-xs text-slate-500 dark:text-slate-400 font-medium">Ticketing System</p>
                 </div>
             </div>
-
-            {{-- Navigation Menu --}}
             <nav class="flex flex-1 flex-col">
                 <ul role="list" class="flex flex-1 flex-col gap-y-7">
                     <li>
@@ -55,7 +44,6 @@
                             </li>
                             <li>
                                 <a href="{{ route('alltickets') }}"
-                                    {{-- class="group flex gap-x-3 rounded-lg p-3 text-sm leading-6 font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all"> --}}
                                     class="group flex gap-x-3 rounded-lg p-3 text-sm leading-6 font-semibold transition-all
                                    {{ request()->routeIs('alltickets')
                                        ? 'bg-gradient-to-r from-blue-500 to-cyan-500 text-white shadow-md'
@@ -67,13 +55,14 @@
                                         </path>
                                     </svg>
                                     All Tickets
-                                    {{-- <span
-                                        class="ml-auto inline-flex items-center rounded-full bg-blue-100 dark:bg-blue-900 px-2.5 py-0.5 text-xs font-bold text-blue-600 dark:text-blue-300">24</span> --}}
                                 </a>
                             </li>
                             <li>
-                                <a href="#"
-                                    class="group flex gap-x-3 rounded-lg p-3 text-sm leading-6 font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all">
+                                <a href="{{ route('mytickets') }}"
+                                    class="group flex gap-x-3 rounded-lg p-3 text-sm leading-6 font-semibold transition-all
+                                   {{ request()->routeIs('mytickets')
+                                       ? 'bg-gradient-to-r from-blue-500 to-cyan-500 text-white shadow-md'
+                                       : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800' }}">
                                     <svg class="h-6 w-6 shrink-0" fill="none" stroke="currentColor"
                                         viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -82,23 +71,9 @@
                                     </svg>
                                     My Tickets
                                     <span
-                                        class="ml-auto inline-flex items-center rounded-full bg-blue-100 dark:bg-blue-900 px-2.5 py-0.5 text-xs font-bold text-blue-600 dark:text-blue-300">24</span>
+                                        class="ml-auto inline-flex items-center rounded-full bg-blue-100 dark:bg-blue-900 px-2.5 py-0.5 text-xs font-bold text-blue-600 dark:text-blue-300">{{ $openTicketCount ?? 0 }}</span>
                                 </a>
                             </li>
-                            {{-- <li>
-                                <a href=""
-                                    class="group flex gap-x-3 rounded-lg p-3 text-sm leading-6 font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all">
-                                    <svg class="h-6 w-6 shrink-0" fill="none" stroke="currentColor"
-                                        viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z">
-                                        </path>
-                                    </svg>
-                                    Users
-                                    <span
-                                        class="ml-auto inline-flex items-center rounded-full bg-blue-100 dark:bg-blue-900 px-2.5 py-0.5 text-xs font-bold text-blue-600 dark:text-blue-300">24</span>
-                                </a>
-                            </li> --}}
                             <li>
                                 <a href="{{ route('users') }}"
                                     class="group flex gap-x-3 rounded-lg p-3 text-sm leading-6 font-semibold transition-all
@@ -156,7 +131,6 @@
                         <div class="text-xs font-semibold leading-6 text-slate-400 uppercase tracking-wider mb-2">
                             Settings</div>
                         <ul role="list" class="-mx-2 space-y-1">
-
                             <li>
                                 <a href="{{ route('profile') }}"
                                     class="group flex gap-x-3 rounded-lg p-3 text-sm leading-6 font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all">
@@ -177,7 +151,6 @@
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                             d="M13 16h-1v-4h-1m1-4h.01M12 2a10 10 0 100 20 10 10 0 000-20z" />
                                     </svg>
-
                                     About
                                 </a>
                             </li>
@@ -187,10 +160,6 @@
                         <li class="mt-auto">
                             <div class="flex items-center justify-between p-3 bg-slate-50 dark:bg-slate-800 rounded-lg">
                                 <div class="flex items-center gap-x-3 min-w-0">
-                                    {{-- <div
-                                    class="h-10 w-10 shrink-0 rounded-full bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center text-white font-bold text-sm">
-                                    JD
-                                </div> --}}
                                     <div class="min-w-0 flex-1">
                                         <p class="text-sm font-semibold text-slate-900 dark:text-white truncate">
                                             {{ Auth::user()->employee->employee_name ?? ' +62 812-3456-9999' }}
@@ -198,8 +167,7 @@
                                         <p class="text-xs text-slate-500 dark:text-slate-400 truncate">
                                             {{ Auth::user()->employee->email ?? ' +62 812-3456-9999' }}</p>
                                     </div>
-                                </div>
-
+                               </div>
                             </div>
                         </li>
                     @endauth
@@ -207,16 +175,12 @@
             </nav>
         </div>
     </aside>
-    {{-- MAIN CONTENT AREA --}}
     <div class="lg:pl-72">
-        {{-- APP CONTAINER --}}
         <div
             class="max-w-md lg:max-w-none mx-auto min-h-screen bg-dark dark:bg-slate-900 lg:bg-slate-100 lg:dark:bg-slate-950 shadow-2xl lg:shadow-none transition-colors duration-300">
-            {{-- HEADER --}}
             <header
                 class="sticky top-0 z-40 bg-dark dark:bg-slate-900 lg:backdrop-blur-sm lg:bg-dark/80 lg:dark:bg-slate-900/80 border-b border-slate-200 dark:border-slate-800 transition-colors duration-300">
                 <div class="px-4 sm:px-6 lg:px-8 py-4 lg:py-6">
-                    {{-- Mobile: Logo & Company Name --}}
                     <div class="flex items-center justify-between mb-4 lg:hidden">
                         <div class="flex items-center space-x-3">
                             <img src="https://cloud.mjm-bali.co.id/index.php/s/7ixWakyMn8JCe9F/download"
@@ -227,8 +191,6 @@
                             </div>
                         </div>
                     </div>
-
-                    {{-- Page Title & Actions --}}
                     <div class="flex items-center justify-between">
                         <div class="flex items-center space-x-3 lg:space-x-4">
                             <div
@@ -245,45 +207,33 @@
                                 </p>
                             </div>
                         </div>
-
                         @auth
                             <div class="hidden lg:flex items-center space-x-3">
                                 <form action="{{ route('logout.post') }}" method="POST">
                                     @csrf
                                     <button type="submit"
                                         class="inline-flex items-center px-4 py-2.5 bg-gradient-to-r from-red-500 to-rose-500 text-white rounded-xl font-semibold shadow-lg shadow-red-500/30 hover:shadow-xl hover:shadow-red-500/40 transition-all text-sm">
-
                                         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor"
                                             viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                 d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1m0-10V5" />
                                         </svg>
-
                                         Logout
                                     </button>
                                 </form>
                             </div>
                         @endauth
-
-
                     </div>
                 </div>
             </header>
-
-            {{-- MAIN CONTENT --}}
             <main class="pb-24 lg:pb-8 pt-6 lg:pt-8 px-4 sm:px-6 lg:px-8">
                 @yield('content')
             </main>
-
-            {{-- BOTTOM NAV (Mobile Only) --}}
             <div class="lg:hidden">
                 @include('components.bottom-navguest')
-                {{-- @include('components.bottom-nav') --}}
             </div>
         </div>
     </div>
-
-    {{-- Background Decoration (Desktop Only) --}}
     <div class="hidden lg:block fixed inset-0 -z-10 overflow-hidden pointer-events-none">
         <div
             class="absolute top-0 right-0 w-[600px] h-[600px] bg-blue-300/10 dark:bg-blue-900/10 rounded-full filter blur-3xl transition-colors">
@@ -292,11 +242,17 @@
             class="absolute bottom-0 left-72 w-[600px] h-[600px] bg-cyan-300/10 dark:bg-cyan-900/10 rounded-full filter blur-3xl transition-colors">
         </div>
     </div>
-
-    {{-- THEME SCRIPT --}}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-
-    {{-- <script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.8/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.8/js/dataTables.bootstrap5.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.5.0/js/responsive.bootstrap5.min.js"></script>
+    @stack('scripts')
+</body>
+</html>
+ {{-- <script>
         // Apply saved theme on load
         if (localStorage.theme === 'dark' ||
             (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
@@ -316,17 +272,6 @@
             }
         }
     </script> --}}
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-    <script src="https://cdn.datatables.net/1.13.8/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.13.8/js/dataTables.bootstrap5.min.js"></script>
-    <script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
-    <script src="https://cdn.datatables.net/responsive/2.5.0/js/responsive.bootstrap5.min.js"></script>
-    @stack('scripts')
-
-</body>
-
-</html>
 {{-- <!DOCTYPE html>
 <html lang="id">
 <head>
