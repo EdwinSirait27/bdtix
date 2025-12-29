@@ -237,7 +237,7 @@
             d="M3 9.75L12 4l9 5.75V20a1 1 0 01-1 1h-5.25v-6h-5.5v6H4a1 1 0 01-1-1V9.75z" />
     </svg>
 
-    <span>Dashboard</span>
+    <span>Home</span>
 </a>
 
 
@@ -292,7 +292,7 @@
                         d="M12 4v16m8-8H4" />
                 </svg>
             </div>
-            <span class="mt-2 text-slate-400">New Tickets</span>
+            <span class="mt-2 text-slate-400">New</span>
         </a>
         </a>
            <a href="{{ route('users') }}"
