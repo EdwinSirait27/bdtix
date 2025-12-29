@@ -218,6 +218,7 @@
             </svg>
             <span>Home</span>
         </a> --}}
+                    @auth
         
         <a href="{{ route('dashboard') }}"
    class="relative flex flex-col items-center justify-center flex-1 py-3
@@ -240,7 +241,6 @@
     <span>Home</span>
 </a>
 
-
         <!-- Your -->
                 <a href="{{ route('alltickets') }}"
             class="relative flex flex-col items-center justify-center flex-1 py-3
@@ -258,6 +258,8 @@
                 </svg>
             <span>All Tickets</span>
         </a>
+     
+
    <a href="{{ route('mytickets') }}"
 
                  class="relative flex flex-col items-center justify-center flex-1 py-3
@@ -338,6 +340,8 @@
             </svg>
             <span>Profile</span>
         </a>
+        @endauth
+
                <a href="{{ route('about') }}"
 
               class="relative flex flex-col items-center justify-center flex-1 py-3
