@@ -8,6 +8,9 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.8/css/dataTables.bootstrap5.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.bootstrap5.min.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet">
+    <script>
+      document.documentElement.classList.add('dark');
+    </script>
     @vite('resources/css/app.css')
     <meta name="theme-color" content="#0F172A">
     <meta name="csrf-token" content="{{ csrf_token() }}">
