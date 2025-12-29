@@ -166,9 +166,9 @@
                                 <thead class="bg-slate-900">
                                     <tr>
                                         <th class="text-center">Queue</th>
-                                        <th class="text-center hidden md:table-cell">Title</th>
-                                        <th class="text-center hidden md:table-cell">Categories</th>
-                                        <th class="text-center hidden md:table-cell">Status</th>
+                                        <th class="text-center">Title</th>
+                                        <th class="text-center">Categories</th>
+                                        <th class="text-center">Status</th>
                                         <th class="text-center">Action</th>
                                     </tr>
                                 </thead>
@@ -821,20 +821,17 @@
                     {
                         data: 'title',
                         name: 'title',
-                        width: '35%',
-                        className: 'hidden md:table-cell'
+                        width: '35%'
                     },
                     {
                         data: 'category',
                         name: 'category',
-                        width: '15%',
-                        className: 'hidden md:table-cell'
+                        width: '15%'
                     },
                     {
                         data: 'status',
                         name: 'status',
-                        width: '15%',
-                        className: 'hidden md:table-cell'
+                        width: '15%'
                     },
                     {
                         data: 'action',
