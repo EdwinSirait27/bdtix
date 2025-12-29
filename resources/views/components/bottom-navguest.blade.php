@@ -256,7 +256,7 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z" />
                 </svg>
-            <span>All Tickets</span>
+            <span>All-Tix</span>
         </a>
      
 
@@ -275,7 +275,7 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z" />
                 </svg>
-            <span>My Tickets</span>
+            <span>M-Tix</span>
             <a href="{{ route('openticket') }}"
              class="relative flex flex-col items-center justify-center flex-1 py-3
           {{ request()->routeIs('openticket') ? 'text-blue-400' : 'text-slate-400 hover:text-white' }}
