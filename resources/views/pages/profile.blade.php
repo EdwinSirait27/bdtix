@@ -49,16 +49,16 @@
         {{-- Stats Cards --}}
         <div class="grid grid-cols-3 gap-3">
             <div class="bg-slate-800/50 backdrop-blur-sm rounded-xl p-4 border border-slate-700">
-                <div class="text-2xl font-bold text-white">24</div>
+                <div class="text-2xl font-bold text-white">{{$allticket ?? 0}}</div>
                 <div class="text-xs text-slate-400 mt-1">Total Tickets</div>
             </div>
             <div class="bg-slate-800/50 backdrop-blur-sm rounded-xl p-4 border border-slate-700">
-                <div class="text-2xl font-bold text-blue-400">5</div>
-                <div class="text-xs text-slate-400 mt-1">Active</div>
+                <div class="text-2xl font-bold text-blue-400">{{$overdueticket ?? 0}}</div>
+                <div class="text-xs text-slate-400 mt-1">Overdue's Ticket</div>
             </div>
             <div class="bg-slate-800/50 backdrop-blur-sm rounded-xl p-4 border border-slate-700">
-                <div class="text-2xl font-bold text-green-400">19</div>
-                <div class="text-xs text-slate-400 mt-1">Resolved</div>
+                <div class="text-2xl font-bold text-green-400">{{$openticket ?? 0}}</div>
+                <div class="text-xs text-slate-400 mt-1">Unchecked Tickets</div>
             </div>
         </div>
 

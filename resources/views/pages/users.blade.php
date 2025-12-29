@@ -3,7 +3,7 @@
 @section('header', 'Users')
 @section('subtitle', 'Manage system users and permissions')
 @section('content')
-  {{-- <style>
+    {{-- <style>
         .dataTables_wrapper {
             font-family: inherit;
         }
@@ -299,7 +299,8 @@
 }
 
     </style> --}}
-      <style>
+    <style>
+        /* Base DataTables Styling */
         .dataTables_wrapper {
             font-family: inherit;
         }
@@ -335,135 +336,73 @@
             color: #f1f5f9;
         }
 
-        /* Desktop Table Styling */
+        /* Table Styling */
+        #users-table {
+            width: 100% !important;
+        }
+
+        #users-table thead {
+            background: linear-gradient(to right, #000000, #000000);
+            color: rgb(255, 255, 255);
+        }
+
+        #users-table thead th {
+            padding: 0.75rem 0.5rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.7rem;
+            letter-spacing: 0.05em;
+            border: none;
+            white-space: nowrap;
+        }
+
         @media (min-width: 768px) {
-            #users-table {
-                width: 100% !important;
-                display: table;
-            }
-
-            #users-table thead {
-                background: linear-gradient(to right, #3b82f6, #06b6d4);
-                color: rgb(0, 0, 0);
-                display: table-header-group;
-            }
-
             #users-table thead th {
                 padding: 1rem;
-                font-weight: 600;
-                text-transform: uppercase;
                 font-size: 0.75rem;
-                letter-spacing: 0.05em;
-                border: none;
-                white-space: nowrap;
             }
+        }
 
-            .dark #users-table thead {
-                background: linear-gradient(to right, #09090e, #0891b2);
-            }
+        .dark #users-table thead {
+            background: #0F172A;
+        }
 
-            #users-table tbody {
-                display: table-row-group;
-            }
+        #users-table tbody tr {
+            border-bottom: 1px solid #ffffff;
+            transition: background-color 0.2s;
+        }
 
-            #users-table tbody tr {
-                display: table-row;
-                border-bottom: 1px solid #000000;
-                transition: background-color 0.2s;
-            }
+        .dark #users-table tbody tr {
+            border-bottom-color: #ffffff;
+        }
 
-            .dark #users-table tbody tr {
-                border-bottom-color: #334155;
-            }
+        #users-table tbody tr:hover {
+            background-color: #000000;
+        }
 
-            #users-table tbody tr:hover {
-                background-color: #000000;
-            }
+        .dark #users-table tbody tr:hover {
+            background-color: #1e293b;
+        }
 
-            .dark #users-table tbody tr:hover {
-                background-color: #1e293b;
-            }
+        #users-table tbody td {
+            padding: 0.75rem 0.5rem;
+            color: #ffffff;
+            font-size: 0.813rem;
+            vertical-align: middle;
+        }
 
+        @media (min-width: 768px) {
             #users-table tbody td {
-                display: table-cell;
                 padding: 1rem;
-                color: #ffffff;
                 font-size: 0.875rem;
-                vertical-align: middle;
-            }
-
-            .dark #users-table tbody td {
-                color: #cbd5e1;
             }
         }
 
-        @media (max-width: 767px) {
-            /* Hide default table structure */
-            #users-table thead {
-                display: none;
-            }
-
-            #users-table tbody {
-                display: block;
-            }
-
-            #users-table tbody tr {
-                display: block;
-                margin-bottom: 1rem;
-                background: rgb(18, 23, 42);
-                border-radius: 0.75rem;
-                padding: 1rem;
-                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-                border: 1px solid #e2e8f0;
-            }
-
-            .dark #users-table tbody tr {
-                background: #1e293b;
-                border-color: #334155;
-            }
-
-            #users-table tbody td {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                padding: 0.5rem 0;
-                border-bottom: 1px solid #f1f5f9;
-                color: #ffffff;
-            }
-
-            .dark #users-table tbody td {
-                border-bottom-color: #334155;
-                color: #cbd5e1;
-            }
-
-            #users-table tbody td:last-child {
-                border-bottom: none;
-                padding-top: 0.75rem;
-                justify-content: center;
-            }
-
-            #users-table tbody td:before {
-                content: attr(data-label);
-                font-weight: 600;
-                font-size: 0.75rem;
-                text-transform: uppercase;
-                color: #64748b;
-                letter-spacing: 0.05em;
-            }
-
-            .dark #users-table tbody td:before {
-                color: #94a3b8;
-            }
-
-            #users-table tbody td:last-child:before {
-                content: none;
-            }
-
-            #users-table tbody td > * {
-                text-align: right;
-            }
+        .dark #users-table tbody td {
+            color: #cbd5e1;
         }
 
+        /* Pagination Styling */
         .dataTables_wrapper .dataTables_paginate {
             display: flex;
             justify-content: center;
@@ -529,6 +468,7 @@
             font-weight: 600;
         }
 
+        /* Dark mode pagination */
         .dark .dataTables_wrapper .dataTables_paginate .paginate_button {
             background-color: #1e293b;
             border-color: #334155;
@@ -546,6 +486,7 @@
             color: white;
         }
 
+        /* DataTables Info & Length */
         .dataTables_wrapper .dataTables_info {
             padding: 0.5rem 0;
             font-size: 0.75rem;
@@ -567,6 +508,7 @@
             }
         }
 
+        /* Action Buttons */
         .btn-action {
             padding: 0.4rem 0.6rem;
             border-radius: 0.5rem;
@@ -614,16 +556,32 @@
             box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
         }
 
+        /* Mobile: Hide text in action buttons, show only icons */
         @media (max-width: 767px) {
-            .action-buttons {
-                display: flex;
-                gap: 0.5rem;
-                width: 100%;
-                justify-content: center;
+            .btn-action .btn-text {
+                display: none;
             }
 
             .btn-action {
-                flex: 1;
+                padding: 0.5rem;
+                min-width: 2.25rem;
+                justify-content: center;
+            }
+        }
+
+        /* Responsive table wrapper */
+        .dataTables_wrapper .dataTables_scroll {
+            overflow-x: auto;
+        }
+
+        /* Fix for mobile horizontal scroll */
+        @media (max-width: 767px) {
+            .dataTables_wrapper {
+                overflow-x: auto;
+            }
+
+            #users-table {
+                min-width: 500px;
             }
         }
 
@@ -631,6 +589,22 @@
             text-align: center;
         }
 
+        /* === HARD FIX Mobile DataTables === */
+        @media (max-width: 767px) {
+            #users-table {
+                min-width: 720px !important;
+                /* paksa tabel lebih lebar dari layar */
+            }
+
+            .dataTables_wrapper {
+                width: 100%;
+                overflow-x: auto;
+            }
+
+            .dataTables_scrollBody {
+                overflow-x: auto !important;
+            }
+        }
     </style>
     <div class="space-y-4 md:space-y-6">
         <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
@@ -686,7 +660,7 @@
             </div>
         </div>
 
-        <div
+        {{-- <div
             class="bg-white dark:bg-slate-800 rounded-xl md:rounded-2xl shadow-lg border border-slate-200 dark:border-slate-700 overflow-hidden">
             <div class="px-4 py-4 md:px-6 md:py-5 border-b border-slate-200 dark:border-slate-700">
                 <div class="flex flex-col gap-3 md:gap-4">
@@ -725,9 +699,8 @@
 
                 <div class="overflow-x-auto -mx-4 md:mx-0">
                     <div class="inline-block min-w-full align-middle">
-                        {{-- <div class="overflow-hidden"> --}}
                         <div class="overflow-x-auto">
-                            
+
                             <table class="min-w-full divide-y divide-slate-200 dark:divide-slate-700" id="users-table">
                                 <thead>
                                     <tr>
@@ -746,140 +719,210 @@
                     </div>
                 </div>
             </div>
+        </div> --}}
+        <div class="bg-slate-800 rounded-xl md:rounded-2xl shadow-lg border border-slate-700 overflow-hidden">
+            {{-- Card Header --}}
+            <div class="px-4 py-4 md:px-6 md:py-5 border-b border-slate-700">
+                <div class="flex flex-col gap-3 md:gap-4">
+                    <div>
+                        <h2 class="text-lg md:text-xl font-bold text-white">All Tickets</h2>
+                        <p class="text-xs md:text-sm text-slate-400 mt-1">Manage and view all tickets users</p>
+                    </div>
+                    <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 md:gap-3">
+                        {{-- Search Input --}}
+                        <div class="relative flex-1">
+                            <input type="text" id="table-search" placeholder="Search..."
+                                class="w-full pl-10 pr-4 py-2 border border-slate-600 rounded-lg bg-slate-700 text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent placeholder-slate-400">
+                            <svg class="absolute left-3 top-2.5 w-5 h-5 text-slate-400" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {{-- Card Body --}}
+            <div class="p-4 md:p-6">
+                {{-- Loading State --}}
+                <div id="loading-state" class="flex items-center justify-center py-12">
+                    <div class="text-center">
+                        <svg class="animate-spin h-10 w-10 text-blue-500 mx-auto mb-4" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
+                                stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor"
+                                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                            </path>
+                        </svg>
+                        <p class="text-slate-400 text-sm">Loading users...</p>
+                    </div>
+                </div>
+
+                {{-- DataTable Wrapper --}}
+                <div class="overflow-x-auto -mx-4 md:mx-0">
+                    <div class="inline-block min-w-full align-middle">
+                        <div class="overflow-hidden">
+                            <table class="min-w-full divide-y divide-slate-700" id="users-table">
+                                <thead class="bg-slate-900">
+                                  <tr>
+                                        <th class="text-center">Username</th>
+                                        <th class="text-center hidden md:table-cell">Employee Name</th>
+                                        <th class="text-center hidden md:table-cell">Comapany</th>
+                                        <th class="text-center hidden md:table-cell">Department</th>
+                                        <th class="text-center hidden md:table-cell">Location</th>
+                                        <th class="text-center hidden md:table-cell">Position</th>
+                                        <th class="text-center hidden md:table-cell">Roles</th>
+                                        <th class="text-center">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-slate-800 divide-y divide-slate-700">
+                                    <!-- DataTable will populate this -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
-   
 
 
-@push('scripts')
-{{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script> --}}
-<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-<script>
-    toastr.options = {
-        closeButton: true,
-        progressBar: true,
-        positionClass: "toast-top-right",
-        timeOut: "3000"
-    };
 
-    @if (session('success'))
-        toastr.success(@json(session('success')));
-    @endif
+    @push('scripts')
+        {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script> --}}
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+        <script>
+            toastr.options = {
+                closeButton: true,
+                progressBar: true,
+                positionClass: "toast-top-right",
+                timeOut: "3000"
+            };
 
-    @if (session('error'))
-        toastr.error(@json(session('error')));
-    @endif
-</script>
-    <script>
-        $(function() {
-            var table = $('#users-table').DataTable({
-                processing: true,
-                serverSide: true,
-                responsive: true,
-                lengthMenu: [
-                    [10, 25, 50, 100, -1],
-                    [10, 25, 50, 100, "All"]
-                ],
-                ajax: "{{ route('users.users') }}",
-                columns: [{
-                        data: 'username',
-                        name: 'username',
-                        width: '10%'
+            @if (session('success'))
+                toastr.success(@json(session('success')));
+            @endif
+
+            @if (session('error'))
+                toastr.error(@json(session('error')));
+            @endif
+        </script>
+        <script>
+            $(function() {
+                var table = $('#users-table').DataTable({
+                    processing: true,
+                    serverSide: true,
+                    responsive: true,
+                    lengthMenu: [
+                        [10, 25, 50, 100, -1],
+                        [10, 25, 50, 100, "All"]
+                    ],
+                    ajax: "{{ route('users.users') }}",
+                    columns: [{
+                            data: 'username',
+                            name: 'username',
+                            width: '10%'
+                        },
+
+                        {
+                            data: 'employee_name',
+                            name: 'employees_tables.employee_name',
+                            width: '25%',
+                            className: 'hidden md:table-cell'
+                        },
+                        {
+                            data: 'company_name',
+                            name: 'company_tables.name',
+                            width: '25%',
+                            className: 'hidden md:table-cell'
+                        },
+                        {
+                            data: 'department_name',
+                            name: 'departments_tables.department_name',
+                            width: '25%',
+                            className: 'hidden md:table-cell'
+                        },
+                        {
+                            data: 'store_name',
+                            name: 'stores_tables.name',
+                            width: '25%',
+                            className: 'hidden md:table-cell'
+                        },
+                        {
+                            data: 'position_name',
+                            name: 'position_tables.name',
+                            width: '25%',
+                            className: 'hidden md:table-cell'
+                        },
+                        {
+                            data: 'roles',
+                            name: 'roles',
+                            width: '25%',
+                            className: 'hidden md:table-cell'
+                        },
+                        {
+                            data: 'action',
+                            name: 'action',
+                            orderable: false,
+                            searchable: false,
+                            width: '30%',
+                            className: 'text-center'
+                        },
+                    ],
+                    language: {
+                        lengthMenu: "_MENU_",
+                        info: "Showing _START_ to _END_ of _TOTAL_ entries",
+                        infoEmpty: "Showing 0 to 0 of 0 entries",
+                        infoFiltered: "(filtered from _MAX_ total entries)",
+                        paginate: {
+                            first: "First",
+                            last: "Last",
+                            next: "Next",
+                            previous: "Prev"
+                        }
                     },
-                    
-                       { data: 'employee_name', name: 'employees_tables.employee_name', width: '25%', className: 'hidden md:table-cell' },
-                    {
-                        data: 'company_name',
-                        name: 'company_tables.name',
-                        width: '25%',
-                        className: 'hidden md:table-cell'
+                    pageLength: 10,
+                    lengthMenu: [
+                        [10, 25, 50, 100, -1],
+                        [10, 25, 50, 100, "All"]
+                    ],
+                    dom: '<"flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-4"<"length-wrapper"l><"info-wrapper"i>>rtip',
+                    initComplete: function() {
+                        // Hide loading, show table
+                        $('#loading-state').hide();
+                        $('#users-table').fadeIn();
+                        // Update total users count
+                        var info = this.api().page.info();
+                        $('#total-users').text(info.recordsTotal);
                     },
-                    {
-                        data: 'department_name',
-                        name: 'departments_tables.department_name',
-                        width: '25%',
-                        className: 'hidden md:table-cell'
-                    },
-                    {
-                        data: 'store_name',
-                        name: 'stores_tables.name',
-                        width: '25%',
-                        className: 'hidden md:table-cell'
-                    },
-                    {
-                        data: 'position_name',
-                        name: 'position_tables.name',
-                        width: '25%',
-                        className: 'hidden md:table-cell'
-                    },
-                    {
-                        data: 'roles',
-                        name: 'roles',
-                        width: '25%',
-                        className: 'hidden md:table-cell'
-                    },
-                    {
-                        data: 'action',
-                        name: 'action',
-                        orderable: false,
-                        searchable: false,
-                        width: '30%',
-                        className: 'text-center'
-                    },
-                ],
-                language: {
-                    lengthMenu: "_MENU_",
-                    info: "Showing _START_ to _END_ of _TOTAL_ entries",
-                    infoEmpty: "Showing 0 to 0 of 0 entries",
-                    infoFiltered: "(filtered from _MAX_ total entries)",
-                    paginate: {
-                        first: "First",
-                        last: "Last",
-                        next: "Next",
-                        previous: "Prev"
+                    drawCallback: function() {
+                        // Update total users count on redraw
+                        var info = this.api().page.info();
+                        $('#total-users').text(info.recordsTotal);
                     }
-                },
-                pageLength: 10,
-               lengthMenu: [
-                    [10, 25, 50, 100, -1],
-                    [10, 25, 50, 100, "All"]
-                ],
-                dom: '<"flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-4"<"length-wrapper"l><"info-wrapper"i>>rtip',
-                initComplete: function() {
-                    // Hide loading, show table
-                    $('#loading-state').hide();
-                    $('#users-table').fadeIn();
-                    // Update total users count
-                    var info = this.api().page.info();
-                    $('#total-users').text(info.recordsTotal);
-                },
-                drawCallback: function() {
-                    // Update total users count on redraw
-                    var info = this.api().page.info();
-                    $('#total-users').text(info.recordsTotal);
+                });
+                // Custom search functionality
+                $('#table-search').on('keyup', function() {
+                    table.search(this.value).draw();
+                });
+
+                // Adjust pagination on mobile
+                adjustPaginationForMobile();
+                $(window).on('resize', adjustPaginationForMobile);
+
+                function adjustPaginationForMobile() {
+                    if ($(window).width() < 768) {
+                        // Show fewer page numbers on mobile
+                        $('.dataTables_paginate').addClass('mobile-pagination');
+                    } else {
+                        $('.dataTables_paginate').removeClass('mobile-pagination');
+                    }
                 }
             });
-            // Custom search functionality
-            $('#table-search').on('keyup', function() {
-                table.search(this.value).draw();
-            });
-
-            // Adjust pagination on mobile
-            adjustPaginationForMobile();
-            $(window).on('resize', adjustPaginationForMobile);
-
-            function adjustPaginationForMobile() {
-                if ($(window).width() < 768) {
-                    // Show fewer page numbers on mobile
-                    $('.dataTables_paginate').addClass('mobile-pagination');
-                } else {
-                    $('.dataTables_paginate').removeClass('mobile-pagination');
-                }
-            }
-        });
-    </script>
-@endpush
+        </script>
+    @endpush
 @endsection
 
 {{-- @extends('layouts.app')

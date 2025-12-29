@@ -150,7 +150,7 @@
                         <div class="flex items-center space-x-2">
                             <img src="https://cloud.mjm-bali.co.id/index.php/s/fMMRXmq5cdkApNc/download"
                                 class="w-8 h-8 select-none pointer-events-none" draggable="false" alt="icon">
-                            <h3 class="text-sm font-bold text-slate-900 dark:text-white">{{ __('auth.departemen') }}
+                            <h3 class="text-sm font-bold text-slate-900 text-white">{{ __('auth.departemen') }}
                             </h3>
                         </div>
                         <p class="text-xs text-slate-600 dark:text-slate-400">
@@ -165,7 +165,7 @@
                 <div class="mt-6 pt-6 border-t border-slate-200 dark:border-slate-800">
                     <div class="flex flex-col sm:flex-row justify-between items-center space-y-2 sm:space-y-0">
                         <p class="text-xs text-slate-500 dark:text-slate-400">
-                            © {{ date('Y') }} IT Departments. Developed by Edwin Sirait
+                            © {{ date('Y') }} SerTix. Developed by Edwin Sirait
                         </p>
                     </div>
                 </div>

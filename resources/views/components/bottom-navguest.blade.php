@@ -308,10 +308,17 @@
                    w-12 h-1 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-b-full">
         </div>
     @endif
-            <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                    d="M15 5v14M5 5h14"/>
-            </svg>
+      <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" stroke-width="1.8"
+     viewBox="0 0 24 24">
+    <path stroke-linecap="round" stroke-linejoin="round"
+          d="M12 12a4 4 0 100-8 4 4 0 000 8z" />
+    <path stroke-linecap="round" stroke-linejoin="round"
+          d="M6 20a6 6 0 0112 0" />
+    <path stroke-linecap="round" stroke-linejoin="round"
+          d="M19 10v4M17 12h4" />
+</svg>
+
+
             <span>Users</span>
         </a>
         <!-- Floating New -->
@@ -333,11 +340,19 @@
                    w-12 h-1 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-b-full">
         </div>
     @endif
-           <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" stroke-width="1.8"
+           {{-- <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" stroke-width="1.8"
                 viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round"
                     d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.5 20.25a7.5 7.5 0 0115 0" />
-            </svg>
+            </svg> --}}
+            <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" stroke-width="1.8"
+     viewBox="0 0 24 24">
+    <path stroke-linecap="round" stroke-linejoin="round"
+          d="M12 12a4 4 0 100-8 4 4 0 000 8z" />
+    <path stroke-linecap="round" stroke-linejoin="round"
+          d="M6 20a6 6 0 0112 0" />
+</svg>
+
             <span>Profile</span>
         </a>
         @endauth
@@ -354,12 +369,36 @@
         </div>
     @endif
             <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" stroke-width="1.8"
-                viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round"
-                    d="M5.121 17.804A9 9 0 1118.88 17.804" />
-            </svg>
+     viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="9"
+            stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M12 11v5"
+          stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M12 8h.01"
+          stroke-linecap="round" stroke-linejoin="round" />
+</svg>
+
             <span>About</span>
         </a>
+        @guest
+          <a href="{{ route('login') }}"
 
+                class="relative flex flex-col items-center justify-center flex-1 py-3
+          {{ request()->routeIs('login') ? 'text-blue-400' : 'text-slate-400 hover:text-white' }}
+          transition">
+           @if (request()->routeIs('login'))
+        <div
+            class="absolute top-0 left-1/2 -translate-x-1/2
+                   w-12 h-1 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-b-full">
+        </div>
+    @endif
+           <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" stroke-width="1.8"
+                viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.5 20.25a7.5 7.5 0 0115 0" />
+            </svg>
+            <span>Login</span>
+        </a>
+@endguest
     </div>
 </nav>

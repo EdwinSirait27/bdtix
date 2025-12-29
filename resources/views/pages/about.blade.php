@@ -245,6 +245,7 @@
                         <div class="flex flex-wrap gap-2">
                             <span class="px-3 py-1 bg-slate-700/50 text-slate-300 text-xs rounded-lg">Dev Ops</span>
                             <span class="px-3 py-1 bg-slate-700/50 text-slate-300 text-xs rounded-lg">Full Stack Dev</span>
+                            <span class="px-3 py-1 bg-slate-700/100 text-slate-300 text-xs rounded-lg">Server Administrators</span>
                         </div>
                     </div>
 
@@ -282,7 +283,7 @@
             </a>
         </div>
     </div>
-    <footer class="bg-dark dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 mt-auto">
+    <footer class="bg-dark dark:bg-slate-900  mt-auto">
         <div class="px-4 sm:px-6 lg:px-8 py-6 lg:py-8">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
                 {{-- Company Info --}}
@@ -290,7 +291,7 @@
                     <div class="flex items-center space-x-2">
                         <img src="https://cloud.mjm-bali.co.id/index.php/s/fMMRXmq5cdkApNc/download"
                             class="w-8 h-8 select-none pointer-events-none" draggable="false" alt="icon">
-                        <h3 class="text-sm font-bold text-slate-900 dark:text-white">{{ __('auth.departemen') }}
+                        <h3 class="text-sm font-bold text-slate-900 text-white">{{ __('auth.departemen') }}
                         </h3>
                     </div>
                     <p class="text-xs text-slate-600 dark:text-slate-400">
@@ -302,7 +303,7 @@
             <div class="mt-6 pt-6 border-t border-slate-200 dark:border-slate-800">
                 <div class="flex flex-col sm:flex-row justify-between items-center space-y-2 sm:space-y-0">
                     <p class="text-xs text-slate-500 dark:text-slate-400">
-                        © {{ date('Y') }} IT Departments. Developed by Edwin Sirait
+                        © {{ date('Y') }} SerTix. Developed by Edwin Sirait
                     </p>
                 </div>
             </div>
