@@ -44,17 +44,7 @@ public function getAllticketforadmins(Request $request)
             return optional($ticket->user?->employee)->employee_name ?? '-';
         })
         ->orderColumn('employee_name', function ($query, $order) {
-            // disable ordering (WAJIB)
         })
-        //         ->addColumn('action', function ($user) {
-        //     $idHashed = substr(hash('sha256', $user->id . env('APP_KEY')), 0, 8);
-        //     return '
-        //         <a href="' . route('editusers', $idHashed) . '" 
-        //            data-bs-toggle="tooltip" 
-        //            title="Edit User: ' . e($user->username) . '">
-        //             <i class="fas fa-user-edit text-secondary"></i>
-        //         </a>';
-        // })
          ->addColumn('action', function ($user) {
     $idHashed = substr(hash('sha256', $user->id . env('APP_KEY')), 0, 8);
 
@@ -77,7 +67,7 @@ public function getAllticketforadmins(Request $request)
             </svg>
 
         </a>
-         <a href="' . route('showopenticket', $idHashed) . '"
+         <a href="' . route('showtickets', $idHashed) . '"
            class="inline-flex items-center justify-center p-2
                   text-slate-500 hover:text-emerald-600
                   hover:bg-emerald-50 rounded-full transition"
@@ -112,12 +102,34 @@ public function getAllticketforadmins(Request $request)
         abort_if(!$user, 404);
         return view('pages.editusers', compact('user'));
     }
- public function show($hash)
+//  public function show($hash)
+//     {
+//         $user = Tickets::all()->first(function ($u) use ($hash) {
+//             return substr(hash('sha256', $u->id . env('APP_KEY')), 0, 8) === $hash;
+//         });
+//         abort_if(!$user, 404);
+//         return view('pages.editusers', compact('user'));
+//     }
+   public function show($hash)
     {
-        $user = Tickets::all()->first(function ($u) use ($hash) {
-            return substr(hash('sha256', $u->id . env('APP_KEY')), 0, 8) === $hash;
-        });
-        abort_if(!$user, 404);
-        return view('pages.editusers', compact('user'));
+        $ticket = Tickets::with([
+            'user.employee',
+            'attachments',
+        ])
+            ->get()
+            ->first(function ($ticket) use ($hash) {
+                $hashedId = substr(
+                    hash('sha256', $ticket->id . env('APP_KEY')),
+                    0,
+                    8
+                );
+                return hash_equals($hashedId, $hash);
+            });
+
+        if (! $ticket) {
+            abort(404, 'Ticket not found');
+        }
+
+        return view('pages.showtickets', compact('ticket'));
     }
 }

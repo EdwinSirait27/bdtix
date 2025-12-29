@@ -32,6 +32,10 @@ Route::get('/editusers/{hash}', [UserController::class, 'edit'])->name('edituser
 Route::post('/updateusers/{hash}/update', [UserController::class, 'update'])->name('updateusers')->middleware('auth');
 Route::get('/editopenticket/{hash}', [dashboardController::class, 'edit'])->name('editopenticket')->middleware('auth');
 Route::get('/showopenticket/{hash}', [dashboardController::class, 'show'])->name('showopenticket')->middleware('auth');
+Route::get('/showtickets/{hash}', [dashboardController::class, 'show'])->name('showtickets')->middleware('auth');
 // Route::get('/editusers/{hashedId}', [UserController::class, 'edit'])->name('editusers');
 Route::post('/ticketreq', [TicketController::class, 'store'])->name('ticketreq')->middleware('auth');
 Route::get('/showmytickets/{hash}', [TicketController::class, 'show'])->name('showmytickets')->middleware('auth');
+Route::get('/editmytickets/{hash}', [TicketController::class, 'edit'])->name('editmytickets')->middleware('auth');
+Route::get('/showalltickets/{hash}', [TicketController::class, 'showalltickets'])->name('showalltickets')->middleware('auth');
+Route::get('/editalltickets/{hash}', [TicketController::class, 'editalltickets'])->name('editalltickets')->middleware('auth');

@@ -3,61 +3,49 @@
 @section('header', 'Dashboard')
 @section('subtitle', 'Manage Dashboard Ticketing System')
 @section('content')
-
-
     <div class="p-4 space-y-4">
-        {{-- STAT CARDS --}}
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {{-- Example: expects $stats = ['open'=>x, 'in_progress'=>y, 'closed'=>z, 'overdue'=>w] --}}
             <div class="bg-white/5 backdrop-blur-sm p-4 rounded-lg shadow-sm flex flex-col">
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-sm text-slate-300">Open</p>
                         <p class="text-2xl font-bold text-white">{{ $todaysticket }}</p>
-                        {{-- <p class="text-2xl font-bold text-white">{{ $stats['open'] ?? 0 }}</p> --}}
                     </div>
-                    <div class="text-sm text-slate-400">▸ {{ $stats['open_change'] ?? '+0' }}</div>
+                    {{-- <div class="text-sm text-slate-400">▸ {{ $stats['open_change'] ?? '+0' }}</div> --}}
                 </div>
-                <p class="mt-3 text-xs text-slate-400">Unchecked tickets</p>
+                <p class="mt-3 text-xs text-slate-400">Today's Unchecked tickets</p>
             </div>
-
             <div class="bg-white/5 backdrop-blur-sm p-4 rounded-lg shadow-sm flex flex-col">
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-sm text-slate-300">In Progress</p>
                         <p class="text-2xl font-bold text-white">{{ $onprogressticket }}</p>
-                        {{-- <p class="text-2xl font-bold text-white">{{ $stats['in_progress'] ?? 0 }}</p> --}}
                     </div>
-                    <div class="text-sm text-slate-400">▸ {{ $stats['in_progress_change'] ?? '+0' }}</div>
+                    {{-- <div class="text-sm text-slate-400">▸ {{ $stats['in_progress_change'] ?? '+0' }}</div> --}}
                 </div>
                 <p class="mt-3 text-xs text-slate-400">Currently being worked on by the team</p>
             </div>
-
             <div class="bg-white/5 backdrop-blur-sm p-4 rounded-lg shadow-sm flex flex-col">
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-sm text-slate-300">Closed</p>
-                        {{-- <p class="text-2xl font-bold text-white">{{ $stats['closed'] ?? 0 }}</p> --}}
                         <p class="text-2xl font-bold text-white">{{ $closedticket }}</p>
                     </div>
-                    <div class="text-sm text-slate-400">▸ {{ $stats['closed_change'] ?? '+0' }}</div>
+                    {{-- <div class="text-sm text-slate-400">▸ {{ $stats['closed_change'] ?? '+0' }}</div> --}}
                 </div>
                 <p class="mt-3 text-xs text-slate-400">Ticket resolved</p>
             </div>
-
             <div class="bg-white/5 backdrop-blur-sm p-4 rounded-lg shadow-sm flex flex-col">
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-sm text-slate-300">Overdue</p>
                         <p class="text-2xl font-bold text-rose-400">{{ $overdueticket }}</p>
-                        {{-- <p class="text-2xl font-bold text-rose-400">{{ $stats['overdue'] ?? 0 }}</p> --}}
                     </div>
-                    <div class="text-sm text-slate-400">▸ {{ $stats['overdue_change'] ?? '+0' }}</div>
+                    {{-- <div class="text-sm text-slate-400">▸ {{ $stats['overdue_change'] ?? '+0' }}</div> --}}
                 </div>
                 <p class="mt-3 text-xs text-slate-400">Tiket melewati SLA</p>
             </div>
         </div>
-        {{-- QUICK ACTIONS + FILTERS --}}
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             <div class="flex items-center gap-3">
             </div>
@@ -65,7 +53,6 @@
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-4"> 
             <div class="lg:col-span-2 space-y-4"> 
                 <h1 class="mt-3 text-xl text-slate-100">Recent Tickets</h1>
-
                 {{-- <div class="bg-white/3 p-4 rounded-lg shadow-sm">
                     <h3 class="text-lg font-semibold text-white mb-3">Recent Tickets</h3>
                     <div class="overflow-x-auto">
@@ -234,7 +221,7 @@
         }
 
         .dark #users-table tbody tr {
-            border-bottom-color: #334155;
+            border-bottom-color: #ffffff;
         }
 
         #users-table tbody tr:hover {
@@ -467,7 +454,6 @@
             }
         }
     </style>
-@endsection
 {{-- @push('scripts') --}}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
@@ -591,21 +577,23 @@
 </script>
 
 
-<script>
-    toastr.options = {
-        closeButton: true,
-        progressBar: true,
-        positionClass: "toast-top-right",
-        timeOut: "3000"
-    };
-    @if (session('success'))
-        toastr.success(@json(session('success')));
-    @endif
+    <script>
+        toastr.options = {
+            closeButton: true,
+            progressBar: true,
+            positionClass: "toast-top-right",
+            timeOut: "3000"
+        };
+        @if (session('success'))
+            toastr.success(@json(session('success')));
+        @endif
 
-    @if (session('error'))
-        toastr.error(@json(session('error')));
-    @endif
-</script>
+        @if (session('error'))
+            toastr.error(@json(session('error')));
+        @endif
+    </script>
+@endsection
+
 {{-- @endpush --}}
 {{-- @extends('layouts.app')
 

@@ -1,12 +1,9 @@
-
 @extends('layouts.app')
 @section('title', 'Users Management')
 @section('header', 'Users')
 @section('subtitle', 'Manage system users and permissions')
 @section('content')
- {{-- Custom DataTables Styling --}}
-  <style>
-        /* Base DataTables Styling */
+  {{-- <style>
         .dataTables_wrapper {
             font-family: inherit;
         }
@@ -42,7 +39,6 @@
             color: #f1f5f9;
         }
 
-        /* Table Styling */
         #users-table {
             width: 100% !important;
         }
@@ -108,7 +104,6 @@
             color: #cbd5e1;
         }
 
-        /* Pagination Styling */
         .dataTables_wrapper .dataTables_paginate {
             display: flex;
             justify-content: center;
@@ -174,7 +169,6 @@
             font-weight: 600;
         }
 
-        /* Dark mode pagination */
         .dark .dataTables_wrapper .dataTables_paginate .paginate_button {
             background-color: #1e293b;
             border-color: #334155;
@@ -192,7 +186,6 @@
             color: white;
         }
 
-        /* DataTables Info & Length */
         .dataTables_wrapper .dataTables_info {
             padding: 0.5rem 0;
             font-size: 0.75rem;
@@ -214,7 +207,6 @@
             }
         }
 
-        /* Action Buttons */
         .btn-action {
             padding: 0.4rem 0.6rem;
             border-radius: 0.5rem;
@@ -262,7 +254,6 @@
             box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
         }
 
-        /* Mobile: Hide text in action buttons, show only icons */
         @media (max-width: 767px) {
             .btn-action .btn-text {
                 display: none;
@@ -275,12 +266,10 @@
             }
         }
 
-        /* Responsive table wrapper */
         .dataTables_wrapper .dataTables_scroll {
             overflow-x: auto;
         }
 
-        /* Fix for mobile horizontal scroll */
         @media (max-width: 767px) {
             .dataTables_wrapper {
                 overflow-x: auto;
@@ -294,10 +283,9 @@
         .text-center {
             text-align: center;
         }
-        /* === HARD FIX Mobile DataTables === */
-@media (max-width: 767px) {
+        @media (max-width: 767px) {
     #users-table {
-        min-width: 720px !important; /* paksa tabel lebih lebar dari layar */
+        min-width: 720px !important; 
     }
 
     .dataTables_wrapper {
@@ -310,9 +298,8 @@
     }
 }
 
-    </style>
-    {{-- <style>
-        /* Base DataTables Styling */
+    </style> --}}
+      <style>
         .dataTables_wrapper {
             font-family: inherit;
         }
@@ -348,73 +335,135 @@
             color: #f1f5f9;
         }
 
-        /* Table Styling */
-        #users-table {
-            width: 100% !important;
-        }
-
-        #users-table thead {
-            background: linear-gradient(to right, #3b82f6, #06b6d4);
-            color: white;
-        }
-
-        #users-table thead th {
-            padding: 0.75rem 0.5rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            font-size: 0.7rem;
-            letter-spacing: 0.05em;
-            border: none;
-            white-space: nowrap;
-        }
-
+        /* Desktop Table Styling */
         @media (min-width: 768px) {
+            #users-table {
+                width: 100% !important;
+                display: table;
+            }
+
+            #users-table thead {
+                background: linear-gradient(to right, #3b82f6, #06b6d4);
+                color: rgb(0, 0, 0);
+                display: table-header-group;
+            }
+
             #users-table thead th {
                 padding: 1rem;
+                font-weight: 600;
+                text-transform: uppercase;
                 font-size: 0.75rem;
+                letter-spacing: 0.05em;
+                border: none;
+                white-space: nowrap;
             }
-        }
 
-        .dark #users-table thead {
-            background: linear-gradient(to right, #2563eb, #0891b2);
-        }
+            .dark #users-table thead {
+                background: linear-gradient(to right, #09090e, #0891b2);
+            }
 
-        #users-table tbody tr {
-            border-bottom: 1px solid #e2e8f0;
-            transition: background-color 0.2s;
-        }
+            #users-table tbody {
+                display: table-row-group;
+            }
 
-        .dark #users-table tbody tr {
-            border-bottom-color: #334155;
-        }
+            #users-table tbody tr {
+                display: table-row;
+                border-bottom: 1px solid #000000;
+                transition: background-color 0.2s;
+            }
 
-        #users-table tbody tr:hover {
-            background-color: #f8fafc;
-        }
+            .dark #users-table tbody tr {
+                border-bottom-color: #334155;
+            }
 
-        .dark #users-table tbody tr:hover {
-            background-color: #1e293b;
-        }
+            #users-table tbody tr:hover {
+                background-color: #000000;
+            }
 
-        #users-table tbody td {
-            padding: 0.75rem 0.5rem;
-            color: #334155;
-            font-size: 0.813rem;
-            vertical-align: middle;
-        }
+            .dark #users-table tbody tr:hover {
+                background-color: #1e293b;
+            }
 
-        @media (min-width: 768px) {
             #users-table tbody td {
+                display: table-cell;
                 padding: 1rem;
+                color: #ffffff;
                 font-size: 0.875rem;
+                vertical-align: middle;
+            }
+
+            .dark #users-table tbody td {
+                color: #cbd5e1;
             }
         }
 
-        .dark #users-table tbody td {
-            color: #cbd5e1;
+        @media (max-width: 767px) {
+            /* Hide default table structure */
+            #users-table thead {
+                display: none;
+            }
+
+            #users-table tbody {
+                display: block;
+            }
+
+            #users-table tbody tr {
+                display: block;
+                margin-bottom: 1rem;
+                background: rgb(18, 23, 42);
+                border-radius: 0.75rem;
+                padding: 1rem;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                border: 1px solid #e2e8f0;
+            }
+
+            .dark #users-table tbody tr {
+                background: #1e293b;
+                border-color: #334155;
+            }
+
+            #users-table tbody td {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 0.5rem 0;
+                border-bottom: 1px solid #f1f5f9;
+                color: #ffffff;
+            }
+
+            .dark #users-table tbody td {
+                border-bottom-color: #334155;
+                color: #cbd5e1;
+            }
+
+            #users-table tbody td:last-child {
+                border-bottom: none;
+                padding-top: 0.75rem;
+                justify-content: center;
+            }
+
+            #users-table tbody td:before {
+                content: attr(data-label);
+                font-weight: 600;
+                font-size: 0.75rem;
+                text-transform: uppercase;
+                color: #64748b;
+                letter-spacing: 0.05em;
+            }
+
+            .dark #users-table tbody td:before {
+                color: #94a3b8;
+            }
+
+            #users-table tbody td:last-child:before {
+                content: none;
+            }
+
+            #users-table tbody td > * {
+                text-align: right;
+            }
         }
 
-        /* Pagination Styling */
         .dataTables_wrapper .dataTables_paginate {
             display: flex;
             justify-content: center;
@@ -480,7 +529,6 @@
             font-weight: 600;
         }
 
-        /* Dark mode pagination */
         .dark .dataTables_wrapper .dataTables_paginate .paginate_button {
             background-color: #1e293b;
             border-color: #334155;
@@ -498,7 +546,6 @@
             color: white;
         }
 
-        /* DataTables Info & Length */
         .dataTables_wrapper .dataTables_info {
             padding: 0.5rem 0;
             font-size: 0.75rem;
@@ -520,7 +567,6 @@
             }
         }
 
-        /* Action Buttons */
         .btn-action {
             padding: 0.4rem 0.6rem;
             border-radius: 0.5rem;
@@ -568,39 +614,26 @@
             box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
         }
 
-        /* Mobile: Hide text in action buttons, show only icons */
         @media (max-width: 767px) {
-            .btn-action .btn-text {
-                display: none;
+            .action-buttons {
+                display: flex;
+                gap: 0.5rem;
+                width: 100%;
+                justify-content: center;
             }
 
             .btn-action {
-                padding: 0.5rem;
-                min-width: 2.25rem;
-                justify-content: center;
+                flex: 1;
             }
         }
 
-        /* Responsive table wrapper */
-        .dataTables_wrapper .dataTables_scroll {
-            overflow-x: auto;
+        .text-center {
+            text-align: center;
         }
 
-        /* Fix for mobile horizontal scroll */
-        @media (max-width: 767px) {
-            .dataTables_wrapper {
-                overflow-x: auto;
-            }
-
-            #users-table {
-                min-width: 500px;
-            }
-        }
-    </style> --}}
+    </style>
     <div class="space-y-4 md:space-y-6">
-        {{-- Stats Cards --}}
         <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
-            {{-- Total Users --}}
             <div
                 class="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl md:rounded-2xl p-4 md:p-6 text-white shadow-lg">
                 <div class="flex items-center justify-between mb-2">
@@ -614,7 +647,6 @@
                 <p class="text-2xl md:text-3xl font-bold mb-1" id="total-users"></p>
                 <p class="text-blue-100 text-xs">Active accounts</p>
             </div>
-            {{-- Active Today --}}
             <div
                 class="bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-xl md:rounded-2xl p-4 md:p-6 text-white shadow-lg">
                 <div class="flex items-center justify-between mb-2">
@@ -627,7 +659,6 @@
                 <p class="text-2xl md:text-3xl font-bold mb-1">24</p>
                 <p class="text-emerald-100 text-xs">Users online</p>
             </div>
-            {{-- New This Week --}}
             <div
                 class="bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl md:rounded-2xl p-4 md:p-6 text-white shadow-lg">
                 <div class="flex items-center justify-between mb-2">
@@ -640,7 +671,6 @@
                 <p class="text-2xl md:text-3xl font-bold mb-1">8</p>
                 <p class="text-purple-100 text-xs">New registrations</p>
             </div>
-            {{-- Admin Users --}}
             <div
                 class="bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl md:rounded-2xl p-4 md:p-6 text-white shadow-lg">
                 <div class="flex items-center justify-between mb-2">
@@ -656,10 +686,8 @@
             </div>
         </div>
 
-        {{-- Users Table Card --}}
         <div
             class="bg-white dark:bg-slate-800 rounded-xl md:rounded-2xl shadow-lg border border-slate-200 dark:border-slate-700 overflow-hidden">
-            {{-- Card Header --}}
             <div class="px-4 py-4 md:px-6 md:py-5 border-b border-slate-200 dark:border-slate-700">
                 <div class="flex flex-col gap-3 md:gap-4">
                     <div>
@@ -668,7 +696,6 @@
                             users</p>
                     </div>
                     <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 md:gap-3">
-                        {{-- Search Input --}}
                         <div class="relative flex-1">
                             <input type="text" id="table-search" placeholder="Search users..."
                                 class="w-full pl-10 pr-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
@@ -682,9 +709,7 @@
                 </div>
             </div>
 
-            {{-- Card Body --}}
             <div class="p-4 md:p-6">
-                {{-- Loading State --}}
                 <div id="loading-state" class="flex items-center justify-center py-12">
                     <div class="text-center">
                         <svg class="animate-spin h-10 w-10 text-blue-500 mx-auto mb-4" fill="none" viewBox="0 0 24 24">
@@ -698,14 +723,14 @@
                     </div>
                 </div>
 
-                {{-- DataTable Wrapper --}}
                 <div class="overflow-x-auto -mx-4 md:mx-0">
                     <div class="inline-block min-w-full align-middle">
-                        <div class="overflow-hidden">
+                        {{-- <div class="overflow-hidden"> --}}
+                        <div class="overflow-x-auto">
+                            
                             <table class="min-w-full divide-y divide-slate-200 dark:divide-slate-700" id="users-table">
                                 <thead>
                                     <tr>
-                                        {{-- <th class="text-left">ID</th> --}}
                                         <th class="text-center">Username</th>
                                         <th class="text-center hidden md:table-cell">Employee Name</th>
                                         <th class="text-center hidden md:table-cell">Comapany</th>
@@ -726,7 +751,6 @@
 
    
 
-@endsection
 
 @push('scripts')
 {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script> --}}
@@ -856,6 +880,8 @@
         });
     </script>
 @endpush
+@endsection
+
 {{-- @extends('layouts.app')
 @section('title', 'Users')
 @section('header', 'Users')

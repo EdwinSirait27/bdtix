@@ -237,73 +237,124 @@
             d="M3 9.75L12 4l9 5.75V20a1 1 0 01-1 1h-5.25v-6h-5.5v6H4a1 1 0 01-1-1V9.75z" />
     </svg>
 
-    <span>Home</span>
+    <span>Dashboard</span>
 </a>
 
 
         <!-- Your -->
-        <a href="#"
-            class="flex flex-col items-center justify-center flex-1 py-3 text-slate-400 hover:text-white transition">
-            <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" stroke-width="1.8"
-                viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round"
-                    d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.5 20.25a7.5 7.5 0 0115 0" />
-            </svg>
-            <span>Your</span>
+                <a href="{{ route('alltickets') }}"
+            class="relative flex flex-col items-center justify-center flex-1 py-3
+          {{ request()->routeIs('alltickets') ? 'text-blue-400' : 'text-slate-400 hover:text-white' }}
+          transition">
+          @if (request()->routeIs('alltickets'))
+        <div
+            class="absolute top-0 left-1/2 -translate-x-1/2
+                   w-12 h-1 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-b-full">
+        </div>
+    @endif
+            <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z" />
+                </svg>
+            <span>All Tickets</span>
         </a>
+   <a href="{{ route('mytickets') }}"
 
-        <!-- Floating New -->
-        <a href="#"
-            class="relative -mt-6 flex flex-col items-center justify-center flex-1">
+                 class="relative flex flex-col items-center justify-center flex-1 py-3
+          {{ request()->routeIs('mytickets') ? 'text-blue-400' : 'text-slate-400 hover:text-white' }}
+          transition">
+           @if (request()->routeIs('mytickets'))
+        <div
+            class="absolute top-0 left-1/2 -translate-x-1/2
+                   w-12 h-1 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-b-full">
+        </div>
+    @endif
+            <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z" />
+                </svg>
+            <span>My Tickets</span>
+            <a href="{{ route('openticket') }}"
+             class="relative flex flex-col items-center justify-center flex-1 py-3
+          {{ request()->routeIs('openticket') ? 'text-blue-400' : 'text-slate-400 hover:text-white' }}
+          transition">
             <div
                 class="w-14 h-14 rounded-2xl bg-blue-600 shadow-lg flex items-center justify-center hover:bg-blue-500 transition">
+                 @if (request()->routeIs('openticket'))
+        <div
+            class="absolute top-0 left-1/2 -translate-x-1/2
+                   w-12 h-1 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-b-full">
+        </div>
+    @endif
                 <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" stroke-width="2"
                     viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round"
                         d="M12 4v16m8-8H4" />
                 </svg>
             </div>
-            <span class="mt-2 text-slate-400">New</span>
+            <span class="mt-2 text-slate-400">New Tickets</span>
         </a>
+        </a>
+           <a href="{{ route('users') }}"
+
+           class="relative flex flex-col items-center justify-center flex-1 py-3
+          {{ request()->routeIs('users') ? 'text-blue-400' : 'text-slate-400 hover:text-white' }}
+          transition">
+           @if (request()->routeIs('users'))
+        <div
+            class="absolute top-0 left-1/2 -translate-x-1/2
+                   w-12 h-1 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-b-full">
+        </div>
+    @endif
+            <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    d="M15 5v14M5 5h14"/>
+            </svg>
+            <span>Users</span>
+        </a>
+        <!-- Floating New -->
+
 
         <!-- All -->
-        <a href="#"
-            class="flex flex-col items-center justify-center flex-1 py-3 text-slate-400 hover:text-white transition">
-            <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" stroke-width="1.8"
-                viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round"
-                    d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
-            <span>All</span>
-        </a>
+     
 
         <!-- Profile -->
-        <a href="#"
-            class="flex flex-col items-center justify-center flex-1 py-3 text-slate-400 hover:text-white transition">
-            <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" stroke-width="1.8"
+       
+        <a href="{{ route('profile') }}"
+
+                class="relative flex flex-col items-center justify-center flex-1 py-3
+          {{ request()->routeIs('profile') ? 'text-blue-400' : 'text-slate-400 hover:text-white' }}
+          transition">
+           @if (request()->routeIs('profile'))
+        <div
+            class="absolute top-0 left-1/2 -translate-x-1/2
+                   w-12 h-1 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-b-full">
+        </div>
+    @endif
+           <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" stroke-width="1.8"
                 viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round"
-                    d="M5.121 17.804A9 9 0 1118.88 17.804" />
+                    d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.5 20.25a7.5 7.5 0 0115 0" />
             </svg>
             <span>Profile</span>
         </a>
-        <a href="#"
-            class="flex flex-col items-center justify-center flex-1 py-3 text-slate-400 hover:text-white transition">
+               <a href="{{ route('about') }}"
+
+              class="relative flex flex-col items-center justify-center flex-1 py-3
+          {{ request()->routeIs('about') ? 'text-blue-400' : 'text-slate-400 hover:text-white' }}
+          transition">
+           @if (request()->routeIs('about'))
+        <div
+            class="absolute top-0 left-1/2 -translate-x-1/2
+                   w-12 h-1 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-b-full">
+        </div>
+    @endif
             <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" stroke-width="1.8"
                 viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round"
                     d="M5.121 17.804A9 9 0 1118.88 17.804" />
             </svg>
-            <span>Profile</span>
-        </a>
-        <a href="#"
-            class="flex flex-col items-center justify-center flex-1 py-3 text-slate-400 hover:text-white transition">
-            <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" stroke-width="1.8"
-                viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round"
-                    d="M5.121 17.804A9 9 0 1118.88 17.804" />
-            </svg>
-            <span>Profile</span>
+            <span>About</span>
         </a>
 
     </div>
