@@ -11,6 +11,19 @@
 //     },
 //     plugins: [],
 // };
+// /** @type {import('tailwindcss').Config} */
+// export default {
+//   content: [
+//     "./resources/**/*.blade.php",
+//     "./resources/**/*.js",
+//     "./resources/**/*.vue",
+//   ],
+//   darkMode: 'class', // Ubah dari 'media' ke 'class'
+//   theme: {
+//     extend: {},
+//   },
+//   plugins: [],
+// }
 /** @type {import('tailwindcss').Config} */
 export default {
   content: [
@@ -18,9 +31,13 @@ export default {
     "./resources/**/*.js",
     "./resources/**/*.vue",
   ],
-  darkMode: 'class', // Ubah dari 'media' ke 'class'
+  darkMode: 'class',
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        dark: '#0F172A', // Tambahkan ini untuk class bg-dark
+      }
+    },
   },
   plugins: [],
 }
