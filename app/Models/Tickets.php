@@ -19,7 +19,7 @@ class Tickets extends Model
         'status',
         'attachment_folder',
         'attachment_url',
-        'executor',
+        'executor_id',
         'priority',
         'notes_executor',
         'finished',
@@ -37,12 +37,8 @@ class Tickets extends Model
     }
     public function executor()
     {
-        return $this->belongsTo(User::class, 'executor', 'id');
+        return $this->belongsTo(User::class, 'executor_id', 'id');
     }
-    // public function attachments()
-    // {
-    //     return $this->hasMany(Ticketattachments::class);
-    // }
     public function attachments()
     {
         return $this->hasMany(Ticketattachments::class, 'ticket_id', 'id');

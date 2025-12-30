@@ -79,13 +79,16 @@ class TicketController extends Controller
     // }
     public function getAllmytickets(Request $request)
     {
-        $query = Tickets::with('user.employee')
+        $query = Tickets::with('user.employee','executor.employee')
             ->where('user_id', auth()->id())
             ->select([
                 'id',
                 'queue_number',
                 'title',
                 'category',
+                'priority',
+                'finished',
+                'estimation',
                 'status',
             ]);
         return DataTables::eloquent($query)
@@ -93,6 +96,10 @@ class TicketController extends Controller
                 return optional($ticket->user?->employee)->employee_name ?? '-';
             })
             ->orderColumn('employee_name', function ($query, $order) {})
+            ->addColumn('executor', function ($ticket) {
+                return optional($ticket->executor?->employee)->employee_name ?? '-';
+            })
+            ->orderColumn('executor', function ($query, $order) {})
             ->addColumn('action', function ($user) {
                 $idHashed = substr(hash('sha256', $user->id . env('APP_KEY')), 0, 8);
                 return '
@@ -234,12 +241,17 @@ class TicketController extends Controller
     }
     public function getAlltickets(Request $request)
     {
-        $query = Tickets::with('user.employee')
+        $query = Tickets::with(['user.employee', 'executor.employee'])
             ->select([
                 'id',
                 'user_id',
                 'queue_number',
                 'title',
+                'executor_id',
+                'priority',
+                'finished',
+                'estimation',
+                'description',
                 'category',
                 'status',
             ]);
@@ -251,6 +263,11 @@ class TicketController extends Controller
             ->orderColumn('employee_name', function ($query, $order) {
                 // disable ordering (WAJIB)
             })
+            ->addColumn('executor_employee_name', function ($ticket) {
+    return $ticket->executor?->employee?->employee_name ?? '-';
+})
+
+
             ->addColumn('action', function ($user) {
                 $idHashed = substr(hash('sha256', $user->id . env('APP_KEY')), 0, 8);
 

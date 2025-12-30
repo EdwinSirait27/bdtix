@@ -625,7 +625,7 @@
                                     <div class="user-card-avatar">${initials}</div>
                                     <div class="user-card-title">
                                         <div class="user-card-name">${user.employee_name || 'N/A'}</div>
-                                        <div class="user-card-username">@${user.username}</div>
+                                        <div class="user-card-username">NIP : ${user.username}</div>
                                     </div>
                                 </div>
                                 <div class="user-card-body">
