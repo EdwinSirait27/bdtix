@@ -509,7 +509,7 @@
 @section('header', 'All Tickets')
 @section('subtitle', 'Manage All Tickets in the System')
 @section('content')
-   
+
     <style>
         /* Base DataTables Styling */
         .dataTables_wrapper {
@@ -712,6 +712,7 @@
 
         /* ========== MOBILE CARD VIEW STYLES ========== */
         @media (max-width: 767px) {
+
             /* Hide desktop table view */
             #users-table-wrapper {
                 display: none !important;
@@ -905,7 +906,8 @@
     <div class="space-y-4 md:space-y-6">
         {{-- Statistics Cards --}}
         <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
-            <div class="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl md:rounded-2xl p-4 md:p-6 text-white shadow-lg">
+            <div
+                class="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl md:rounded-2xl p-4 md:p-6 text-white shadow-lg">
                 <div class="flex items-center justify-between mb-2">
                     <h3 class="text-xs md:text-sm font-semibold opacity-90">Total Tickets</h3>
                     <svg class="w-6 h-6 md:w-8 md:h-8 opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -917,7 +919,8 @@
                 <p class="text-2xl md:text-3xl font-bold mb-1" id="total-users"></p>
                 <p class="text-blue-100 text-xs">All Tickets</p>
             </div>
-            <div class="bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-xl md:rounded-2xl p-4 md:p-6 text-white shadow-lg">
+            <div
+                class="bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-xl md:rounded-2xl p-4 md:p-6 text-white shadow-lg">
                 <div class="flex items-center justify-between mb-2">
                     <h3 class="text-xs md:text-sm font-semibold opacity-90">Tickets Today</h3>
                     <svg class="w-6 h-6 md:w-8 md:h-8 opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -928,7 +931,8 @@
                 <p class="text-2xl md:text-3xl font-bold mb-1">{{ $todaysticket ?? 0 }}</p>
                 <p class="text-emerald-100 text-xs">Tickets</p>
             </div>
-            <div class="bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl md:rounded-2xl p-4 md:p-6 text-white shadow-lg">
+            <div
+                class="bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl md:rounded-2xl p-4 md:p-6 text-white shadow-lg">
                 <div class="flex items-center justify-between mb-2">
                     <h3 class="text-xs md:text-sm font-semibold opacity-90">On Progress Tickets</h3>
                     <svg class="w-6 h-6 md:w-8 md:h-8 opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -939,7 +943,8 @@
                 <p class="text-2xl md:text-3xl font-bold mb-1">{{ $onprogressticket ?? 0 }}</p>
                 <p class="text-purple-100 text-xs">On Progress Tickets</p>
             </div>
-            <div class="bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl md:rounded-2xl p-4 md:p-6 text-white shadow-lg">
+            <div
+                class="bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl md:rounded-2xl p-4 md:p-6 text-white shadow-lg">
                 <div class="flex items-center justify-between mb-2">
                     <h3 class="text-xs md:text-sm font-semibold opacity-90">Administrators</h3>
                     <svg class="w-6 h-6 md:w-8 md:h-8 opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1061,23 +1066,80 @@
                         [10, 25, 50, 100, "All"]
                     ],
                     ajax: "{{ route('alltickets.alltickets') }}",
-                     columnDefs: [{
-                    targets: '_all',
-                    className: 'dt-center'
-                }],
-                    columns: [
-                        { data: 'queue_number', name: 'queue_number', width: '10%' },
-                        { data: 'employee_name', name: 'employees_tables.employee_name', width: '25%',  orderable: false,
-                        searchable: false },
-                        { data: 'title', name: 'title', width: '25%' },
-                        { data: 'category', name: 'category', width: '15%' },
-                        { data: 'status', name: 'status', width: '15%' },
+                    columnDefs: [{
+                        targets: '_all',
+                        className: 'dt-center'
+                    }],
+                    columns: [{
+                            data: 'queue_number',
+                            name: 'queue_number',
+                            width: '10%'
+                        },
+                        {
+                            data: 'employee_name',
+                            name: 'employees_tables.employee_name',
+                            width: '25%',
+                            orderable: false,
+                            searchable: false
+                        },
+                        {
+                            data: 'title',
+                            name: 'title',
+                            width: '25%'
+                        },
+                        {
+                            data: 'category',
+                            name: 'category',
+                            width: '15%'
+                        },
+                        {
+                            data: 'status',
+                            name: 'status',
+                            width: '15%'
+                        },
                         // { data: 'executor', name: 'employees_tables.employee_name', width: '15%' },
-                            { data: 'executor_employee_name', name: 'employees_tables.employee_name',width: '15%' },
-                        { data: 'priority', name: 'priority', width: '15%' },
-                        { data: 'estimation', name: 'estimation', width: '15%' },
-                        { data: 'finished', name: 'finished', width: '15%' },
-                        { data: 'action', name: 'action', orderable: false, searchable: false, width: '30%', className: 'text-center' },
+                        {
+                            data: 'executor_employee_name',
+                            name: 'employees_tables.employee_name',
+                            width: '15%',
+                             orderable: false,
+                            searchable: false
+                        },
+                        {
+                            data: 'priority',
+                            name: 'priority',
+                            width: '15%',
+                            render: function(data) {
+                                return data ? data : 'empty';
+                            }
+                        },
+
+                        {
+                            data: 'estimation',
+                            name: 'estimation',
+                            width: '15%',
+                            render: function(data) {
+                                return data ? data : 'empty';
+                            }
+                        },
+
+                        {
+                            data: 'finished',
+                            name: 'finished',
+                            width: '15%',
+                            render: function(data) {
+                                return data ? data : 'empty';
+                            }
+                        },
+
+                        {
+                            data: 'action',
+                            name: 'action',
+                            orderable: false,
+                            searchable: false,
+                            width: '30%',
+                            className: 'text-center'
+                        },
                     ],
                     language: {
                         lengthMenu: "_MENU_",
@@ -1096,17 +1158,17 @@
                     initComplete: function() {
                         $('#loading-state').hide();
                         $('#users-table-wrapper').fadeIn();
-                        
+
                         var info = this.api().page.info();
                         $('#total-users').text(info.recordsTotal);
-                        
+
                         // Initialize mobile view
                         renderMobileCards();
                     },
                     drawCallback: function() {
                         var info = this.api().page.info();
                         $('#total-users').text(info.recordsTotal);
-                        
+
                         // Update mobile view
                         if ($(window).width() < 768) {
                             renderMobileCards();
@@ -1122,19 +1184,22 @@
                 // Function to render mobile cards
                 function renderMobileCards() {
                     if ($(window).width() >= 768) return;
-                    
-                    var data = table.rows({ page: 'current' }).data();
+
+                    var data = table.rows({
+                        page: 'current'
+                    }).data();
                     var container = $('#mobile-cards-container');
                     container.empty();
-                    
+
                     if (data.length === 0) {
-                        container.html('<div class="text-center py-8 text-slate-400">No users found</div>');
+                        container.html('<div class="text-center py-8 text-slate-400">No tickets found</div>');
                         return;
                     }
-                    
+
                     data.each(function(ticket) {
-                        var initials = ticket.user.employee.employee_name ? ticket.user.employee.employee_name.substring(0, 2).toUpperCase() : 'U';
-                        
+                        var initials = ticket.user.employee.employee_name ? ticket.user.employee.employee_name
+                            .substring(0, 2).toUpperCase() : 'U';
+
                         var card = `
                             <div class="user-card">
                                 <div class="user-card-header">
@@ -1158,18 +1223,52 @@
                                         <div class="user-card-value">${ticket.description || 'N/A'}</div>
                                     </div>
                                     <div class="user-card-field">
-                                        <div class="user-card-label">Position</div>
-                                        <div class="user-card-value">${ticket.title || 'N/A'}</div>
+                                        <div class="user-card-label">Executor</div>
+                                        <div class="user-card-value">${ticket.executor_employee_name || 'N/A'}</div>
                                     </div>
+                                    <div class="user-card-field">
+                                        <div class="user-card-label">Priority</div>
+                                        <div class="user-card-value">${ticket.priority || 'N/A'}</div>
+                                    </div>
+                                    <div class="user-card-field">
+                                        <div class="user-card-label">Estimation</div>
+                                        <div class="user-card-value">${ticket.estimation || 'N/A'}</div>
+                                    </div>
+                                    <div class="user-card-field">
+                                        <div class="user-card-label">Finished</div>
+                                        <div class="user-card-value">${ticket.finished || 'N/A'}</div>
+                                    </div>
+                                    <div class="user-card-field">
+    <div class="user-card-label">Status</div>
+    <div class="user-card-value">
+        ${(() => {
+            const status = ticket.status || 'N/A';
+
+            let cls = 'bg-slate-500';
+            if (status === 'Open') cls = 'bg-green-500';
+            else if (status === 'Progress') cls = 'bg-yellow-500 text-black';
+            else if (status === 'Overdue') cls = 'bg-red-500 text-black';
+            else if (status === 'Closed') cls = 'bg-slate-600';
+
+            return `
+                <span class="inline-flex items-center gap-2 px-3 py-1 text-xs font-semibold text-white rounded-full ${cls}">
+                    <span class="w-2 h-2 rounded-full bg-white"></span>
+                    ${status}
+                </span>
+            `;
+        })()}
+    </div>
+</div>
+
                                    
                                 <div class="user-card-actions">
-                                    ${ticket.action}
+                                Action${ticket.action}
                                 </div>
                             </div>
                         `;
                         container.append(card);
                     });
-                    
+
                     // Update mobile pagination
                     renderMobilePagination();
                 }
@@ -1179,7 +1278,7 @@
                     var info = table.page.info();
                     var pagination = $('#mobile-pagination');
                     pagination.empty();
-                    
+
                     // Previous button
                     var prevBtn = $('<button class="mobile-page-btn">Prev</button>');
                     if (info.page === 0) prevBtn.prop('disabled', true);
@@ -1187,11 +1286,11 @@
                         table.page('previous').draw('page');
                     });
                     pagination.append(prevBtn);
-                    
+
                     // Page info
                     var pageInfo = $(`<span class="mobile-page-btn active">${info.page + 1} / ${info.pages}</span>`);
                     pagination.append(pageInfo);
-                    
+
                     // Next button
                     var nextBtn = $('<button class="mobile-page-btn">Next</button>');
                     if (info.page >= info.pages - 1) nextBtn.prop('disabled', true);
@@ -1199,7 +1298,7 @@
                         table.page('next').draw('page');
                     });
                     pagination.append(nextBtn);
-                    
+
                     // Info text
                     $('#mobile-info').text(`Showing ${info.start + 1} to ${info.end} of ${info.recordsTotal} entries`);
                 }

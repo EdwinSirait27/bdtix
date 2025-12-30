@@ -79,16 +79,18 @@ class TicketController extends Controller
     // }
     public function getAllmytickets(Request $request)
     {
-        $query = Tickets::with('user.employee','executor.employee')
+        $query = Tickets::with(['user.employee', 'executor.employee'])
             ->where('user_id', auth()->id())
             ->select([
                 'id',
                 'queue_number',
                 'title',
-                'category',
+                 'executor_id',
                 'priority',
                 'finished',
                 'estimation',
+                'description',
+                'category',
                 'status',
             ]);
         return DataTables::eloquent($query)
@@ -96,10 +98,12 @@ class TicketController extends Controller
                 return optional($ticket->user?->employee)->employee_name ?? '-';
             })
             ->orderColumn('employee_name', function ($query, $order) {})
-            ->addColumn('executor', function ($ticket) {
-                return optional($ticket->executor?->employee)->employee_name ?? '-';
+             ->addColumn('executor_employee_name', function ($ticket) {
+    return $ticket->executor?->employee?->employee_name ?? 'empty';
+})
+ ->orderColumn('executor_employee_name', function ($query, $order) {
+                // disable ordering (WAJIB)
             })
-            ->orderColumn('executor', function ($query, $order) {})
             ->addColumn('action', function ($user) {
                 $idHashed = substr(hash('sha256', $user->id . env('APP_KEY')), 0, 8);
                 return '
@@ -264,8 +268,11 @@ class TicketController extends Controller
                 // disable ordering (WAJIB)
             })
             ->addColumn('executor_employee_name', function ($ticket) {
-    return $ticket->executor?->employee?->employee_name ?? '-';
+    return $ticket->executor?->employee?->employee_name ?? 'empty';
 })
+ ->orderColumn('executor_employee_name', function ($query, $order) {
+                // disable ordering (WAJIB)
+            })
 
 
             ->addColumn('action', function ($user) {
