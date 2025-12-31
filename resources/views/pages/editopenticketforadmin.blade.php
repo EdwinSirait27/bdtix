@@ -216,39 +216,41 @@
 @section('header', 'Edit Ticket')
 @section('subtitle', 'Answer problem or request from users')
 @section('content')
-<style>
-    .select2-container--default .select2-selection--single {
-    background-color: #1e293b; /* slate-800 */
-    border: 1px solid #334155; /* slate-700 */
-    border-radius: 0.75rem;
-    height: 52px;
-    display: flex;
-    align-items: center;
-}
+    <style>
+        .select2-container--default .select2-selection--single {
+            background-color: #1e293b;
+            /* slate-800 */
+            border: 1px solid #334155;
+            /* slate-700 */
+            border-radius: 0.75rem;
+            height: 52px;
+            display: flex;
+            align-items: center;
+        }
 
-.select2-container--default .select2-selection--single .select2-selection__rendered {
-    color: #e5e7eb;
-    padding-left: 1rem;
-}
+        .select2-container--default .select2-selection--single .select2-selection__rendered {
+            color: #e5e7eb;
+            padding-left: 1rem;
+        }
 
-.select2-container--default .select2-selection--single .select2-selection__arrow {
-    height: 100%;
-    right: 0.75rem;
-}
+        .select2-container--default .select2-selection--single .select2-selection__arrow {
+            height: 100%;
+            right: 0.75rem;
+        }
 
-.select2-dropdown {
-    background-color: #1e293b;
-    border: 1px solid #334155;
-}
+        .select2-dropdown {
+            background-color: #1e293b;
+            border: 1px solid #334155;
+        }
 
-.select2-results__option {
-    color: #e5e7eb;
-}
+        .select2-results__option {
+            color: #e5e7eb;
+        }
 
-.select2-results__option--highlighted {
-    background-color: #2563eb !important;
-}
-</style>
+        .select2-results__option--highlighted {
+            background-color: #2563eb !important;
+        }
+    </style>
     <div class="px-4 space-y-6 pb-8">
         <div class="bg-gradient-to-r from-blue-500/10 to-cyan-500/10 border border-blue-500/30 rounded-2xl p-4">
             <div class="flex items-start space-x-3">
@@ -316,11 +318,8 @@
                 <div class="relative">
                     {{-- <select id="category" name="category" required
                         class="w-full px-4 py-3.5 bg-slate-800 border border-slate-700 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 appearance-none cursor-pointer"> --}}
-                         <select
-            id="category"
-            name="category"
-            required
-            class="select2 w-full bg-slate-800 border border-slate-700 rounded-xl text-white">
+                    <select id="category" name="category" required
+                        class="select2 w-full bg-slate-800 border border-slate-700 rounded-xl text-white">
 
                         <option value="">Choose Categories...</option>
                         <option value="Hardware & Software"
@@ -493,42 +492,68 @@
                 @enderror
             </div>
             <div>
-    <label for="status"
-        class="block text-sm font-semibold text-slate-300 mb-2 flex items-center space-x-2">
-        <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M9 12h6m-3-3v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-        </svg>
-        <span>Status</span>
-        <span class="text-red-400">*</span>
-    </label>
+                <label for="finished"
+                    class="block text-sm font-semibold text-slate-300 mb-2 flex items-center space-x-2">
+                    <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M8 7V3m8 4V3M3 11h18M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                    <span>Finished</span>
+                    <span class="text-red-400">*</span>
+                </label>
 
-    <div class="relative">
-        <select
-            id="status"
-            name="status"
-            required
-            class="select2 w-full bg-slate-800 border border-slate-700 rounded-xl text-white">
+                <input type="date" min="{{ now()->toDateString() }}" id="finished" name="finished"
+                    value="{{ old('finished', $ticket->finished ?? '') }}" placeholder="Select finished date"
+                    class="w-full px-4 py-3.5 bg-slate-800 border border-slate-700 rounded-xl
+               text-white placeholder-slate-500 focus:outline-none
+               focus:ring-2 focus:ring-blue-500 focus:border-transparent
+               transition-all duration-200"
+                    >
 
-            <option value="">Choose Status...</option>
-            <option value="Open" @selected(old('status', $ticket->status) === 'Open')>Open</option>
-            <option value="Progress" @selected(old('status', $ticket->status) === 'Progress')>In Progress</option>
-            <option value="Closed" @selected(old('status', $ticket->status) === 'Closed')>Closed</option>
-            <option value="Overdue" @selected(old('status', $ticket->status) === 'Overdue')>Overdue</option>
-        </select>
-    </div>
+                @error('finished')
+                    <p class="mt-2 text-sm text-red-400 flex items-center space-x-1">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd"
+                                d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                                clip-rule="evenodd" />
+                        </svg>
+                        <span>{{ $message }}</span>
+                    </p>
+                @enderror
+            </div>
+            <div>
+                <label for="status" class="block text-sm font-semibold text-slate-300 mb-2 flex items-center space-x-2">
+                    <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9 12h6m-3-3v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <span>Status</span>
+                    <span class="text-red-400">*</span>
+                </label>
 
-    @error('status')
-        <p class="mt-2 text-sm text-red-400 flex items-center space-x-1">
-            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                <path fill-rule="evenodd"
-                    d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
-                    clip-rule="evenodd" />
-            </svg>
-            <span>{{ $message }}</span>
-        </p>
-    @enderror
-</div>
+                <div class="relative">
+                    <select id="status" name="status" required
+                        class="select2 w-full bg-slate-800 border border-slate-700 rounded-xl text-white">
+
+                        <option value="">Choose Status...</option>
+                        <option value="Open" @selected(old('status', $ticket->status) === 'Open')>Open</option>
+                        <option value="Progress" @selected(old('status', $ticket->status) === 'Progress')>In Progress</option>
+                        <option value="Closed" @selected(old('status', $ticket->status) === 'Closed')>Closed</option>
+                        <option value="Overdue" @selected(old('status', $ticket->status) === 'Overdue')>Overdue</option>
+                    </select>
+                </div>
+
+                @error('status')
+                    <p class="mt-2 text-sm text-red-400 flex items-center space-x-1">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd"
+                                d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                                clip-rule="evenodd" />
+                        </svg>
+                        <span>{{ $message }}</span>
+                    </p>
+                @enderror
+            </div>
 
 
             <div>
@@ -577,62 +602,71 @@
             </div>
         </form>
     </div>
-@push('scripts')
-    {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script> --}}
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    @push('scripts')
+        {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script> --}}
+        <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
-<script>
-    $(document).ready(function () {
-        $('#status').select2({
-            placeholder: 'Choose Status...',
-            width: '100%',
-            dropdownParent: $('#status').parent()
-        });
-    });
-</script>
-<script>
-    $(document).ready(function () {
-        $('#category').select2({
-            placeholder: 'Choose Category...',
-            width: '100%',
-            dropdownParent: $('#category').parent()
-        });
-    });
-</script>
-    <script>
-        const description = document.getElementById('description');
-        const charCount = document.getElementById('charCount');
-        description.addEventListener('input', function() {
-            charCount.textContent = this.value.length;
-        });
-    </script>
-    <script>
-        toastr.options = {
-            closeButton: true,
-            progressBar: true,
-            positionClass: "toast-top-right",
-            timeOut: "3000"
-        };
-        @if (session('success'))
-            toastr.success(@json(session('success')));
-        @endif
-        @if (session('error'))
-            toastr.error(@json(session('error')));
-        @endif
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+        <script>
+            $(document).ready(function() {
+                $('#status').select2({
+                    placeholder: 'Choose Status...',
+                    width: '100%',
+                    dropdownParent: $('#status').parent()
+                });
+            });
+        </script>
+        <script>
+            $(document).ready(function() {
+                $('#category').select2({
+                    placeholder: 'Choose Category...',
+                    width: '100%',
+                    dropdownParent: $('#category').parent()
+                });
+            });
+        </script>
+        <script>
+            const description = document.getElementById('description');
+            const charCount = document.getElementById('charCount');
+            description.addEventListener('input', function() {
+                charCount.textContent = this.value.length;
+            });
+        </script>
+        <script>
+            toastr.options = {
+                closeButton: true,
+                progressBar: true,
+                positionClass: "toast-top-right",
+                timeOut: "3000"
+            };
+            @if (session('success'))
+                toastr.success(@json(session('success')));
+            @endif
+            @if (session('error'))
+                toastr.error(@json(session('error')));
+            @endif
+        </script>
+        <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
-    <script>
-        flatpickr("#estimation", {
-            enableTime: true, // false kalau hanya tanggal
-            dateFormat: "Y-m-d H:i", // format ke backend
-            time_24hr: true,
-            minDate: "today",
-            defaultHour: 9
-        });
-    </script>
+        <script>
+            flatpickr("#estimation", {
+                enableTime: true,
+                dateFormat: "Y-m-d H:i",
+                time_24hr: true,
+                minDate: "today",
+                defaultHour: 9
+            });
+        </script>
+        <script>
+            flatpickr("#finished", {
+                enableTime: true,
+                dateFormat: "Y-m-d H:i",
+                time_24hr: true,
+                minDate: "today",
+                defaultHour: 9
+            });
+        </script>
     @endpush
 @endsection

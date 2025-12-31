@@ -6,6 +6,10 @@ use Carbon\Carbon;
 use App\Models\Tickets;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
+use App\Services\NextcloudService;
+use Illuminate\Support\Facades\Http;
 
 class dashboardController extends Controller
 {
@@ -116,41 +120,292 @@ public function edit(string $hash)
     $ticket = $this->findTicketByHash($hash);
     return view('pages.editopenticketforadmin', compact('ticket'));
 }
+// public function update(Request $request, string $hash)
+// {
+//     $ticket = $this->findTicketByHash($hash);
+//     $validated = $request->validate([
+//         'title'       => 'required|string|max:255',
+//         'category'    => 'required|string|max:100',
+//         'description' => 'nullable|string',
+//         'status'      => 'required|string',
+//         'updated_at'  => 'required|date',
+//     ]);
+
+//     $affected = Tickets::where('id', $ticket->id)
+//         ->where('updated_at', $validated['updated_at'])
+//         ->update([
+//             'title'       => $validated['title'],
+//             'category'    => $validated['category'],
+//             'description' => $validated['description'],
+//             'status'      => $validated['status'],
+//             'updated_at'  => now(),
+//         ]);
+
+//     if ($affected === 0) {
+//         return back()
+//             ->withErrors([
+//                 'conflict' =>
+//                     'Ticket ini sudah diperbarui oleh admin lain. '
+//                     . 'Silakan reload halaman untuk melihat perubahan terbaru.'
+//             ])
+//             ->withInput();
+//     }
+
+//     return redirect()
+//         ->route('showopenticketforadmin', $hash)
+//         ->with('success', 'Ticket berhasil diperbarui');
+// }
+// public function update(Request $request, string $hash)
+// {
+//     $ticket = $this->findTicketByHash($hash);
+
+//     Log::info('TICKET_UPDATE_START', [
+//         'ticket_id' => $ticket->id,
+//         'user_id'   => auth()->id(),
+//         'ip'        => $request->ip(),
+//     ]);
+
+//     // =========================
+//     // VALIDATION
+//     // =========================
+//     try {
+//         $validated = $request->validate([
+//             'category'      => 'required|string',
+//             'notes_executor'   => 'required|string|min:5|max:500',
+//             'status'        => 'required|string',
+//             'priority'        => 'required|string',
+//             'finished'        => 'nullable',
+//             'estimation'        => 'nullable',
+//         ]);
+
+//         Log::info('UPDATE_VALIDATION_SUCCESS', $validated);
+//     } catch (\Throwable $e) {
+//         Log::error('UPDATE_VALIDATION_FAILED', [
+//             'error' => $e->getMessage(),
+//         ]);
+//         throw $e;
+//     }
+
+//     try {
+//         DB::transaction(function () use ($request, $validated, $ticket) {
+
+//             Log::info('DB_TRANSACTION_UPDATE_START', [
+//                 'ticket_id' => $ticket->id
+//             ]);
+//             // =========================
+//             // UPDATE TICKET
+//             // =========================
+//             $ticket->update([
+//                 'title'       => $validated['title'],
+//                 'category'    => $validated['category'],
+//                 'description' => $validated['description'],
+//                 'status'      => $validated['status'],
+//                 'priority'      => $validated['priority'],
+//                 'finished'      => $validated['finished'],
+//                 'estrimation'      => $validated['estrimation'],
+//                 'executor_id'      => auth()->id(),
+//             ]);
+//             Log::info('TICKET_UPDATED', [
+//                 'ticket_id' => $ticket->id
+//             ]);
+//             // =========================
+//             // ATTACHMENT PROCESS (OPTIONAL)
+//             // =========================
+//             if ($request->hasFile('attachments')) {
+
+//                 $categoryFolder = Str::slug($ticket->category);
+//                 $userFolder     = Str::slug($ticket->user->username);
+//                 $ticketFolder   = $ticket->id;
+
+//                 $basePath = "ticket/{$categoryFolder}/{$userFolder}/{$ticketFolder}";
+
+//                 try {
+//                     NextcloudService::makeDir('ticket');
+//                     NextcloudService::makeDir("ticket/{$categoryFolder}");
+//                     NextcloudService::makeDir("ticket/{$categoryFolder}/{$userFolder}");
+//                     NextcloudService::makeDir($basePath);
+//                 } catch (\Throwable $e) {
+//                     Log::error('NEXTCLOUD_MKDIR_FAILED', [
+//                         'path'  => $basePath,
+//                         'error' => $e->getMessage()
+//                     ]);
+//                     throw $e;
+//                 }
+
+//                 foreach ($request->file('attachments') as $file) {
+//                     $filename = time() . '_' . $file->getClientOriginalName();
+
+//                     try {
+//                         NextcloudService::upload(
+//                             $basePath,
+//                             $filename,
+//                             file_get_contents($file->getRealPath()),
+//                             $file->getMimeType()
+//                         );
+
+//                         Ticketattachments::create([
+//                             'id'        => (string) Str::uuid(),
+//                             'ticket_id' => $ticket->id,
+//                             'file_name' => $filename,
+//                             'file_path' => "{$basePath}/{$filename}",
+//                         ]);
+//                     } catch (\Throwable $e) {
+//                         Log::error('UPLOAD_FILE_FAILED', [
+//                             'filename' => $filename,
+//                             'error'    => $e->getMessage()
+//                         ]);
+//                         throw $e;
+//                     }
+//                 }
+
+//                 // =========================
+//                 // SHARE FOLDER (ONLY IF EMPTY)
+//                 // =========================
+               
+//             }
+
+//             Log::info('DB_TRANSACTION_UPDATE_END');
+//         });
+
+//         $ticket->refresh();
+
+//         // =========================
+//         // WHATSAPP NOTIFICATION (UPDATE)
+//         // =========================
+//         try {
+//             $message =
+//                 "*Ticket Updated*\n" .
+//                 "Queue: {$ticket->queue_number}\n" .
+//                 "Title: {$ticket->title}\n" .
+//                 "Category: {$ticket->category}\n" .
+//                 "Status: {$ticket->status}\n" .
+//                 "Updated by: {$ticket->executor_id};
+
+            
+
+//             Http::timeout(15)->post('http://127.0.0.1:3000/send-message', [
+//                 'group_id' => '120363405189832865@g.us',
+//                 'text'     => $message,
+//             ]);
+//         } catch (\Throwable $e) {
+//             Log::warning('WA_UPDATE_FAILED', [
+//                 'error' => $e->getMessage(),
+//             ]);
+//         }
+
+//         Log::info('TICKET_UPDATE_SUCCESS', [
+//             'ticket_id' => $ticket->id
+//         ]);
+
+//         return redirect()
+//             ->route('alltickets')
+//             ->with('success', 'Ticket successfully updated');
+
+//     } catch (\Throwable $e) {
+
+//         Log::critical('TICKET_UPDATE_FAILED', [
+//             'ticket_id' => $ticket->id,
+//             'error'     => $e->getMessage(),
+//             'trace'     => $e->getTraceAsString(),
+//         ]);
+
+//         return redirect()
+//             ->back()
+//             ->withInput()
+//             ->with('error', 'Ticket failed to update');
+//     }
+// }
+private function generateTicketHash(string $ticketId): string
+{
+    return substr(
+        hash('sha256', $ticketId . config('app.key')),
+        0,
+        8
+    );
+}
+
+
 public function update(Request $request, string $hash)
 {
     $ticket = $this->findTicketByHash($hash);
-    $validated = $request->validate([
-        'title'       => 'required|string|max:255',
-        'category'    => 'required|string|max:100',
-        'description' => 'nullable|string',
-        'status'      => 'required|string',
-        'updated_at'  => 'required|date',
+
+    Log::info('TICKET_UPDATE_START', [
+        'ticket_id' => $ticket->id,
+        'user_id'   => auth()->id(),
+        'ip'        => $request->ip(),
     ]);
 
-    $affected = Tickets::where('id', $ticket->id)
-        ->where('updated_at', $validated['updated_at'])
-        ->update([
-            'title'       => $validated['title'],
-            'category'    => $validated['category'],
-            'description' => $validated['description'],
-            'status'      => $validated['status'],
-            'updated_at'  => now(),
+    // =========================
+    // VALIDATION
+    // =========================
+    $validated = $request->validate([
+        'category'        => 'required|string',
+        'notes_executor' => 'required|string|min:5|max:500',
+        'status'          => 'required|string',
+        'priority'        => 'required|string',
+        'finished'        => 'nullable|boolean',
+        'estimation'      => 'nullable|date',
+    ]);
+
+    DB::transaction(function () use ($validated, $ticket) {
+
+        $ticket->update([
+            'category'        => $validated['category'],
+            'notes_executor' => $validated['notes_executor'],
+            'status'          => $validated['status'],
+            'priority'        => $validated['priority'],
+            'finished'        => $validated['finished'] ?? false,
+            'estimation'      => $validated['estimation'] ?? null,
+            'executor_id'     => auth()->id(),
         ]);
 
-    if ($affected === 0) {
-        return back()
-            ->withErrors([
-                'conflict' =>
-                    'Ticket ini sudah diperbarui oleh admin lain. '
-                    . 'Silakan reload halaman untuk melihat perubahan terbaru.'
-            ])
-            ->withInput();
+        Log::info('TICKET_UPDATED', [
+            'ticket_id' => $ticket->id
+        ]);
+    });
+
+    $ticket->refresh();
+
+    // =========================
+    // WHATSAPP NOTIFICATION
+    // =========================
+    try {
+        $hash = $this->generateTicketHash($ticket->id);
+
+        $adminUrl = route('editopenticketforadmin', $hash);
+
+        $executorName = auth()->user()->employee->employee_name
+            ?? auth()->user()->username;
+
+        $message =
+            "*Ticket Updated*\n" .
+            "Queue: {$ticket->queue_number}\n" .
+            "Category: {$ticket->category}\n" .
+            "Status: {$ticket->status}\n" .
+            "Priority: {$ticket->priority}\n" .
+            "Executor: {$executorName}\n\n" .
+            "Admin Link:\n{$adminUrl}";
+
+        Http::timeout(15)->post('http://127.0.0.1:3000/send-message', [
+            'group_id' => '120363405189832865@g.us',
+            'text'     => $message,
+        ]);
+
+        Log::info('WA_UPDATE_SUCCESS', [
+            'ticket_id' => $ticket->id
+        ]);
+    } catch (\Throwable $e) {
+        Log::warning('WA_UPDATE_FAILED', [
+            'error' => $e->getMessage(),
+        ]);
     }
 
     return redirect()
-        ->route('showopenticketforadmin', $hash)
-        ->with('success', 'Ticket berhasil diperbarui');
+        ->route('alltickets')
+        ->with('success', 'Ticket successfully updated');
 }
+
+
 
 
    public function show(string $hash)
