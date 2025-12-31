@@ -19,8 +19,7 @@
                 </div>
             </div>
         </div>
-        {{-- <form method="POST" action="#" enctype="multipart/form-data" class="space-y-5"> --}}
-            <form method="POST" action="{{ route('ticketreq') }}" enctype="multipart/form-data" class="space-y-5">
+        <form method="POST" action="{{ route('ticketreq') }}" enctype="multipart/form-data" class="space-y-5">
             @csrf
             <input type="hidden" name="request_uuid" value="{{ Str::uuid() }}">
 
@@ -48,7 +47,6 @@
                     </p>
                 @enderror
             </div>
-            {{-- Category --}}
             <div>
                 <label for="category" class="block text-sm font-semibold text-slate-300 mb-2 flex items-center space-x-2">
                     <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -115,7 +113,6 @@
                     </p>
                 @enderror
             </div>
-
             <div>
                 <label class="block text-sm font-semibold text-slate-300 mb-2 flex items-center space-x-2">
                     <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -187,9 +184,9 @@
         </div>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
-     <script>
+    <script>
         // Character counter for description
         const description = document.getElementById('description');
         const charCount = document.getElementById('charCount');
@@ -274,11 +271,12 @@
         function openCamera() {
             if (!activeInputId) return;
 
-            const input =document.getElementById(activeInputId);
+            const input = document.getElementById(activeInputId);
             input.setAttribute('capture', 'environment');
             input.click();
             closeModal();
         }
+
         function openFilePicker() {
             if (!activeInputId) return;
             const input = document.getElementById(activeInputId);
@@ -286,6 +284,7 @@
             input.click();
             closeModal();
         }
+
         function eraseAttachment() {
             if (attachmentCount <= minAttachment) return;
             const lastId = "wrap_attachment_" + attachmentCount;
@@ -301,6 +300,7 @@
                 document.getElementById("limitMessage").classList.add("hidden");
             }
         }
+
         function updateFileName(id) {
             const input = document.getElementById(id);
             const label = document.getElementById("fileName_" + id);
@@ -325,96 +325,3 @@
         @endif
     </script>
 @endsection
-{{-- Priority --}}
-{{-- <div>
-                <label class="block text-sm font-semibold text-slate-300 mb-3 flex items-center space-x-2">
-                    <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                    </svg>
-                    <span>Priority Level</span>
-                    <span class="text-red-400">*</span>
-                </label>
-                <div class="grid grid-cols-3 gap-3">
-                    <label class="relative cursor-pointer">
-                        <input type="radio" name="priority" value="low" class="peer sr-only" required>
-                        <div
-                            class="px-4 py-3 bg-slate-800 border-2 border-slate-700 rounded-xl text-center transition-all peer-checked:border-green-500 peer-checked:bg-green-500/10 hover:border-slate-600">
-                            <div class="text-2xl mb-1">🟢</div>
-                            <div class="text-xs font-semibold text-slate-400 peer-checked:text-green-400">Low</div>
-                        </div>
-                    </label>
-                    <label class="relative cursor-pointer">
-                        <input type="radio" name="priority" value="medium" class="peer sr-only">
-                        <div
-                            class="px-4 py-3 bg-slate-800 border-2 border-slate-700 rounded-xl text-center transition-all peer-checked:border-yellow-500 peer-checked:bg-yellow-500/10 hover:border-slate-600">
-                            <div class="text-2xl mb-1">🟡</div>
-                            <div class="text-xs font-semibold text-slate-400 peer-checked:text-yellow-400">Mid</div>
-                        </div>
-                    </label>
-                    <label class="relative cursor-pointer">
-                        <input type="radio" name="priority" value="high" class="peer sr-only">
-                        <div
-                            class="px-4 py-3 bg-slate-800 border-2 border-slate-700 rounded-xl text-center transition-all peer-checked:border-red-500 peer-checked:bg-red-500/10 hover:border-slate-600">
-                            <div class="text-2xl mb-1">🔴</div>
-                            <div class="text-xs font-semibold text-slate-400 peer-checked:text-red-400">High</div>
-                        </div>
-                    </label>
-                </div>
-                @error('priority')
-                    <p class="mt-2 text-sm text-red-400 flex items-center space-x-1">
-                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd"
-                                d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
-                                clip-rule="evenodd" />
-                        </svg>
-                        <span>{{ $message }}</span>
-                    </p>
-                @enderror
-            </div> --}}
-{{-- Description --}}
-{{-- // function eraseAttachment() {
-        //     if (attachmentCount >= maxAttachment) return;
-        //     attachmentCount++;
-        //     const id = "attachment_" + attachmentCount;
-        //     // HTML input sesuai desain kamu
-        //     const html = `
-    //         <div class="relative mb-3" id="wrap_${id}">
-    //             <input type="file" 
-    //                 id="${id}" 
-    //                 name="attachments[]" 
-    //                 accept="image/*,.pdf,.doc,.docx"
-    //                 class="hidden" 
-    //                 onchange="updateFileName('${id}')">
-
-    //             <label for="${id}"
-    //                 class="flex items-center justify-center w-full px-4 py-8 bg-slate-800 border-2 border-dashed border-slate-700 rounded-xl cursor-pointer hover:border-blue-500 hover:bg-slate-800/50 transition-all duration-200 group">
-    //                 <div class="text-center">
-    //                     <svg class="w-12 h-12 mx-auto mb-3 text-slate-600 group-hover:text-blue-500" 
-    //                         fill="none" stroke="currentColor" viewBox="0 0 24 24">
-    //                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-    //                             d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-    //                     </svg>
-
-    //                     <p id="fileName_${id}" 
-    //                         class="text-sm font-medium text-slate-400 group-hover:text-blue-400">
-    //                         Klik untuk upload file
-    //                     </p>
-
-    //                     <p class="text-xs text-slate-600 mt-1">
-    //                         PNG, JPG, PDF, DOC (Max. 5MB)
-    //                     </p>
-    //                 </div>
-    //             </label>
-    //         </div>
-    //     `;
-        //     document.getElementById("attachmentContainer").insertAdjacentHTML("beforeend", html);
-
-        //     // Disable tombol jika mencapai batas maksimum
-        //     if (attachmentCount >= maxAttachment) {
-        //         document.getElementById("btnAddAttachment").disabled = true;
-        //         document.getElementById("btnAddAttachment").classList.add("opacity-50", "cursor-not-allowed");
-        //         // Tampilkan pesan limit
-        //         document.getElementById("limitMessage").classList.remove("hidden");
-        //     }
-        // } --}}

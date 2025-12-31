@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-    <title>500 - Server Error</title>
+    <title>403 - Leave</title>
     <link rel="icon" type="image/png" href="https://cloud.mjm-bali.co.id/index.php/s/CHRczpYqozMHjoD/download">
 
     {{-- Tailwind --}}
@@ -19,7 +19,7 @@
     {{-- APP CONTAINER --}}
     {{-- <div class="max-w-md mx-auto min-h-screen bg-slate-900 shadow-2xl flex flex-col"> --}}
         {{-- <div class="w-full max-w-3xl mx-auto min-h-screen bg-slate-900 shadow-2xl flex flex-col"> --}}
- <div class="min-h-screen bg-slate-900 flex flex-col 
+<div class="min-h-screen bg-slate-900 flex flex-col 
         mx-auto w-full 
         max-w-md md:max-w-full
         px-4 md:px-0">
@@ -31,8 +31,7 @@
                     {{-- <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
                     </svg> --}}
-                                         <img src="https://cloud.mjm-bali.co.id/index.php/s/fMMRXmq5cdkApNc/download"
-
+                     <img src="https://cloud.mjm-bali.co.id/index.php/s/fMMRXmq5cdkApNc/download"
                         class="w-15 h-15 select-none pointer-events-none" draggable="false" alt="icon">
                 {{-- </div> --}}
                 <div>
@@ -54,13 +53,13 @@
                     {{-- 404 Number with Glitch Effect --}}
                     <div class="relative">
                         <div class="text-9xl font-black text-transparent bg-clip-text bg-gradient-to-br from-blue-500 via-cyan-500 to-blue-600 leading-none animate-glitch">
-                            500
+                            403
                         </div>
                         <div class="absolute inset-0 text-9xl font-black text-blue-500/20 leading-none" style="transform: translate(-2px, -2px);">
-                            500
+                            403
                         </div>
                         <div class="absolute inset-0 text-9xl font-black text-cyan-500/20 leading-none" style="transform: translate(2px, 2px);">
-                            500
+                            403
                         </div>
                     </div>
 
@@ -83,9 +82,9 @@
 
                 {{-- Error Message --}}
                 <div class="space-y-3 pt-6">
-                    <h1 class="text-2xl font-bold text-white">Internal Server Error</h1>
+                    <h1 class="text-2xl font-bold text-white">Why you visit this site?</h1>
                     <p class="text-slate-400 text-sm leading-relaxed max-w-sm mx-auto">
-Server Error, please contact Edwin.
+                        Sorry, the page you are looking for is not for you. Make sure the URL you entered is correct.
                     </p>
                 </div>
 
@@ -143,7 +142,7 @@ Server Error, please contact Edwin.
                 {{-- Contact Support --}}
                 <div class="pt-6">
                     <p class="text-xs text-slate-500 mb-3">Need Help?</p>
-                    <a href="#" class="inline-flex items-center space-x-2 text-sm text-blue-400 hover:text-blue-300 transition-colors font-medium group">
+                    <a href="mailto:it@mjm-bali.co.id" class="inline-flex items-center space-x-2 text-sm text-blue-400 hover:text-blue-300 transition-colors font-medium group">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"/>
                         </svg>
@@ -159,8 +158,8 @@ Server Error, please contact Edwin.
 
         {{-- Footer --}}
         <footer class="px-6 py-4 border-t border-slate-800 text-center">
-                       <p class="text-xs text-slate-600"> &copy; 2025 SerTix, Developed by Edwin Sirait</p>
-
+            <p class="text-xs text-slate-600"> &copy; 2025 SerTix, Developed by Edwin Sirait</p>
+            {{-- <p class="text-xs text-slate-600">Error Code: 404 | Page Not Found</p> --}}
         </footer>
 
     </div>

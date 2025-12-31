@@ -1,11 +1,10 @@
 <?php
-
 namespace App\Http\Controllers;
-
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use App\Models\Tickets;
+use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
 
 class dashboardController extends Controller
@@ -38,22 +37,22 @@ public function getAllticketforadmins(Request $request)
             'description',
             'category',
             'status',
-            'created_at', // pastikan ada
+            'created_at', 
         ])
-        ->whereDate('created_at', Carbon::today()); // 🔥 ticket hari ini saja
+        ->whereDate('created_at', Carbon::today()); 
 
     return DataTables::eloquent($query)
         ->addColumn('employee_name', function ($ticket) {
             return optional($ticket->user?->employee)->employee_name ?? '-';
         })
         ->orderColumn('employee_name', function ($query, $order) {
-            // optional
+         
         })
         ->addColumn('action', function ($user) {
             $idHashed = substr(hash('sha256', $user->id . env('APP_KEY')), 0, 8);
 
                return '
-        <a href="' . route('editopenticket', $idHashed) . '"
+        <a href="' . route('editopenticketforadmin', $idHashed) . '"
            class="inline-flex items-center justify-center p-2 
                   text-slate-500 hover:text-indigo-600 
                   hover:bg-indigo-50 rounded-full transition"
@@ -69,9 +68,8 @@ public function getAllticketforadmins(Request $request)
                       d="M16.862 3.487a2.1 2.1 0 013.001 2.949L7.125 19.174 
                          3 21l1.826-4.125L16.862 3.487z" />
             </svg>
-
         </a>
-         <a href="' . route('showtickets', $idHashed) . '"
+         <a href="' . route('showopenticketforadmin', $idHashed) . '"
            class="inline-flex items-center justify-center p-2
                   text-slate-500 hover:text-emerald-600
                   hover:bg-emerald-50 rounded-full transition"
@@ -97,111 +95,114 @@ public function getAllticketforadmins(Request $request)
         ->rawColumns(['action'])
         ->make(true);
 }
+private function findTicketByHash(string $hash): Tickets
+{
+    $ticket = Tickets::with('user.employee')
+        ->get()
+        ->first(fn ($t) =>
+            substr(
+                hash('sha256', $t->id . config('app.key')),
+                0,
+                8
+            ) === $hash
+        );
 
-// public function getAllticketforadmins(Request $request)
-// {
-//     $query = Tickets::with('user.employee')
-//         ->select([
-//             'id',
-//             'user_id',
-//             'queue_number',
-//             'title',
-//             'description',
-//             'category',
-//             'status',
-//         ]);
+    abort_if(!$ticket, 404, 'Ticket tidak ditemukan');
 
-//     return DataTables::eloquent($query)
-//         ->addColumn('employee_name', function ($ticket) {
-//             return optional($ticket->user?->employee)->employee_name ?? '-';
-//         })
-//         ->orderColumn('employee_name', function ($query, $order) {
-//         })
-//          ->addColumn('action', function ($user) {
-//     $idHashed = substr(hash('sha256', $user->id . env('APP_KEY')), 0, 8);
+    return $ticket;
+}
+public function edit(string $hash)
+{
+    $ticket = $this->findTicketByHash($hash);
+    return view('pages.editopenticketforadmin', compact('ticket'));
+}
+public function update(Request $request, string $hash)
+{
+    $ticket = $this->findTicketByHash($hash);
+    $validated = $request->validate([
+        'title'       => 'required|string|max:255',
+        'category'    => 'required|string|max:100',
+        'description' => 'nullable|string',
+        'status'      => 'required|string',
+        'updated_at'  => 'required|date',
+    ]);
 
-//     return '
-//         <a href="' . route('editopenticket', $idHashed) . '"
-//            class="inline-flex items-center justify-center p-2 
-//                   text-slate-500 hover:text-indigo-600 
-//                   hover:bg-indigo-50 rounded-full transition"
-//            title="Edit Tickets: ' . e($user->user->employee->employee_name) . '">
+    $affected = Tickets::where('id', $ticket->id)
+        ->where('updated_at', $validated['updated_at'])
+        ->update([
+            'title'       => $validated['title'],
+            'category'    => $validated['category'],
+            'description' => $validated['description'],
+            'status'      => $validated['status'],
+            'updated_at'  => now(),
+        ]);
 
-//             <svg xmlns="http://www.w3.org/2000/svg" 
-//                  class="w-5 h-5" 
-//                  fill="none" 
-//                  viewBox="0 0 24 24" 
-//                  stroke="currentColor" 
-//                  stroke-width="1.8">
-//                 <path stroke-linecap="round" stroke-linejoin="round"
-//                       d="M16.862 3.487a2.1 2.1 0 013.001 2.949L7.125 19.174 
-//                          3 21l1.826-4.125L16.862 3.487z" />
-//             </svg>
+    if ($affected === 0) {
+        return back()
+            ->withErrors([
+                'conflict' =>
+                    'Ticket ini sudah diperbarui oleh admin lain. '
+                    . 'Silakan reload halaman untuk melihat perubahan terbaru.'
+            ])
+            ->withInput();
+    }
 
-//         </a>
-//          <a href="' . route('showtickets', $idHashed) . '"
-//            class="inline-flex items-center justify-center p-2
-//                   text-slate-500 hover:text-emerald-600
-//                   hover:bg-emerald-50 rounded-full transition"
-//            title="Show Tickets: ' . e($user->user->employee->employee_name) . '">
+    return redirect()
+        ->route('showopenticketforadmin', $hash)
+        ->with('success', 'Ticket berhasil diperbarui');
+}
 
-//             <svg xmlns="http://www.w3.org/2000/svg"
-//                  class="w-5 h-5"
-//                  fill="none"
-//                  viewBox="0 0 24 24"
-//                  stroke="currentColor"
-//                  stroke-width="1.8">
-//                 <path stroke-linecap="round" stroke-linejoin="round"
-//                       d="M2.25 12s3.75-6.75 9.75-6.75
-//                          S21.75 12 21.75 12
-//                          18 18.75 12 18.75
-//                          2.25 12 2.25 12z" />
-//                 <circle cx="12" cy="12" r="3.25" />
-//             </svg>
 
-//         </a>
-//     ';
-// })
-//                 ->rawColumns(['action'])
-
-//         ->make(true);
-// }
- public function edit($hash)
-    {
-        $user = Tickets::all()->first(function ($u) use ($hash) {
-            return substr(hash('sha256', $u->id . env('APP_KEY')), 0, 8) === $hash;
+   public function show(string $hash)
+{
+    $ticket = Tickets::with(['user.employee'])
+        ->get()
+        ->first(function ($ticket) use ($hash) {
+            return substr(
+                hash('sha256', $ticket->id . config('app.key')),
+                0,
+                8
+            ) === $hash;
         });
-        abort_if(!$user, 404);
-        return view('pages.editusers', compact('user'));
-    }
-//  public function show($hash)
-//     {
-//         $user = Tickets::all()->first(function ($u) use ($hash) {
-//             return substr(hash('sha256', $u->id . env('APP_KEY')), 0, 8) === $hash;
+
+    abort_if(!$ticket, 404, 'Ticket tidak ditemukan');
+
+    return view('pages.showopenticketforadmin', [
+        'ticket' => $ticket,
+    ]);
+}
+// public function update(Request $request, string $hash)
+// {
+//     $ticket = Tickets::get()
+//         ->first(function ($ticket) use ($hash) {
+//             return substr(
+//                 hash('sha256', $ticket->id . config('app.key')),
+//                 0,
+//                 8
+//             ) === $hash;
 //         });
-//         abort_if(!$user, 404);
-//         return view('pages.editusers', compact('user'));
-//     }
-   public function show($hash)
-    {
-        $ticket = Tickets::with([
-            'user.employee',
-            'attachments',
-        ])
-            ->get()
-            ->first(function ($ticket) use ($hash) {
-                $hashedId = substr(
-                    hash('sha256', $ticket->id . env('APP_KEY')),
-                    0,
-                    8
-                );
-                return hash_equals($hashedId, $hash);
-            });
+//     abort_if(!$ticket, 404, 'Ticket tidak ditemukan');
 
-        if (! $ticket) {
-            abort(404, 'Ticket not found');
-        }
+//     $validated = $request->validate([
+//         'title'       => 'required|string|max:255',
+//         'category'    => 'required|string|max:100',
+//         'description' => 'nullable|string',
+//         'status'      => 'required|string',
+//     ]);
 
-        return view('pages.showtickets', compact('ticket'));
-    }
+//     DB::transaction(function () use ($ticket, $validated) {
+//         $ticket->update([
+//             'title'       => $validated['title'],
+//             'category'    => $validated['category'],
+//             'description' => $validated['description'],
+//             'status'      => $validated['status'],
+//         ]);
+//     });
+
+//     return redirect()
+//         ->route('showopenticketforadmin', $hash)
+//         ->with('success', 'Ticket berhasil diperbarui');
+// }
+
+
 }

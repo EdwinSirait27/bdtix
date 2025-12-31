@@ -308,6 +308,8 @@
                                     Dashboard
                                 </a>
                             </li>
+                            @role('admin|executor')
+
                             <li>
                                 <a href="{{ route('alltickets') }}"
                                     class="group flex gap-x-3 rounded-lg p-3 text-sm leading-6 font-semibold transition-all
@@ -323,6 +325,9 @@
                                     All Tickets
                                 </a>
                             </li>
+                            @endrole
+                            @role('human')
+
                             <li>
                                 <a href="{{ route('mytickets') }}"
                                     class="group flex gap-x-3 rounded-lg p-3 text-sm leading-6 font-semibold transition-all
@@ -340,6 +345,9 @@
                                         class="ml-auto inline-flex items-center rounded-full bg-blue-900 px-2.5 py-0.5 text-xs font-bold text-blue-300">{{ $openTicketCount ?? 0 }}</span>
                                 </a>
                             </li>
+                            @endrole
+                            @role('admin')
+
                             <li>
                                 <a href="{{ route('users') }}"
                                     class="group flex gap-x-3 rounded-lg p-3 text-sm leading-6 font-semibold transition-all
@@ -355,6 +363,9 @@
                                     Users
                                 </a>
                             </li>
+                            @endrole
+                            @role('human')
+
                             <li>
                                 <a href="{{ route('openticket') }}"
                                     class="group flex gap-x-3 rounded-lg p-3 text-sm leading-6 font-semibold transition-all
@@ -369,6 +380,9 @@
                                     Create Ticket
                                 </a>
                             </li>
+                            @endrole
+                            @role('admin|executor')
+
                             <li>
                                 <a href="#"
                                     class="group flex gap-x-3 rounded-lg p-3 text-sm leading-6 font-semibold text-slate-300 hover:bg-slate-800 transition-all">
@@ -380,17 +394,7 @@
                                     Resolved Tickets
                                 </a>
                             </li>
-                            <li>
-                                <a href="#"
-                                    class="group flex gap-x-3 rounded-lg p-3 text-sm leading-6 font-semibold text-slate-300 hover:bg-slate-800 transition-all">
-                                    <svg class="h-6 w-6 shrink-0" fill="none" stroke="currentColor"
-                                        viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                    </svg>
-                                    History
-                                </a>
-                            </li>
+                            @endrole
                         </ul>
                     </li>
                     @endauth
@@ -412,6 +416,20 @@
                                 </a>
                             </li>
                             @endguest
+                            <li>
+                                <a href="{{ route('profile') }}"
+                                    class="group flex gap-x-3 rounded-lg p-3 text-sm leading-6 font-semibold transition-all
+                                   {{ request()->routeIs('profile')
+                                       ? 'bg-gradient-to-r from-blue-500 to-cyan-500 text-white shadow-md'
+                                       : 'text-slate-300 hover:bg-slate-800' }}">
+                                    <svg class="h-6 w-6 shrink-0" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M13 16h-1v-4h-1m1-4h.01M12 2a10 10 0 100 20 10 10 0 000-20z" />
+                                    </svg>
+                                    Profile
+                                </a>
+                            </li>
                             <li>
                                 <a href="{{ route('about') }}"
                                     class="group flex gap-x-3 rounded-lg p-3 text-sm leading-6 font-semibold transition-all
