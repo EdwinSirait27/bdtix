@@ -61,7 +61,7 @@ Route::middleware(['auth', 'role:admin|executor'])->group(function () {
     Route::get('/showopenticketforadmin/{hash}', [dashboardController::class, 'show'])->name('showopenticketforadmin');
     Route::put(
         'updateopenticketforadmin/{hash}',
-        [TicketController::class, 'update']
+        [dashboardController::class, 'update']
     )->name('updateopenticketforadmin');
 });
 Route::middleware(['auth', 'role:admin'])->group(function () {
