@@ -577,7 +577,7 @@
             </div>
         </form>
     </div>
-
+@push('scripts')
     {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script> --}}
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
@@ -634,4 +634,5 @@
             defaultHour: 9
         });
     </script>
+    @endpush
 @endsection
