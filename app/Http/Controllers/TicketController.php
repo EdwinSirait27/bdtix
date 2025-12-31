@@ -139,7 +139,6 @@ public function getResolvetickets(Request $request)
         ->rawColumns(['action'])
         ->make(true);
 }
-
     public function myTicket()
     {
         $user = Auth::user();

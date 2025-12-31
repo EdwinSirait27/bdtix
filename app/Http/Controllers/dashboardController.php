@@ -343,19 +343,26 @@ public function update(Request $request, string $hash)
         'notes_executor' => 'required|string|min:5|max:500',
         'status'          => 'required|string',
         'priority'        => 'required|string',
-        'finished'        => 'nullable|boolean',
+        'finished'        => 'nullable|date',
         'estimation'      => 'nullable|date',
     ]);
 
     DB::transaction(function () use ($validated, $ticket) {
+$finished = !empty($validated['finished'])
+    ? Carbon::parse($validated['finished'])
+    : null;
+
+$estimation = !empty($validated['estimation'])
+    ? Carbon::parse($validated['estimation'])
+    : null;
 
         $ticket->update([
             'category'        => $validated['category'],
             'notes_executor' => $validated['notes_executor'],
             'status'          => $validated['status'],
             'priority'        => $validated['priority'],
-            'finished'        => $validated['finished'] ?? false,
-            'estimation'      => $validated['estimation'] ?? null,
+            'finished'        => $finished,
+            'estimation'      => $estimation, 
             'executor_id'     => auth()->id(),
         ]);
 
