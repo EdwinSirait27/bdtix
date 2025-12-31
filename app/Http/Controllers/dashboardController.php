@@ -383,10 +383,16 @@ $estimation = !empty($validated['estimation'])
 
         $executorName = auth()->user()->employee->employee_name
             ?? auth()->user()->username;
-
+ $formattedDate = $ticket->created_at
+                    ->timezone('Asia/Makassar')
+                    ->format('d-m-Y H:i');
+                    $userName = $ticket->user->employee->employee_name;
         $message =
             "*Ticket Updated*\n" .
             "Queue: {$ticket->queue_number}\n" .
+            "Date: {$formattedDate}\n" .
+            "User: {$userName}\n" .
+            "Title: {$ticket->title}\n" .
             "Category: {$ticket->category}\n" .
             "Status: {$ticket->status}\n" .
             "Priority: {$ticket->priority}\n" .

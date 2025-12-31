@@ -396,8 +396,15 @@
                 </label>
                 <div class="grid grid-cols-3 gap-3">
                     <label class="relative cursor-pointer">
-                        <input type="radio" name="priority" value="Low" id="Low" class="peer sr-only"
-                            required>
+                       <input type="radio"
+    name="priority"
+    value="Low"
+    id="Low"
+    class="peer sr-only"
+    required
+    @checked(old('priority', $ticket->priority ?? '') === 'Low')
+>
+
                         <div
                             class="px-4 py-3 bg-slate-800 border-2 border-slate-700 rounded-xl text-center transition-all peer-checked:border-green-500 peer-checked:bg-green-500/10 hover:border-slate-600">
                             <div class="text-2xl mb-1">🟢</div>
@@ -405,7 +412,14 @@
                         </div>
                     </label>
                     <label class="relative cursor-pointer">
-                        <input type="radio" name="priority" value="Medium" id="Medium" class="peer sr-only">
+                      <input type="radio"
+    name="priority"
+    value="Medium"
+    id="Medium"
+    class="peer sr-only"
+    @checked(old('priority', $ticket->priority ?? '') === 'Medium')
+>
+
                         <div
                             class="px-4 py-3 bg-slate-800 border-2 border-slate-700 rounded-xl text-center transition-all peer-checked:border-yellow-500 peer-checked:bg-yellow-500/10 hover:border-slate-600">
                             <div class="text-2xl mb-1">🟡</div>
@@ -413,7 +427,14 @@
                         </div>
                     </label>
                     <label class="relative cursor-pointer">
-                        <input type="radio" name="priority" value="High" id="High" class="peer sr-only">
+                        <input type="radio"
+    name="priority"
+    value="High"
+    id="High"
+    class="peer sr-only"
+    @checked(old('priority', $ticket->priority ?? '') === 'High')
+>
+
                         <div
                             class="px-4 py-3 bg-slate-800 border-2 border-slate-700 rounded-xl text-center transition-all peer-checked:border-red-500 peer-checked:bg-red-500/10 hover:border-slate-600">
                             <div class="text-2xl mb-1">🔴</div>
@@ -461,6 +482,25 @@
                     </p>
                 @enderror
             </div>
+             {{-- <input type="date" min="{{ now()->toDateString() }}" id="estimation" name="estimation"
+                    value="{{ old('estimation', $ticket->estimation ?? '') }}" placeholder="Select estimation date"
+                    class="w-full px-4 py-3.5 bg-slate-800 border border-slate-700 rounded-xl
+               text-white placeholder-slate-500 focus:outline-none
+               focus:ring-2 focus:ring-blue-500 focus:border-transparent
+               transition-all duration-200"
+                    required> --}}
+                    {{-- <input
+    type="text"
+    id="estimation"
+    name="estimation"
+    value="{{ old('estimation', optional($ticket->estimation)->format('Y-m-d H:i')) }}"
+    placeholder="Select estimation date"
+    class="w-full px-4 py-3.5 bg-slate-800 border border-slate-700 rounded-xl
+           text-white placeholder-slate-500 focus:outline-none
+           focus:ring-2 focus:ring-blue-500 focus:border-transparent
+           transition-all duration-200"
+    required
+> --}}
             <div>
                 <label for="estimation"
                     class="block text-sm font-semibold text-slate-300 mb-2 flex items-center space-x-2">
@@ -472,13 +512,18 @@
                     <span class="text-red-400">*</span>
                 </label>
 
-                <input type="date" min="{{ now()->toDateString() }}" id="estimation" name="estimation"
-                    value="{{ old('estimation', $ticket->estimation ?? '') }}" placeholder="Select estimation date"
-                    class="w-full px-4 py-3.5 bg-slate-800 border border-slate-700 rounded-xl
-               text-white placeholder-slate-500 focus:outline-none
-               focus:ring-2 focus:ring-blue-500 focus:border-transparent
-               transition-all duration-200"
-                    required>
+               
+<input
+    type="datetime-local"
+    id="estimation"
+    name="estimation"
+    value="{{ old('estimation') ?? $ticket->estimation }}"
+    class="w-full px-4 py-3.5 bg-slate-800 border border-slate-700 rounded-xl text-white"
+    required
+>
+
+
+
 
                 @error('estimation')
                     <p class="mt-2 text-sm text-red-400 flex items-center space-x-1">
@@ -491,6 +536,39 @@
                     </p>
                 @enderror
             </div>
+            <div>
+                <label for="status" class="block text-sm font-semibold text-slate-300 mb-2 flex items-center space-x-2">
+                    <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9 12h6m-3-3v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <span>Status</span>
+                    <span class="text-red-400">*</span>
+                </label>
+
+                <div class="relative">
+                    <select id="status" name="status" required
+                        class="select2 w-full bg-slate-800 border border-slate-700 rounded-xl text-white">
+
+                        <option value="">Choose Status...</option>
+                        <option value="Open" @selected(old('status', $ticket->status) === 'Open')>Open</option>
+                        <option value="Progress" @selected(old('status', $ticket->status) === 'Progress')>In Progress</option>
+                        <option value="Closed" @selected(old('status', $ticket->status) === 'Closed')>Closed</option>
+                    </select>
+                </div>
+
+                @error('status')
+                    <p class="mt-2 text-sm text-red-400 flex items-center space-x-1">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd"
+                                d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                                clip-rule="evenodd" />
+                        </svg>
+                        <span>{{ $message }}</span>
+                    </p>
+                @enderror
+            </div>
+{{-- 
             <div>
                 <label for="finished"
                     class="block text-sm font-semibold text-slate-300 mb-2 flex items-center space-x-2">
@@ -520,41 +598,28 @@
                         <span>{{ $message }}</span>
                     </p>
                 @enderror
-            </div>
-            <div>
-                <label for="status" class="block text-sm font-semibold text-slate-300 mb-2 flex items-center space-x-2">
-                    <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M9 12h6m-3-3v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    <span>Status</span>
-                    <span class="text-red-400">*</span>
-                </label>
+            </div> --}}
+            <div id="finished-wrapper" class="hidden">
+    <label for="finished"
+        class="block text-sm font-semibold text-slate-300 mb-2 flex items-center space-x-2">
+        <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M8 7V3m8 4V3M3 11h18M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+        </svg>
+        <span>Finished</span>
+        <span class="text-red-400">*</span>
+    </label>
 
-                <div class="relative">
-                    <select id="status" name="status" required
-                        class="select2 w-full bg-slate-800 border border-slate-700 rounded-xl text-white">
+    <input type="date"
+        min="{{ now()->toDateString() }}"
+        id="finished"
+        name="finished"
+        value="{{ old('finished', $ticket->finished ?? '') }}"
+        class="w-full px-4 py-3.5 bg-slate-800 border border-slate-700 rounded-xl
+               text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+</div>
 
-                        <option value="">Choose Status...</option>
-                        <option value="Open" @selected(old('status', $ticket->status) === 'Open')>Open</option>
-                        <option value="Progress" @selected(old('status', $ticket->status) === 'Progress')>In Progress</option>
-                        <option value="Closed" @selected(old('status', $ticket->status) === 'Closed')>Closed</option>
-                        <option value="Overdue" @selected(old('status', $ticket->status) === 'Overdue')>Overdue</option>
-                    </select>
-                </div>
-
-                @error('status')
-                    <p class="mt-2 text-sm text-red-400 flex items-center space-x-1">
-                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd"
-                                d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
-                                clip-rule="evenodd" />
-                        </svg>
-                        <span>{{ $message }}</span>
-                    </p>
-                @enderror
-            </div>
-
+            
 
             <div>
                 <label class="block text-sm font-semibold text-slate-300 mb-2 flex items-center space-x-2">
@@ -585,7 +650,7 @@
             </div>
 
             <div class="flex space-x-3 pt-4">
-                <a href="{{ route('dashboard') }}"
+                <a href="{{ route('alltickets') }}"
                     class="flex-1 py-3.5 bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 font-semibold rounded-xl transition-all duration-200 flex items-center justify-center space-x-2">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -608,6 +673,21 @@
 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script>
+    $(document).ready(function () {
+        function toggleFinished() {
+            if ($('#status').val() === 'Closed') {
+                $('#finished-wrapper').removeClass('hidden');
+            } else {
+                $('#finished-wrapper').addClass('hidden');
+            }
+        }
+
+        toggleFinished(); // initial load
+
+        $('#status').on('change', toggleFinished);
+    });
+</script>
 
         <script>
             $(document).ready(function() {
@@ -650,7 +730,7 @@
         </script>
         <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
-        <script>
+        {{-- <script>
             flatpickr("#estimation", {
                 enableTime: true,
                 dateFormat: "Y-m-d H:i",
@@ -658,7 +738,33 @@
                 minDate: "today",
                 defaultHour: 9
             });
-        </script>
+        </script> --}}
+        {{-- <script>
+    flatpickr("#estimation", {
+        enableTime: true,
+        dateFormat: "Y-m-d H:i",
+        time_24hr: true,
+        minDate: "today",
+        defaultHour: 9
+    });
+</script> --}}
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const estimationInput = document.getElementById('estimation');
+
+    flatpickr(estimationInput, {
+        enableTime: true,
+        dateFormat: "Y-m-d H:i",
+        time_24hr: true,
+        defaultDate: estimationInput.value || null,
+        minDate: estimationInput.value ? null : "today",
+        allowInput: true
+    });
+});
+</script>
+
+
+
         <script>
             flatpickr("#finished", {
                 enableTime: true,
