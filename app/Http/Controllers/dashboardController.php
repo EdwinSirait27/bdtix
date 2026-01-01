@@ -13,18 +13,63 @@ use Illuminate\Support\Facades\Http;
 
 class dashboardController extends Controller
 {
+  // public function dashboardPage()
+  // {
+  //   $user = Auth::user();
+  //   $todaysticket = Tickets::whereDate('created_at', Carbon::today())->count();
+  //   $onprogressticket = Tickets::where('status', 'Progress')
+  //     ->count();
+  //   $closedticket = Tickets::where('status', 'Closed')
+  //     ->count();
+  //     $totalTickets   = Tickets::count();
+  //   $overdueticket = Tickets::where('status', 'Overdue')
+  //     ->count();
+      
+
+  //     $slaCompliance = $totalTickets > 0
+  //   ? round((($totalTickets - $overdueticket) / $totalTickets) * 100, 2)
+  //   : 0;
+  //   return view('pages.dashboard', compact('slaCompliance','user', 'todaysticket', 'onprogressticket', 'closedticket', 'overdueticket'));
+  // }
   public function dashboardPage()
-  {
+{
     $user = Auth::user();
+
     $todaysticket = Tickets::whereDate('created_at', Carbon::today())->count();
-    $onprogressticket = Tickets::where('status', 'Progress')
-      ->count();
-    $closedticket = Tickets::where('status', 'Closed')
-      ->count();
-    $overdueticket = Tickets::where('status', 'Overdue')
-      ->count();
-    return view('pages.dashboard', compact('user', 'todaysticket', 'onprogressticket', 'closedticket', 'overdueticket'));
-  }
+
+    $onprogressticket = Tickets::where('status', 'Progress')->count();
+
+    $closedticket = Tickets::whereNotNull('finished')->count();
+
+    // 🔴 LIVE MONITORING (Overdue)
+    $overdueticket = Tickets::where('status', 'Overdue')->count();
+
+    // ✅ SLA FINAL (hanya ticket selesai)
+    $totalSlaTickets = Tickets::whereNotNull('executor_id')
+        ->whereNotNull('estimation')
+        ->whereNotNull('finished')
+        ->count();
+
+    $slaCompliantTickets = Tickets::whereNotNull('executor_id')
+        ->whereNotNull('estimation')
+        ->whereNotNull('finished')
+        ->whereColumn('finished', '<=', 'estimation')
+        ->count();
+
+    $slaCompliance = $totalSlaTickets > 0
+        ? round(($slaCompliantTickets / $totalSlaTickets) * 100, 2)
+        : 0;
+
+    return view('pages.dashboard', compact(
+        'user',
+        'todaysticket',
+        'onprogressticket',
+        'closedticket',
+        'overdueticket',
+        'slaCompliance'
+    ));
+}
+
   public function aboutUs()
   {
     return view('pages.about');
