@@ -416,6 +416,7 @@
                                 </a>
                             </li>
                             @endguest
+                            @auth
                             <li>
                                 <a href="{{ route('profile') }}"
                                     class="group flex gap-x-3 rounded-lg p-3 text-sm leading-6 font-semibold transition-all
@@ -430,6 +431,7 @@
                                     Profile
                                 </a>
                             </li>
+                            @endauth
                             <li>
                                 <a href="{{ route('about') }}"
                                     class="group flex gap-x-3 rounded-lg p-3 text-sm leading-6 font-semibold transition-all

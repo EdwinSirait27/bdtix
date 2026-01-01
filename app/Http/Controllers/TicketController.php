@@ -412,6 +412,7 @@ public function getResolvetickets(Request $request)
             ->rawColumns(['action'])
             ->make(true);
     }
+
     public function store(Request $request)
     {
         Log::info('TICKET_STORE_START', [
@@ -579,6 +580,14 @@ public function getResolvetickets(Request $request)
             });
 
             $ticket->refresh();
+            $hash = substr(
+    hash('sha256', $ticket->id . config('app.key')),
+    0,
+    8
+);
+
+$editTicketUrl = route('editopenticketforadmin', $hash);
+
             Log::info('TICKET_REFRESHED', ['ticket_id' => $ticket->id]);
 
             // =========================
@@ -603,7 +612,10 @@ public function getResolvetickets(Request $request)
                     "Title: {$ticket->title}\n" .
                     "Category: {$ticket->category}\n" .
                     "Description: {$ticket->description}\n" .
-                    "User: {$userName}";
+                    "User: {$userName}\n" .
+                     "*Tickets Edit Link*\n" .
+    "{$editTicketUrl}"
+                    ;
 
                 if (!empty($ticket->attachment_url)) {
                     $message .= "\nAttachments:\n{$ticket->attachment_url}";
