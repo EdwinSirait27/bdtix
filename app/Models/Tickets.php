@@ -43,4 +43,9 @@ class Tickets extends Model
     {
         return $this->hasMany(Ticketattachments::class, 'ticket_id', 'id');
     }
+    public function review()
+{
+    return $this->hasOne(TicketReview::class, 'ticket_id', 'id');
+}
+
 }

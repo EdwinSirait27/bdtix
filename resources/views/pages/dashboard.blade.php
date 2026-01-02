@@ -40,7 +40,7 @@
                         <p class="text-2xl font-bold text-rose-400">{{ $overdueticket }}</p>
                     </div>
                 </div>
-                <p class="mt-3 text-xs text-slate-400">Tiket melewati SLA</p>
+                <p class="mt-3 text-xs text-slate-400">Ticket passes SLA</p>
             </div>
         </div>
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
@@ -133,7 +133,7 @@
                                 style="width: {{ $slaCompliance ?? 0 }}%; background: linear-gradient(90deg,#06b6d4,#3b82f6);">
                             </div>
                         </div>
-                        <div class="mt-2 text-sm text-slate-300">{{ $slaCompliance ?? 0 }}% memenuhi SLA</div>
+                        <div class="mt-2 text-sm text-slate-300">{{ $slaCompliance ?? 0 }}% Ticket passes SLA</div>
                     </div>
                 </div>
                 <div class="bg-white/3 p-4 rounded-lg shadow-sm">
@@ -820,7 +820,7 @@
                         <p class="text-2xl font-bold text-rose-400">{{ $overdueticket }}</p>
                     </div>
                 </div>
-                <p class="mt-3 text-xs text-slate-400">Tiket melewati SLA</p>
+                <p class="mt-3 text-xs text-slate-400">Ticket passes SLA</p>
             </div>
         </div>
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
@@ -913,7 +913,7 @@
                                 style="width: {{ $slaCompliance ?? 0 }}%; background: linear-gradient(90deg,#06b6d4,#3b82f6);">
                             </div>
                         </div>
-                        <div class="mt-2 text-sm text-slate-300">{{ $slaCompliance ?? 0 }}% memenuhi SLA</div>
+                        <div class="mt-2 text-sm text-slate-300">{{ $slaCompliance ?? 0 }}% Ticket passes SLA</div>
                     </div>
                 </div>
                 <div class="bg-white/3 p-4 rounded-lg shadow-sm">

@@ -11,8 +11,7 @@ class TicketOverdueService
     public function markOverdue(): int
     {
         $now = Carbon::now();
-
-        $tickets = Tickets::whereIn('status', ['Open', 'Progress'])
+        $tickets = Tickets::whereIn('status', ['Open', 'Progress', 'Closed'])
             ->whereNotNull('estimation')
             ->where('estimation', '<', $now)
             ->get();
