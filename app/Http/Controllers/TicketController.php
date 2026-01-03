@@ -519,9 +519,9 @@ class TicketController extends Controller
         try {
             $validated = $request->validate([
                 'request_uuid'  => 'required|uuid|unique:ticket_tables,request_uuid',
-                'title'         => 'required|string|min:5|max:150',
+                'title'         => 'required|string|min:1|max:150',
                 'category'      => 'required|string',
-                'description'   => 'required|string|min:5|max:500',
+                'description'   => 'required|string|min:1|max:500',
                 'attachments'   => 'nullable|array|min:1|max:3',
                 'attachments.*' => 'file|max:5120|mimes:jpg,jpeg,png,pdf,doc,docx',
             ]);
