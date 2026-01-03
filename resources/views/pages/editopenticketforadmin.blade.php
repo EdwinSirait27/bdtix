@@ -284,7 +284,7 @@
                     </p>
                 @enderror
             </div>
-            <div>
+            {{-- <div>
                 <label for="status" class="block text-sm font-semibold text-slate-300 mb-2 flex items-center space-x-2">
                     <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -315,8 +315,8 @@
                         <span>{{ $message }}</span>
                     </p>
                 @enderror
-            </div>
-            <div id="finished-wrapper" class="hidden">
+            </div> --}}
+            {{-- <div id="finished-wrapper" class="hidden">
                 <label for="finished" class="block text-sm font-semibold text-slate-300 mb-2 flex items-center space-x-2">
                     <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -329,7 +329,7 @@
 
                 <input type="datetime-local" id="finished" name="finished"
                     value="{{ old('finished') ?? $ticket->finished }}"
-                    class="w-full px-4 py-3.5 bg-slate-800 border border-slate-700 rounded-xl text-white" required>
+                    class="w-full px-4 py-3.5 bg-slate-800 border border-slate-700 rounded-xl text-white">
 
                 @error('finished')
                     <p class="mt-2 text-sm text-red-400 flex items-center space-x-1">
@@ -341,7 +341,7 @@
                         <span>{{ $message }}</span>
                     </p>
                 @enderror
-            </div>
+            </div> --}}
             <div>
                 <label class="block text-sm font-semibold text-slate-300 mb-2 flex items-center space-x-2">
                     <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -377,13 +377,34 @@
                     </svg>
                     <span>Abort</span>
                 </a>
-                <button type="submit"
+                {{-- <button type="submit"
                     class="flex-1 py-3.5 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white font-semibold rounded-xl shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center space-x-2">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                     </svg>
                     <span>take this ticket</span>
-                </button>
+                </button> --}}
+              @if ($ticket->status === 'Open')
+        <input type="hidden" name="status" value="Progress">
+        <button type="submit" name="action" value="take"
+            class="flex-1 py-3.5 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white font-semibold rounded-xl shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center space-x-2">
+             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                    </svg>
+                            <span>take this ticket</span>
+
+        </button>
+    @endif
+    @if ($ticket->status === 'Progress')
+        <input type="hidden" name="status" value="Closed">
+        <button type="submit" name="action" value="close"
+            class="flex-1 py-3.5 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white font-semibold rounded-xl shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center space-x-2">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                    </svg>
+                            <span>closed this ticket</span>
+        </button>
+    @endif
             </div>
         </form>
     </div>
@@ -391,7 +412,7 @@
         <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-        <script>
+        {{-- <script>
             $(document).ready(function() {
                 function toggleFinished() {
                     if ($('#status').val() === 'Closed') {
@@ -404,8 +425,8 @@
 
                 $('#status').on('change', toggleFinished);
             });
-        </script>
-        <script>
+        </script> --}}
+        {{-- <script>
             $(document).ready(function() {
                 $('#status').select2({
                     placeholder: 'Choose Status...',
@@ -413,7 +434,7 @@
                     dropdownParent: $('#status').parent()
                 });
             });
-        </script>
+        </script> --}}
         <script>
             $(document).ready(function() {
                 $('#category').select2({

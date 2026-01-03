@@ -77,4 +77,5 @@ Route::middleware(['auth', 'role:human'])->group(function () {
     Route::post('/ticketreq', [TicketController::class, 'store'])->name('ticketreq');
     Route::get('/showmytickets/{hash}', [TicketController::class, 'show'])->name('showmytickets');
     Route::get('/editmytickets/{hash}', [TicketController::class, 'edit'])->name('editmytickets');
+    Route::get('/reviewtickets/{hash}', [TicketController::class, 'reviewticket'])->name('reviewtickets');
 });

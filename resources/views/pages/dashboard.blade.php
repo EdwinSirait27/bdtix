@@ -121,19 +121,19 @@
                         <div class="mt-3 grid grid-cols-2 gap-2 text-sm text-slate-300">
                             <div>
                                 <div class="text-xs">Assigned to Me</div>
-                                <div class="font-medium text-white">{{ $stats['assigned_to_me'] ?? 0 }}</div>
+                                <div class="font-medium text-white">{{ $assignedtoyou ?? 0 }}</div>
                             </div>
                             <div>
                                 <div class="text-xs">New Today</div>
-                                <div class="font-medium text-white">{{ $stats['today'] ?? 0 }}</div>
+                                <div class="font-medium text-white">{{$todaysticket ?? 0}}</div>
                             </div>
                             <div>
                                 <div class="text-xs">High Priority</div>
-                                <div class="font-medium text-white">{{ $stats['high'] ?? 0 }}</div>
+                                <div class="font-medium text-white">{{$highprior ?? 0}}</div>
                             </div>
                             <div>
-                                <div class="text-xs">Waiting Tikets</div>
-                                <div class="font-medium text-white">{{ $stats['waiting_customer'] ?? 0 }}</div>
+                                <div class="text-xs">Finished Ticket</div>
+                                <div class="font-medium text-white">{{ $finishedtickettoyou ?? 0 }}</div>
                             </div>
                         </div>
                     </div>

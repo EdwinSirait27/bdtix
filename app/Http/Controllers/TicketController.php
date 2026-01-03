@@ -293,6 +293,30 @@ class TicketController extends Controller
 
         return view('pages.showmytickets', compact('ticket'));
     }
+    public function reviewticket($hash)
+    {
+        $userId = Auth::id();
+        $ticket = Tickets::with([
+            'user.employee',
+            'attachments',
+        ])
+            ->where('user_id', $userId)
+            ->get()
+            ->first(function ($ticket) use ($hash) {
+                $hashedId = substr(
+                    hash('sha256', $ticket->id . env('APP_KEY')),
+                    0,
+                    8
+                );
+                return hash_equals($hashedId, $hash);
+            });
+
+        if (! $ticket) {
+            abort(404, 'Ticket not found');
+        }
+
+        return view('pages.reviewtickets', compact('ticket'));
+    }
     public function edit($hash)
     {
         $userId = Auth::id();
