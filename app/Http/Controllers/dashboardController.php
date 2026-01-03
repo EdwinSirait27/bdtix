@@ -60,7 +60,32 @@ class dashboardController extends Controller
         ? round(($slaCompliantTickets / $totalSlaTickets) * 100, 2)
         : 0;
 
+
+
+
+
+
+        //untuk human 
+         $userhuman = Auth::user();
+
+        $alltickethuman = Tickets::where('user_id', auth()->id())
+            ->count();
+        $overduetickethuman = Tickets::where('user_id', auth()->id())
+            ->where('status', 'Overdue')
+
+            ->count();
+        $todaystickethuman = Tickets::where('user_id', auth()->id())
+            ->whereDate('created_at', Carbon::today())
+            ->count();
+        $onprogresstickethuman = Tickets::where('user_id', auth()->id())
+            ->where('status', 'Progress')
+            ->count();
     return view('pages.dashboard', compact(
+        'userhuman',
+        'alltickethuman',
+        'overduetickethuman',
+        'todaystickethuman',
+        'onprogresstickethuman',
         'user',
         'todaysticket',
         'onprogressticket',
