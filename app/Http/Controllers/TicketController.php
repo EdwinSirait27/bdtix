@@ -669,18 +669,20 @@ class TicketController extends Controller
                 $userName = auth()->user()->employee->employee_name
                     ?? auth()->user()->employee->store->name
                     ?? auth()->user()->username;
-
+                $locationName = auth()->user()->employee->store->name;
+                $phoneNumber = auth()->user()->employee->telp_number;
                 $message =
                     "*New Ticket*\n" .
-                    "Queue: {$ticket->queue_number}\n" .
                     "Date: {$formattedDate}\n" .
+                    "Queue: {$ticket->queue_number}\n" .
                     "Title: {$ticket->title}\n" .
+                    "User: {$userName}\n" .
+                    "Location: {$locationName}\n" .
+                    "Phone Number: {$phoneNumber}\n" .
                     "Category: {$ticket->category}\n" .
                     "Description: {$ticket->description}\n" .
-                    "User: {$userName}\n" .
                     "*Tickets Edit Link*\n" .
                     "{$editTicketUrl}";
-
                 if (!empty($ticket->attachment_url)) {
                     $message .= "\nAttachments:\n{$ticket->attachment_url}";
                 }
