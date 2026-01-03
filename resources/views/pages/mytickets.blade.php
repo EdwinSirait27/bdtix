@@ -256,20 +256,17 @@
                 font-size: 0.875rem;
             }
         }
-
         .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
             background-color: #f1f5f9;
             border-color: #cbd5e1;
             color: #1e293b;
         }
-
         .dataTables_wrapper .dataTables_paginate .paginate_button.current {
             background: linear-gradient(to right, #3b82f6, #06b6d4);
             border-color: transparent;
             color: white;
             box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.3);
         }
-
         .dataTables_wrapper .dataTables_paginate .paginate_button.disabled {
             opacity: 0.5;
             cursor: not-allowed;
