@@ -773,15 +773,33 @@ public function store(Request $request)
 
         DB::commit();
 
-        /** 🔥 DISPATCH ASYNC JOB */
+        /**
+         * ============================
+         * STORE TEMP FILES
+         * ============================
+         */
+        $tempFiles = [];
+
         if ($request->hasFile('attachments')) {
+            foreach ($request->file('attachments') as $file) {
+                $path = $file->store('tmp/tickets');
+
+                $tempFiles[] = [
+                    'path' => $path,
+                    'name' => $file->getClientOriginalName(),
+                    'mime' => $file->getMimeType(),
+                ];
+            }
+
+            // 🔥 dispatch HANYA jika ada file
             ProcessTicketAttachmentsJob::dispatch(
                 $ticket->id,
-                $request->file('attachments'),
-                auth()->user()
+                $tempFiles,
+                auth()->id()
             )->onQueue('ticket-heavy');
         }
 
+        // 🔔 WA notification (tidak blocking)
         SendTicketWhatsappJob::dispatch($ticket->id)
             ->onQueue('notification');
 
@@ -799,5 +817,63 @@ public function store(Request $request)
         return back()->with('error', 'Gagal mengirim ticket');
     }
 }
+
+// public function store(Request $request)
+// {
+//     $validated = $request->validate([
+//         'request_uuid'  => 'required|uuid|unique:ticket_tables,request_uuid',
+//         'title'         => 'required|string|max:150',
+//         'category'      => 'required|string',
+//         'description'   => 'required|string|max:500',
+//         'attachments'   => 'nullable|array|max:3',
+//         'attachments.*' => 'file|max:5120|mimes:jpg,jpeg,png,pdf,doc,docx',
+//     ]);
+
+//     DB::beginTransaction();
+
+//     try {
+//         $queueNumber = Tickets::whereDate('created_at', today())
+//             ->lockForUpdate()
+//             ->count() + 1;
+
+//         $ticket = Tickets::create([
+//             'id'           => (string) Str::uuid(),
+//             'request_uuid' => $validated['request_uuid'],
+//             'user_id'      => auth()->id(),
+//             'queue_number' => $queueNumber,
+//             'title'        => $validated['title'],
+//             'category'     => $validated['category'],
+//             'description'  => $validated['description'],
+//             'status'       => 'Open',
+//         ]);
+
+//         DB::commit();
+
+//         /** 🔥 DISPATCH ASYNC JOB */
+//         if ($request->hasFile('attachments')) {
+//             ProcessTicketAttachmentsJob::dispatch(
+//                 $ticket->id,
+//                 $request->file('attachments'),
+//                 auth()->user()
+//             )->onQueue('ticket-heavy');
+//         }
+
+//         SendTicketWhatsappJob::dispatch($ticket->id)
+//             ->onQueue('notification');
+
+//         return redirect()
+//             ->route('openticket')
+//             ->with('success', 'Ticket berhasil dikirim & sedang diproses');
+
+//     } catch (\Throwable $e) {
+//         DB::rollBack();
+
+//         Log::critical('TICKET_STORE_FAILED', [
+//             'error' => $e->getMessage()
+//         ]);
+
+//         return back()->with('error', 'Gagal mengirim ticket');
+//     }
+// }
 
 }
