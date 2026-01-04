@@ -47,6 +47,8 @@ Route::middleware(['auth', 'role:admin|human|executor'])->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])
         ->name('logout.post');
     Route::get('/profile', [ProfileController::class, 'profile'])->name('profile');
+    Route::get('/editopenticketforadmin/{hash}', [dashboardController::class, 'edit'])->name('editopenticketforadmin');
+    Route::get('/showopenticketforadmin/{hash}', [dashboardController::class, 'show'])->name('showopenticketforadmin');
 });
 
 Route::middleware(['auth', 'role:admin|executor'])->group(function () {
@@ -57,8 +59,7 @@ Route::middleware(['auth', 'role:admin|executor'])->group(function () {
     Route::get('/showtickets/{hash}', [dashboardController::class, 'show'])->name('showtickets');
     Route::get('/showalltickets/{hash}', [TicketController::class, 'showalltickets'])->name('showalltickets');
     Route::get('/editalltickets/{hash}', [TicketController::class, 'editalltickets'])->name('editalltickets');
-    Route::get('/editopenticketforadmin/{hash}', [dashboardController::class, 'edit'])->name('editopenticketforadmin');
-    Route::get('/showopenticketforadmin/{hash}', [dashboardController::class, 'show'])->name('showopenticketforadmin');
+    
     Route::put(
         'updateopenticketforadmin/{hash}',
         [dashboardController::class, 'update']
