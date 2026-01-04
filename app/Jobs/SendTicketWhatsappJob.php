@@ -108,7 +108,7 @@ public function handle()
     Log::info('WA_JOB_START', [
         'ticket_id' => $this->ticketId
     ]);
-
+    $editTicketUrl = route('editopenticketforadmin', $hash);
     try {
         $ticket = Tickets::with('user.employee.store')
             ->findOrFail($this->ticketId);
@@ -137,12 +137,12 @@ public function handle()
             ."Phone Number: {$phoneNumber}\n"
             ."Title: {$ticket->title}\n"
             ."Category: {$ticket->category}\n"
-            ."Description: {$ticket->description}";
-
+            ."Description: {$ticket->description}\n"
+            ."*Tickets Url Links*\n" 
+            ."{$editTicketUrl}";
         if ($ticket->attachment_url) {
             $message .= "\nAttachments:\n{$ticket->attachment_url}";
         }
-
         $response = Http::timeout(10)->post(
             'http://127.0.0.1:3000/send-message',
             [
@@ -150,7 +150,6 @@ public function handle()
                 'text'     => $message,
             ]
         );
-
         Log::info('WA_JOB_RESPONSE', [
             'status' => $response->status(),
             'body'   => $response->body(),
@@ -168,7 +167,7 @@ public function handle()
             'error' => $e->getMessage(),
         ]);
 
-        throw $e; // ⬅ WAJIB agar masuk failed_jobs
+        throw $e;
     }
 }
 

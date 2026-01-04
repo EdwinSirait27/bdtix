@@ -19,7 +19,12 @@
                 </div>
             </div>
         </div>
-        <form method="POST" action="{{ route('ticketreq') }}" enctype="multipart/form-data" class="space-y-5">
+        <form id="ticketForm"
+      method="POST"
+      action="{{ route('ticketreq') }}"
+      enctype="multipart/form-data"
+      class="space-y-5">
+        {{-- <form  method="POST" action="{{ route('ticketreq') }}" enctype="multipart/form-data" class="space-y-5"> --}}
             @csrf
             <input type="hidden" name="request_uuid" value="{{ Str::uuid() }}">
 
@@ -154,13 +159,39 @@
                     </svg>
                     <span>Abort</span>
                 </a>
-                <button type="submit"
+                {{-- <button type="submit"
                     class="flex-1 py-3.5 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white font-semibold rounded-xl shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center space-x-2">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                     </svg>
                     <span>Send Ticket</span>
-                </button>
+                </button> --}}
+                <button
+        type="submit"
+        id="submitBtn"
+        data-loading="Sending..."
+        class="flex-1 py-3.5 bg-gradient-to-r from-blue-600 to-cyan-600
+               hover:from-blue-700 hover:to-cyan-700
+               text-white font-semibold rounded-xl
+               shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50
+               transition-all duration-300 transform
+               hover:scale-[1.02] active:scale-[0.98]
+               flex items-center justify-center space-x-2"
+    >
+        <svg id="submitIcon" class="w-5 h-5" fill="none"
+             stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                  stroke-width="2" d="M5 13l4 4L19 7"/>
+        </svg>
+        <span id="submitText">Send Ticket</span>
+    </button>
+
+    <p id="uploadInfo"
+   class="hidden text-sm text-slate-400 text-center mt-3">
+    ⏳ File is being uploaded, please do not close the page...
+</p>
+
+
             </div>
         </form>
     </div>
@@ -185,6 +216,65 @@
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script>
+document.addEventListener('DOMContentLoaded', () => {
+    const form = document.querySelector('form');
+    const btn = document.getElementById('submitBtn');
+    const text = document.getElementById('submitText');
+    const icon = document.getElementById('submitIcon');
+    const uploadInfo = document.getElementById('uploadInfo');
+
+    form.addEventListener('submit', () => {
+        // disable button
+        btn.disabled = true;
+        btn.classList.add('opacity-70', 'cursor-not-allowed');
+
+        // ganti text
+        text.textContent = btn.dataset.loading;
+
+        // ganti icon jadi spinner
+        icon.innerHTML = `
+            <circle class="opacity-25" cx="12" cy="12" r="10"
+                stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor"
+                d="M4 12a8 8 0 018-8v4
+                   a4 4 0 00-4 4H4z"></path>
+        `;
+        icon.classList.add('animate-spin');
+
+        // 🔥 tampilkan info upload
+        uploadInfo.classList.remove('hidden');
+    });
+});
+</script>
+
+{{-- <script>
+document.addEventListener('DOMContentLoaded', () => {
+    const form = document.getElementById('ticketForm');
+    const btn = document.getElementById('submitBtn');
+    const text = document.getElementById('submitText');
+    const icon = document.getElementById('submitIcon');
+
+    if (!form) return;
+
+    form.addEventListener('submit', () => {
+        btn.disabled = true;
+        btn.classList.add('opacity-70', 'cursor-not-allowed');
+
+        text.textContent = btn.dataset.loading;
+
+        icon.innerHTML = `
+            <circle class="opacity-25" cx="12" cy="12" r="10"
+                stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor"
+                d="M4 12a8 8 0 018-8v4
+                   a4 4 0 00-4 4H4z"></path>
+        `;
+        icon.classList.add('animate-spin');
+    });
+});
+</script> --}}
+
 
     <script>
         // Character counter for description
