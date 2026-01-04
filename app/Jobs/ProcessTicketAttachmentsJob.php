@@ -11,6 +11,7 @@ use Illuminate\Support\Str;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use App\Models\Ticketattachments;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Storage;
 
@@ -63,8 +64,61 @@ class ProcessTicketAttachmentsJob implements ShouldQueue
 //         ]);
 //     }
 // }
+// {
+//     use Dispatchable, Queueable, SerializesModels;
+
+//     public function __construct(
+//         public string $ticketId,
+//         public array $files,
+//         public string $userId
+//     ) {}
+
+//     public function handle()
+//     {
+//         $ticket = Tickets::findOrFail($this->ticketId);
+//         $user   = User::findOrFail($this->userId);
+
+//         $category = Str::slug($ticket->category);
+//         $username = Str::slug($user->username);
+//         $basePath = "ticket/{$category}/{$username}/{$ticket->id}";
+
+//         NextcloudService::makeDir($basePath);
+
+//         foreach ($this->files as $file) {
+//             $content = Storage::get($file['path']);
+//             $filename = time().'_'.$file['name'];
+
+//             NextcloudService::upload(
+//                 $basePath,
+//                 $filename,
+//                 $content,
+//                 $file['mime']
+//             );
+
+//             Ticketattachments::create([
+//                 'id'        => Str::uuid(),
+//                 'ticket_id' => $ticket->id,
+//                 'file_name' => $filename,
+//                 'file_path' => "{$basePath}/{$filename}",
+//             ]);
+
+//             // 🔥 hapus file sementara
+//             Storage::delete($file['path']);
+//         }
+
+//         $shareUrl = NextcloudService::shareFolder($basePath);
+
+//         $ticket->update([
+//             'attachment_folder' => $basePath,
+//             'attachment_url'    => $shareUrl,
+//         ]);
+//     }
+// }
 {
-    use Dispatchable, Queueable, SerializesModels;
+    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+
+    public int $tries = 3;
+    public int $timeout = 120;
 
     public function __construct(
         public string $ticketId,
@@ -74,42 +128,77 @@ class ProcessTicketAttachmentsJob implements ShouldQueue
 
     public function handle()
     {
-        $ticket = Tickets::findOrFail($this->ticketId);
-        $user   = User::findOrFail($this->userId);
+        Log::info('ATTACHMENT_JOB_START', [
+            'ticket_id' => $this->ticketId,
+            'files'     => count($this->files),
+        ]);
 
-        $category = Str::slug($ticket->category);
-        $username = Str::slug($user->username);
-        $basePath = "ticket/{$category}/{$username}/{$ticket->id}";
+        try {
+            $ticket = Tickets::findOrFail($this->ticketId);
+            $user   = User::findOrFail($this->userId);
 
-        NextcloudService::makeDir($basePath);
+            $category = Str::slug($ticket->category);
+            $username = Str::slug($user->username);
+            $basePath = "ticket/{$category}/{$username}/{$ticket->id}";
 
-        foreach ($this->files as $file) {
-            $content = Storage::get($file['path']);
-            $filename = time().'_'.$file['name'];
+            NextcloudService::makeDir($basePath);
 
-            NextcloudService::upload(
-                $basePath,
-                $filename,
-                $content,
-                $file['mime']
-            );
+            foreach ($this->files as $file) {
 
-            Ticketattachments::create([
-                'id'        => Str::uuid(),
-                'ticket_id' => $ticket->id,
-                'file_name' => $filename,
-                'file_path' => "{$basePath}/{$filename}",
+                if (!Storage::exists($file['path'])) {
+                    Log::warning('ATTACHMENT_TMP_NOT_FOUND', [
+                        'path' => $file['path']
+                    ]);
+                    continue;
+                }
+
+                $content  = Storage::get($file['path']);
+                $filename = time() . '_' . Str::slug($file['name']);
+
+                NextcloudService::upload(
+                    $basePath,
+                    $filename,
+                    $content,
+                    $file['mime']
+                );
+
+                Ticketattachments::create([
+                    'id'        => (string) Str::uuid(),
+                    'ticket_id' => $ticket->id,
+                    'file_name' => $filename,
+                    'file_path' => "{$basePath}/{$filename}",
+                ]);
+
+                // 🔥 hapus file sementara (aman)
+                Storage::delete($file['path']);
+            }
+
+            $shareUrl = NextcloudService::shareFolder($basePath);
+
+            $ticket->update([
+                'attachment_folder' => $basePath,
+                'attachment_url'    => $shareUrl,
             ]);
 
-            // 🔥 hapus file sementara
-            Storage::delete($file['path']);
+            Log::info('ATTACHMENT_JOB_DONE', [
+                'ticket_id' => $ticket->id,
+                'share_url' => $shareUrl,
+            ]);
+
+        } catch (\Throwable $e) {
+            Log::error('ATTACHMENT_JOB_FAILED', [
+                'ticket_id' => $this->ticketId,
+                'error'     => $e->getMessage(),
+            ]);
+
+            // ⛔ hapus file tmp kalau job benar-benar gagal
+            foreach ($this->files as $file) {
+                if (isset($file['path']) && Storage::exists($file['path'])) {
+                    Storage::delete($file['path']);
+                }
+            }
+
+            throw $e; // ⬅ WAJIB supaya retry & masuk failed_jobs
         }
-
-        $shareUrl = NextcloudService::shareFolder($basePath);
-
-        $ticket->update([
-            'attachment_folder' => $basePath,
-            'attachment_url'    => $shareUrl,
-        ]);
     }
 }

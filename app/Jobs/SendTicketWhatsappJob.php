@@ -54,14 +54,66 @@ class SendTicketWhatsappJob implements ShouldQueue
 //             'text'     => $message,
 //         ]);
 //     }
+// public function handle()
+// {
+//     Log::info('WA_JOB_START', [
+//         'ticket_id' => $this->ticketId
+//     ]);
+
+//     $ticket = Tickets::with('user.employee.store')->findOrFail($this->ticketId);
+// $createdAt = $ticket->created_at
+//             ->timezone('Asia/Makassar')
+//             ->format('d-m-Y H:i');
+
+//         $user = $ticket->user;
+//         $employee = $user?->employee;
+//         $store = $employee?->store;
+
+//         $userName =
+//             $employee->employee_name
+//             ?? $store->name
+//             ?? $user->username;
+
+//         $locationName = $store->name ?? '-';
+//         $phoneNumber  = $employee->telp_number ?? '-';
+
+//     $message = "*New IT Ticket*\n"
+//         ."Queue: {$ticket->queue_number}\n"
+//         ."Date: {$createdAt}\n"
+//         ."User: {$userName}\n"
+//         ."Location: {$locationName}\n"
+//         ."Phone Number: {$phoneNumber}\n"
+//         ."Title: {$ticket->title}\n"
+//         ."Category: {$ticket->category}\n"
+//         ."Description: {$ticket->description}";
+
+//     if ($ticket->attachment_url) {
+//         $message .= "\nAttachments:\n{$ticket->attachment_url}";
+//     }
+
+//     $response = Http::timeout(10)->post(
+//         'http://127.0.0.1:3000/send-message',
+//         [
+//             'group_id' => '120363405189832865@g.us',
+//             'text'     => $message,
+//         ]
+//     );
+//     Log::info('WA_JOB_RESPONSE', [
+//         'status' => $response->status(),
+//         'body'   => $response->body(),
+//     ]);
+// }
 public function handle()
 {
     Log::info('WA_JOB_START', [
         'ticket_id' => $this->ticketId
     ]);
 
-    $ticket = Tickets::with('user.employee.store')->findOrFail($this->ticketId);
-$createdAt = $ticket->created_at
+    try {
+        $ticket = Tickets::with('user.employee.store')
+            ->findOrFail($this->ticketId);
+
+        $createdAt = $ticket->created_at
             ->timezone('Asia/Makassar')
             ->format('d-m-Y H:i');
 
@@ -77,30 +129,47 @@ $createdAt = $ticket->created_at
         $locationName = $store->name ?? '-';
         $phoneNumber  = $employee->telp_number ?? '-';
 
-    $message = "*New IT Ticket*\n"
-        ."Queue: {$ticket->queue_number}\n"
-        ."Date: {$createdAt}\n"
-        ."User: {$userName}\n"
-        ."Location: {$locationName}\n"
-        ."Phone Number: {$phoneNumber}\n"
-        ."Title: {$ticket->title}\n"
-        ."Category: {$ticket->category}\n"
-        ."Description: {$ticket->description}";
+        $message = "*New IT Ticket*\n"
+            ."Queue: {$ticket->queue_number}\n"
+            ."Date: {$createdAt}\n"
+            ."User: {$userName}\n"
+            ."Location: {$locationName}\n"
+            ."Phone Number: {$phoneNumber}\n"
+            ."Title: {$ticket->title}\n"
+            ."Category: {$ticket->category}\n"
+            ."Description: {$ticket->description}";
 
-    if ($ticket->attachment_url) {
-        $message .= "\nAttachments:\n{$ticket->attachment_url}";
+        if ($ticket->attachment_url) {
+            $message .= "\nAttachments:\n{$ticket->attachment_url}";
+        }
+
+        $response = Http::timeout(10)->post(
+            'http://127.0.0.1:3000/send-message',
+            [
+                'group_id' => '120363405189832865@g.us',
+                'text'     => $message,
+            ]
+        );
+
+        Log::info('WA_JOB_RESPONSE', [
+            'status' => $response->status(),
+            'body'   => $response->body(),
+        ]);
+
+        if (! $response->successful()) {
+            throw new \Exception(
+                'WA API failed: ' . $response->body()
+            );
+        }
+
+    } catch (\Throwable $e) {
+        Log::error('WA_JOB_FAILED', [
+            'ticket_id' => $this->ticketId,
+            'error' => $e->getMessage(),
+        ]);
+
+        throw $e; // ⬅ WAJIB agar masuk failed_jobs
     }
-
-    $response = Http::timeout(10)->post(
-        'http://127.0.0.1:3000/send-message',
-        [
-            'group_id' => '120363405189832865@g.us',
-            'text'     => $message,
-        ]
-    );
-    Log::info('WA_JOB_RESPONSE', [
-        'status' => $response->status(),
-        'body'   => $response->body(),
-    ]);
 }
+
 }
