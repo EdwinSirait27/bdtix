@@ -149,9 +149,9 @@ public function handle(): void
             "*Ticket Link*\n" .
             "{$editTicketUrl}";
 
-        if ($ticket->attachment_url) {
-            $message .= "\nAttachments:\n{$ticket->attachment_url}";
-        }
+        // if ($ticket->attachment_url) {
+        //     $message .= "\nAttachments:\n{$ticket->attachment_url}";
+        // }
 
         $response = Http::timeout(10)->post(
             'http://127.0.0.1:3000/send-message',
