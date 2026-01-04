@@ -129,7 +129,7 @@
                                     </a>
                                 </li>
                             @endrole
-                            <li>
+                            {{-- <li>
                                 <a href="#"
                                     class="group flex gap-x-3 rounded-lg p-3 text-sm leading-6 font-semibold text-slate-300 hover:bg-slate-800 transition-all">
                                     <svg class="h-6 w-6 shrink-0" fill="none" stroke="currentColor"
@@ -139,7 +139,7 @@
                                     </svg>
                                     Resolved Tickets
                                 </a>
-                            </li>
+                            </li> --}}
                         </ul>
                     </li>
                     <li>

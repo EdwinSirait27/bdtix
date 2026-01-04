@@ -52,12 +52,13 @@
                     {{ $ticket->category ?? '-' }}
                 </p>
             </div>
-            <div class="bg-white dark:bg-slate-900 rounded-xl p-5 shadow">
-                <p class="text-xs text-slate-500 uppercase">Executor</p>
-                <p class="font-semibold mt-1">
-                    {{ $ticket->executor ?? '-' }}
-                </p>
-            </div>
+           <div class="bg-white dark:bg-slate-900 rounded-xl p-5 shadow">
+    <p class="text-xs text-slate-500 uppercase">Executor</p>
+    <p class="font-semibold mt-1">
+        {{ $ticket->executor?->employee?->employee_name ?? '-' }}
+    </p>
+</div>
+
             <div class="bg-white dark:bg-slate-900 rounded-xl p-5 shadow">
                 <p class="text-xs text-slate-500 uppercase">Finished</p>
                 <p class="font-semibold mt-1">
@@ -118,11 +119,11 @@
         @endif
         {{-- Back Button --}}
         <div class="flex justify-end">
-            <a href="{{ route('alltickets') }}"
+            <a href="{{ route('dashboard') }}"
                 class="inline-flex items-center px-5 py-2.5 rounded-xl
                   bg-slate-200 dark:bg-slate-700 text-slate-800 dark:text-white
                   hover:bg-slate-300 dark:hover:bg-slate-600 transition">
-                Back to Tickets
+                Back to Dashboard
             </a>
         </div>
     </div>

@@ -186,18 +186,6 @@ private function findTicketByHash(string $hash): Tickets
     return $ticket;
 }
 
-// public function edit(string $hash)
-// {
-//     $ticket = $this->findTicketByHash($hash);
-
-//     // 🚫 ticket Closed → redirect dashboard
-//     if ($ticket->status === 'Closed') {
-//         return redirect()
-//             ->route('dashboard')
-//             ->with('error', 'The ticket is closed and cannot be edited.');
-//     }
-//     return view('pages.editopenticketforadmin', compact('ticket'));
-// }
 public function edit(string $hash)
 {
     $ticket = $this->findTicketByHash($hash);
@@ -333,8 +321,44 @@ public function update(Request $request, string $hash)
             "Category: {$ticket->category}\n" .
             "Status: {$ticket->status}\n" .
             "Priority: {$ticket->priority}\n" .
-            "Executor: {$executorName}\n\n" .
-            "Admin Link:\n{$adminUrl}";
+            "Executor: {$executorName}\n";
+            // if ($ticket->status === 'Progress' && $ticket->estimation) {
+            //   $estimationFormatted = $ticket->estimation
+            //   ->timezone('Asia/Makassar')
+            //   ->format('d-m-Y H:i');
+            //   $message .= "Estimation: {$estimationFormatted}\n";
+            // }
+            // if ($ticket->status === 'Closed' && $ticket->estimation && $ticket->finished) {
+            //   $estimationFormatted = $ticket->estimation
+            //   ->timezone('Asia/Makassar')
+            //   ->format('d-m-Y H:i');
+            //   $finishedFormatted = $ticket->finished
+            //   ->timezone('Asia/Makassar')
+            //   ->format('d-m-Y H:i');
+            //   $message .= "Estimation: {$estimationFormatted}\n";
+            //   $message .= "Finished: {$finishedFormatted}\n";
+            // }
+            // Closed → tampilkan estimation & finished
+if ($ticket->status === 'Closed') {
+
+    if ($ticket->estimation) {
+        $message .= "Estimation: " .
+            $ticket->estimation
+                ->timezone('Asia/Makassar')
+                ->format('d-m-Y H:i') . "\n";
+    }
+
+    if ($ticket->finished) {
+        $message .= "Finished: " .
+            $ticket->finished
+                ->timezone('Asia/Makassar')
+                ->format('d-m-Y H:i') . "\n";
+    }
+}
+
+            
+           $message .= "\nAdmin Link:\n{$adminUrl}";
+
 
         Http::timeout(15)->post('http://127.0.0.1:3000/send-message', [
             'group_id' => '120363405189832865@g.us',

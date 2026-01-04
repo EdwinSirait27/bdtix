@@ -77,6 +77,12 @@ Route::middleware(['auth', 'role:human'])->group(function () {
     Route::match(['GET', 'POST'], '/allmytickets/allmytickets', [TicketController::class, 'getAllmytickets'])->name('allmytickets.allmytickets');
     Route::post('/ticketreq', [TicketController::class, 'store'])->name('ticketreq');
     Route::get('/showmytickets/{hash}', [TicketController::class, 'show'])->name('showmytickets');
-    Route::get('/editmytickets/{hash}', [TicketController::class, 'edit'])->name('editmytickets');
+    // Route::get('/editmytickets/{hash}', [TicketController::class, 'edit'])->name('editmytickets');
     Route::get('/reviewtickets/{hash}', [TicketController::class, 'reviewticket'])->name('reviewtickets');
+    Route::get('/editmytickets/{hash}', [TicketController::class, 'editmyticket'])->name('editmytickets');
+  Route::put(
+        'updatemytickets/{hash}',
+        [TicketController::class, 'updatemytickets']
+    )->name('updatemytickets');
+
 });

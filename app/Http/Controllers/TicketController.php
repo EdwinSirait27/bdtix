@@ -15,7 +15,7 @@ use Carbon\Carbon;
 use App\Services\NextcloudService;
 use PHPUnit\Framework\Attributes\Ticket;
 use Yajra\DataTables\Facades\DataTables;
-    use App\Jobs\ProcessTicketAttachmentsJob;
+use App\Jobs\ProcessTicketAttachmentsJob;
 use App\Jobs\SendTicketWhatsappJob;
 
 class TicketController extends Controller
@@ -166,12 +166,12 @@ class TicketController extends Controller
         $highprior = Tickets::where('priority', 'High')->count();
         $onprogressticket = Tickets::where('status', 'Progress')
             ->count();
-        return view('pages.alltickets', compact('todaysticket', 'onprogressticket','highprior'));
+        return view('pages.alltickets', compact('todaysticket', 'onprogressticket', 'highprior'));
     }
 
     public function getAllmytickets(Request $request)
     {
-        $query = Tickets::with(['user.employee', 'executor.employee','review' ])
+        $query = Tickets::with(['user.employee', 'executor.employee', 'review'])
             ->where('user_id', auth()->id())
             ->select([
                 'id',
@@ -196,33 +196,104 @@ class TicketController extends Controller
             ->orderColumn('executor_employee_name', function ($query, $order) {
                 // disable ordering (WAJIB)
             })
-            ->addColumn('action', function ($user) {
-                $idHashed = substr(hash('sha256', $user->id . env('APP_KEY')), 0, 8);
-                return '
-        <a href="' . route('editmytickets', $idHashed) . '"
-           class="inline-flex items-center justify-center p-2
-                  text-slate-500 hover:text-indigo-600
-                  hover:bg-indigo-50 rounded-full transition"
-           title="Edit Tickets: ' . e($user->title) . '">
+    //         ->addColumn('action', function ($user) {
+    //             $idHashed = substr(hash('sha256', $user->id . env('APP_KEY')), 0, 8);
+    //             return '
+    //     <a href="' . route('editmytickets', $idHashed) . '"
+    //        class="inline-flex items-center justify-center p-2
+    //               text-slate-500 hover:text-indigo-600
+    //               hover:bg-indigo-50 rounded-full transition"
+    //        title="Edit Tickets: ' . e($user->title) . '">
 
-            <svg xmlns="http://www.w3.org/2000/svg"
-                 class="w-5 h-5"
-                 fill="none"
-                 viewBox="0 0 24 24"
-                 stroke="currentColor"
-                 stroke-width="1.8">
-                <path stroke-linecap="round" stroke-linejoin="round"
-                      d="M16.862 3.487a2.1 2.1 0 013.001 2.949L7.125 19.174
-                         3 21l1.826-4.125L16.862 3.487z" />
-            </svg>
+    //         <svg xmlns="http://www.w3.org/2000/svg"
+    //              class="w-5 h-5"
+    //              fill="none"
+    //              viewBox="0 0 24 24"
+    //              stroke="currentColor"
+    //              stroke-width="1.8">
+    //             <path stroke-linecap="round" stroke-linejoin="round"
+    //                   d="M16.862 3.487a2.1 2.1 0 013.001 2.949L7.125 19.174
+    //                      3 21l1.826-4.125L16.862 3.487z" />
+    //         </svg>
 
-        </a>
-         <a href="' . route('showmytickets', $idHashed) . '"
+    //     </a>
+    //      <a href="' . route('showmytickets', $idHashed) . '"
+    //        class="inline-flex items-center justify-center p-2
+    //               text-slate-500 hover:text-emerald-600
+    //               hover:bg-emerald-50 rounded-full transition"
+    //        title="Show Tickets: ' . e($user->title) . '">
+
+    //         <svg xmlns="http://www.w3.org/2000/svg"
+    //              class="w-5 h-5"
+    //              fill="none"
+    //              viewBox="0 0 24 24"
+    //              stroke="currentColor"
+    //              stroke-width="1.8">
+    //             <path stroke-linecap="round" stroke-linejoin="round"
+    //                   d="M2.25 12s3.75-6.75 9.75-6.75
+    //                      S21.75 12 21.75 12
+    //                      18 18.75 12 18.75
+    //                      2.25 12 2.25 12z" />
+    //             <circle cx="12" cy="12" r="3.25" />
+    //         </svg>
+
+    //     </a>
+    // ';
+    //         })
+    ->addColumn('action', function ($ticket) {
+
+    $idHashed = substr(hash('sha256', $ticket->id . env('APP_KEY')), 0, 8);
+
+    // ===== EDIT BUTTON =====
+    if (in_array($ticket->status, ['Progress', 'Closed'])) {
+
+        // 🔒 LOCKED ICON (no link)
+        $editBtn = '
+            <span
+                class="inline-flex items-center justify-center p-2
+                       text-slate-400 cursor-not-allowed"
+                title="Ticket cannot be edited due to status ' . e($ticket->status) . '">
+                <svg xmlns="http://www.w3.org/2000/svg"
+                     class="w-5 h-5"
+                     fill="none"
+                     viewBox="0 0 24 24"
+                     stroke="currentColor"
+                     stroke-width="1.8">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                          d="M12 11c1.657 0 3-1.343 3-3V6a3 3 0 10-6 0v2c0 1.657 1.343 3 3 3z" />
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                          d="M5 11h14v9H5z" />
+                </svg>
+            </span>';
+    } else {
+
+        // ✏️ EDIT ICON (active)
+        $editBtn = '
+            <a href="' . route('editmytickets', $idHashed) . '"
+               class="inline-flex items-center justify-center p-2
+                      text-slate-500 hover:text-indigo-600
+                      hover:bg-indigo-50 rounded-full transition"
+               title="Edit Ticket: ' . e($ticket->title) . '">
+                <svg xmlns="http://www.w3.org/2000/svg"
+                     class="w-5 h-5"
+                     fill="none"
+                     viewBox="0 0 24 24"
+                     stroke="currentColor"
+                     stroke-width="1.8">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                          d="M16.862 3.487a2.1 2.1 0 013.001 2.949L7.125 19.174
+                             3 21l1.826-4.125L16.862 3.487z" />
+                </svg>
+            </a>';
+    }
+
+    // ===== SHOW BUTTON (always available) =====
+    $showBtn = '
+        <a href="' . route('showmytickets', $idHashed) . '"
            class="inline-flex items-center justify-center p-2
                   text-slate-500 hover:text-emerald-600
                   hover:bg-emerald-50 rounded-full transition"
-           title="Show Tickets: ' . e($user->title) . '">
-
+           title="Show Ticket: ' . e($ticket->title) . '">
             <svg xmlns="http://www.w3.org/2000/svg"
                  class="w-5 h-5"
                  fill="none"
@@ -236,30 +307,31 @@ class TicketController extends Controller
                          2.25 12 2.25 12z" />
                 <circle cx="12" cy="12" r="3.25" />
             </svg>
+        </a>';
 
-        </a>
-    ';
-            })
+    return $editBtn . $showBtn;
+})
+
             ->addColumn('review_action', function ($ticket) {
 
-    // ticket belum selesai
-    if (!in_array($ticket->status, ['Closed','Overdue'])) {
-        return '<span class="text-gray-400">-</span>';
-    }
+                // ticket belum selesai
+                if (!in_array($ticket->status, ['Closed', 'Overdue'])) {
+                    return '<span class="text-gray-400">-</span>';
+                }
 
-    // sudah direview
-    if ($ticket->review) {
-        return '
+                // sudah direview
+                if ($ticket->review) {
+                    return '
             <span class="inline-flex items-center text-emerald-600 font-semibold">
                 ★ ' . $ticket->review->rating . '/5
             </span>
         ';
-    }
+                }
 
-    // bisa review
-    $idHashed = substr(hash('sha256', $ticket->id . env('APP_KEY')), 0, 8);
+                // bisa review
+                $idHashed = substr(hash('sha256', $ticket->id . env('APP_KEY')), 0, 8);
 
-    return '
+                return '
         <a href="' . route('reviewtickets', $idHashed) . '"
            class="inline-flex items-center px-3 py-1
                   text-sm text-yellow-700 bg-yellow-100
@@ -267,7 +339,7 @@ class TicketController extends Controller
            ⭐ Review
         </a>
     ';
-})
+            })
 
             ->rawColumns(['action'])
             ->make(true);
@@ -277,6 +349,7 @@ class TicketController extends Controller
         $userId = Auth::id();
         $ticket = Tickets::with([
             'user.employee',
+            'executor.employee',
             'attachments',
         ])
             ->where('user_id', $userId)
@@ -320,65 +393,130 @@ class TicketController extends Controller
 
         return view('pages.reviewtickets', compact('ticket'));
     }
-    public function edit($hash)
+    private function findTicketByHash(string $hash): Tickets
     {
-        $userId = Auth::id();
-        $ticket = Tickets::with([
-            'user.employee',
-            'attachments',
-        ])
-            ->where('user_id', $userId)
-            ->get()
-            ->first(function ($ticket) use ($hash) {
-                $hashedId = substr(
-                    hash('sha256', $ticket->id . env('APP_KEY')),
-                    0,
-                    8
-                );
-                return hash_equals($hashedId, $hash);
-            });
+        $ticket = Tickets::with('user.employee')
+            ->whereRaw(
+                "SUBSTRING(SHA2(CONCAT(id, ?), 256), 1, 8) = ?",
+                [config('app.key'), $hash]
+            )
+            ->first();
 
-        if (! $ticket) {
-            abort(404, 'Ticket not found');
+        abort_if(!$ticket, 404, 'Ticket not found');
+
+        return $ticket;
+    }
+    public function editmyticket(string $hash)
+    {
+        $ticket = $this->findTicketByHash($hash);
+        $user   = auth()->user();
+            if ($ticket->status === 'Closed') {
+                return redirect()
+                    ->route('dashboard')
+                    ->with('error', 'The ticket is closed and cannot be edited.');
+            }
+            if ($ticket->user_id !== $user->id) {
+                abort(403, 'You are not allowed to access this ticket.');
+            }
+
+            return view('pages.editmytickets', compact('ticket'));
+        
+        abort(403, 'Unauthorized action.');
+    }
+    // public function edit($hash)
+    // {
+    //     $userId = Auth::id();
+    //     $ticket = Tickets::with([
+    //         'user.employee',
+    //         'attachments',
+    //     ])
+    //         ->where('user_id', $userId)
+    //         ->get()
+    //         ->first(function ($ticket) use ($hash) {
+    //             $hashedId = substr(
+    //                 hash('sha256', $ticket->id . env('APP_KEY')),
+    //                 0,
+    //                 8
+    //             );
+    //             return hash_equals($hashedId, $hash);
+    //         });
+
+    //     if (! $ticket) {
+    //         abort(404, 'Ticket not found');
+    //     }
+
+    //     return view('pages.editmytickets', compact('ticket'));
+    // }
+    public function updatemytickets(Request $request, string $hash)
+    {
+        $ticket = $this->findTicketByHash($hash);
+        if (in_array($ticket->status, ['Progress', 'Closed'])) {
+            abort(403, 'Ticket cannot be edited');
         }
+        Log::info('TICKET_UPDATE_START', [
+            'ticket_id' => $ticket->id,
+        ]);
+        $validated = $request->validate([
+            'title'        => 'required|string',
+            'category'        => 'required|string',
+            'description'        => 'required|string|min:5|max:500',
 
-        return view('pages.editmytickets', compact('ticket'));
+        ]);
+
+        DB::transaction(function () use ($validated, $ticket) {
+
+
+            $ticket->update([
+                'title'        => $validated['title'],
+                'category'        => $validated['category'],
+                'description' => $validated['description'],
+                'status'          => 'Open',
+            ]);
+
+            Log::info('TICKET_UPDATED', [
+                'ticket_id' => $ticket->id,
+            ]);
+        });
+
+        return redirect()
+            ->route('dashboard')
+            ->with('success', 'Ticket successfully updated');
     }
 
     public function storeReview(Request $request, Tickets $ticket)
-{
-    // hanya pengaju ticket
-    abort_if($ticket->user_id !== auth()->id(), 403);
+    {
+        // hanya pengaju ticket
+        abort_if($ticket->user_id !== auth()->id(), 403);
 
-    // ticket harus selesai
-    abort_if(!in_array($ticket->status, ['closed', 'finished']), 403);
+        // ticket harus selesai
+        abort_if(!in_array($ticket->status, ['closed', 'finished']), 403);
 
-    // ticket harus punya executor
-    abort_if(!$ticket->executor_id, 422);
+        // ticket harus punya executor
+        abort_if(!$ticket->executor_id, 422);
 
-    // 1 ticket = 1 review
-    abort_if($ticket->review, 409);
+        // 1 ticket = 1 review
+        abort_if($ticket->review, 409);
 
-    $validated = $request->validate([
-        'rating'  => 'required|integer|min:1|max:5',
-        'comment' => 'nullable|string|max:500',
-    ]);
+        $validated = $request->validate([
+            'rating'  => 'required|integer|min:1|max:5',
+            'comment' => 'nullable|string|max:500',
+        ]);
 
-    $ticket->review()->create([
-        'user_id'     => auth()->id(),
-        'executor_id' => $ticket->executor_id,
-        ...$validated
-    ]);
+        $ticket->review()->create([
+            'user_id'     => auth()->id(),
+            'executor_id' => $ticket->executor_id,
+            ...$validated
+        ]);
 
-    Log::info('Ticket reviewed', [
-        'ticket_id'   => $ticket->id,
-        'rating'      => $validated['rating'],
-        'executor_id' => $ticket->executor_id,
-        'reviewer'    => auth()->id(),
-    ]);
+        Log::info('Ticket reviewed', [
+            'ticket_id'   => $ticket->id,
+            'rating'      => $validated['rating'],
+            'executor_id' => $ticket->executor_id,
+            'reviewer'    => auth()->id(),
+        ]);
 
-    return back()->with('success', 'Terima kasih, review Anda berhasil disimpan 🙏');
-}
+        return back()->with('success', 'Terima kasih, review Anda berhasil disimpan 🙏');
+    }
 
     public function showalltickets($hash)
     {
@@ -504,6 +642,85 @@ class TicketController extends Controller
             ->rawColumns(['action'])
             ->make(true);
     }
+
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'request_uuid'  => 'required|uuid|unique:ticket_tables,request_uuid',
+            'title'         => 'required|string|max:150',
+            'category'      => 'required|string',
+            'description'   => 'required|string|max:500',
+            'attachments'   => 'nullable|array|max:3',
+            'attachments.*' => 'file|max:51200|mimes:jpg,jpeg,png,pdf,doc,docx',
+        ]);
+        DB::beginTransaction();
+        try {
+            // 🔒 aman dari race queue number
+            $queueNumber = Tickets::whereDate('created_at', today())
+                ->lockForUpdate()
+                ->count() + 1;
+
+            $ticket = Tickets::create([
+                'id'           => (string) Str::uuid(),
+                'request_uuid' => $validated['request_uuid'],
+                'user_id'      => auth()->id(),
+                'queue_number' => $queueNumber,
+                'title'        => $validated['title'],
+                'category'     => $validated['category'],
+                'description'  => $validated['description'],
+                'status'       => 'Open',
+            ]);
+
+            DB::commit(); // ⬅️ WAJIB selesai dulu
+
+            /**
+             * ============================
+             * PREPARE TEMP FILES
+             * ============================
+             */
+            $tempFiles = [];
+
+            if ($request->hasFile('attachments')) {
+                foreach ($request->file('attachments') as $file) {
+                    $path = $file->store('tmp/tickets');
+
+                    $tempFiles[] = [
+                        'path' => $path,
+                        'name' => $file->getClientOriginalName(),
+                        'mime' => $file->getMimeType(),
+                    ];
+                }
+
+                // 📦 job berat (optional)
+                ProcessTicketAttachmentsJob::dispatch(
+                    $ticket->id,
+                    $tempFiles,
+                    auth()->id()
+                )
+                    ->onQueue('ticket-heavy')
+                    ->afterCommit();
+            }
+
+            // 🔔 WA HARUS SELALU DIKIRIM
+            SendTicketWhatsappJob::dispatch($ticket->id)
+                ->onQueue('notification')
+                ->afterCommit();
+
+            return redirect()
+                ->route('dashboard')
+                ->with('success', 'Ticket has been successfully submitted and is being processed.');
+        } catch (\Throwable $e) {
+
+            DB::rollBack();
+
+            Log::critical('TICKET_STORE_FAILED', [
+                'error' => $e->getMessage(),
+            ]);
+
+            return back()->with('error', 'failed send ticket');
+        }
+    }
+}
 
     // public function store(Request $request)
     // {
@@ -740,222 +957,138 @@ class TicketController extends Controller
     //             ->with('error', 'Ticket failed to submitted');
     //     }
     // }
-    
-// public function store(Request $request)
-// {
-//     $validated = $request->validate([
-//         'request_uuid'  => 'required|uuid|unique:ticket_tables,request_uuid',
-//         'title'         => 'required|string|max:150',
-//         'category'      => 'required|string',
-//         'description'   => 'required|string|max:500',
-//         'attachments'   => 'nullable|array|max:3',
-//         'attachments.*' => 'file|max:5120|mimes:jpg,jpeg,png,pdf,doc,docx',
-//     ]);
 
-//     DB::beginTransaction();
+    // public function store(Request $request)
+    // {
+    //     $validated = $request->validate([
+    //         'request_uuid'  => 'required|uuid|unique:ticket_tables,request_uuid',
+    //         'title'         => 'required|string|max:150',
+    //         'category'      => 'required|string',
+    //         'description'   => 'required|string|max:500',
+    //         'attachments'   => 'nullable|array|max:3',
+    //         'attachments.*' => 'file|max:5120|mimes:jpg,jpeg,png,pdf,doc,docx',
+    //     ]);
 
-//     try {
-//         $queueNumber = Tickets::whereDate('created_at', today())
-//             ->lockForUpdate()
-//             ->count() + 1;
+    //     DB::beginTransaction();
 
-//         $ticket = Tickets::create([
-//             'id'           => (string) Str::uuid(),
-//             'request_uuid' => $validated['request_uuid'],
-//             'user_id'      => auth()->id(),
-//             'queue_number' => $queueNumber,
-//             'title'        => $validated['title'],
-//             'category'     => $validated['category'],
-//             'description'  => $validated['description'],
-//             'status'       => 'Open',
-//         ]);
+    //     try {
+    //         $queueNumber = Tickets::whereDate('created_at', today())
+    //             ->lockForUpdate()
+    //             ->count() + 1;
 
-//         DB::commit();
+    //         $ticket = Tickets::create([
+    //             'id'           => (string) Str::uuid(),
+    //             'request_uuid' => $validated['request_uuid'],
+    //             'user_id'      => auth()->id(),
+    //             'queue_number' => $queueNumber,
+    //             'title'        => $validated['title'],
+    //             'category'     => $validated['category'],
+    //             'description'  => $validated['description'],
+    //             'status'       => 'Open',
+    //         ]);
 
-//         /** 🔥 DISPATCH ASYNC JOB */
-//         if ($request->hasFile('attachments')) {
-//             ProcessTicketAttachmentsJob::dispatch(
-//                 $ticket->id,
-//                 $request->file('attachments'),
-//                 auth()->user()
-//             )->onQueue('ticket-heavy');
-//         }
+    //         DB::commit();
 
-//         SendTicketWhatsappJob::dispatch($ticket->id)
-//             ->onQueue('notification');
+    //         /** 🔥 DISPATCH ASYNC JOB */
+    //         if ($request->hasFile('attachments')) {
+    //             ProcessTicketAttachmentsJob::dispatch(
+    //                 $ticket->id,
+    //                 $request->file('attachments'),
+    //                 auth()->user()
+    //             )->onQueue('ticket-heavy');
+    //         }
 
-//         return redirect()
-//             ->route('openticket')
-//             ->with('success', 'Ticket berhasil dikirim & sedang diproses');
+    //         SendTicketWhatsappJob::dispatch($ticket->id)
+    //             ->onQueue('notification');
 
-//     } catch (\Throwable $e) {
-//         DB::rollBack();
+    //         return redirect()
+    //             ->route('openticket')
+    //             ->with('success', 'Ticket berhasil dikirim & sedang diproses');
 
-//         Log::critical('TICKET_STORE_FAILED', [
-//             'error' => $e->getMessage()
-//         ]);
+    //     } catch (\Throwable $e) {
+    //         DB::rollBack();
 
-//         return back()->with('error', 'Gagal mengirim ticket');
-//     }
-// }
+    //         Log::critical('TICKET_STORE_FAILED', [
+    //             'error' => $e->getMessage()
+    //         ]);
 
-
-
-// public function store(Request $request)
-// {
-//     $validated = $request->validate([
-//         'request_uuid'  => 'required|uuid|unique:ticket_tables,request_uuid',
-//         'title'         => 'required|string|max:150',
-//         'category'      => 'required|string',
-//         'description'   => 'required|string|max:500',
-//         'attachments'   => 'nullable|array|max:3',
-//         'attachments.*' => 'file|max:5120|mimes:jpg,jpeg,png,pdf,doc,docx',
-//     ]);
-
-//     DB::beginTransaction();
-
-//     try {
-//         $queueNumber = Tickets::whereDate('created_at', today())
-//             ->lockForUpdate()
-//             ->count() + 1;
-
-//         $ticket = Tickets::create([
-//             'id'           => (string) Str::uuid(),
-//             'request_uuid' => $validated['request_uuid'],
-//             'user_id'      => auth()->id(),
-//             'queue_number' => $queueNumber,
-//             'title'        => $validated['title'],
-//             'category'     => $validated['category'],
-//             'description'  => $validated['description'],
-//             'status'       => 'Open',
-//         ]);
-
-//         DB::commit();
-
-//         /**
-//          * ============================
-//          * STORE TEMP FILES
-//          * ============================
-//          */
-//         $tempFiles = [];
-
-//         if ($request->hasFile('attachments')) {
-//             foreach ($request->file('attachments') as $file) {
-//                 $path = $file->store('tmp/tickets');
-
-//                 $tempFiles[] = [
-//                     'path' => $path,
-//                     'name' => $file->getClientOriginalName(),
-//                     'mime' => $file->getMimeType(),
-//                 ];
-//             }
-
-//             // 🔥 dispatch HANYA jika ada file
-//             ProcessTicketAttachmentsJob::dispatch(
-//                 $ticket->id,
-//                 $tempFiles,
-//                 auth()->id()
-//             )->onQueue('ticket-heavy');
-//         }
-
-//         // 🔔 WA notification (tidak blocking)
-//         SendTicketWhatsappJob::dispatch($ticket->id)
-//             ->onQueue('notification');
-
-//         return redirect()
-//             ->route('dashboard')
-//             ->with('success', 'Ticket has been successfully submitted and is being processed.');
-//     } catch (\Throwable $e) {
-//         DB::rollBack();
-
-//         Log::critical('TICKET_STORE_FAILED', [
-//             'error' => $e->getMessage()
-//         ]);
-
-//         return back()->with('error', 'failed send ticket');
-//     }
-// }
-public function store(Request $request)
-{
-    $validated = $request->validate([
-        'request_uuid'  => 'required|uuid|unique:ticket_tables,request_uuid',
-        'title'         => 'required|string|max:150',
-        'category'      => 'required|string',
-        'description'   => 'required|string|max:500',
-        'attachments'   => 'nullable|array|max:3',
-        'attachments.*' => 'file|max:51200|mimes:jpg,jpeg,png,pdf,doc,docx',
-    ]);
-    DB::beginTransaction();
-    try {
-        // 🔒 aman dari race queue number
-        $queueNumber = Tickets::whereDate('created_at', today())
-            ->lockForUpdate()
-            ->count() + 1;
-
-        $ticket = Tickets::create([
-            'id'           => (string) Str::uuid(),
-            'request_uuid' => $validated['request_uuid'],
-            'user_id'      => auth()->id(),
-            'queue_number' => $queueNumber,
-            'title'        => $validated['title'],
-            'category'     => $validated['category'],
-            'description'  => $validated['description'],
-            'status'       => 'Open',
-        ]);
-
-        DB::commit(); // ⬅️ WAJIB selesai dulu
-
-        /**
-         * ============================
-         * PREPARE TEMP FILES
-         * ============================
-         */
-        $tempFiles = [];
-
-        if ($request->hasFile('attachments')) {
-            foreach ($request->file('attachments') as $file) {
-                $path = $file->store('tmp/tickets');
-
-                $tempFiles[] = [
-                    'path' => $path,
-                    'name' => $file->getClientOriginalName(),
-                    'mime' => $file->getMimeType(),
-                ];
-            }
-
-            // 📦 job berat (optional)
-            ProcessTicketAttachmentsJob::dispatch(
-                $ticket->id,
-                $tempFiles,
-                auth()->id()
-            )
-            ->onQueue('ticket-heavy')
-            ->afterCommit();
-        }
-
-        // 🔔 WA HARUS SELALU DIKIRIM
-        SendTicketWhatsappJob::dispatch($ticket->id)
-            ->onQueue('notification')
-            ->afterCommit();
-
-        return redirect()
-            ->route('dashboard')
-            ->with('success', 'Ticket has been successfully submitted and is being processed.');
-
-    } catch (\Throwable $e) {
-
-        DB::rollBack();
-
-        Log::critical('TICKET_STORE_FAILED', [
-            'error' => $e->getMessage(),
-        ]);
-
-        return back()->with('error', 'failed send ticket');
-    }
-}
+    //         return back()->with('error', 'Gagal mengirim ticket');
+    //     }
+    // }
 
 
 
+    // public function store(Request $request)
+    // {
+    //     $validated = $request->validate([
+    //         'request_uuid'  => 'required|uuid|unique:ticket_tables,request_uuid',
+    //         'title'         => 'required|string|max:150',
+    //         'category'      => 'required|string',
+    //         'description'   => 'required|string|max:500',
+    //         'attachments'   => 'nullable|array|max:3',
+    //         'attachments.*' => 'file|max:5120|mimes:jpg,jpeg,png,pdf,doc,docx',
+    //     ]);
 
+    //     DB::beginTransaction();
 
-}
+    //     try {
+    //         $queueNumber = Tickets::whereDate('created_at', today())
+    //             ->lockForUpdate()
+    //             ->count() + 1;
+
+    //         $ticket = Tickets::create([
+    //             'id'           => (string) Str::uuid(),
+    //             'request_uuid' => $validated['request_uuid'],
+    //             'user_id'      => auth()->id(),
+    //             'queue_number' => $queueNumber,
+    //             'title'        => $validated['title'],
+    //             'category'     => $validated['category'],
+    //             'description'  => $validated['description'],
+    //             'status'       => 'Open',
+    //         ]);
+
+    //         DB::commit();
+
+    //         /**
+    //          * ============================
+    //          * STORE TEMP FILES
+    //          * ============================
+    //          */
+    //         $tempFiles = [];
+
+    //         if ($request->hasFile('attachments')) {
+    //             foreach ($request->file('attachments') as $file) {
+    //                 $path = $file->store('tmp/tickets');
+
+    //                 $tempFiles[] = [
+    //                     'path' => $path,
+    //                     'name' => $file->getClientOriginalName(),
+    //                     'mime' => $file->getMimeType(),
+    //                 ];
+    //             }
+
+    //             // 🔥 dispatch HANYA jika ada file
+    //             ProcessTicketAttachmentsJob::dispatch(
+    //                 $ticket->id,
+    //                 $tempFiles,
+    //                 auth()->id()
+    //             )->onQueue('ticket-heavy');
+    //         }
+
+    //         // 🔔 WA notification (tidak blocking)
+    //         SendTicketWhatsappJob::dispatch($ticket->id)
+    //             ->onQueue('notification');
+
+    //         return redirect()
+    //             ->route('dashboard')
+    //             ->with('success', 'Ticket has been successfully submitted and is being processed.');
+    //     } catch (\Throwable $e) {
+    //         DB::rollBack();
+
+    //         Log::critical('TICKET_STORE_FAILED', [
+    //             'error' => $e->getMessage()
+    //         ]);
+
+    //         return back()->with('error', 'failed send ticket');
+    //     }
+    // }
