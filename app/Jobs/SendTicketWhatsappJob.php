@@ -88,7 +88,7 @@ public function handle()
         ]);
 
         // throw $e;
+        return;
     }
 }
-
 }
