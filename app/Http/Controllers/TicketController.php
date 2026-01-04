@@ -804,8 +804,8 @@ public function store(Request $request)
             ->onQueue('notification');
 
         return redirect()
-            ->route('openticket')
-            ->with('success', 'Ticket berhasil dikirim & sedang diproses');
+            ->route('dashboard')
+            ->with('success', 'Ticket has been successfully submitted and is being processed.');
 
     } catch (\Throwable $e) {
         DB::rollBack();

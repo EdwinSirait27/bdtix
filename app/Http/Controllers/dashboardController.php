@@ -186,18 +186,51 @@ private function findTicketByHash(string $hash): Tickets
     return $ticket;
 }
 
+// public function edit(string $hash)
+// {
+//     $ticket = $this->findTicketByHash($hash);
+
+//     // 🚫 ticket Closed → redirect dashboard
+//     if ($ticket->status === 'Closed') {
+//         return redirect()
+//             ->route('dashboard')
+//             ->with('error', 'The ticket is closed and cannot be edited.');
+//     }
+//     return view('pages.editopenticketforadmin', compact('ticket'));
+// }
 public function edit(string $hash)
 {
     $ticket = $this->findTicketByHash($hash);
+    $user   = auth()->user();
 
-    // 🚫 ticket Closed → redirect dashboard
+    // 🚫 Ticket CLOSED → tidak boleh apa pun
     if ($ticket->status === 'Closed') {
         return redirect()
             ->route('dashboard')
             ->with('error', 'The ticket is closed and cannot be edited.');
     }
-    return view('pages.editopenticketforadmin', compact('ticket'));
+
+    // 👨‍💼 Admin & Executor → boleh edit semua
+    if ($user->hasRole(['admin', 'executor'])) {
+        return view('pages.editopenticketforadmin', compact('ticket'));
+    }
+
+    // 👤 Human → hanya tiket milik sendiri
+    if ($user->hasRole('human')) {
+
+        // 🚫 BUKAN tiket dia
+        if ($ticket->user_id !== $user->id) {
+            abort(403, 'You are not allowed to access this ticket.');
+        }
+
+        // ✅ tiket milik sendiri → hanya view
+        return redirect()->route('showopenticketforadmin', $hash);
+    }
+
+    // 🚫 Role tidak dikenal
+    abort(403, 'Unauthorized action.');
 }
+
 public function show(string $hash)
 {
      $ticket = $this->findTicketByHash($hash);

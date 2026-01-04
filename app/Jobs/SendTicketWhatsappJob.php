@@ -18,100 +18,21 @@ class SendTicketWhatsappJob implements ShouldQueue
 
     public function __construct(public string $ticketId) {}
 
-//     public function handle()
-//     {
-//         $ticket = Tickets::with('user.employee.store')->findOrFail($this->ticketId);
-// $createdAt = $ticket->created_at
-//             ->timezone('Asia/Makassar')
-//             ->format('d-m-Y H:i');
-
-//         $user = $ticket->user;
-//         $employee = $user?->employee;
-//         $store = $employee?->store;
-
-//         $userName =
-//             $employee->employee_name
-//             ?? $store->name
-//             ?? $user->username;
-
-//         $locationName = $store->name ?? '-';
-//         $phoneNumber  = $employee->telp_number ?? '-';
-
-//         $message = "*New Tickets*\n"
-//         ."Queue: {$ticket->queue_number}\n"
-//         ."Date: {$createdAt}\n"
-//         ."User: {$userName}\n"
-//         ."Location: {$locationName}\n"
-//         ."Phone Number: {$phoneNumber}\n"
-//         ."Title: {$ticket->title}\n"
-//         ."Category: {$ticket->category}\n"
-//         ."Description: {$ticket->description}";
-//         if ($ticket->attachment_url) {
-//             $message .= "\nAttachments:\n{$ticket->attachment_url}";
-//         }
-//         Http::timeout(15)->post('http://127.0.0.1:3000/send-message', [
-//             'group_id' => '120363405189832865@g.us',
-//             'text'     => $message,
-//         ]);
-//     }
-// public function handle()
-// {
-//     Log::info('WA_JOB_START', [
-//         'ticket_id' => $this->ticketId
-//     ]);
-
-//     $ticket = Tickets::with('user.employee.store')->findOrFail($this->ticketId);
-// $createdAt = $ticket->created_at
-//             ->timezone('Asia/Makassar')
-//             ->format('d-m-Y H:i');
-
-//         $user = $ticket->user;
-//         $employee = $user?->employee;
-//         $store = $employee?->store;
-
-//         $userName =
-//             $employee->employee_name
-//             ?? $store->name
-//             ?? $user->username;
-
-//         $locationName = $store->name ?? '-';
-//         $phoneNumber  = $employee->telp_number ?? '-';
-
-//     $message = "*New IT Ticket*\n"
-//         ."Queue: {$ticket->queue_number}\n"
-//         ."Date: {$createdAt}\n"
-//         ."User: {$userName}\n"
-//         ."Location: {$locationName}\n"
-//         ."Phone Number: {$phoneNumber}\n"
-//         ."Title: {$ticket->title}\n"
-//         ."Category: {$ticket->category}\n"
-//         ."Description: {$ticket->description}";
-
-//     if ($ticket->attachment_url) {
-//         $message .= "\nAttachments:\n{$ticket->attachment_url}";
-//     }
-
-//     $response = Http::timeout(10)->post(
-//         'http://127.0.0.1:3000/send-message',
-//         [
-//             'group_id' => '120363405189832865@g.us',
-//             'text'     => $message,
-//         ]
-//     );
-//     Log::info('WA_JOB_RESPONSE', [
-//         'status' => $response->status(),
-//         'body'   => $response->body(),
-//     ]);
-// }
 public function handle()
 {
     Log::info('WA_JOB_START', [
         'ticket_id' => $this->ticketId
     ]);
-    $editTicketUrl = route('editopenticketforadmin', $hash);
+         
     try {
         $ticket = Tickets::with('user.employee.store')
             ->findOrFail($this->ticketId);
+               $hash = substr(
+                hash('sha256', $ticket->id . config('app.key')),
+                0,
+                8
+            );
+    $editTicketUrl = route('editopenticketforadmin', $hash);
 
         $createdAt = $ticket->created_at
             ->timezone('Asia/Makassar')

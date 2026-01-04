@@ -216,15 +216,17 @@
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-    <script>
+  <script>
 document.addEventListener('DOMContentLoaded', () => {
-    const form = document.querySelector('form');
+    const form = document.getElementById('ticketForm');
     const btn = document.getElementById('submitBtn');
     const text = document.getElementById('submitText');
     const icon = document.getElementById('submitIcon');
     const uploadInfo = document.getElementById('uploadInfo');
 
-    form.addEventListener('submit', () => {
+    form.addEventListener('submit', (e) => {
+        e.preventDefault(); // ⛔ stop submit sementara
+
         // disable button
         btn.disabled = true;
         btn.classList.add('opacity-70', 'cursor-not-allowed');
@@ -242,11 +244,17 @@ document.addEventListener('DOMContentLoaded', () => {
         `;
         icon.classList.add('animate-spin');
 
-        // 🔥 tampilkan info upload
+        // tampilkan info upload
         uploadInfo.classList.remove('hidden');
+
+        // ✅ kasih waktu browser render UI dulu
+        requestAnimationFrame(() => {
+            form.submit(); // 🚀 lanjut submit asli
+        });
     });
 });
 </script>
+
 
 {{-- <script>
 document.addEventListener('DOMContentLoaded', () => {
