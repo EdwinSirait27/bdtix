@@ -23,7 +23,6 @@ public function handle()
     Log::info('WA_JOB_START', [
         'ticket_id' => $this->ticketId
     ]);
-         
     try {
         $ticket = Tickets::with('user.employee.store')
             ->findOrFail($this->ticketId);
@@ -88,7 +87,7 @@ public function handle()
             'error' => $e->getMessage(),
         ]);
 
-        throw $e;
+        // throw $e;
     }
 }
 

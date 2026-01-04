@@ -806,7 +806,6 @@ public function store(Request $request)
         return redirect()
             ->route('dashboard')
             ->with('success', 'Ticket has been successfully submitted and is being processed.');
-
     } catch (\Throwable $e) {
         DB::rollBack();
 
@@ -814,7 +813,7 @@ public function store(Request $request)
             'error' => $e->getMessage()
         ]);
 
-        return back()->with('error', 'Gagal mengirim ticket');
+        return back()->with('error', 'failed send ticket');
     }
 }
 
