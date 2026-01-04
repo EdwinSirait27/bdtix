@@ -296,6 +296,7 @@ public function update(Request $request, string $hash)
             'status'    => $status,
         ]);
     });
+$oldStatus = $ticket->status;
 
     $ticket->refresh();
     // =========================
@@ -311,48 +312,45 @@ public function update(Request $request, string $hash)
             ->format('d-m-Y H:i');
 
         $userName = $ticket->user->employee->employee_name;
-
+  $locationName = $ticket->user->employee->store->name ?? '-';
+        $phoneNumber  = $ticket->user->employee->telp_number ?? '-';
         $message =
             "*IT Ticket Updated*\n" .
             "Queue: {$ticket->queue_number}\n" .
             "Date: {$formattedDate}\n" .
             "User: {$userName}\n" .
+            "Location: {$locationName}\n" .
+            "Phone: {$phoneNumber}\n" .
             "Title: {$ticket->title}\n" .
             "Category: {$ticket->category}\n" .
             "Status: {$ticket->status}\n" .
             "Priority: {$ticket->priority}\n" .
             "Executor: {$executorName}\n";
-            if ($ticket->status === 'Progress' && $ticket->estimation) {
-              $estimationFormatted = $ticket->estimation
-              ->timezone('Asia/Makassar')
-              ->format('d-m-Y H:i');
-              $message .= "Estimation: {$estimationFormatted}\n";
-            }
-            if ($ticket->status === 'Closed' && $ticket->estimation && $ticket->finished) {
-              $estimationFormatted = $ticket->estimation
-              ->timezone('Asia/Makassar')
-              ->format('d-m-Y H:i');
-              $finishedFormatted = $ticket->finished
-              ->timezone('Asia/Makassar')
-              ->format('d-m-Y H:i');
-              $message .= "Estimation: {$estimationFormatted}\n";
-              $message .= "Finished: {$finishedFormatted}\n";
-            }
-            // Closed → tampilkan estimation & finished
-// if ($ticket->status === 'Closed') {
-//     if ($ticket->estimation) {
-//         $message .= "Estimation: " .
-//             $ticket->estimation
-//                 ->timezone('Asia/Makassar')
-//                 ->format('d-m-Y H:i') . "\n";
-//     }
-//     if ($ticket->finished) {
-//         $message .= "Finished: " .
-//             $ticket->finished
-//                 ->timezone('Asia/Makassar')
-//                 ->format('d-m-Y H:i') . "\n";
-//     }
-// }           
+            if ($oldStatus === 'Open' && $ticket->status === 'Progress' && $ticket->estimation) {
+    $estimationFormatted = $ticket->estimation
+        ->timezone('Asia/Makassar')
+        ->format('d-m-Y H:i');
+
+    $message .= "Estimation: {$estimationFormatted}\n";
+}
+         if ($oldStatus === 'Progress' && $ticket->status === 'Closed') {
+
+    if ($ticket->estimation) {
+        $message .= "Estimation: " .
+            $ticket->estimation
+                ->timezone('Asia/Makassar')
+                ->format('d-m-Y H:i') . "\n";
+    }
+
+    if ($ticket->finished) {
+        $message .= "Finished: " .
+            $ticket->finished
+                ->timezone('Asia/Makassar')
+                ->format('d-m-Y H:i') . "\n";
+    }
+}
+
+          
            $message .= "\nAdmin Link:\n{$adminUrl}";
         Http::timeout(15)->post('http://127.0.0.1:3000/send-message', [
             'group_id' => '120363405189832865@g.us',
@@ -372,7 +370,21 @@ public function update(Request $request, string $hash)
         ->route('alltickets')
         ->with('success', 'Ticket successfully updated');
 }
-
+           // Closed → tampilkan estimation & finished
+// if ($ticket->status === 'Closed') {
+//     if ($ticket->estimation) {
+//         $message .= "Estimation: " .
+//             $ticket->estimation
+//                 ->timezone('Asia/Makassar')
+//                 ->format('d-m-Y H:i') . "\n";
+//     }
+//     if ($ticket->finished) {
+//         $message .= "Finished: " .
+//             $ticket->finished
+//                 ->timezone('Asia/Makassar')
+//                 ->format('d-m-Y H:i') . "\n";
+//     }
+// }  
 // public function update(Request $request, string $hash)
 // {
 //     $ticket = $this->findTicketByHash($hash);
