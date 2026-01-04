@@ -308,9 +308,7 @@ class ProcessTicketAttachmentsJob implements ShouldQueue
                 }
             }
 
-            // ⛔ WAJIB throw supaya:
-            // - retry
-            // - masuk failed_jobs
+          
             throw $e;
         }
     }
