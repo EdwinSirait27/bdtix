@@ -224,7 +224,7 @@ public function edit(string $hash)
         }
 
         // ✅ tiket milik sendiri → hanya view
-        return redirect()->route('showopenticketforadmin', $hash);
+        return redirect()->route('showopenticket', $hash);
     }
 
     // 🚫 Role tidak dikenal
