@@ -883,11 +883,9 @@ public function store(Request $request)
         'category'      => 'required|string',
         'description'   => 'required|string|max:500',
         'attachments'   => 'nullable|array|max:3',
-        'attachments.*' => 'file|max:5120|mimes:jpg,jpeg,png,pdf,doc,docx',
+        'attachments.*' => 'file|max:51200|mimes:jpg,jpeg,png,pdf,doc,docx',
     ]);
-
     DB::beginTransaction();
-
     try {
         // 🔒 aman dari race queue number
         $queueNumber = Tickets::whereDate('created_at', today())
