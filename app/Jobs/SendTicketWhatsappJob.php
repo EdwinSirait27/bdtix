@@ -111,6 +111,7 @@ class SendTicketWhatsappJob implements ShouldQueue
 // }
 public function handle(): void
 {
+    
     Log::info('WA_JOB_START', [
         'ticket_id'  => $this->ticketId,
         'old_status' => $this->oldStatus,
@@ -212,3 +213,4 @@ public function handle(): void
 }
 
 }
+
