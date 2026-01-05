@@ -131,39 +131,144 @@ class ProcessTicketAttachmentsJob implements ShouldQueue
         public string $userId
     ) {}
 
-    public function handle(): void
-    {
-        Log::info('ATTACHMENT_JOB_START', [
+    // public function handle(): void
+    // {
+    //     Log::info('ATTACHMENT_JOB_START', [
+    //         'ticket_id' => $this->ticketId,
+    //         'file_count'=> count($this->files),
+    //     ]);
+
+    //     if (empty($this->files)) {
+    //         Log::info('ATTACHMENT_JOB_SKIP_EMPTY', [
+    //             'ticket_id' => $this->ticketId,
+    //         ]);
+    //         return;
+    //     }
+
+    //     $ticket = Tickets::findOrFail($this->ticketId);
+    //     $user   = User::findOrFail($this->userId);
+
+    //     $basePath = $this->buildBasePath($ticket, $user);
+
+    //     // 1️⃣ Pastikan folder ada (critical)
+    //     NextcloudService::makeDir($basePath);
+
+    //     foreach ($this->files as $file) {
+    //         $this->processSingleFile($ticket, $basePath, $file);
+    //     }
+
+    //     // 2️⃣ Share folder (NON-CRITICAL)
+    //     $this->shareFolderSafely($ticket, $basePath);
+
+    //     Log::info('ATTACHMENT_JOB_DONE', [
+    //         'ticket_id' => $ticket->id,
+    //     ]);
+    // }
+public function handle(): void
+{
+    Log::info('ATTACHMENT_JOB_START', [
+        'ticket_id' => $this->ticketId,
+        'file_count' => count($this->files),
+    ]);
+
+    if (empty($this->files)) {
+        return;
+    }
+
+    $ticket = Tickets::find($this->ticketId);
+    $user   = User::find($this->userId);
+
+    if (!$ticket || !$user) {
+        Log::error('ATTACHMENT_JOB_INVALID_DATA', [
             'ticket_id' => $this->ticketId,
-            'file_count'=> count($this->files),
+            'user_id'   => $this->userId,
+        ]);
+        return; // ❗ jangan FAIL queue
+    }
+
+    $basePath = sprintf(
+        'ticket/%s/%s/%s',
+        Str::slug($ticket->category),
+        Str::slug($user->username),
+        $ticket->id
+    );
+
+    // 1️⃣ makeDir (JANGAN FAIL JOB)
+    try {
+        NextcloudService::makeDir($basePath);
+    } catch (\Throwable $e) {
+        Log::error('ATTACHMENT_MKDIR_FAILED', [
+            'ticket_id' => $ticket->id,
+            'error'     => $e->getMessage(),
+        ]);
+        return; // ❗ stop job, tapi tidak FAIL
+    }
+
+    // 2️⃣ process file satu-satu
+    foreach ($this->files as $file) {
+
+        if (empty($file['path']) || !Storage::exists($file['path'])) {
+            Log::warning('ATTACHMENT_TMP_NOT_FOUND', [
+                'ticket_id' => $ticket->id,
+                'path'      => $file['path'] ?? null,
+            ]);
+            continue;
+        }
+
+        try {
+            $content  = Storage::get($file['path']);
+            $filename = time().'_'.Str::slug($file['name']);
+
+            NextcloudService::upload(
+                $basePath,
+                $filename,
+                $content,
+                $file['mime']
+            );
+
+            Ticketattachments::create([
+                'id'        => (string) Str::uuid(),
+                'ticket_id' => $ticket->id,
+                'file_name' => $filename,
+                'file_path' => "{$basePath}/{$filename}",
+            ]);
+
+            Log::info('ATTACHMENT_UPLOADED', [
+                'ticket_id' => $ticket->id,
+                'file'      => $filename,
+            ]);
+
+        } catch (\Throwable $e) {
+            Log::error('ATTACHMENT_UPLOAD_FAILED', [
+                'ticket_id' => $ticket->id,
+                'file'      => $file['name'] ?? null,
+                'error'     => $e->getMessage(),
+            ]);
+        } finally {
+            Storage::delete($file['path']);
+        }
+    }
+
+    // 3️⃣ share folder (OPSIONAL)
+    try {
+        $shareUrl = NextcloudService::shareFolder($basePath);
+
+        $ticket->update([
+            'attachment_folder' => $basePath,
+            'attachment_url'    => $shareUrl,
         ]);
 
-        if (empty($this->files)) {
-            Log::info('ATTACHMENT_JOB_SKIP_EMPTY', [
-                'ticket_id' => $this->ticketId,
-            ]);
-            return;
-        }
-
-        $ticket = Tickets::findOrFail($this->ticketId);
-        $user   = User::findOrFail($this->userId);
-
-        $basePath = $this->buildBasePath($ticket, $user);
-
-        // 1️⃣ Pastikan folder ada (critical)
-        NextcloudService::makeDir($basePath);
-
-        foreach ($this->files as $file) {
-            $this->processSingleFile($ticket, $basePath, $file);
-        }
-
-        // 2️⃣ Share folder (NON-CRITICAL)
-        $this->shareFolderSafely($ticket, $basePath);
-
-        Log::info('ATTACHMENT_JOB_DONE', [
+    } catch (\Throwable $e) {
+        Log::warning('ATTACHMENT_SHARE_FAILED', [
             'ticket_id' => $ticket->id,
+            'error'     => $e->getMessage(),
         ]);
     }
+
+    Log::info('ATTACHMENT_JOB_DONE', [
+        'ticket_id' => $ticket->id,
+    ]);
+}
 
     protected function buildBasePath(Tickets $ticket, User $user): string
     {
