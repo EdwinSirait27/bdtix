@@ -107,45 +107,211 @@ class ProcessTicketAttachmentsJob implements ShouldQueue
     }
 
     protected function processSingleFile(
-        Tickets $ticket,
-        string $basePath,
-        array $file
-    ): void {
-        if (empty($file['path']) || !Storage::exists($file['path'])) {
-            Log::warning('ATTACHMENT_TMP_NOT_FOUND', [
-                'ticket_id' => $ticket->id,
-                'path'      => $file['path'] ?? null,
-            ]);
-            return;
-        }
-
-        try {
-            $content  = Storage::get($file['path']);
-            $filename = time() . '_' . Str::slug($file['name']);
-
-            NextcloudService::upload(
-                $basePath,
-                $filename,
-                $content,
-                $file['mime']
-            );
-
-            Ticketattachments::create([
-                'id'        => (string) Str::uuid(),
-                'ticket_id' => $ticket->id,
-                'file_name' => $filename,
-                'file_path' => "{$basePath}/{$filename}",
-            ]);
-
-            Log::info('ATTACHMENT_UPLOADED', [
-                'ticket_id' => $ticket->id,
-                'file'      => $filename,
-            ]);
-        } finally {
-            Storage::delete($file['path']);
-        }
+    Tickets $ticket,
+    string $basePath,
+    array $file
+): void {
+    if (empty($file['path']) || !Storage::exists($file['path'])) {
+        Log::warning('ATTACHMENT_TMP_NOT_FOUND', [
+            'ticket_id' => $ticket->id,
+            'path'      => $file['path'] ?? null,
+        ]);
+        return;
     }
+
+    $content = Storage::get($file['path']);
+
+    if (empty($content)) {
+        Log::error('ATTACHMENT_EMPTY_CONTENT', [
+            'ticket_id' => $ticket->id,
+            'path'      => $file['path'],
+        ]);
+        return;
+    }
+
+    // ✅ FIX FILENAME (KEEP EXTENSION)
+    $extension = pathinfo($file['name'], PATHINFO_EXTENSION);
+    $basename  = pathinfo($file['name'], PATHINFO_FILENAME);
+
+    $filename = time() . '_' . Str::slug($basename) . '.' . $extension;
+
+    // ✅ SAFE MIME
+    $mime = $file['mime'] ?? 'application/octet-stream';
+
+    NextcloudService::upload(
+        $basePath,
+        $filename,
+        $content,
+        $mime
+    );
+    Ticketattachments::create([
+        'id'        => (string) Str::uuid(),
+        'ticket_id' => $ticket->id,
+        'file_name' => $filename,
+        'file_path' => "{$basePath}/{$filename}",
+    ]);
+
+    Storage::delete($file['path']);
+
+    Log::info('ATTACHMENT_UPLOADED', [
+        'ticket_id' => $ticket->id,
+        'file'      => $filename,
+    ]);
 }
+
+}
+// {
+//     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+
+//     public int $tries   = 3;
+//     public int $timeout = 120;
+
+//     public function __construct(
+//         public string $ticketId,
+//         public array  $files,
+//         public string $userId
+//     ) {}
+
+//     public function handle(): void
+//     {
+//         Log::info('ATTACHMENT_JOB_START', [
+//             'ticket_id'   => $this->ticketId,
+//             'file_count'  => count($this->files),
+//         ]);
+
+//         if (empty($this->files)) {
+//             return;
+//         }
+
+//         $ticket = Tickets::find($this->ticketId);
+//         $user   = User::find($this->userId);
+
+//         if (!$ticket || !$user) {
+//             Log::error('ATTACHMENT_JOB_INVALID_DATA', [
+//                 'ticket_id' => $this->ticketId,
+//                 'user_id'   => $this->userId,
+//             ]);
+//             return;
+//         }
+
+//         $basePath = $this->buildBasePath($ticket, $user);
+
+//         // 1️⃣ ensure folder
+//         try {
+//             NextcloudService::makeDir($basePath);
+//         } catch (\Throwable $e) {
+//             Log::error('ATTACHMENT_MKDIR_FAILED', [
+//                 'ticket_id' => $ticket->id,
+//                 'error'     => $e->getMessage(),
+//             ]);
+//             return;
+//         }
+
+//         // 2️⃣ upload files
+//         foreach ($this->files as $file) {
+//             try {
+//                 $this->processSingleFile($ticket, $basePath, $file);
+//             } catch (\Throwable $e) {
+//                 continue; // lanjut file lain
+//             }
+//         }
+
+//         // 3️⃣ share folder (opsional)
+//         try {
+//             $shareUrl = NextcloudService::shareFolder($basePath);
+
+//             $ticket->update([
+//                 'attachment_folder' => $basePath,
+//                 'attachment_url'    => $shareUrl,
+//             ]);
+//         } catch (\Throwable $e) {
+//             Log::warning('ATTACHMENT_SHARE_FAILED', [
+//                 'ticket_id' => $ticket->id,
+//                 'error'     => $e->getMessage(),
+//             ]);
+//         }
+
+//         Log::info('ATTACHMENT_JOB_DONE', [
+//             'ticket_id' => $ticket->id,
+//         ]);
+//     }
+
+
+
+//     protected function buildBasePath(Tickets $ticket, User $user): string
+//     {
+//         return sprintf(
+//             'ticket/%s/%s/%s',
+//             Str::slug($ticket->category),
+//             Str::slug($user->username),
+//             $ticket->id
+//         );
+//     }
+
+//     protected function processSingleFile(
+//         Tickets $ticket,
+//         string $basePath,
+//         array $file
+//     ): void {
+//         if (empty($file['path']) || !Storage::exists($file['path'])) {
+//             Log::warning('ATTACHMENT_TMP_NOT_FOUND', [
+//                 'ticket_id' => $ticket->id,
+//                 'path'      => $file['path'] ?? null,
+//             ]);
+//             return;
+//         }
+
+//         try {
+//             $content  = Storage::get($file['path']);
+//             $filename = time() . '_' . Str::slug($file['name']);
+
+//             NextcloudService::upload(
+//                 $basePath,
+//                 $filename,
+//                 $content,
+//                 $file['mime']
+//             );
+
+//             Ticketattachments::create([
+//                 'id'        => (string) Str::uuid(),
+//                 'ticket_id' => $ticket->id,
+//                 'file_name' => $filename,
+//                 'file_path' => "{$basePath}/{$filename}",
+//             ]);
+
+//             Log::info('ATTACHMENT_UPLOADED', [
+//                 'ticket_id' => $ticket->id,
+//                 'file'      => $filename,
+//             ]);
+//         } finally {
+//             Storage::delete($file['path']);
+//         }
+//     }
+// }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // {
 //     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
