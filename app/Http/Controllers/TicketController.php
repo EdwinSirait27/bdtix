@@ -302,6 +302,22 @@ class TicketController extends Controller
         ->timezone('Asia/Makassar')
         ->format('d-m-Y H:i');
 })
+->editColumn('estimation', function ($ticket) {
+    return $ticket->estimation
+        ? $ticket->estimation
+            ->timezone('Asia/Makassar')
+            ->format('d-m-Y H:i')
+        : 'empty';
+})
+->editColumn('finished', function ($ticket) {
+    return $ticket->finished
+        ? $ticket->finished
+            ->timezone('Asia/Makassar')
+            ->format('d-m-Y H:i')
+        : 'empty';
+})
+
+
 
             ->rawColumns(['action'])
             ->make(true);

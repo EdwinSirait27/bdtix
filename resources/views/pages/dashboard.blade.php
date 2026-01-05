@@ -534,7 +534,6 @@
                 var searchQuery = '';
                 var totalRecords = 0;
                 var searchTimeout;
-
                 if ($(window).width() >= 768) {
                     initializeDataTable();
                 } else {
@@ -549,7 +548,6 @@
                         loadMobileData();
                     }, 500);
                 });
-
                 $('#mobile-length').on('change', function() {
                     itemsPerPage = parseInt($(this).val());
                     currentPage = 1;
@@ -1326,6 +1324,7 @@
                                         <th class="text-center">Status</th>
                                         <th class="text-center">Executor</th>
                                         <th class="text-center">Priority</th>
+                                        <th class="text-center">Created</th>
                                         <th class="text-center">Estimation</th>
                                         <th class="text-center">Finished</th>
                                         <th class="text-center">Action</th>
@@ -1421,6 +1420,14 @@
                             }
                         },
 
+                        {
+                            data: 'created_at',
+                            name: 'created_at',
+                            width: '15%',
+                            render: function(data) {
+                                return data ? data : 'empty';
+                            }
+                        },
                         {
                             data: 'estimation',
                             name: 'estimation',
