@@ -84,5 +84,9 @@ Route::middleware(['auth', 'role:human'])->group(function () {
         'updatemytickets/{hash}',
         [TicketController::class, 'updatemytickets']
     )->name('updatemytickets');
+  Route::put(
+        'reviewticketsfromhuman/{hash}',
+        [TicketController::class, 'storeReview']
+    )->name('reviewticketsfromhuman');
 
 });

@@ -12,7 +12,6 @@ class MarkTicketOverdue extends Command
     public function handle(TicketOverdueService $service)
     {
         $count = $service->markOverdue();
-
         $this->info("{$count} ticket(s) marked as overdue");
     }
 }

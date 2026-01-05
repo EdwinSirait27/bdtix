@@ -1007,7 +1007,7 @@
                                         <th class="text-center">Queue</th>
                                         <th class="text-center">Users</th>
                                         <th class="text-center">Title</th>
-                                        <th class="text-center">Categories</th>
+                                        <th class="text-center">Created</th>
                                         <th class="text-center">Status</th>
                                         <th class="text-center">Executor</th>
                                         <th class="text-center">Priority</th>
@@ -1087,8 +1087,8 @@
                             width: '25%'
                         },
                         {
-                            data: 'category',
-                            name: 'category',
+                            data: 'created_at',
+                            name: 'created_at',
                             width: '15%'
                         },
                         {

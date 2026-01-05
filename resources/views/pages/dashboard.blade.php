@@ -1521,7 +1521,7 @@
                                     <div class="user-card-title">
                                         <div class="user-card-name"> Title : ${ticket.title || 'N/A'}</div>
                                         <div class="user-card-username">Queue : ${ticket.queue_number}</div>
-                                        <div class="user-card-date">Date : ${ticket.created_at}</div>
+                                        <div class="user-card-username">Date : ${ticket.created_at}</div>
                                     </div>
                                 </div>
                                 <div class="user-card-body">
@@ -1545,6 +1545,10 @@
                                     <div class="user-card-field">
                                         <div class="user-card-label">Estimation</div>
                                         <div class="user-card-value">${ticket.estimation || 'N/A'}</div>
+                                    </div>
+                                    <div class="user-card-field">
+                                        <div class="user-card-label">Notes IT</div>
+                                        <div class="user-card-value">${ticket.executor_notes || 'N/A'}</div>
                                     </div>
                                     <div class="user-card-field">
                                         <div class="user-card-label">Finished</div>

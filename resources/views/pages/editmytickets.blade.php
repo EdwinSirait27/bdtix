@@ -51,6 +51,8 @@
                     <h3 class="text-sm font-semibold text-blue-400 mb-1">Tickets from
                         {{ optional($ticket->user->employee)->employee_name }}</h3>
                     <p class="text-xs text-slate-400 leading-relaxed">Queue Number : {{ optional($ticket)->queue_number }}
+                    <p class="text-xs text-slate-400 leading-relaxed">Date : {{ optional($ticket)->created_at }}
+
                     </p>
                 </div>
             </div>

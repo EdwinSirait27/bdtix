@@ -51,23 +51,22 @@
                     <h3 class="text-sm font-semibold text-blue-400 mb-1">Tickets from
                         {{ optional($ticket->user->employee)->employee_name }}</h3>
                     <p class="text-xs text-slate-400 leading-relaxed">Queue Number : {{ optional($ticket)->queue_number }}
+                    <p class="text-xs text-slate-400 leading-relaxed">Date : {{ optional($ticket)->created_at }}
                     </p>
                 </div>
             </div>
         </div>
 
-        <form method="POST" action="{{ route('updateopenticketforadmin', request()->route('hash')) }}" class="space-y-6">
+        <form method="POST" action="{{ route('reviewticketsfromhuman', request()->route('hash')) }}" class="space-y-6">
             @csrf
             @method('PUT')
             <input type="hidden" name="updated_at" value="{{ $ticket->updated_at->toISOString() }}">
-
             @if ($errors->has('conflict'))
                 <div class="mb-4 p-4 rounded bg-yellow-50 text-yellow-800 border border-yellow-300">
                     <strong>Caution!</strong><br>
                     {{ $errors->first('conflict') }}
                 </div>
             @endif
-
             <div>
                 <label for="title" class="block text-sm font-semibold text-slate-300 mb-2 flex items-center space-x-2">
                     <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -77,7 +76,7 @@
                     <span>Ticket Title</span>
                     <span class="text-red-400">*</span>
                 </label>
-                <input type="text" id="title" name="title" required
+                <input type="text" id="title" name="title" disabled
                     placeholder="Example: Laptop cannot connect to WiFi"
                     class="w-full px-4 py-3.5 bg-slate-800 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
                     value="{{ old('title', $ticket->title) }}" disabled>
@@ -92,7 +91,6 @@
                     </p>
                 @enderror
             </div>
-
             <div>
                 <label for="category" class="block text-sm font-semibold text-slate-300 mb-2 flex items-center space-x-2">
                     <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -103,9 +101,7 @@
                     <span class="text-red-400">*</span>
                 </label>
                 <div class="relative">
-                    {{-- <select id="category" name="category" required
-                        class="w-full px-4 py-3.5 bg-slate-800 border border-slate-700 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 appearance-none cursor-pointer"> --}}
-                    <select id="category" name="category" required
+                    <select id="category" name="category" readonly
                         class="select2 w-full bg-slate-800 border border-slate-700 rounded-xl text-white">
 
                         <option value="">Choose Categories...</option>
@@ -188,7 +184,7 @@
     value="Low"
     id="Low"
     class="peer sr-only"
-    required
+    disabled
     @checked(old('priority', $ticket->priority ?? '') === 'Low')
 >
 
@@ -203,7 +199,7 @@
     name="priority"
     value="Medium"
     id="Medium"
-    class="peer sr-only"
+    class="peer sr-only" disabled
     @checked(old('priority', $ticket->priority ?? '') === 'Medium')
 >
 
@@ -218,7 +214,7 @@
     name="priority"
     value="High"
     id="High"
-    class="peer sr-only"
+    class="peer sr-only" disabled
     @checked(old('priority', $ticket->priority ?? '') === 'High')
 >
 
@@ -250,7 +246,7 @@
                     <span>Notes Executor</span>
                     <span class="text-red-400">*</span>
                 </label>
-                <textarea id="notes_executor" name="notes_executor" rows="5" required
+                <textarea id="notes_executor" name="notes_executor" rows="5" disabled
                     placeholder="Describe user's problem in detail:
 - What happened?"
                     class="w-full px-4 py-3.5 bg-slate-800 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 resize-none">{{ old('notes_executor', $ticket->notes_executor) }}</textarea>
@@ -269,25 +265,7 @@
                     </p>
                 @enderror
             </div>
-             {{-- <input type="date" min="{{ now()->toDateString() }}" id="estimation" name="estimation"
-                    value="{{ old('estimation', $ticket->estimation ?? '') }}" placeholder="Select estimation date"
-                    class="w-full px-4 py-3.5 bg-slate-800 border border-slate-700 rounded-xl
-               text-white placeholder-slate-500 focus:outline-none
-               focus:ring-2 focus:ring-blue-500 focus:border-transparent
-               transition-all duration-200"
-                    required> --}}
-                    {{-- <input
-    type="text"
-    id="estimation"
-    name="estimation"
-    value="{{ old('estimation', optional($ticket->estimation)->format('Y-m-d H:i')) }}"
-    placeholder="Select estimation date"
-    class="w-full px-4 py-3.5 bg-slate-800 border border-slate-700 rounded-xl
-           text-white placeholder-slate-500 focus:outline-none
-           focus:ring-2 focus:ring-blue-500 focus:border-transparent
-           transition-all duration-200"
-    required
-> --}}
+
             <div>
                 <label for="estimation"
                     class="block text-sm font-semibold text-slate-300 mb-2 flex items-center space-x-2">
@@ -306,7 +284,7 @@
     name="estimation"
     value="{{ old('estimation') ?? $ticket->estimation }}"
     class="w-full px-4 py-3.5 bg-slate-800 border border-slate-700 rounded-xl text-white"
-    required
+    disabled
 >
 
 
@@ -334,7 +312,7 @@
                 </label>
 
                 <div class="relative">
-                    <select id="status" name="status" required
+                    <select id="status" name="status" readonly
                         class="select2 w-full bg-slate-800 border border-slate-700 rounded-xl text-white">
 
                         <option value="">Choose Status...</option>
@@ -355,38 +333,8 @@
                     </p>
                 @enderror
             </div>
-{{-- 
-            <div>
-                <label for="finished"
-                    class="block text-sm font-semibold text-slate-300 mb-2 flex items-center space-x-2">
-                    <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M8 7V3m8 4V3M3 11h18M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                    </svg>
-                    <span>Finished</span>
-                    <span class="text-red-400">*</span>
-                </label>
 
-                <input type="date" min="{{ now()->toDateString() }}" id="finished" name="finished"
-                    value="{{ old('finished', $ticket->finished ?? '') }}" placeholder="Select finished date"
-                    class="w-full px-4 py-3.5 bg-slate-800 border border-slate-700 rounded-xl
-               text-white placeholder-slate-500 focus:outline-none
-               focus:ring-2 focus:ring-blue-500 focus:border-transparent
-               transition-all duration-200"
-                    >
-
-                @error('finished')
-                    <p class="mt-2 text-sm text-red-400 flex items-center space-x-1">
-                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd"
-                                d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
-                                clip-rule="evenodd" />
-                        </svg>
-                        <span>{{ $message }}</span>
-                    </p>
-                @enderror
-            </div> --}}
-            <div id="finished-wrapper" class="hidden">
+            <div class="relative">
     <label for="finished"
         class="block text-sm font-semibold text-slate-300 mb-2 flex items-center space-x-2">
         <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -397,13 +345,14 @@
         <span class="text-red-400">*</span>
     </label>
 
-    <input type="date"
-        min="{{ now()->toDateString() }}"
-        id="finished"
-        name="finished"
-        value="{{ old('finished', $ticket->finished ?? '') }}"
-        class="w-full px-4 py-3.5 bg-slate-800 border border-slate-700 rounded-xl
-               text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+  <input
+    type="datetime-local"
+    id="finished"
+    name="finished"
+    value="{{ old('finished') ?? $ticket->finished }}"
+    class="w-full px-4 py-3.5 bg-slate-800 border border-slate-700 rounded-xl text-white"
+    disabled
+>
 </div>
 
             
@@ -435,53 +384,151 @@
                     <p class="text-sm text-slate-500">No attachments</p>
                 @endif
             </div>
+            @if (in_array($ticket->status, ['Closed', 'Overdue']) && !$ticket->review)
+<div class="pt-6 border-t border-slate-700 space-y-4">
+
+    {{-- TITLE --}}
+    <label class="block text-sm font-semibold text-slate-300 flex items-center space-x-2">
+        <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286
+                     3.966a1 1 0 00.95.69h4.173c.969 0
+                     1.371 1.24.588 1.81l-3.377
+                     2.455a1 1 0 00-.364 1.118l1.287
+                     3.966c.3.921-.755 1.688-1.54
+                     1.118l-3.377-2.455a1 1 0 00-1.175
+                     0l-3.377 2.455c-.784.57-1.838
+                     -.197-1.539-1.118l1.287-3.966a1
+                     1 0 00-.364-1.118L2.98
+                     9.393c-.783-.57-.38-1.81.588
+                     -1.81h4.173a1 1 0 00.95-.69
+                     l1.286-3.966z"/>
+        </svg>
+        <span>Review Ticket</span>
+        <span class="text-red-400">*</span>
+    </label>
+
+    {{-- RATING --}}
+    <div>
+        <label class="block text-sm text-slate-400 mb-2">Rating</label>
+        
+        {{-- <select name="rating"
+            class="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-xl text-white focus:ring-2 focus:ring-yellow-500"
+            required> --}}
+              <select id="rating" name="rating" required
+                        class="select2 w-full bg-slate-800 border border-slate-700 rounded-xl text-white">
+
+            <option value="">-- Select Rating --</option>
+            @for ($i = 5; $i >= 1; $i--)
+                <option value="{{ $i }}" {{ old('rating') == $i ? 'selected' : '' }}>
+                    {{ $i }} ★
+                </option>
+            @endfor
+        </select>
+    </div>
+
+    {{-- COMMENT --}}
+    <div>
+        <label class="block text-sm text-slate-400 mb-2">Comment (optional)</label>
+        <textarea
+            name="comment"
+            rows="4"
+            placeholder="Write down your experience regarding solving this ticket..."
+            class="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:ring-2 focus:ring-yellow-500"
+        >{{ old('comment') }}</textarea>
+    </div>
+
+</div>
+@endif
+@if ($ticket->review)
+<div class="pt-6 border-t border-slate-700 space-y-4">
+    <label class="block text-sm font-semibold text-slate-300 flex items-center space-x-2">
+        <svg class="w-4 h-4 text-green-400" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M16.707 5.293a1 1 0 00-1.414 0L8 12.586
+                     4.707 9.293a1 1 0 00-1.414
+                     1.414l4 4a1 1 0 001.414
+                     0l8-8a1 1 0 000-1.414z"/>
+        </svg>
+        <span>Your review</span>
+    </label>
+
+    {{-- Rating --}}
+    <div class="flex items-center space-x-2 text-yellow-400">
+        @for ($i = 1; $i <= 5; $i++)
+            @if ($i <= $ticket->review->rating)
+                ★
+            @else
+                ☆
+            @endif
+        @endfor
+        <span class="text-sm text-slate-400 ml-2">
+            ({{ $ticket->review->rating }}/5)
+        </span>
+    </div>
+
+    {{-- Comment --}}
+    @if ($ticket->review->comment)
+        <p class="text-slate-300 italic">
+        Comment : “{{ $ticket->review->comment }}”
+        </p>
+    @else
+        <p class="text-slate-500 italic">
+            No comment provided.
+        </p>
+    @endif
+</div>
+@endif
+
+
 
             <div class="flex space-x-3 pt-4">
-                <a href="{{ route('alltickets') }}"
+                <a href="{{ route('dashboard') }}"
                     class="flex-1 py-3.5 bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 font-semibold rounded-xl transition-all duration-200 flex items-center justify-center space-x-2">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                     </svg>
                     <span>Abort</span>
                 </a>
-                <button type="submit"
+                {{-- <button type="submit"
                     class="flex-1 py-3.5 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white font-semibold rounded-xl shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center space-x-2">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                     </svg>
-                    <span>take this ticket</span>
-                </button>
+                    <span>Submit Review</span>
+                </button> --}}
+                @if ($ticket->review)
+    <div class="flex-1 py-3.5 bg-slate-800 border border-slate-700 text-slate-400
+                font-semibold rounded-xl flex items-center justify-center space-x-2">
+        <svg class="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M9 12l2 2 4-4" />
+        </svg>
+        <span>Review already submitted</span>
+    </div>
+@endif
+
             </div>
         </form>
     </div>
     @push('scripts')
-        {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script> --}}
         <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-<script>
-    $(document).ready(function () {
-        function toggleFinished() {
-            if ($('#status').val() === 'Closed') {
-                $('#finished-wrapper').removeClass('hidden');
-            } else {
-                $('#finished-wrapper').addClass('hidden');
-            }
-        }
-
-        toggleFinished(); // initial load
-
-        $('#status').on('change', toggleFinished);
-    });
-</script>
-
         <script>
             $(document).ready(function() {
                 $('#status').select2({
                     placeholder: 'Choose Status...',
                     width: '100%',
                     dropdownParent: $('#status').parent()
+                });
+            });
+        </script>
+        <script>
+            $(document).ready(function() {
+                $('#rating').select2({
+                    placeholder: 'Choose Rating...',
+                    width: '100%',
+                    dropdownParent: $('#rating').parent()
                 });
             });
         </script>
@@ -545,6 +592,16 @@ document.addEventListener('DOMContentLoaded', function () {
         time_24hr: true,
         defaultDate: estimationInput.value || null,
         minDate: estimationInput.value ? null : "today",
+        allowInput: true
+    });
+    const finishedInput = document.getElementById('finished');
+
+    flatpickr(finishedInput, {
+        enableTime: true,
+        dateFormat: "Y-m-d H:i",
+        time_24hr: true,
+        defaultDate: finishedInput.value || null,
+        minDate: finishedInput.value ? null : "today",
         allowInput: true
     });
 });

@@ -194,17 +194,86 @@ class TicketController extends Controller
             ->addColumn('executor_employee_name', function ($ticket) {
                 return $ticket->executor?->employee?->employee_name ?? 'empty';
             })
-            ->orderColumn('executor_employee_name', function ($query, $order) {
-            })
-    ->addColumn('action', function ($ticket) {
+            ->orderColumn('executor_employee_name', function ($query, $order) {})
+            //     ->addColumn('action', function ($ticket) {
 
-    $idHashed = substr(hash('sha256', $ticket->id . env('APP_KEY')), 0, 8);
+            //     $idHashed = substr(hash('sha256', $ticket->id . env('APP_KEY')), 0, 8);
 
-    // ===== EDIT BUTTON =====
-    if (in_array($ticket->status, ['Progress', 'Closed'])) {
+            //     // ===== EDIT BUTTON =====
+            //     if (in_array($ticket->status, ['Progress', 'Closed'])) {
 
-        // 🔒 LOCKED ICON (no link)
-        $editBtn = '
+            //         // 🔒 LOCKED ICON (no link)
+            //         $editBtn = '
+            //             <span
+            //                 class="inline-flex items-center justify-center p-2
+            //                        text-slate-400 cursor-not-allowed"
+            //                 title="Ticket cannot be edited due to status ' . e($ticket->status) . '">
+            //                 <svg xmlns="http://www.w3.org/2000/svg"
+            //                      class="w-5 h-5"
+            //                      fill="none"
+            //                      viewBox="0 0 24 24"
+            //                      stroke="currentColor"
+            //                      stroke-width="1.8">
+            //                     <path stroke-linecap="round" stroke-linejoin="round"
+            //                           d="M12 11c1.657 0 3-1.343 3-3V6a3 3 0 10-6 0v2c0 1.657 1.343 3 3 3z" />
+            //                     <path stroke-linecap="round" stroke-linejoin="round"
+            //                           d="M5 11h14v9H5z" />
+            //                 </svg>
+            //             </span>';
+            //     } else {
+
+            //         // ✏️ EDIT ICON (active)
+            //         $editBtn = '
+            //             <a href="' . route('editmytickets', $idHashed) . '"
+            //                class="inline-flex items-center justify-center p-2
+            //                       text-slate-500 hover:text-indigo-600
+            //                       hover:bg-indigo-50 rounded-full transition"
+            //                title="Edit Ticket: ' . e($ticket->title) . '">
+            //                 <svg xmlns="http://www.w3.org/2000/svg"
+            //                      class="w-5 h-5"
+            //                      fill="none"
+            //                      viewBox="0 0 24 24"
+            //                      stroke="currentColor"
+            //                      stroke-width="1.8">
+            //                     <path stroke-linecap="round" stroke-linejoin="round"
+            //                           d="M16.862 3.487a2.1 2.1 0 013.001 2.949L7.125 19.174
+            //                              3 21l1.826-4.125L16.862 3.487z" />
+            //                 </svg>
+            //             </a>';
+            //     }
+
+            //     // ===== SHOW BUTTON (always available) =====
+            //     $showBtn = '
+            //         <a href="' . route('showmytickets', $idHashed) . '"
+            //            class="inline-flex items-center justify-center p-2
+            //                   text-slate-500 hover:text-emerald-600
+            //                   hover:bg-emerald-50 rounded-full transition"
+            //            title="Show Ticket: ' . e($ticket->title) . '">
+            //             <svg xmlns="http://www.w3.org/2000/svg"
+            //                  class="w-5 h-5"
+            //                  fill="none"
+            //                  viewBox="0 0 24 24"
+            //                  stroke="currentColor"
+            //                  stroke-width="1.8">
+            //                 <path stroke-linecap="round" stroke-linejoin="round"
+            //                       d="M2.25 12s3.75-6.75 9.75-6.75
+            //                          S21.75 12 21.75 12
+            //                          18 18.75 12 18.75
+            //                          2.25 12 2.25 12z" />
+            //                 <circle cx="12" cy="12" r="3.25" />
+            //             </svg>
+            //         </a>';
+            //     return $editBtn . $showBtn;
+            // })
+            ->addColumn('action', function ($ticket) {
+
+                $idHashed = substr(hash('sha256', $ticket->id . env('APP_KEY')), 0, 8);
+
+                // ================= EDIT BUTTON =================
+                if (in_array($ticket->status, ['Progress', 'Closed'])) {
+
+                    // 🔒 LOCKED ICON
+                    $editBtn = '
             <span
                 class="inline-flex items-center justify-center p-2
                        text-slate-400 cursor-not-allowed"
@@ -221,10 +290,10 @@ class TicketController extends Controller
                           d="M5 11h14v9H5z" />
                 </svg>
             </span>';
-    } else {
+                } else {
 
-        // ✏️ EDIT ICON (active)
-        $editBtn = '
+                    // ✏️ EDIT ICON
+                    $editBtn = '
             <a href="' . route('editmytickets', $idHashed) . '"
                class="inline-flex items-center justify-center p-2
                       text-slate-500 hover:text-indigo-600
@@ -237,14 +306,15 @@ class TicketController extends Controller
                      stroke="currentColor"
                      stroke-width="1.8">
                     <path stroke-linecap="round" stroke-linejoin="round"
-                          d="M16.862 3.487a2.1 2.1 0 013.001 2.949L7.125 19.174
-                             3 21l1.826-4.125L16.862 3.487z" />
+                          d="M16.862 3.487a2.1 2.1 0 013.001 2.949
+                             L7.125 19.174 3 21l1.826-4.125
+                             L16.862 3.487z" />
                 </svg>
             </a>';
-    }
+                }
 
-    // ===== SHOW BUTTON (always available) =====
-    $showBtn = '
+                // ================= SHOW BUTTON =================
+                $showBtn = '
         <a href="' . route('showmytickets', $idHashed) . '"
            class="inline-flex items-center justify-center p-2
                   text-slate-500 hover:text-emerald-600
@@ -265,57 +335,83 @@ class TicketController extends Controller
             </svg>
         </a>';
 
-    return $editBtn . $showBtn;
-})
+                // ================= REVIEW BUTTON =================
+                $reviewBtn = '';
 
-            ->addColumn('review_action', function ($ticket) {
-
-                // ticket belum selesai
-                if (!in_array($ticket->status, ['Closed', 'Overdue'])) {
-                    return '<span class="text-gray-400">-</span>';
+                if (in_array($ticket->status, ['Closed', 'Overdue'])) {
+                    $reviewBtn = '
+    <a href="' . route("reviewtickets", $idHashed) . '"
+       class="inline-flex items-center justify-center p-2
+              text-slate-400 hover:text-yellow-500
+              hover:bg-yellow-50 rounded-full transition"
+       title="Review Ticket">
+        <svg xmlns="http://www.w3.org/2000/svg"
+             class="w-6 h-6"
+             viewBox="0 0 20 20"
+             fill="currentColor">
+            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286
+                     3.966a1 1 0 00.95.69h4.173c.969 0
+                     1.371 1.24.588 1.81l-3.377
+                     2.455a1 1 0 00-.364 1.118l1.287
+                     3.966c.3.921-.755 1.688-1.54
+                     1.118l-3.377-2.455a1 1 0 00-1.175
+                     0l-3.377 2.455c-.784.57-1.838
+                     -.197-1.539-1.118l1.287-3.966a1
+                     1 0 00-.364-1.118L2.98
+                     9.393c-.783-.57-.38-1.81.588
+                     -1.81h4.173a1 1 0 00.95-.69
+                     l1.286-3.966z"/>
+        </svg>
+    </a>';
                 }
 
-                // sudah direview
-                if ($ticket->review) {
-                    return '
-            <span class="inline-flex items-center text-emerald-600 font-semibold">
-                ★ ' . $ticket->review->rating . '/5
-            </span>
-        ';
-                }
-
-                // bisa review
-                $idHashed = substr(hash('sha256', $ticket->id . env('APP_KEY')), 0, 8);
-
-                return '
-        <a href="' . route('reviewtickets', $idHashed) . '"
-           class="inline-flex items-center px-3 py-1
-                  text-sm text-yellow-700 bg-yellow-100
-                  hover:bg-yellow-200 rounded-full transition">
-           ⭐ Review
-        </a>
-    ';
+                return $editBtn . $showBtn . $reviewBtn;
             })
 
+            //         ->addColumn('review_action', function ($ticket) {
+            //             // ticket belum selesai
+            //             if (!in_array($ticket->status, ['Closed', 'Overdue'])) {
+            //                 return '<span class="text-gray-400">-</span>';
+            //             }
+            //             // sudah direview
+            //             if ($ticket->review) {
+            //                 return '
+            //         <span class="inline-flex items-center text-emerald-600 font-semibold">
+            //             ★ ' . $ticket->review->rating . '/5
+            //         </span>
+            //     ';
+            //             }
+            //             // bisa review
+            //             $idHashed = substr(hash('sha256', $ticket->id . env('APP_KEY')), 0, 8);
+            //             return '
+            //     <a href="' . route('reviewtickets', $idHashed) . '"
+            //        class="inline-flex items-center px-3 py-1
+            //               text-sm text-yellow-700 bg-yellow-100
+            //               hover:bg-yellow-200 rounded-full transition">
+            //        ⭐ Review
+            //     </a>
+            // ';
+            //         })
+
             ->editColumn('created_at', function ($ticket) {
-    return optional($ticket->created_at)
-        ->timezone('Asia/Makassar')
-        ->format('d-m-Y H:i');
-})
-->editColumn('estimation', function ($ticket) {
-    return $ticket->estimation
-        ? $ticket->estimation
-            ->timezone('Asia/Makassar')
-            ->format('d-m-Y H:i')
-        : 'empty';
-})
-->editColumn('finished', function ($ticket) {
-    return $ticket->finished
-        ? $ticket->finished
-            ->timezone('Asia/Makassar')
-            ->format('d-m-Y H:i')
-        : 'empty';
-})
+                return optional($ticket->created_at)
+                    ->timezone('Asia/Makassar')
+                    ->format('d-m-Y H:i');
+            })
+            ->editColumn('estimation', function ($ticket) {
+                return $ticket->estimation
+                    ? $ticket->estimation
+                    ->timezone('Asia/Makassar')
+                    ->format('d-m-Y H:i')
+                    : 'empty';
+            })
+            ->editColumn('finished', function ($ticket) {
+                return $ticket->finished
+                    ? $ticket->finished
+                    ->timezone('Asia/Makassar')
+                    ->format('d-m-Y H:i')
+                    : 'empty';
+            })
 
 
 
@@ -344,33 +440,239 @@ class TicketController extends Controller
         if (! $ticket) {
             abort(404, 'Ticket not found');
         }
-
         return view('pages.showmytickets', compact('ticket'));
     }
-    public function reviewticket($hash)
-    {
-        $userId = Auth::id();
-        $ticket = Tickets::with([
+//     public function reviewticket($hash)
+//     {
+//         $userId = Auth::id();
+//         $ticket = Tickets::with([
+//             'user.employee',
+//             'attachments',
+//         ])
+//             ->where('user_id', $userId)
+//             ->get()
+//             ->first(function ($ticket) use ($hash) {
+//                 $hashedId = substr(
+//                     hash('sha256', $ticket->id . env('APP_KEY')),
+//                     0,
+//                     8
+//                 );
+//                 return hash_equals($hashedId, $hash);
+//             });
+
+//         if (! $ticket) {
+//             abort(404, 'Ticket not found');
+//         }
+
+//         return view('pages.reviewtickets', compact('ticket'));
+//     }
+//      public function storeReview(Request $request, Tickets $ticket)
+// {
+//     abort_if($ticket->user_id !== auth()->id(), 403);
+//     abort_if(!in_array($ticket->status, ['Closed', 'Finished']), 403);
+//     abort_if(!$ticket->executor_id, 422);
+//     abort_if($ticket->review, 409);
+
+//     $validated = $request->validate([
+//         'rating'  => 'required|integer|min:1|max:5',
+//         'comment' => 'nullable|string|max:500',
+//     ]);
+//     $ticket->review()->create([
+//         'ticket_id'   => $ticket->id,          
+//         'user_id'     => auth()->id(),
+//         'executor_id' => $ticket->executor_id,
+//         'rating'      => $validated['rating'],
+//         'comment'     => $validated['comment'] ?? null,
+//     ]);
+//     Log::info('Ticket reviewed', [
+//         'ticket_id'   => $ticket->id,
+//         'rating'      => $validated['rating'],
+//         'executor_id' => $ticket->executor_id,
+//         'reviewer'    => auth()->id(),
+//     ]);
+//     return back()->with('success', 'Thank you, your review has been saved successfully.');
+// }
+public function reviewticket($hash)
+{
+    $userId = Auth::id();
+
+    Log::info('Access review ticket page - start', [
+        'hash'   => $hash,
+        'user'   => $userId,
+        'ip'     => request()->ip(),
+        'agent' => request()->userAgent(),
+    ]);
+
+    $ticket = Tickets::with([
             'user.employee',
             'attachments',
         ])
-            ->where('user_id', $userId)
-            ->get()
-            ->first(function ($ticket) use ($hash) {
-                $hashedId = substr(
-                    hash('sha256', $ticket->id . env('APP_KEY')),
-                    0,
-                    8
-                );
-                return hash_equals($hashedId, $hash);
-            });
+        ->where('user_id', $userId)
+        ->get()
+        ->first(function ($ticket) use ($hash) {
+            $hashedId = substr(
+                hash('sha256', $ticket->id . env('APP_KEY')),
+                0,
+                8
+            );
+            return hash_equals($hashedId, $hash);
+        });
 
-        if (! $ticket) {
-            abort(404, 'Ticket not found');
-        }
+    if (! $ticket) {
+        Log::warning('Review ticket access failed - ticket not found', [
+            'hash' => $hash,
+            'user' => $userId,
+        ]);
 
-        return view('pages.reviewtickets', compact('ticket'));
+        abort(404, 'Ticket not found');
     }
+
+    Log::info('Review ticket page loaded', [
+        'ticket_id' => $ticket->id,
+        'status'    => $ticket->status,
+        'user'      => $userId,
+    ]);
+
+    return view('pages.reviewtickets', compact('ticket'));
+}
+// public function storeReview(Request $request, Tickets $ticket)
+// {
+//     Log::info('Submit review attempt', [
+//         'ticket_id' => $ticket->id,
+//         'user'      => auth()->id(),
+//         'ip'        => $request->ip(),
+//     ]);
+
+//     if ($ticket->user_id !== auth()->id()) {
+//         Log::warning('Review forbidden - not ticket owner', [
+//             'ticket_id' => $ticket->id,
+//             'user'      => auth()->id(),
+//         ]);
+//         abort(403);
+//     }
+
+//     if (!in_array($ticket->status, ['Closed', 'Finished'])) {
+//         Log::warning('Review forbidden - invalid status', [
+//             'ticket_id' => $ticket->id,
+//             'status'    => $ticket->status,
+//         ]);
+//         abort(403);
+//     }
+
+//     if (!$ticket->executor_id) {
+//         Log::error('Review failed - executor missing', [
+//             'ticket_id' => $ticket->id,
+//         ]);
+//         abort(422);
+//     }
+
+//     if ($ticket->review) {
+//         Log::notice('Review rejected - already exists', [
+//             'ticket_id' => $ticket->id,
+//         ]);
+//         abort(409);
+//     }
+
+//     $validated = $request->validate([
+//         'rating'  => 'required|integer|min:1|max:5',
+//         'comment' => 'nullable|string|max:500',
+//     ]);
+
+//     $ticket->review()->create([
+//         'ticket_id'   => $ticket->id,
+//         'user_id'     => auth()->id(),
+//         'executor_id' => $ticket->executor_id,
+//         'rating'      => $validated['rating'],
+//         'comment'     => $validated['comment'] ?? null,
+//     ]);
+
+//     Log::info('Ticket reviewed successfully', [
+//         'ticket_id'   => $ticket->id,
+//         'rating'      => $validated['rating'],
+//         'executor_id' => $ticket->executor_id,
+//         'reviewer'    => auth()->id(),
+//     ]);
+
+//     return back()->with('success', 'Thank you, your review has been saved successfully.');
+// }
+public function storeReview(Request $request, $hash)
+{
+    Log::info('Submit review attempt', [
+        'hash' => $hash,
+        'user' => auth()->id(),
+        'ip'   => $request->ip(),
+    ]);
+
+    $ticket = Tickets::where('user_id', auth()->id())
+        ->get()
+        ->first(function ($ticket) use ($hash) {
+            $hashedId = substr(
+                hash('sha256', $ticket->id . env('APP_KEY')),
+                0,
+                8
+            );
+            return hash_equals($hashedId, $hash);
+        });
+
+    if (!$ticket) {
+        Log::warning('Review submit failed - ticket not found', [
+            'hash' => $hash,
+            'user' => auth()->id(),
+        ]);
+        abort(404);
+    }
+     if ($ticket->user_id !== auth()->id()) {
+        abort(403);
+    }
+
+    // 🔐 Status valid
+    if (!in_array($ticket->status, ['Closed', 'Finished'])) {
+        return back()->with('error', 'Ticket is not completed, cannot be reviewed.');
+    }
+
+    // 🔐 Harus ada executor
+    if (!$ticket->executor_id) {
+        return back()->with('error', 'Ticket does not have an executor yet.');
+    }
+    if ($ticket->review) {
+        Log::warning('Review submit blocked - already reviewed', [
+            'ticket_id' => $ticket->id,
+            'user'      => auth()->id(),
+        ]);
+
+        return back()->with('error', 'This ticket has already been reviewed.');
+    }
+
+
+    // lanjut logic lama
+        abort_if($ticket->user_id !== auth()->id(), 403);
+    abort_if(!in_array($ticket->status, ['Closed', 'Finished']), 403);
+    abort_if(!$ticket->executor_id, 422);
+    abort_if($ticket->review, 409);
+
+    $validated = $request->validate([
+        'rating'  => 'required|integer|min:1|max:5',
+        'comment' => 'nullable|string|max:500',
+    ]);
+
+    $ticket->review()->create([
+        'id'          => (string) Str::uuid(),
+        'ticket_id'   => $ticket->id,
+        'user_id'     => auth()->id(),
+        'executor_id' => $ticket->executor_id,
+        'rating'      => $validated['rating'],
+        'comment'     => $validated['comment'] ?? null,
+    ]);
+    Log::info('Ticket reviewed successfully', [
+        'ticket_id' => $ticket->id,
+        'rating'    => $validated['rating'],
+    ]);
+
+    return back()->with('success', 'Thank you, your review has been saved successfully.');
+}
+
+
+
     private function findTicketByHash(string $hash): Tickets
     {
         $ticket = Tickets::with('user.employee')
@@ -388,17 +690,17 @@ class TicketController extends Controller
     {
         $ticket = $this->findTicketByHash($hash);
         $user   = auth()->user();
-            if ($ticket->status === 'Closed') {
-                return redirect()
-                    ->route('dashboard')
-                    ->with('error', 'The ticket is closed and cannot be edited.');
-            }
-            if ($ticket->user_id !== $user->id) {
-                abort(403, 'You are not allowed to access this ticket.');
-            }
+        if ($ticket->status === 'Closed') {
+            return redirect()
+                ->route('dashboard')
+                ->with('error', 'The ticket is closed and cannot be edited.');
+        }
+        if ($ticket->user_id !== $user->id) {
+            abort(403, 'You are not allowed to access this ticket.');
+        }
 
-            return view('pages.editmytickets', compact('ticket'));
-        
+        return view('pages.editmytickets', compact('ticket'));
+
         abort(403, 'Unauthorized action.');
     }
     // public function edit($hash)
@@ -461,41 +763,30 @@ class TicketController extends Controller
             ->with('success', 'Ticket successfully updated');
     }
 
-    public function storeReview(Request $request, Tickets $ticket)
-    {
-        // hanya pengaju ticket
-        abort_if($ticket->user_id !== auth()->id(), 403);
-
-        // ticket harus selesai
-        abort_if(!in_array($ticket->status, ['closed', 'finished']), 403);
-
-        // ticket harus punya executor
-        abort_if(!$ticket->executor_id, 422);
-
-        // 1 ticket = 1 review
-        abort_if($ticket->review, 409);
-
-        $validated = $request->validate([
-            'rating'  => 'required|integer|min:1|max:5',
-            'comment' => 'nullable|string|max:500',
-        ]);
-
-        $ticket->review()->create([
-            'user_id'     => auth()->id(),
-            'executor_id' => $ticket->executor_id,
-            ...$validated
-        ]);
-
-        Log::info('Ticket reviewed', [
-            'ticket_id'   => $ticket->id,
-            'rating'      => $validated['rating'],
-            'executor_id' => $ticket->executor_id,
-            'reviewer'    => auth()->id(),
-        ]);
-
-        return back()->with('success', 'Terima kasih, review Anda berhasil disimpan 🙏');
-    }
-
+    // public function storeReview(Request $request, Tickets $ticket)
+    // {
+    //     abort_if($ticket->user_id !== auth()->id(), 403);
+    //     abort_if(!in_array($ticket->status, ['Closed', 'Finished']), 403);
+    //     abort_if(!$ticket->executor_id, 422);
+    //     abort_if($ticket->review, 409);
+    //     $validated = $request->validate([
+    //         'rating'  => 'required|integer|min:1|max:5',
+    //         'comment' => 'nullable|string|max:500',
+    //     ]);
+    //     $ticket->review()->create([
+    //         'user_id'     => auth()->id(),
+    //         'executor_id' => $ticket->executor_id,
+    //         ...$validated
+    //     ]);
+    //     Log::info('Ticket reviewed', [
+    //         'ticket_id'   => $ticket->id,
+    //         'rating'      => $validated['rating'],
+    //         'executor_id' => $ticket->executor_id,
+    //         'reviewer'    => auth()->id(),
+    //     ]);
+    //     return back()->with('success', 'Terima kasih, review Anda berhasil disimpan 🙏');
+    // }
+  
     public function showalltickets($hash)
     {
         $ticket = Tickets::with([
@@ -554,6 +845,7 @@ class TicketController extends Controller
                 'estimation',
                 'description',
                 'category',
+                'created_at',
                 'status',
             ]);
 
@@ -572,34 +864,58 @@ class TicketController extends Controller
             })
 
 
-            ->addColumn('action', function ($user) {
-                $idHashed = substr(hash('sha256', $user->id . env('APP_KEY')), 0, 8);
+            ->addColumn('action', function ($ticket) {
+                $idHashed = substr(hash('sha256', $ticket->id . env('APP_KEY')), 0, 8);
 
-                return '
-        <a href="' . route('editopenticketforadmin', $idHashed) . '"
-           class="inline-flex items-center justify-center p-2
-                  text-slate-500 hover:text-indigo-600
-                  hover:bg-indigo-50 rounded-full transition"
-           title="Edit Tickets: ' . e($user->user->employee->employee_name) . '">
+                if (in_array($ticket->status, ['Progress', 'Closed'])) {
 
-            <svg xmlns="http://www.w3.org/2000/svg"
-                 class="w-5 h-5"
-                 fill="none"
-                 viewBox="0 0 24 24"
-                 stroke="currentColor"
-                 stroke-width="1.8">
-                <path stroke-linecap="round" stroke-linejoin="round"
-                      d="M16.862 3.487a2.1 2.1 0 013.001 2.949L7.125 19.174
-                         3 21l1.826-4.125L16.862 3.487z" />
-            </svg>
+                    // 🔒 LOCKED ICON (no link)
+                    $editBtn = '
+            <span
+                class="inline-flex items-center justify-center p-2
+                       text-slate-400 cursor-not-allowed"
+                title="Ticket cannot be edited due to status ' . e($ticket->status) . '">
+                <svg xmlns="http://www.w3.org/2000/svg"
+                     class="w-5 h-5"
+                     fill="none"
+                     viewBox="0 0 24 24"
+                     stroke="currentColor"
+                     stroke-width="1.8">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                          d="M12 11c1.657 0 3-1.343 3-3V6a3 3 0 10-6 0v2c0 1.657 1.343 3 3 3z" />
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                          d="M5 11h14v9H5z" />
+                </svg>
+            </span>';
+                } else {
 
-        </a>
-         <a href="' . route('editopenticketforadmin', $idHashed) . '"
+                    // ✏️ EDIT ICON (active)
+                    $editBtn = '
+            <a href="' . route('editopenticketforadmin', $idHashed) . '"
+               class="inline-flex items-center justify-center p-2
+                      text-slate-500 hover:text-indigo-600
+                      hover:bg-indigo-50 rounded-full transition"
+               title="Edit Ticket: ' . e($ticket->title) . '">
+                <svg xmlns="http://www.w3.org/2000/svg"
+                     class="w-5 h-5"
+                     fill="none"
+                     viewBox="0 0 24 24"
+                     stroke="currentColor"
+                     stroke-width="1.8">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                          d="M16.862 3.487a2.1 2.1 0 013.001 2.949L7.125 19.174
+                             3 21l1.826-4.125L16.862 3.487z" />
+                </svg>
+            </a>';
+                }
+
+                // ===== SHOW BUTTON (always available) =====
+                $showBtn = '
+        <a href="' . route('showopenticket', $idHashed) . '"
            class="inline-flex items-center justify-center p-2
                   text-slate-500 hover:text-emerald-600
                   hover:bg-emerald-50 rounded-full transition"
-           title="Show Tickets: ' . e($user->user->employee->employee_name) . '">
-
+           title="Show Ticket: ' . e($ticket->title) . '">
             <svg xmlns="http://www.w3.org/2000/svg"
                  class="w-5 h-5"
                  fill="none"
@@ -613,9 +929,29 @@ class TicketController extends Controller
                          2.25 12 2.25 12z" />
                 <circle cx="12" cy="12" r="3.25" />
             </svg>
+        </a>';
 
-        </a>
-    ';
+                return $editBtn . $showBtn;
+            })
+
+            ->editColumn('created_at', function ($ticket) {
+                return optional($ticket->created_at)
+                    ->timezone('Asia/Makassar')
+                    ->format('d-m-Y H:i');
+            })
+            ->editColumn('estimation', function ($ticket) {
+                return $ticket->estimation
+                    ? $ticket->estimation
+                    ->timezone('Asia/Makassar')
+                    ->format('d-m-Y H:i')
+                    : 'empty';
+            })
+            ->editColumn('finished', function ($ticket) {
+                return $ticket->finished
+                    ? $ticket->finished
+                    ->timezone('Asia/Makassar')
+                    ->format('d-m-Y H:i')
+                    : 'empty';
             })
             ->rawColumns(['action'])
             ->make(true);
