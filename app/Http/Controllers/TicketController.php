@@ -996,26 +996,55 @@ public function storeReview(Request $request, $hash)
              */
             $tempFiles = [];
 
+            // if ($request->hasFile('attachments')) {
+            //     foreach ($request->file('attachments') as $file) {
+            //         $path = $file->store('tmp/tickets');
+
+            //         $tempFiles[] = [
+            //             'path' => $path,
+            //             'name' => $file->getClientOriginalName(),
+            //             'mime' => $file->getMimeType(),
+            //             'mime' => $file->getClientMimeType(),
+
+            //         ];
+            //     }
+
+            //     // 📦 job berat (optional)
+            //     ProcessTicketAttachmentsJob::dispatch(
+            //         $ticket->id,
+            //         $tempFiles,
+            //         auth()->id()
+            //     )
+            //         ->onQueue('ticket-heavy')
+            //         ->afterCommit();
+            // }
             if ($request->hasFile('attachments')) {
-                foreach ($request->file('attachments') as $file) {
-                    $path = $file->store('tmp/tickets');
+    foreach ($request->file('attachments') as $file) {
+        $path = $file->store('tmp/tickets');
 
-                    $tempFiles[] = [
-                        'path' => $path,
-                        'name' => $file->getClientOriginalName(),
-                        'mime' => $file->getMimeType(),
-                    ];
-                }
+        $originalName = pathinfo(
+            $file->getClientOriginalName(),
+            PATHINFO_FILENAME
+        );
 
-                // 📦 job berat (optional)
-                ProcessTicketAttachmentsJob::dispatch(
-                    $ticket->id,
-                    $tempFiles,
-                    auth()->id()
-                )
-                    ->onQueue('ticket-heavy')
-                    ->afterCommit();
-            }
+        $extension = $file->getClientOriginalExtension();
+
+        $tempFiles[] = [
+            'path' => $path,
+            'name' => $originalName . '.' . $extension, // ✅ ADA TITIK
+            'mime' => $file->getClientMimeType(),       // ✅ WAJIB
+        ];
+    }
+
+    ProcessTicketAttachmentsJob::dispatch(
+        $ticket->id,
+        $tempFiles,
+        auth()->id()
+    )
+    ->onQueue('ticket-heavy')
+    ->afterCommit();
+}
+
 
             // 🔔 WA HARUS SELALU DIKIRIM
             SendTicketWhatsappJob::dispatch($ticket->id)
