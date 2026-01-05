@@ -867,7 +867,7 @@ public function storeReview(Request $request, $hash)
             ->addColumn('action', function ($ticket) {
                 $idHashed = substr(hash('sha256', $ticket->id . env('APP_KEY')), 0, 8);
 
-                if (in_array($ticket->status, ['Progress', 'Closed'])) {
+                if (in_array($ticket->status, ['Closed'])) {
 
                     // 🔒 LOCKED ICON (no link)
                     $editBtn = '

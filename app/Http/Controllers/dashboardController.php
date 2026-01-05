@@ -448,7 +448,7 @@ try {
         $ticket->status === 'Closed';
 
     $titleMessage = $isClosedFromProgress
-        ? '*Ticket Review*'
+        ? '*IT Ticket Review*'
         : '*IT Ticket Updated*';
 
     $ticketUrl = $isClosedFromProgress
@@ -460,31 +460,28 @@ try {
     // =========================
     $message =
         "{$titleMessage}\n" .
-        "Queue: {$ticket->queue_number}\n" .
         "Date: {$formattedDate}\n" .
+        "Queue: {$ticket->queue_number}\n" .
         "User: {$userName}\n" .
         "Location: {$locationName}\n" .
         "Phone: {$phoneNumber}\n" .
         "Title: {$ticket->title}\n" .
         "Category: {$ticket->category}\n" .
-        "Status: {$ticket->status}\n" .
         "Priority: {$ticket->priority}\n" .
+        "Status: {$ticket->status}\n" .
         "Executor: {$executorName}\n" .
         "Notes IT: {$ticket->notes_executor}\n" .
         "Estimation: {$estimationDate}\n" .
         "Finished: {$finishedDate}\n" .
-        "Ticket Link:\n{$ticketUrl}";
-
+        "Ticket Review Link:\n{$ticketUrl}";
     Http::timeout(15)->post('http://127.0.0.1:3000/send-message', [
         'group_id' => '120363405189832865@g.us',
         'text'     => $message,
     ]);
-
     Log::info('WA_UPDATE_SUCCESS', [
         'ticket_id' => $ticket->id,
         'type'      => $isClosedFromProgress ? 'REVIEW' : 'UPDATE',
     ]);
-
 } catch (\Throwable $e) {
     Log::warning('WA_UPDATE_FAILED', [
         'error' => $e->getMessage(),
