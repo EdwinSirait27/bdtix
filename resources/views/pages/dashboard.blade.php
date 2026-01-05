@@ -1512,8 +1512,9 @@
                                 <div class="user-card-header">
                                     <div class="user-card-avatar">${initials}</div>
                                     <div class="user-card-title">
-                                        <div class="user-card-name">${ticket.title || 'N/A'}</div>
+                                        <div class="user-card-name"> Title : ${ticket.title || 'N/A'}</div>
                                         <div class="user-card-username">Queue : ${ticket.queue_number}</div>
+                                        <div class="user-card-date">Date : ${ticket.created_at}</div>
                                     </div>
                                 </div>
                                 <div class="user-card-body">

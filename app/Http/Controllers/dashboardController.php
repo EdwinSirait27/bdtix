@@ -309,6 +309,14 @@ public function update(Request $request, string $hash)
         $formattedDate = $ticket->created_at
             ->timezone('Asia/Makassar')
             ->format('d-m-Y H:i');
+        $estimationDate = $ticket->estimation
+            ->timezone('Asia/Makassar')
+            ->format('d-m-Y H:i');
+       $finishedDate = $ticket->finished
+    ? $ticket->finished
+        ->timezone('Asia/Makassar')
+        ->format('d-m-Y H:i')
+    : '-';
         $userName = $ticket->user->employee->employee_name;
   $locationName = $ticket->user->employee->store->name ?? '-';
         $phoneNumber  = $ticket->user->employee->telp_number ?? '-';
@@ -335,24 +343,9 @@ public function update(Request $request, string $hash)
     "Category: {$ticket->category}\n" .
     "Status: {$ticket->status}\n" .
     "Priority: {$ticket->priority}\n" .
-    "Executor: {$executorName}\n";
-
-// ✅ Estimation SELALU ditampilkan kalau ada
-if ($ticket->estimation) {
-    $message .= "Estimation: " .
-        $ticket->estimation
-            ->timezone('Asia/Makassar')
-            ->format('d-m-Y H:i') . "\n";
-}
-
-// ✅ Finished SELALU ditampilkan kalau ada
-if ($ticket->finished) {
-    $message .= "Finished: " .
-        $ticket->finished
-            ->timezone('Asia/Makassar')
-            ->format('d-m-Y H:i') . "\n";
-}
-          
+    "Executor: {$executorName}\n" .
+    "Estimation: {$estimationDate}\n" .
+    "Finished: {$finishedDate}\n";
            $message .= "\nAdmin Link:\n{$adminUrl}";
         Http::timeout(15)->post('http://127.0.0.1:3000/send-message', [
             'group_id' => '120363405189832865@g.us',
