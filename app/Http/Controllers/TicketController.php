@@ -965,7 +965,9 @@ public function storeReview(Request $request, $hash)
             'category'      => 'required|string',
             'description'   => 'required|string|max:500',
             'attachments'   => 'nullable|array|max:3',
-            'attachments.*' => 'file|max:51200|mimes:jpg,jpeg,png,pdf,doc,docx',
+            // 'attachments.*' => 'file|max:51200|mimes:jpg,jpeg,png,pdf,doc,docx',
+            'attachments.*' => 'file|max:51200|mimes:jpg,jpeg,png,pdf,doc,docx,xls,xlsx',
+
         ]);
         DB::beginTransaction();
         try {

@@ -130,10 +130,10 @@ class ProcessTicketAttachmentsJob implements ShouldQueue
     }
 
     // ✅ FIX FILENAME (KEEP EXTENSION)
-    $extension = pathinfo($file['name'], PATHINFO_EXTENSION);
-    $basename  = pathinfo($file['name'], PATHINFO_FILENAME);
+    $originalName = pathinfo($file['name'], PATHINFO_FILENAME);
+  $extension    = pathinfo($file['name'], PATHINFO_EXTENSION);
 
-    $filename = time() . '_' . Str::slug($basename) . '.' . $extension;
+   $filename = time() . '_' . Str::slug($originalName) . '.' . strtolower($extension);
 
     // ✅ SAFE MIME
     $mime = $file['mime'] ?? 'application/octet-stream';
