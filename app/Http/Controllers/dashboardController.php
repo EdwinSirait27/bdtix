@@ -303,22 +303,26 @@ class dashboardController extends Controller
       $adminUrl = route('editopenticketforadmin', $hash);
       $executorName = auth()->user()->employee->employee_name
         ?? auth()->user()->username;
-      $formattedDate = $ticket->created_at
-        ->timezone('Asia/Makassar')
-        ->format('d-m-Y H:i');
+      $formattedDate = optional($ticket->created_at)
+            ->timezone('Asia/Makassar')
+            ->format('d-m-Y H:i') ?? '-';
+      $finishedDate = optional($ticket->finished)
+            ->timezone('Asia/Makassar')
+            ->format('d-m-Y H:i') ?? '-';
+      $estimationDate = optional($ticket->estimation)
+            ->timezone('Asia/Makassar')
+            ->format('d-m-Y H:i') ?? '-';
+     
+      // $finishedDate = $ticket->finished
+      //   ? $ticket->finished
+      //   ->timezone('Asia/Makassar')
+      //   ->format('d-m-Y H:i')
+      //   : '-';
       // $estimationDate = $ticket->estimation
-      //     ->timezone('Asia/Makassar')
-      //     ->format('d-m-Y H:i');
-      $finishedDate = $ticket->finished
-        ? $ticket->finished
-        ->timezone('Asia/Makassar')
-        ->format('d-m-Y H:i')
-        : '-';
-      $estimationDate = $ticket->estimation
-        ? $ticket->estimation
-        ->timezone('Asia/Makassar')
-        ->format('d-m-Y H:i')
-        : '-';
+      //   ? $ticket->estimation
+      //   ->timezone('Asia/Makassar')
+      //   ->format('d-m-Y H:i')
+      //   : '-';
       $userName = $ticket->user->employee->employee_name;
       $locationName = $ticket->user->employee->store->name ?? '-';
       $phoneNumber  = $ticket->user->employee->telp_number ?? '-';
