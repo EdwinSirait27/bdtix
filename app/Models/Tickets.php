@@ -25,6 +25,11 @@ class Tickets extends Model
         'finished',
         'estimation',
     ];
+    protected $casts = [
+    'estimation' => 'datetime',
+    'finished'   => 'datetime',
+    'created_at'   => 'datetime',
+];
     protected static function booted()
     {
         static::creating(function ($model) {
