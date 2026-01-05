@@ -36,7 +36,7 @@ return [
     ],
  'nextcloud' => [
     'base' => env('NEXTCLOUD_BASE'),
-    'dav' => env('NEXTCLOUD_DAV'),
+    // 'dav' => env('NEXTCLOUD_DAV'),
     'username' => env('NEXTCLOUD_USERNAME'),
     'password' => env('NEXTCLOUD_PASSWORD'),
 ],
