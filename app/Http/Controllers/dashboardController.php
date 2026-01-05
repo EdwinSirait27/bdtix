@@ -251,7 +251,7 @@ class dashboardController extends Controller
       'notes_executor' => 'required|string|min:5|max:500',
       'priority'        => 'required|string',
       'finished'        => 'nullable|date',
-      'estimation'      => 'required|date',
+      'estimation'      => 'nullable|date',
     ]);
     // =========================
     // STATUS SYNC (SERVER SIDE)
@@ -303,26 +303,27 @@ class dashboardController extends Controller
       $adminUrl = route('editopenticketforadmin', $hash);
       $executorName = auth()->user()->employee->employee_name
         ?? auth()->user()->username;
-      $formattedDate = optional($ticket->created_at)
-            ->timezone('Asia/Makassar')
-            ->format('d-m-Y H:i') ?? '-';
-      $finishedDate = optional($ticket->finished)
-            ->timezone('Asia/Makassar')
-            ->format('d-m-Y H:i') ?? '-';
-      $estimationDate = optional($ticket->estimation)
-            ->timezone('Asia/Makassar')
-            ->format('d-m-Y H:i') ?? '-';
-     
-      // $finishedDate = $ticket->finished
-      //   ? $ticket->finished
-      //   ->timezone('Asia/Makassar')
-      //   ->format('d-m-Y H:i')
-      //   : '-';
-      // $estimationDate = $ticket->estimation
-      //   ? $ticket->estimation
-      //   ->timezone('Asia/Makassar')
-      //   ->format('d-m-Y H:i')
-      //   : '-';
+      // $formattedDate = optional($ticket->created_at)
+      //       ->timezone('Asia/Makassar')
+      //       ->format('d-m-Y H:i') ?? '-';
+      // $finishedDate = optional($ticket->finished)
+      //       ->timezone('Asia/Makassar')
+      //       ->format('d-m-Y H:i') ?? '-';
+      // $estimationDate = optional($ticket->estimation)
+      //       ->timezone('Asia/Makassar')
+      //       ->format('d-m-Y H:i') ?? '-';
+      $formattedDate = $ticket->created_at
+    ?->timezone('Asia/Makassar')
+    ?->format('d-m-Y H:i') ?? '-';
+
+$finishedDate = $ticket->finished
+    ?->timezone('Asia/Makassar')
+    ?->format('d-m-Y H:i') ?? '-';
+
+$estimationDate = $ticket->estimation
+    ?->timezone('Asia/Makassar')
+    ?->format('d-m-Y H:i') ?? '-';
+
       $userName = $ticket->user->employee->employee_name;
       $locationName = $ticket->user->employee->store->name ?? '-';
       $phoneNumber  = $ticket->user->employee->telp_number ?? '-';
@@ -341,7 +342,8 @@ class dashboardController extends Controller
         "Notes IT: {$ticket->notes_executor}\n" .
         "Estimation: {$estimationDate}\n" .
         "Finished: {$finishedDate}\n" .
-        "\Ticket Link:\n{$adminUrl}";
+        // "\Ticket Link:\n{$adminUrl}";
+        "Ticket Link:\n{$adminUrl}";
       Http::timeout(15)->post('http://127.0.0.1:3000/send-message', [
         'group_id' => '120363405189832865@g.us',
         'text'     => $message,
