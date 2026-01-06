@@ -965,7 +965,6 @@ public function storeReview(Request $request, $hash)
             'category'      => 'required|string',
             'description'   => 'required|string|max:500',
             'attachments'   => 'nullable|array|max:3',
-            // 'attachments.*' => 'file|max:51200|mimes:jpg,jpeg,png,pdf,doc,docx',
             'attachments.*' => 'file|max:51200|mimes:jpg,jpeg,png,pdf,doc,docx,xls,xlsx',
 
         ]);
@@ -995,29 +994,6 @@ public function storeReview(Request $request, $hash)
              * ============================
              */
             $tempFiles = [];
-
-            // if ($request->hasFile('attachments')) {
-            //     foreach ($request->file('attachments') as $file) {
-            //         $path = $file->store('tmp/tickets');
-
-            //         $tempFiles[] = [
-            //             'path' => $path,
-            //             'name' => $file->getClientOriginalName(),
-            //             'mime' => $file->getMimeType(),
-            //             'mime' => $file->getClientMimeType(),
-
-            //         ];
-            //     }
-
-            //     // 📦 job berat (optional)
-            //     ProcessTicketAttachmentsJob::dispatch(
-            //         $ticket->id,
-            //         $tempFiles,
-            //         auth()->id()
-            //     )
-            //         ->onQueue('ticket-heavy')
-            //         ->afterCommit();
-            // }
             if ($request->hasFile('attachments')) {
     foreach ($request->file('attachments') as $file) {
         $path = $file->store('tmp/tickets');
