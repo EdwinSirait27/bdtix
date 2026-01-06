@@ -29,7 +29,6 @@ class ProcessTicketAttachmentsJob implements ShouldQueue
 //         public array  $files,
 //         public string $userId
 //     ) {}
-
 //     public function handle(): void
 //     {
 //         Log::info('ATTACHMENT_JOB_START', [
@@ -374,15 +373,23 @@ class ProcessTicketAttachmentsJob implements ShouldQueue
                     continue;
                 }
 
-                $content  = Storage::get($file['path']);
+                // $content  = Storage::get($file['path']);
                 $filename = time() . '_' . Str::slug($file['name']);
 
+                // NextcloudService::upload(
+                //     $basePath,
+                //     $filename,
+                //     $content,
+                //     $file['mime']
+                // );
+                
                 NextcloudService::upload(
-                    $basePath,
-                    $filename,
-                    $content,
-                    $file['mime']
-                );
+    $basePath,
+    $filename,
+    Storage::path($file['path']), // 🔥 BUKAN Storage::get
+    $file['mime']
+);
+
 
                 Ticketattachments::create([
                     'id'        => (string) Str::uuid(),

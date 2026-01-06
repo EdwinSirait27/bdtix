@@ -146,41 +146,99 @@ class NextcloudService
         );
     }
 
+    // public static function makeDir(string $path): void
+    // {
+    //     $path = trim($path, '/');
+    //     $segments = explode('/', $path);
+    //     $current = '';
+
+    //     foreach ($segments as $segment) {
+    //         $current = $current ? $current.'/'.$segment : $segment;
+
+    //         try {
+    //             self::client()->send(
+    //                 'MKCOL',
+    //                 config('services.nextcloud.base') .
+    //                 self::userRoot() . '/' . $current
+    //             );
+    //         } catch (\Throwable $e) {
+    //         }
+    //     }
+    // }
     public static function makeDir(string $path): void
-    {
-        $path = trim($path, '/');
-        $segments = explode('/', $path);
-        $current = '';
+{
+    $path = trim($path, '/');
+    $segments = explode('/', $path);
+    $current = '';
 
-        foreach ($segments as $segment) {
-            $current = $current ? $current.'/'.$segment : $segment;
+    foreach ($segments as $segment) {
+        $current = $current ? $current.'/'.$segment : $segment;
 
-            try {
-                self::client()->send(
-                    'MKCOL',
-                    config('services.nextcloud.base') .
-                    self::userRoot() . '/' . $current
-                );
-            } catch (\Throwable $e) {
-            }
+        $url =
+            config('services.nextcloud.base') .
+            self::userRoot() . '/' . $current;
+
+        $response = self::client()->send('MKCOL', $url);
+
+        // 201 = created, 405 = already exists
+        if (!in_array($response->status(), [201, 405])) {
+            throw new \Exception(
+                'MKCOL failed: ' . $response->status()
+            );
         }
     }
+}
+
+
+    // public static function upload(
+    //     string $path,
+    //     string $filename,
+    //     string $content,
+    //     string $mime
+    // ): void {
+    //     $path = trim($path, '/');
+
+    //     self::client()
+    //         ->withBody($content, $mime)
+    //         ->put(
+    //             config('services.nextcloud.base') .
+    //             self::userRoot() . '/' . $path . '/' . $filename
+    //         );
+    // }
+  
 
     public static function upload(
-        string $path,
-        string $filename,
-        string $content,
-        string $mime
-    ): void {
-        $path = trim($path, '/');
+    string $path,
+    string $filename,
+    string $localPath,
+    string $mime
+): void {
+    $path = trim($path, '/');
 
-        self::client()
-            ->withBody($content, $mime)
-            ->put(
-                config('services.nextcloud.base') .
-                self::userRoot() . '/' . $path . '/' . $filename
-            );
+    $fullUrl =
+        config('services.nextcloud.base') .
+        self::userRoot() . '/' . $path . '/' . $filename;
+
+    $stream = fopen($localPath, 'r');
+
+    if (!$stream) {
+        throw new \Exception("Cannot open file stream: {$localPath}");
     }
+
+    $response = self::client()
+        ->withBody($stream, $mime)
+        ->put($fullUrl);
+
+    fclose($stream);
+
+    if (!$response->successful()) {
+        throw new \Exception(
+            'Nextcloud upload failed: ' .
+            $response->status() . ' ' . $response->body()
+        );
+    }
+}
+
 
     public static function shareFolder(string $path): string
     {
