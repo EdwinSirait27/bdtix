@@ -711,7 +711,7 @@
                         var card = `
                     <div class="ticket-card">
                         <div class="ticket-card-header">
-                            <span class="ticket-queue">#${queueNumber}</span>
+                            <span class="ticket-queue">Queue : ${queueNumber}</span>
                             <span class="ticket-status ${statusClass}">${status}</span>
                         </div>
                         <div class="ticket-info">

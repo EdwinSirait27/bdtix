@@ -234,263 +234,262 @@ class dashboardController extends Controller
     );
   }
   //ini salah
-  //   public function update(Request $request, string $hash)
-  //   {
-  //     $ticket = $this->findTicketByHash($hash);
+    public function update(Request $request, string $hash)
+    {
+      $ticket = $this->findTicketByHash($hash);
 
-  //     Log::info('TICKET_UPDATE_START', [
-  //       'ticket_id' => $ticket->id,
-  //       'user_id'   => auth()->id(),
-  //       'ip'        => $request->ip(),
-  //     ]);
-
-  //     // =========================
-  //     // VALIDATION
-  //     // =========================
-  //     $validated = $request->validate([
-  //       'category'        => 'required|string',
-  //       'notes_executor' => 'required|string|min:5|max:500',
-  //       'priority'        => 'required|string',
-  //       'finished'        => 'nullable|date',
-  //       'estimation'      => 'nullable|date',
-  //     ]);
-  //     // =========================
-  //     // STATUS SYNC (SERVER SIDE)
-  //     // =========================
-  //     if ($ticket->status === 'Closed') {
-  //       abort(403, 'Ticket sudah closed');
-  //     }
-
-  //     if ($ticket->status === 'Open') {
-  //       // TAKE TICKET
-  //       $status   = 'Progress';
-  //       $finished = null;
-  //     } elseif ($ticket->status === 'Progress') {
-  //       // CLOSE TICKET
-  //       $status   = 'Closed';
-  //       $finished = now();
-  //     } else {
-  //       abort(403, 'Status ticket tidak valid');
-  //     }
-
-  //     DB::transaction(function () use ($validated, $ticket, $status, $finished) {
-
-  //       $estimation = !empty($validated['estimation'])
-  //         ? Carbon::parse($validated['estimation'])
-  //         : null;
-
-  //       $ticket->update([
-  //         'category'        => $validated['category'],
-  //         'notes_executor' => $validated['notes_executor'],
-  //         'status'          => $status,
-  //         'priority'        => $validated['priority'],
-  //         'finished'        => $finished,
-  //         'estimation'      => $estimation,
-  //         'executor_id'     => auth()->id(),
-  //       ]);
-
-  //       Log::info('TICKET_UPDATED', [
-  //         'ticket_id' => $ticket->id,
-  //         'status'    => $status,
-  //       ]);
-  //     });
-  //     $ticket->refresh();
-  //     // =========================
-  //     // WHATSAPP NOTIFICATION
-  //     // =========================
-  //     try {
-  //       $hash = $this->generateTicketHash($ticket->id);
-  //       $adminUrl = route('editopenticketforadmin', $hash);
-  //       $reviewUrl = route('reviewtickets', $hash);
-  //       $executorName = auth()->user()->employee->employee_name
-  //         ?? auth()->user()->username;
-  //       $formattedDate = $ticket->created_at
-  //     ?->timezone('Asia/Makassar')
-  //     ?->format('d-m-Y H:i') ?? '-';
-
-  // $finishedDate = $ticket->finished
-  //     ?->timezone('Asia/Makassar')
-  //     ?->format('d-m-Y H:i') ?? '-';
-
-  // $estimationDate = $ticket->estimation
-  //     ?->timezone('Asia/Makassar')
-  //     ?->format('d-m-Y H:i') ?? '-';
-
-  //       $userName = $ticket->user->employee->employee_name;
-  //       $locationName = $ticket->user->employee->store->name ?? '-';
-  //       $phoneNumber  = $ticket->user->employee->telp_number ?? '-';
-  //       $message =
-  //         "*IT Ticket Updated*\n" .
-  //         "Queue: {$ticket->queue_number}\n" .
-  //         "Date: {$formattedDate}\n" .
-  //         "User: {$userName}\n" .
-  //         "Location: {$locationName}\n" .
-  //         "Phone: {$phoneNumber}\n" .
-  //         "Title: {$ticket->title}\n" .
-  //         "Category: {$ticket->category}\n" .
-  //         "Status: {$ticket->status}\n" .
-  //         "Priority: {$ticket->priority}\n" .
-  //         "Executor: {$executorName}\n" .
-  //         "Notes IT: {$ticket->notes_executor}\n" .
-  //         "Estimation: {$estimationDate}\n" .
-  //         "Finished: {$finishedDate}\n" .
-  //         // "\Ticket Link:\n{$adminUrl}";
-  //         "Ticket Link:\n{$adminUrl}";
-  //       Http::timeout(15)->post('http://127.0.0.1:3000/send-message', [
-  //         'group_id' => '120363405189832865@g.us',
-  //         'text'     => $message,
-  //       ]);
-
-  //       Log::info('WA_UPDATE_SUCCESS', [
-  //         'ticket_id' => $ticket->id
-  //       ]);
-  //     } catch (\Throwable $e) {
-  //       Log::warning('WA_UPDATE_FAILED', [
-  //         'error' => $e->getMessage(),
-  //       ]);
-  //     }
-
-  //     return redirect()
-  //       ->route('alltickets')
-  //       ->with('success', 'Ticket successfully updated');
-  //   }
-  public function update(Request $request, string $hash)
-  {
-    $ticket = $this->findTicketByHash($hash);
- $oldStatus = $ticket->status;
-    Log::info('TICKET_UPDATE_START', [
-      'ticket_id' => $ticket->id,
-      'user_id'   => auth()->id(),
-      'ip'        => $request->ip(),
-    ]);
-
-    // =========================
-    // VALIDATION
-    // =========================
-    $validated = $request->validate([
-      'category'        => 'required|string',
-      'notes_executor' => 'required|string|min:5|max:500',
-      'priority'        => 'required|string',
-      'finished'        => 'nullable|date',
-      'estimation'      => 'nullable|date',
-    ]);
-    // =========================
-    // STATUS SYNC (SERVER SIDE)
-    // =========================
-    if ($ticket->status === 'Closed') {
-      abort(403, 'Ticket sudah closed');
-    }
-
-    if ($ticket->status === 'Open') {
-      // TAKE TICKET
-      $status   = 'Progress';
-      $finished = null;
-    } elseif ($ticket->status === 'Progress') {
-      // CLOSE TICKET
-      $status   = 'Closed';
-      $finished = now();
-    } else {
-      abort(403, 'Status ticket tidak valid');
-    }
-
-    DB::transaction(function () use ($validated, $ticket, $status, $finished) {
-
-      $estimation = !empty($validated['estimation'])
-        ? Carbon::parse($validated['estimation'])
-        : null;
-
-      $ticket->update([
-        'category'        => $validated['category'],
-        'notes_executor' => $validated['notes_executor'],
-        'status'          => $status,
-        'priority'        => $validated['priority'],
-        'finished'        => $finished,
-        'estimation'      => $estimation,
-        'executor_id'     => auth()->id(),
+      Log::info('TICKET_UPDATE_START', [
+        'ticket_id' => $ticket->id,
+        'user_id'   => auth()->id(),
+        'ip'        => $request->ip(),
       ]);
 
-      Log::info('TICKET_UPDATED', [
-        'ticket_id' => $ticket->id,
-        'status'    => $status,
+      // =========================
+      // VALIDATION
+      // =========================
+      $validated = $request->validate([
+        'category'        => 'required|string',
+        'notes_executor' => 'required|string|min:5|max:500',
+        'priority'        => 'required|string',
+        'finished'        => 'nullable|date',
+        'estimation'      => 'nullable|date',
       ]);
-    });
-    $ticket->refresh();
-try {
-    $hash = $this->generateTicketHash($ticket->id);
+      // =========================
+      // STATUS SYNC (SERVER SIDE)
+      // =========================
+      if ($ticket->status === 'Closed') {
+        abort(403, 'Ticket sudah closed');
+      }
 
-    $adminUrl  = route('editopenticketforadmin', $hash);
-    $reviewUrl = route('reviewtickets', $hash);
+      if ($ticket->status === 'Open') {
+        // TAKE TICKET
+        $status   = 'Progress';
+        $finished = null;
+      } elseif ($ticket->status === 'Progress') {
+        // CLOSE TICKET
+        $status   = 'Closed';
+        $finished = now();
+      } else {
+        abort(403, 'Status ticket tidak valid');
+      }
 
-    $executorName = auth()->user()->employee->employee_name
-        ?? auth()->user()->username;
+      DB::transaction(function () use ($validated, $ticket, $status, $finished) {
 
-    $formattedDate = $ticket->created_at
-        ?->timezone('Asia/Makassar')
-        ?->format('d-m-Y H:i') ?? '-';
+        $estimation = !empty($validated['estimation'])
+          ? Carbon::parse($validated['estimation'])
+          : null;
 
-    $finishedDate = $ticket->finished
-        ?->timezone('Asia/Makassar')
-        ?->format('d-m-Y H:i') ?? '-';
+        $ticket->update([
+          'category'        => $validated['category'],
+          'notes_executor' => $validated['notes_executor'],
+          'status'          => $status,
+          'priority'        => $validated['priority'],
+          'finished'        => $finished,
+          'estimation'      => $estimation,
+          'executor_id'     => auth()->id(),
+        ]);
 
-    $estimationDate = $ticket->estimation
-        ?->timezone('Asia/Makassar')
-        ?->format('d-m-Y H:i') ?? '-';
+        Log::info('TICKET_UPDATED', [
+          'ticket_id' => $ticket->id,
+          'status'    => $status,
+        ]);
+      });
+      $ticket->refresh();
+      // =========================
+      // WHATSAPP NOTIFICATION
+      // =========================
+      try {
+        $hash = $this->generateTicketHash($ticket->id);
+        $adminUrl = route('editopenticketforadmin', $hash);
+        $reviewUrl = route('reviewtickets', $hash);
+        $executorName = auth()->user()->employee->employee_name
+          ?? auth()->user()->username;
+        $formattedDate = $ticket->created_at
+      ?->timezone('Asia/Makassar')
+      ?->format('d-m-Y H:i') ?? '-';
 
-    $userName     = $ticket->user->employee->employee_name;
-    $locationName = $ticket->user->employee->store->name ?? '-';
-    $phoneNumber  = $ticket->user->employee->telp_number ?? '-';
+  $finishedDate = $ticket->finished
+      ?->timezone('Asia/Makassar')
+      ?->format('d-m-Y H:i') ?? '-';
+  $estimationDate = $ticket->estimation
+      ?->timezone('Asia/Makassar')
+      ?->format('d-m-Y H:i') ?? '-';
 
-    // =========================
-    // STATUS TRANSITION CHECK
-    // =========================
-    $isClosedFromProgress =
-        $oldStatus === 'Progress' &&
-        $ticket->status === 'Closed';
+        $userName = $ticket->user->employee->employee_name;
+        $locationName = $ticket->user->employee->store->name ?? '-';
+        $phoneNumber  = $ticket->user->employee->telp_number ?? '-';
+        $message =
+          "*IT Ticket Updated*\n" .
+          "Queue: {$ticket->queue_number}\n" .
+          "Date: {$formattedDate}\n" .
+          "User: {$userName}\n" .
+          "Location: {$locationName}\n" .
+          "Phone: {$phoneNumber}\n" .
+          "Title: {$ticket->title}\n" .
+          "Category: {$ticket->category}\n" .
+          "Status: {$ticket->status}\n" .
+          "Priority: {$ticket->priority}\n" .
+          "Executor: {$executorName}\n" .
+          "Notes IT: {$ticket->notes_executor}\n" .
+          "Estimation: {$estimationDate}\n" .
+          "Finished: {$finishedDate}\n" .
+          // "\Ticket Link:\n{$adminUrl}";
+          "Ticket Link:\n{$adminUrl}";
+        Http::timeout(15)->post('http://127.0.0.1:3000/send-message', [
+          'group_id' => '120363405189832865@g.us',
+          'text'     => $message,
+        ]);
 
-    $titleMessage = $isClosedFromProgress
-        ? '*IT Ticket Review*'
-        : '*IT Ticket Updated*';
+        Log::info('WA_UPDATE_SUCCESS', [
+          'ticket_id' => $ticket->id
+        ]);
+      } catch (\Throwable $e) {
+        Log::warning('WA_UPDATE_FAILED', [
+          'error' => $e->getMessage(),
+        ]);
+      }
 
-    $ticketUrl = $isClosedFromProgress
-        ? $reviewUrl
-        : $adminUrl;
+      return redirect()
+        ->route('alltickets')
+        ->with('success', 'Ticket successfully updated');
+    }
+//   public function update(Request $request, string $hash)
+//   {
+//     $ticket = $this->findTicketByHash($hash);
+//  $oldStatus = $ticket->status;
+//     Log::info('TICKET_UPDATE_START', [
+//       'ticket_id' => $ticket->id,
+//       'user_id'   => auth()->id(),
+//       'ip'        => $request->ip(),
+//     ]);
 
-    // =========================
-    // MESSAGE
-    // =========================
-    $message =
-        "{$titleMessage}\n" .
-        "Date: {$formattedDate}\n" .
-        "Queue: {$ticket->queue_number}\n" .
-        "User: {$userName}\n" .
-        "Location: {$locationName}\n" .
-        "Phone: {$phoneNumber}\n" .
-        "Title: {$ticket->title}\n" .
-        "Category: {$ticket->category}\n" .
-        "Priority: {$ticket->priority}\n" .
-        "Status: {$ticket->status}\n" .
-        "Executor: {$executorName}\n" .
-        "Notes IT: {$ticket->notes_executor}\n" .
-        "Estimation: {$estimationDate}\n" .
-        "Finished: {$finishedDate}\n" .
-        "Ticket Review Link:\n{$ticketUrl}";
-    Http::timeout(15)->post('http://127.0.0.1:3000/send-message', [
-        'group_id' => '120363405189832865@g.us',
-        'text'     => $message,
-    ]);
-    Log::info('WA_UPDATE_SUCCESS', [
-        'ticket_id' => $ticket->id,
-        'type'      => $isClosedFromProgress ? 'REVIEW' : 'UPDATE',
-    ]);
-} catch (\Throwable $e) {
-    Log::warning('WA_UPDATE_FAILED', [
-        'error' => $e->getMessage(),
-    ]);
-}
-    return redirect()
-      ->route('alltickets')
-      ->with('success', 'Ticket successfully updated');
-  }
+//     // =========================
+//     // VALIDATION
+//     // =========================
+//     $validated = $request->validate([
+//       'category'        => 'required|string',
+//       'notes_executor' => 'required|string|min:5|max:500',
+//       'priority'        => 'required|string',
+//       'finished'        => 'nullable|date',
+//       'estimation'      => 'nullable|date',
+//     ]);
+//     // =========================
+//     // STATUS SYNC (SERVER SIDE)
+//     // =========================
+//     if ($ticket->status === 'Closed') {
+//       abort(403, 'Ticket sudah closed');
+//     }
+
+//     if ($ticket->status === 'Open') {
+//       // TAKE TICKET
+//       $status   = 'Progress';
+//       $finished = null;
+//     } elseif ($ticket->status === 'Progress') {
+//       // CLOSE TICKET
+//       $status   = 'Closed';
+//       $finished = now();
+//     } else {
+//       abort(403, 'Status ticket tidak valid');
+//     }
+
+//     DB::transaction(function () use ($validated, $ticket, $status, $finished) {
+
+//       $estimation = !empty($validated['estimation'])
+//         ? Carbon::parse($validated['estimation'])
+//         : null;
+
+//       $ticket->update([
+//         'category'        => $validated['category'],
+//         'notes_executor' => $validated['notes_executor'],
+//         'status'          => $status,
+//         'priority'        => $validated['priority'],
+//         'finished'        => $finished,
+//         'estimation'      => $estimation,
+//         'executor_id'     => auth()->id(),
+//       ]);
+
+//       Log::info('TICKET_UPDATED', [
+//         'ticket_id' => $ticket->id,
+//         'status'    => $status,
+//       ]);
+//     });
+//     $ticket->refresh();
+// try {
+//     $hash = $this->generateTicketHash($ticket->id);
+
+//     $adminUrl  = route('editopenticketforadmin', $hash);
+//     $reviewUrl = route('reviewtickets', $hash);
+
+//     $executorName = auth()->user()->employee->employee_name
+//         ?? auth()->user()->username;
+
+//     $formattedDate = $ticket->created_at
+//         ?->timezone('Asia/Makassar')
+//         ?->format('d-m-Y H:i') ?? '-';
+
+//     $finishedDate = $ticket->finished
+//         ?->timezone('Asia/Makassar')
+//         ?->format('d-m-Y H:i') ?? '-';
+
+//     $estimationDate = $ticket->estimation
+//         ?->timezone('Asia/Makassar')
+//         ?->format('d-m-Y H:i') ?? '-';
+
+//     $userName     = $ticket->user->employee->employee_name;
+//     $locationName = $ticket->user->employee->store->name ?? '-';
+//     $phoneNumber  = $ticket->user->employee->telp_number ?? '-';
+
+//     // =========================
+//     // STATUS TRANSITION CHECK
+//     // =========================
+//     $isClosedFromProgress =
+//         $oldStatus === 'Progress' &&
+//         $ticket->status === 'Closed';
+
+//     $titleMessage = $isClosedFromProgress
+//         ? '*IT Ticket Review*'
+//         : '*IT Ticket Updated*';
+
+//     $ticketUrl = $isClosedFromProgress
+//         ? $reviewUrl
+//         : $adminUrl;
+
+//     // =========================
+//     // MESSAGE
+//     // =========================
+//     $message =
+//         "{$titleMessage}\n" .
+//         "Date: {$formattedDate}\n" .
+//         "Queue: {$ticket->queue_number}\n" .
+//         "User: {$userName}\n" .
+//         "Location: {$locationName}\n" .
+//         "Phone: {$phoneNumber}\n" .
+//         "Title: {$ticket->title}\n" .
+//         "Category: {$ticket->category}\n" .
+//         "Priority: {$ticket->priority}\n" .
+//         "Status: {$ticket->status}\n" .
+//         "Executor: {$executorName}\n" .
+//         "Notes IT: {$ticket->notes_executor}\n" .
+//         "Estimation: {$estimationDate}\n" .
+//         "Finished: {$finishedDate}\n" .
+//         "Ticket Review Link:\n{$ticketUrl}";
+//     Http::timeout(15)->post('http://127.0.0.1:3000/send-message', [
+//         'group_id' => '120363405189832865@g.us',
+//         'text'     => $message,
+//     ]);
+//     Log::info('WA_UPDATE_SUCCESS', [
+//         'ticket_id' => $ticket->id,
+//         'type'      => $isClosedFromProgress ? 'REVIEW' : 'UPDATE',
+//     ]);
+// } catch (\Throwable $e) {
+//     Log::warning('WA_UPDATE_FAILED', [
+//         'error' => $e->getMessage(),
+//     ]);
+// }
+//     return redirect()
+//       ->route('alltickets')
+//       ->with('success', 'Ticket successfully updated');
+//   }
   //   public function update(Request $request, string $hash)
   //   {
   //     $ticket = $this->findTicketByHash($hash);
