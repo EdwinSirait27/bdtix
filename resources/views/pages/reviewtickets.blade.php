@@ -488,13 +488,7 @@
                     </svg>
                     <span>Abort</span>
                 </a>
-                {{-- <button type="submit"
-                    class="flex-1 py-3.5 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white font-semibold rounded-xl shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center space-x-2">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                    </svg>
-                    <span>Submit Review</span>
-                </button> --}}
+              
                 @if (empty($ticket->rating))
     <button type="submit"
         class="flex-1 py-3.5 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white font-semibold rounded-xl shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center space-x-2">
@@ -504,19 +498,6 @@
         <span>Submit Review</span>
     </button>
 @endif
-
-                {{-- @if ($ticket->review)
-    <div class="flex-1 py-3.5 bg-slate-800 border border-slate-700 text-slate-400
-                font-semibold rounded-xl flex items-center justify-center space-x-2">
-        <svg class="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M9 12l2 2 4-4" />
-        </svg>
-        <span>Review already submitted</span>
-    </div>
-@endif
-
-            </div> --}}
         </form>
     </div>
     @push('scripts')
@@ -574,24 +555,7 @@
         </script>
         <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
-        {{-- <script>
-            flatpickr("#estimation", {
-                enableTime: true,
-                dateFormat: "Y-m-d H:i",
-                time_24hr: true,
-                minDate: "today",
-                defaultHour: 9
-            });
-        </script> --}}
-        {{-- <script>
-    flatpickr("#estimation", {
-        enableTime: true,
-        dateFormat: "Y-m-d H:i",
-        time_24hr: true,
-        minDate: "today",
-        defaultHour: 9
-    });
-</script> --}}
+      
 <script>
 document.addEventListener('DOMContentLoaded', function () {
     const estimationInput = document.getElementById('estimation');

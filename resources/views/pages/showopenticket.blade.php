@@ -55,328 +55,317 @@
                 </div>
             </div>
         </div>
-            @if ($errors->has('conflict'))
-                <div class="mb-4 p-4 rounded bg-yellow-50 text-yellow-800 border border-yellow-300">
-                    <strong>Caution!</strong><br>
-                    {{ $errors->first('conflict') }}
-                </div>
-            @endif
-
-            <div>
-                <label for="title" class="block text-sm font-semibold text-slate-300 mb-2 flex items-center space-x-2">
-                    <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" />
-                    </svg>
-                    <span>Ticket Title</span>
-                    <span class="text-red-400">*</span>
-                </label>
-                <input type="text" id="title" name="title"
-                    placeholder="Example: Laptop cannot connect to WiFi"
-                    class="w-full px-4 py-3.5 bg-slate-800 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
-                    value="{{ old('title', $ticket->title) }}" disabled>
-                @error('title')
-                    <p class="mt-2 text-sm text-red-400 flex items-center space-x-1">
-                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd"
-                                d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
-                                clip-rule="evenodd" />
-                        </svg>
-                        <span>{{ $message }}</span>
-                    </p>
-                @enderror
+        @if ($errors->has('conflict'))
+            <div class="mb-4 p-4 rounded bg-yellow-50 text-yellow-800 border border-yellow-300">
+                <strong>Caution!</strong><br>
+                {{ $errors->first('conflict') }}
             </div>
+        @endif
 
-            <div>
-                <label for="category" class="block text-sm font-semibold text-slate-300 mb-2 flex items-center space-x-2">
-                    <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+        <div>
+            <label for="title" class="block text-sm font-semibold text-slate-300 mb-2 flex items-center space-x-2">
+                <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" />
+                </svg>
+                <span>Ticket Title</span>
+                <span class="text-red-400">*</span>
+            </label>
+            <input type="text" id="title" name="title" placeholder="Example: Laptop cannot connect to WiFi"
+                class="w-full px-4 py-3.5 bg-slate-800 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                value="{{ old('title', $ticket->title) }}" disabled>
+            @error('title')
+                <p class="mt-2 text-sm text-red-400 flex items-center space-x-1">
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd"
+                            d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                            clip-rule="evenodd" />
                     </svg>
-                    <span>Categories</span>
-                    <span class="text-red-400">*</span>
-                </label>
-                <div class="relative">
-                    <select id="category" name="category"
-                        class="select2 w-full bg-slate-800 border border-slate-700 rounded-xl text-white">
+                    <span>{{ $message }}</span>
+                </p>
+            @enderror
+        </div>
 
-                        <option value="">Choose Categories...</option>
-                        <option value="Hardware & Software"
-                            {{ old('category', $ticket->category) == 'Hardware & Software' ? 'selected' : '' }}>
-                            Hardware & Software
-                        </option>
-                        <option value="Network" {{ old('category', $ticket->category) == 'Network' ? 'selected' : '' }}>
-                            Network
-                        </option>
-                        <option value="Account & Access"
-                            {{ old('category', $ticket->category) == 'Account & Access' ? 'selected' : '' }}>
-                            Account & Access
-                        </option>
-                        <option value="Others" {{ old('category', $ticket->category) == 'Others' ? 'selected' : '' }}>
-                            Others
-                        </option>
-                    </select>
-                    <div class="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none">
-                        <svg class="w-5 h-5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                        </svg>
-                    </div>
+        <div>
+            <label for="category" class="block text-sm font-semibold text-slate-300 mb-2 flex items-center space-x-2">
+                <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                </svg>
+                <span>Categories</span>
+                <span class="text-red-400">*</span>
+            </label>
+            <div class="relative">
+                <select id="category" name="category"
+                    class="select2 w-full bg-slate-800 border border-slate-700 rounded-xl text-white">
+
+                    <option value="">Choose Categories...</option>
+                    <option value="Hardware & Software"
+                        {{ old('category', $ticket->category) == 'Hardware & Software' ? 'selected' : '' }}>
+                        Hardware & Software
+                    </option>
+                    <option value="Network" {{ old('category', $ticket->category) == 'Network' ? 'selected' : '' }}>
+                        Network
+                    </option>
+                    <option value="Account & Access"
+                        {{ old('category', $ticket->category) == 'Account & Access' ? 'selected' : '' }}>
+                        Account & Access
+                    </option>
+                    <option value="Others" {{ old('category', $ticket->category) == 'Others' ? 'selected' : '' }}>
+                        Others
+                    </option>
+                </select>
+                <div class="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none">
+                    <svg class="w-5 h-5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                    </svg>
                 </div>
-                @error('category')
-                    <p class="mt-2 text-sm text-red-400 flex items-center space-x-1">
-                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd"
-                                d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
-                                clip-rule="evenodd" />
-                        </svg>
-                        <span>{{ $message }}</span>
-                    </p>
-                @enderror
             </div>
-
-            <div>
-                <label for="description"
-                    class="block text-sm font-semibold text-slate-300 mb-2 flex items-center space-x-2">
-                    <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7" />
+            @error('category')
+                <p class="mt-2 text-sm text-red-400 flex items-center space-x-1">
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd"
+                            d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                            clip-rule="evenodd" />
                     </svg>
-                    <span>Problem Description</span>
-                    <span class="text-red-400">*</span>
-                </label>
-                <textarea id="description" name="description" rows="5" disabled
-                    placeholder="Describe your problem in detail:
+                    <span>{{ $message }}</span>
+                </p>
+            @enderror
+        </div>
+
+        <div>
+            <label for="description" class="block text-sm font-semibold text-slate-300 mb-2 flex items-center space-x-2">
+                <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7" />
+                </svg>
+                <span>Problem Description</span>
+                <span class="text-red-400">*</span>
+            </label>
+            <textarea id="description" name="description" rows="5" disabled
+                placeholder="Describe your problem in detail:
 - What happened?
 - When did the problem start?
 - What steps have you tried?"
-                    class="w-full px-4 py-3.5 bg-slate-800 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 resize-none">{{ old('description', $ticket->description) }}</textarea>
-                <div class="flex items-center justify-between mt-2">
-                    <p class="text-xs text-slate-500">minimum 10 character</p>
-                    <p class="text-xs text-slate-500"><span id="charCount">0</span> / 500</p>
-                </div>
-                @error('description')
-                    <p class="mt-2 text-sm text-red-400 flex items-center space-x-1">
-                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd"
-                                d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
-                                clip-rule="evenodd" />
-                        </svg>
-                        <span>{{ $message }}</span>
-                    </p>
-                @enderror
+                class="w-full px-4 py-3.5 bg-slate-800 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 resize-none">{{ old('description', $ticket->description) }}</textarea>
+            <div class="flex items-center justify-between mt-2">
+                <p class="text-xs text-slate-500">minimum 10 character</p>
+                <p class="text-xs text-slate-500"><span id="charCount">0</span> / 500</p>
             </div>
-            <div>
-                <label class="block text-sm font-semibold text-slate-300 mb-3 flex items-center space-x-2">
-                    <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+            @error('description')
+                <p class="mt-2 text-sm text-red-400 flex items-center space-x-1">
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd"
+                            d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                            clip-rule="evenodd" />
                     </svg>
-                    <span>Priority Level</span>
-                    <span class="text-red-400">*</span>
+                    <span>{{ $message }}</span>
+                </p>
+            @enderror
+        </div>
+        <div>
+            <label class="block text-sm font-semibold text-slate-300 mb-3 flex items-center space-x-2">
+                <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                </svg>
+                <span>Priority Level</span>
+                <span class="text-red-400">*</span>
+            </label>
+            <div class="grid grid-cols-3 gap-3">
+                <label class="relative cursor-pointer">
+                    <input type="radio" name="priority" value="Low" id="Low" class="peer sr-only"
+                        @checked(old('priority', $ticket->priority ?? '') === 'Low')>
+
+                    <div
+                        class="px-4 py-3 bg-slate-800 border-2 border-slate-700 rounded-xl text-center transition-all peer-checked:border-green-500 peer-checked:bg-green-500/10 hover:border-slate-600">
+                        <div class="text-2xl mb-1">🟢</div>
+                        <div class="text-xs font-semibold text-slate-400 peer-checked:text-green-400">Low</div>
+                    </div>
                 </label>
-                <div class="grid grid-cols-3 gap-3">
-                    <label class="relative cursor-pointer">
-                        <input type="radio" name="priority" value="Low" id="Low" class="peer sr-only"
-                             @checked(old('priority', $ticket->priority ?? '') === 'Low')>
+                <label class="relative cursor-pointer">
+                    <input type="radio" name="priority" value="Medium" id="Medium" class="peer sr-only"
+                        @checked(old('priority', $ticket->priority ?? '') === 'Medium')>
 
-                        <div
-                            class="px-4 py-3 bg-slate-800 border-2 border-slate-700 rounded-xl text-center transition-all peer-checked:border-green-500 peer-checked:bg-green-500/10 hover:border-slate-600">
-                            <div class="text-2xl mb-1">🟢</div>
-                            <div class="text-xs font-semibold text-slate-400 peer-checked:text-green-400">Low</div>
-                        </div>
-                    </label>
-                    <label class="relative cursor-pointer">
-                        <input type="radio" name="priority" value="Medium" id="Medium" class="peer sr-only"
-                            @checked(old('priority', $ticket->priority ?? '') === 'Medium')>
+                    <div
+                        class="px-4 py-3 bg-slate-800 border-2 border-slate-700 rounded-xl text-center transition-all peer-checked:border-yellow-500 peer-checked:bg-yellow-500/10 hover:border-slate-600">
+                        <div class="text-2xl mb-1">🟡</div>
+                        <div class="text-xs font-semibold text-slate-400 peer-checked:text-yellow-400">Mid</div>
+                    </div>
+                </label>
+                <label class="relative cursor-pointer">
+                    <input type="radio" name="priority" value="High" id="High" class="peer sr-only"
+                        @checked(old('priority', $ticket->priority ?? '') === 'High')>
 
-                        <div
-                            class="px-4 py-3 bg-slate-800 border-2 border-slate-700 rounded-xl text-center transition-all peer-checked:border-yellow-500 peer-checked:bg-yellow-500/10 hover:border-slate-600">
-                            <div class="text-2xl mb-1">🟡</div>
-                            <div class="text-xs font-semibold text-slate-400 peer-checked:text-yellow-400">Mid</div>
-                        </div>
-                    </label>
-                    <label class="relative cursor-pointer">
-                        <input type="radio" name="priority" value="High" id="High" class="peer sr-only"
-                            @checked(old('priority', $ticket->priority ?? '') === 'High')>
-
-                        <div
-                            class="px-4 py-3 bg-slate-800 border-2 border-slate-700 rounded-xl text-center transition-all peer-checked:border-red-500 peer-checked:bg-red-500/10 hover:border-slate-600">
-                            <div class="text-2xl mb-1">🔴</div>
-                            <div class="text-xs font-semibold text-slate-400 peer-checked:text-red-400">High</div>
-                        </div>
-                    </label>
-                </div>
-                @error('priority')
-                    <p class="mt-2 text-sm text-red-400 flex items-center space-x-1">
-                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd"
-                                d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
-                                clip-rule="evenodd" />
-                        </svg>
-                        <span>{{ $message }}</span>
-                    </p>
-                @enderror
+                    <div
+                        class="px-4 py-3 bg-slate-800 border-2 border-slate-700 rounded-xl text-center transition-all peer-checked:border-red-500 peer-checked:bg-red-500/10 hover:border-slate-600">
+                        <div class="text-2xl mb-1">🔴</div>
+                        <div class="text-xs font-semibold text-slate-400 peer-checked:text-red-400">High</div>
+                    </div>
+                </label>
             </div>
-            <div>
-                <label for="notes_executor"
-                    class="block text-sm font-semibold text-slate-300 mb-2 flex items-center space-x-2">
-                    <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M4 6h16M4 12h16M4 18h7" />
+            @error('priority')
+                <p class="mt-2 text-sm text-red-400 flex items-center space-x-1">
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd"
+                            d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                            clip-rule="evenodd" />
                     </svg>
-                    <span>Notes Executor</span>
-                    <span class="text-red-400">*</span>
-                </label>
-                <textarea id="notes_executor" name="notes_executor" rows="5" 
-                    placeholder="Describe user's problem in detail:
+                    <span>{{ $message }}</span>
+                </p>
+            @enderror
+        </div>
+        <div>
+            <label for="notes_executor"
+                class="block text-sm font-semibold text-slate-300 mb-2 flex items-center space-x-2">
+                <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7" />
+                </svg>
+                <span>Notes Executor</span>
+                <span class="text-red-400">*</span>
+            </label>
+            <textarea id="notes_executor" name="notes_executor" rows="5"
+                placeholder="Describe user's problem in detail:
 - What happened?"
-                    class="w-full px-4 py-3.5 bg-slate-800 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 resize-none">{{ old('notes_executor', $ticket->notes_executor) }}</textarea>
-                <div class="flex items-center justify-between mt-2">
-                    <p class="text-xs text-slate-500">minimum 10 character</p>
-                    <p class="text-xs text-slate-500"><span id="charCount">0</span> / 500</p>
-                </div>
-                @error('notes_executor')
-                    <p class="mt-2 text-sm text-red-400 flex items-center space-x-1">
-                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd"
-                                d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
-                                clip-rule="evenodd" />
-                        </svg>
-                        <span>{{ $message }}</span>
-                    </p>
-                @enderror
+                class="w-full px-4 py-3.5 bg-slate-800 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 resize-none">{{ old('notes_executor', $ticket->notes_executor) }}</textarea>
+            <div class="flex items-center justify-between mt-2">
+                <p class="text-xs text-slate-500">minimum 10 character</p>
+                <p class="text-xs text-slate-500"><span id="charCount">0</span> / 500</p>
+            </div>
+            @error('notes_executor')
+                <p class="mt-2 text-sm text-red-400 flex items-center space-x-1">
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd"
+                            d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                            clip-rule="evenodd" />
+                    </svg>
+                    <span>{{ $message }}</span>
+                </p>
+            @enderror
+        </div>
+
+        <div>
+            <label for="estimation" class="block text-sm font-semibold text-slate-300 mb-2 flex items-center space-x-2">
+                <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M8 7V3m8 4V3M3 11h18M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+                <span>Estimation</span>
+                <span class="text-red-400">*</span>
+            </label>
+
+
+            <input type="datetime-local" id="estimation" name="estimation"
+                value="{{ old('estimation') ?? $ticket->estimation }}"
+                class="w-full px-4 py-3.5 bg-slate-800 border border-slate-700 rounded-xl text-white">
+
+
+
+
+            @error('estimation')
+                <p class="mt-2 text-sm text-red-400 flex items-center space-x-1">
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd"
+                            d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                            clip-rule="evenodd" />
+                    </svg>
+                    <span>{{ $message }}</span>
+                </p>
+            @enderror
+        </div>
+        <div>
+            <label for="status" class="block text-sm font-semibold text-slate-300 mb-2 flex items-center space-x-2">
+                <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M9 12h6m-3-3v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <span>Status</span>
+                <span class="text-red-400">*</span>
+            </label>
+
+            <div class="relative">
+                <select id="status" name="status"
+                    class="select2 w-full bg-slate-800 border border-slate-700 rounded-xl text-white">
+
+                    <option value="">Choose Status...</option>
+                    <option value="Open" @selected(old('status', $ticket->status) === 'Open')>Open</option>
+                    <option value="Progress" @selected(old('status', $ticket->status) === 'Progress')>In Progress</option>
+                    <option value="Closed" @selected(old('status', $ticket->status) === 'Closed')>Closed</option>
+                </select>
             </div>
 
-            <div>
-                <label for="estimation"
-                    class="block text-sm font-semibold text-slate-300 mb-2 flex items-center space-x-2">
-                    <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M8 7V3m8 4V3M3 11h18M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            @error('status')
+                <p class="mt-2 text-sm text-red-400 flex items-center space-x-1">
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd"
+                            d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                            clip-rule="evenodd" />
                     </svg>
-                    <span>Estimation</span>
-                    <span class="text-red-400">*</span>
-                </label>
+                    <span>{{ $message }}</span>
+                </p>
+            @enderror
+        </div>
+        <div id="finished-wrapper" class="hidden">
+            <label for="finished" class="block text-sm font-semibold text-slate-300 mb-2 flex items-center space-x-2">
+                <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M8 7V3m8 4V3M3 11h18M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+                <span>Finished</span>
+                <span class="text-red-400">*</span>
+            </label>
 
 
-                <input type="datetime-local" id="estimation" name="estimation"
-                    value="{{ old('estimation') ?? $ticket->estimation }}"
-                    class="w-full px-4 py-3.5 bg-slate-800 border border-slate-700 rounded-xl text-white">
+            <input type="datetime-local" id="finished" name="finished"
+                value="{{ old('finished') ?? $ticket->finished }}"
+                class="w-full px-4 py-3.5 bg-slate-800 border border-slate-700 rounded-xl text-white">
 
-
-
-
-                @error('estimation')
-                    <p class="mt-2 text-sm text-red-400 flex items-center space-x-1">
-                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd"
-                                d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
-                                clip-rule="evenodd" />
-                        </svg>
-                        <span>{{ $message }}</span>
-                    </p>
-                @enderror
-            </div>
-            <div>
-                <label for="status" class="block text-sm font-semibold text-slate-300 mb-2 flex items-center space-x-2">
-                    <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M9 12h6m-3-3v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+            @error('finished')
+                <p class="mt-2 text-sm text-red-400 flex items-center space-x-1">
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd"
+                            d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                            clip-rule="evenodd" />
                     </svg>
-                    <span>Status</span>
-                    <span class="text-red-400">*</span>
-                </label>
-
-                <div class="relative">
-                    <select id="status" name="status"
-                        class="select2 w-full bg-slate-800 border border-slate-700 rounded-xl text-white">
-
-                        <option value="">Choose Status...</option>
-                        <option value="Open" @selected(old('status', $ticket->status) === 'Open')>Open</option>
-                        <option value="Progress" @selected(old('status', $ticket->status) === 'Progress')>In Progress</option>
-                        <option value="Closed" @selected(old('status', $ticket->status) === 'Closed')>Closed</option>
-                    </select>
-                </div>
-
-                @error('status')
-                    <p class="mt-2 text-sm text-red-400 flex items-center space-x-1">
-                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd"
-                                d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
-                                clip-rule="evenodd" />
-                        </svg>
-                        <span>{{ $message }}</span>
-                    </p>
-                @enderror
-            </div>
-            <div id="finished-wrapper" class="hidden">
-                <label for="finished" class="block text-sm font-semibold text-slate-300 mb-2 flex items-center space-x-2">
-                    <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M8 7V3m8 4V3M3 11h18M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                    </svg>
-                    <span>Finished</span>
-                    <span class="text-red-400">*</span>
-                </label>
-
-
-                <input type="datetime-local" id="finished" name="finished"
-                    value="{{ old('finished') ?? $ticket->finished }}"
-                    class="w-full px-4 py-3.5 bg-slate-800 border border-slate-700 rounded-xl text-white">
-
-                @error('finished')
-                    <p class="mt-2 text-sm text-red-400 flex items-center space-x-1">
-                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd"
-                                d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
-                                clip-rule="evenodd" />
-                        </svg>
-                        <span>{{ $message }}</span>
-                    </p>
-                @enderror
-            </div>
-            <div>
-                <label class="block text-sm font-semibold text-slate-300 mb-2 flex items-center space-x-2">
-                    <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
-                    </svg>
-                    <span>Attachments</span>
-                </label>
-                @if ($ticket->attachments->count())
-                    <ul class="space-y-2">
-                        @foreach ($ticket->attachments as $file)
-                            <li class="flex items-center gap-2">
-                                <svg class="w-4 h-4 text-slate-400" fill="currentColor" viewBox="0 0 20 20">
-                                    <path
-                                        d="M8 2a4 4 0 00-4 4v8a6 6 0 0012 0V6a2 2 0 10-4 0v7a1 1 0 102 0V6a4 4 0 00-8 0v8a4 4 0 008 0V6" />
-                                </svg>
-                                <a href="{{ $ticket->attachment_url }}" target="_blank"
-                                    class="text-blue-400 hover:underline text-sm">
-                                    {{ $file->file_name }}
-                                </a>
-                            </li>
-                        @endforeach
-                    </ul>
-                @else
-                    <p class="text-sm text-slate-500">No attachments</p>
-                @endif
-            </div>
-            <div class="flex space-x-3 pt-4">
-                <a href="{{ route('dashboard') }}"
-                    class="flex-1 py-3.5 bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 font-semibold rounded-xl transition-all duration-200 flex items-center justify-center space-x-2">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                    <span>Back</span>
-                </a>
-                {{-- <button type="submit"
-                    class="flex-1 py-3.5 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white font-semibold rounded-xl shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center space-x-2">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                    </svg>
-                    <span>take this ticket</span>
-                </button> --}}
-            </div>
+                    <span>{{ $message }}</span>
+                </p>
+            @enderror
+        </div>
+        <div>
+            <label class="block text-sm font-semibold text-slate-300 mb-2 flex items-center space-x-2">
+                <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
+                </svg>
+                <span>Attachments</span>
+            </label>
+            @if ($ticket->attachments->count())
+                <ul class="space-y-2">
+                    @foreach ($ticket->attachments as $file)
+                        <li class="flex items-center gap-2">
+                            <svg class="w-4 h-4 text-slate-400" fill="currentColor" viewBox="0 0 20 20">
+                                <path
+                                    d="M8 2a4 4 0 00-4 4v8a6 6 0 0012 0V6a2 2 0 10-4 0v7a1 1 0 102 0V6a4 4 0 00-8 0v8a4 4 0 008 0V6" />
+                            </svg>
+                            <a href="{{ $ticket->attachment_url }}" target="_blank"
+                                class="text-blue-400 hover:underline text-sm">
+                                {{ $file->file_name }}
+                            </a>
+                        </li>
+                    @endforeach
+                </ul>
+            @else
+                <p class="text-sm text-slate-500">No attachments</p>
+            @endif
+        </div>
+        <div class="flex space-x-3 pt-4">
+            <a href="{{ route('dashboard') }}"
+                class="flex-1 py-3.5 bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 font-semibold rounded-xl transition-all duration-200 flex items-center justify-center space-x-2">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+                <span>Back</span>
+            </a>
+        </div>
     </div>
     @push('scripts')
         <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>

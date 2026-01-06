@@ -212,13 +212,6 @@
                 <span>Logout</span>
             </button>
         </form>
-
-        {{-- App Version --}}
-        {{-- <div class="text-center pb-4">
-            <p class="text-xs text-slate-500">Ticketing v.1.0</p>
-            <p class="text-xs text-slate-600 mt-1">&copy; 2025 IT Departments, Developed by Edwin Sirait</p>
-        </div> --}}
-
     </div>
 @endsection
 {{-- Settings Menu --}}

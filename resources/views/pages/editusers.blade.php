@@ -22,38 +22,20 @@
                 </div>
             </div>
         </div>
-        {{-- Form --}}
-        {{-- <form method="POST" action="#" enctype="multipart/form-data" class="space-y-5"> --}}
-            {{-- <form method="POST" action="{{ route('tickets.store') }}" enctype="multipart/form-data" class="space-y-5"> --}}
-            {{-- @csrf --}}
-            {{-- Ticket Title --}}
-            <form action="{{ route('updateusers', request()->route('hash')) }}" method="POST">
-    @csrf
+       
+        <form action="{{ route('updateusers', request()->route('hash')) }}" method="POST">
+            @csrf
             <div>
                 <label for="title" class="block text-sm font-semibold text-slate-300 mb-2 flex items-center space-x-2">
                     <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" />
                     </svg>
-                    <span>Edit for Users {{$user->employee->employee_name}}</span>
+                    <span>Edit for Users {{ $user->employee->employee_name }}</span>
                     <span class="text-red-400">*</span>
                 </label>
-                {{-- <input type="text" id="title" name="title" required
-                    placeholder="Example: Laptop cannot connect to WiFi"
-                    class="w-full px-4 py-3.5 bg-slate-800 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
-                    value="{{ old('title') }}">
-                @error('title')
-                    <p class="mt-2 text-sm text-red-400 flex items-center space-x-1">
-                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd"
-                                d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
-                                clip-rule="evenodd" />
-                        </svg>
-                        <span>{{ $message }}</span>
-                    </p>
-                @enderror --}}
+
             </div>
-            {{-- Category --}}
             <div>
                 <label for="roles" class="block text-sm font-semibold text-slate-300 mb-2 flex items-center space-x-2">
                     <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -64,22 +46,17 @@
                     <span class="text-red-400">*</span>
                 </label>
                 <div class="relative">
-                   @foreach ($roles as $role)
-            <div class="form-check">
-                <input class="form-check-input"
-                       type="checkbox"
-                       name="roles[]"
-                       value="{{ $role->name }}"
-                       {{ in_array($role->name, $userRoles) ? 'checked' : '' }}>
-                <label class="form-check-label">
-                    {{ ucfirst($role->name) }}
-                </label>
-            </div>
-        @endforeach
+                    @foreach ($roles as $role)
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="roles[]" value="{{ $role->name }}"
+                                {{ in_array($role->name, $userRoles) ? 'checked' : '' }}>
+                            <label class="form-check-label">
+                                {{ ucfirst($role->name) }}
+                            </label>
+                        </div>
+                    @endforeach
                     <div class="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none">
-                        {{-- <svg class="w-5 h-5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                        </svg> --}}
+
                     </div>
                 </div>
                 @error('roles')
@@ -93,157 +70,7 @@
                     </p>
                 @enderror
             </div>
-            {{-- Priority --}}
-            {{-- <div>
-                <label class="block text-sm font-semibold text-slate-300 mb-3 flex items-center space-x-2">
-                    <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                    </svg>
-                    <span>Priority Level</span>
-                    <span class="text-red-400">*</span>
-                </label>
-                <div class="grid grid-cols-3 gap-3">
-                    <label class="relative cursor-pointer">
-                        <input type="radio" name="priority" value="low" class="peer sr-only" required>
-                        <div
-                            class="px-4 py-3 bg-slate-800 border-2 border-slate-700 rounded-xl text-center transition-all peer-checked:border-green-500 peer-checked:bg-green-500/10 hover:border-slate-600">
-                            <div class="text-2xl mb-1">🟢</div>
-                            <div class="text-xs font-semibold text-slate-400 peer-checked:text-green-400">Low</div>
-                        </div>
-                    </label>
-                    <label class="relative cursor-pointer">
-                        <input type="radio" name="priority" value="medium" class="peer sr-only">
-                        <div
-                            class="px-4 py-3 bg-slate-800 border-2 border-slate-700 rounded-xl text-center transition-all peer-checked:border-yellow-500 peer-checked:bg-yellow-500/10 hover:border-slate-600">
-                            <div class="text-2xl mb-1">🟡</div>
-                            <div class="text-xs font-semibold text-slate-400 peer-checked:text-yellow-400">Mid</div>
-                        </div>
-                    </label>
-                    <label class="relative cursor-pointer">
-                        <input type="radio" name="priority" value="high" class="peer sr-only">
-                        <div
-                            class="px-4 py-3 bg-slate-800 border-2 border-slate-700 rounded-xl text-center transition-all peer-checked:border-red-500 peer-checked:bg-red-500/10 hover:border-slate-600">
-                            <div class="text-2xl mb-1">🔴</div>
-                            <div class="text-xs font-semibold text-slate-400 peer-checked:text-red-400">High</div>
-                        </div>
-                    </label>
-                </div>
-                @error('priority')
-                    <p class="mt-2 text-sm text-red-400 flex items-center space-x-1">
-                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd"
-                                d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
-                                clip-rule="evenodd" />
-                        </svg>
-                        <span>{{ $message }}</span>
-                    </p>
-                @enderror
-            </div> --}}
-            {{-- Description --}}
-            {{-- <div>
-                <label for="description"
-                    class="block text-sm font-semibold text-slate-300 mb-2 flex items-center space-x-2">
-                    <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M4 6h16M4 12h16M4 18h7" />
-                    </svg>
-                    <span>Problem Description</span>
-                    <span class="text-red-400">*</span>
-                </label>
-                <textarea id="description" name="description" rows="5" required
-                    placeholder="Describe your problem in detail:
-- What happened?
-- When did the problem start?
-- What steps have you tried?"
-                    class="w-full px-4 py-3.5 bg-slate-800 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 resize-none">{{ old('description') }}</textarea>
-                <div class="flex items-center justify-between mt-2">
-                    <p class="text-xs text-slate-500">minimum 10 character</p>
-                    <p class="text-xs text-slate-500"><span id="charCount">0</span> / 500</p>
-                </div>
-                @error('description')
-                    <p class="mt-2 text-sm text-red-400 flex items-center space-x-1">
-                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd"
-                                d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
-                                clip-rule="evenodd" />
-                        </svg>
-                        <span>{{ $message }}</span>
-                    </p>
-                @enderror
-            </div> --}}
-            {{-- File Attachment --}}
-            {{-- <div>
-                <label for="attachment"
-                    class="block text-sm font-semibold text-slate-300 mb-2 flex items-center space-x-2">
-                    <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
-                    </svg>
-                    <span>Attachment (Optional)</span>
-                </label>
-                <div class="relative">
-                    <input type="file" id="attachment" name="attachment" accept="image/*,.pdf,.doc,.docx"
-                        class="hidden" onchange="updateFileName(this)">
-                    <label for="attachment"
-                        class="flex items-center justify-center w-full px-4 py-8 bg-slate-800 border-2 border-dashed border-slate-700 rounded-xl cursor-pointer hover:border-blue-500 hover:bg-slate-800/50 transition-all duration-200 group">
-                        <div class="text-center">
-                            <svg class="w-12 h-12 mx-auto mb-3 text-slate-600 group-hover:text-blue-500 transition-colors"
-                                fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-                            </svg>
-                            <p class="text-sm font-medium text-slate-400 group-hover:text-blue-400 transition-colors">
-                                <span id="fileName">Klik untuk upload file</span>
-                            </p>
-                            <p class="text-xs text-slate-600 mt-1">PNG, JPG, PDF, DOC (Max. 5MB)</p>
-                        </div>
-                    </label>
-                </div>
-                @error('attachment')
-                    <p class="mt-2 text-sm text-red-400 flex items-center space-x-1">
-                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd"
-                                d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
-                                clip-rule="evenodd" />
-                        </svg>
-                        <span>{{ $message }}</span>
-                    </p>
-                @enderror
-            </div> --}}
-            {{-- <div>
-                <label class="block text-sm font-semibold text-slate-300 mb-2 flex items-center space-x-2">
-                    <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
-                    </svg>
-                    <span>Attachment (Optional)</span>
-                </label>
-                <!-- Tempat semua attachment -->
-                <div id="attachmentContainer"></div>
-                <!-- Pesan limit -->
-                <p id="limitMessage" class="text-red-400 text-sm mt-2 hidden">
-                    Maximal 3 attachment.
-                </p>
-                <p id="minimumMessage" class="text-red-400 text-sm mt-2 hidden">
-                    Minimun 1 attachment.
-                </p>
-                <!-- Tombol tambah -->
-                <button type="button" id="btnAddAttachment"
-                    class="mt-3 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm"
-                    onclick="addAttachment()">
-                    + Add Attachment
-                </button>
-                <button type="button" id="btnEraseAttachment"
-                    class="mt-3 px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg text-sm"
-                    onclick="eraseAttachment()">
-                    - Erase Attachment
-                </button>
-                @error('attachments')
-                    <p class="mt-2 text-sm text-red-400">{{ $message }}</p>
-                @enderror
-            </div> --}}
-            {{-- Action Buttons --}}
+
             <div class="flex space-x-3 pt-4">
                 <a href="{{ route('users') }}"
                     class="flex-1 py-3.5 bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 font-semibold rounded-xl transition-all duration-200 flex items-center justify-center space-x-2">
@@ -262,5 +89,5 @@
             </div>
         </form>
     </div>
-  
+
 @endsection

@@ -195,29 +195,7 @@
         <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-        {{-- <script>
-            $(document).ready(function() {
-                function toggleFinished() {
-                    if ($('#status').val() === 'Closed') {
-                        $('#finished-wrapper').removeClass('hidden');
-                    } else {
-                        $('#finished-wrapper').addClass('hidden');
-                    }
-                }
-                toggleFinished();
-
-                $('#status').on('change', toggleFinished);
-            });
-        </script> --}}
-        {{-- <script>
-            $(document).ready(function() {
-                $('#status').select2({
-                    placeholder: 'Choose Status...',
-                    width: '100%',
-                    dropdownParent: $('#status').parent()
-                });
-            });
-        </script> --}}
+    
         <script>
             $(document).ready(function() {
                 $('#category').select2({

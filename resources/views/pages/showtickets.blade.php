@@ -80,20 +80,17 @@
                 {!! nl2br(e($ticket->notes_executor ?? '-')) !!}
             </div>
         </div>
-@if (!empty($ticket->attachment_url))
-<div class="bg-white dark:bg-slate-900 rounded-2xl shadow p-6">
-    <h3 class="text-lg font-bold mb-4">Attachments</h3>
+        @if (!empty($ticket->attachment_url))
+            <div class="bg-white dark:bg-slate-900 rounded-2xl shadow p-6">
+                <h3 class="text-lg font-bold mb-4">Attachments</h3>
 
-    <a href="{{ $ticket->attachment_url }}"
-       target="_blank"
-       class="inline-flex items-center gap-2 px-4 py-2 rounded-lg
+                <a href="{{ $ticket->attachment_url }}" target="_blank"
+                    class="inline-flex items-center gap-2 px-4 py-2 rounded-lg
               bg-indigo-600 text-white hover:bg-indigo-700 transition">
-        Open Attachment Folder
-    </a>
-</div>
-@endif
-
-
+                    Open Attachment Folder
+                </a>
+            </div>
+        @endif
         @if ($ticket->replies && $ticket->replies->count())
             <div class="bg-white dark:bg-slate-900 rounded-2xl shadow p-6">
                 <h3 class="text-lg font-bold mb-4">Activity</h3>
