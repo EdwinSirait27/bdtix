@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use App\Models\Tickets;
+use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\Log;
@@ -19,7 +20,7 @@ class dashboardController extends Controller
   public function dashboardPage()
   {
     $user = Auth::user();
-
+$adminCount = User::role('admin')->count();
     $todaysticket = Tickets::whereDate('created_at', Carbon::today())->count();
     $highprior = Tickets::where('priority', 'High')->count();
     $assignedtoyou = Tickets::where('executor_id', auth()->id())->count();
@@ -73,11 +74,11 @@ class dashboardController extends Controller
       'onprogresstickethuman',
       'user',
       'assignedtoyou',
-
       'todaysticket',
       'onprogressticket',
       'closedticket',
       'overdueticket',
+      'adminCount',
       'slaCompliance'
     ));
   }
@@ -169,44 +170,92 @@ class dashboardController extends Controller
     return $ticket;
   }
 
-  public function edit(string $hash)
-  {
-    $ticket = $this->findTicketByHash($hash);
-    $user   = auth()->user();
+  // public function edit($hash)
+  //   {
+  //       $ticket = Tickets::with([
+  //           'user.employee',
+  //           'executor.employee',
+  //           'attachments',
+  //       ])
+  //           ->get()
+  //           ->first(function ($ticket) use ($hash) {
+  //               $hashedId = substr(
+  //                   hash('sha256', $ticket->id . env('APP_KEY')),
+  //                   0,
+  //                   8
+  //               );
+  //               return hash_equals($hashedId, $hash);
+  //           });
+  //       if (! $ticket) {
+  //           abort(404, 'Ticket not found');
+  //       }
+  //       return view('pages.editopenticketforadmin', compact('ticket'));
+  //   }
+  public function edit($hash)
+{
+    $ticket = Tickets::with([
+        'user.employee',
+        'executor.employee',
+        'attachments',
+    ])
+        ->get()
+        ->first(function ($ticket) use ($hash) {
+            $hashedId = substr(
+                hash('sha256', $ticket->id . env('APP_KEY')),
+                0,
+                8
+            );
+            return hash_equals($hashedId, $hash);
+        });
 
-    // 🚫 Ticket CLOSED → tidak boleh apa pun
-    if ($ticket->status === 'Closed') {
-      return redirect()
-        ->route('dashboard')
-        ->with('error', 'The ticket is closed and cannot be edited.');
+    if (! $ticket) {
+        abort(404, 'Ticket not found');
     }
 
-    // 👨‍💼 Admin & Executor → boleh edit semua
-    if ($user->hasRole(['admin', 'executor'])) {
-      return view('pages.editopenticketforadmin', compact('ticket'));
+    // ✅ ROLE CHECK
+    if (auth()->user()->hasRole('human')) {
+        return redirect()
+            ->route('showmytickets', $hash)
+            ->with('error', 'You are not allowed to edit this ticket');
     }
 
-    // 👤 Human → hanya tiket milik sendiri
-    if ($user->hasRole('human')) {
+    // admin & executor lanjut ke edit page
+    return view('pages.editopenticketforadmin', compact('ticket'));
+}
 
-      // 🚫 BUKAN tiket dia
-      if ($ticket->user_id !== $user->id) {
-        abort(403, 'You are not allowed to access this ticket.');
-      }
 
-      // ✅ tiket milik sendiri → hanya view
-      return redirect()->route('showopenticket', $hash);
+  // public function show(string $hash)
+  // {
+  //   $ticket = $this->findTicketByHash($hash);
+  //   return view('pages.showopenticket', compact('ticket'));
+  // }
+    public function show($hash)
+    {
+        $ticket = Tickets::with([
+            'user.employee',
+            'executor.employee',
+            'attachments',
+        ])
+            ->get()
+            ->first(function ($ticket) use ($hash) {
+                $hashedId = substr(
+                    hash('sha256', $ticket->id . env('APP_KEY')),
+                    0,
+                    8
+                );
+                return hash_equals($hashedId, $hash);
+            });
+
+        if (! $ticket) {
+            abort(404, 'Ticket not found');
+        }
+          if (auth()->user()->hasRole('human')) {
+        return redirect()
+            ->route('showmytickets', $hash)
+            ->with('error', 'You are not allowed to edit this ticket');
     }
-
-    // 🚫 Role tidak dikenal
-    abort(403, 'Unauthorized action.');
-  }
-
-  public function show(string $hash)
-  {
-    $ticket = $this->findTicketByHash($hash);
-    return view('pages.showopenticket', compact('ticket'));
-  }
+        return view('pages.showopenticket', compact('ticket'));
+    }
 
   private function generateTicketHash(string $ticketId): string
   {
@@ -354,3 +403,29 @@ try {
       ->with('success', 'Ticket successfully updated');
   }
 }
+
+  // public function edit(string $hash)
+  // {
+  //   $ticket = $this->findTicketByHash($hash);
+  //   $user   = auth()->user();
+  //   if ($ticket->status === 'Closed') {
+  //     return redirect()
+  //       ->route('dashboard')
+  //       ->with('error', 'The ticket is closed and cannot be edited.');
+  //   }
+  //   if ($user->hasRole(['admin', 'executor'])) {
+  //     return view('pages.editopenticketforadmin', compact('ticket'));
+  //   }
+  //   // 👤 Human → hanya tiket milik sendiri
+  //   if ($user->hasRole('human')) {
+  //     // 🚫 BUKAN tiket dia
+  //     if ($ticket->user_id !== $user->id) {
+  //       abort(403, 'You are not allowed to access this ticket.');
+  //     }
+  //     // ✅ tiket milik sendiri → hanya view
+  //     return redirect()->route('showopenticket', $hash);
+  //   }
+
+  //   // 🚫 Role tidak dikenal
+  //   abort(403, 'Unauthorized action.');
+  // }

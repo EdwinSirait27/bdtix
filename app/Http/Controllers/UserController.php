@@ -6,15 +6,13 @@ use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Role;
-
-
+use Illuminate\Support\Facades\Log;
 class UserController extends Controller
 {
     public function users()
     {
         return view('pages.users');
     }
-
     public function getUsers(Request $request)
     {
         $query = User::select([
@@ -34,11 +32,9 @@ class UserController extends Controller
             ->leftJoin('stores_tables', 'stores_tables.id', '=', 'employees_tables.store_id')
             ->leftJoin('position_tables', 'position_tables.id', '=', 'employees_tables.position_id')
             ->whereIn('employees_tables.status', ['Active', 'Pending', 'Mutation']);
-
         return DataTables::eloquent($query)
             ->addColumn('roles', function ($user) {
-                $roles = $user->getRoleNames(); // dari Spatie
-
+                $roles = $user->getRoleNames();
                 if ($roles->isEmpty()) {
                     return '<span class="badge bg-secondary">No Role</span>';
                 }
@@ -72,10 +68,44 @@ class UserController extends Controller
         </a>
     ';
             })
+           ->addColumn('checkbox', function ($user) {
+    return '
+        <input type="checkbox"
+               class="user-checkbox"
+               name="user_ids[]"
+               value="' . e($user->id) . '">
+    ';
+})
 
-            ->rawColumns(['roles', 'action'])
+
+            ->rawColumns(['roles', 'action', 'checkbox'])
             ->make(true);
     }
+    public function bulkUpdateRole(Request $request)
+{
+    $request->validate([
+        'user_ids'   => 'required|array',
+        'user_ids.*' => 'uuid'
+    ]);
+
+    try {
+        User::whereIn('id', $request->user_ids)
+            ->get()
+            ->each(fn ($user) => $user->syncRoles('human'));
+
+        return redirect()
+            ->route('users')
+            ->with('success', 'Role Updated Successfully');
+    } catch (\Exception $e) {
+        Log::error('Bulk update error', ['message' => $e->getMessage()]);
+
+        return redirect()
+            ->route('users')
+            ->with('error', 'Role error update');
+    }
+}
+
+
     public function edit($hash)
     {
         $user = User::all()->first(function ($u) use ($hash) {

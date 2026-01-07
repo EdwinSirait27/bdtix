@@ -40,6 +40,22 @@
                     </svg>
                     <span>All-Tix</span>
                 </a>
+                <a href="{{ route('resolvetickets') }}"
+                    class="relative flex flex-col items-center justify-center flex-1 py-3
+          {{ request()->routeIs('resolvetickets') ? 'text-blue-400' : 'text-slate-400 hover:text-white' }}
+          transition">
+                    @if (request()->routeIs('resolvetickets'))
+                        <div
+                            class="absolute top-0 left-1/2 -translate-x-1/2
+                   w-12 h-1 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-b-full">
+                        </div>
+                    @endif
+                  <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+</svg>
+                    <span>Resolve-Tix</span>
+                </a>
             @endrole
 
             @role('human')

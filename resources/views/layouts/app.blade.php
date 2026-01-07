@@ -76,6 +76,20 @@
                                         All Tickets
                                     </a>
                                 </li>
+                                  <li>
+                                <a href="{{ route('resolvetickets') }}"
+                                   class="group flex gap-x-3 rounded-lg p-3 text-sm leading-6 font-semibold transition-all
+                                   {{ request()->routeIs('resolvetickets')
+                                       ? 'bg-gradient-to-r from-blue-500 to-cyan-500 text-white shadow-md'
+                                       : 'text-slate-300 hover:bg-slate-800' }}">
+                                    <svg class="h-6 w-6 shrink-0" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    Resolved Tickets
+                                </a>
+                            </li>
                             @endrole
                             @role('human')
                                 <li>
@@ -129,17 +143,7 @@
                                     </a>
                                 </li>
                             @endrole
-                            {{-- <li>
-                                <a href="#"
-                                    class="group flex gap-x-3 rounded-lg p-3 text-sm leading-6 font-semibold text-slate-300 hover:bg-slate-800 transition-all">
-                                    <svg class="h-6 w-6 shrink-0" fill="none" stroke="currentColor"
-                                        viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                    </svg>
-                                    Resolved Tickets
-                                </a>
-                            </li> --}}
+                          
                         </ul>
                     </li>
                     <li>

@@ -448,7 +448,15 @@
                      1.414l4 4a1 1 0 001.414
                      0l8-8a1 1 0 000-1.414z"/>
         </svg>
+@role('human')
         <span>Your review</span>
+@endrole
+
+        @role('admin|executor')
+        <span>Reviewed By : {{$ticket->user->employee->employee_name}}</span>
+
+        @endrole
+
     </label>
 
     {{-- Rating --}}
@@ -486,9 +494,10 @@
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                     </svg>
-                    <span>Abort</span>
+                    <span>Back</span>
                 </a>
-              
+
+                {{-- @role('human')    
                 @if (empty($ticket->rating))
     <button type="submit"
         class="flex-1 py-3.5 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white font-semibold rounded-xl shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center space-x-2">
@@ -498,6 +507,26 @@
         <span>Submit Review</span>
     </button>
 @endif
+@endrole --}}
+@role('human')
+    @if (is_null($ticket->review))
+        <button type="submit"
+            class="flex-1 py-3.5 bg-gradient-to-r from-blue-600 to-cyan-600
+                   hover:from-blue-700 hover:to-cyan-700 text-white font-semibold
+                   rounded-xl shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50
+                   transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98]
+                   flex items-center justify-center space-x-2">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M5 13l4 4L19 7" />
+            </svg>
+            <span>Submit Review</span>
+        </button>
+    @endif
+    {{-- {{ dd($ticket->rating, $ticket->review) }} --}}
+
+@endrole
+
         </form>
     </div>
     @push('scripts')

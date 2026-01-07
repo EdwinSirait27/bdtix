@@ -29,7 +29,6 @@ class TicketController extends Controller
     {
         $user = Auth::user();
         $executorId = auth()->id();
-
         $allticket = Tickets::where('executor_id', $executorId)
             ->count();
 
@@ -350,31 +349,78 @@ class TicketController extends Controller
         }
         return view('pages.showmytickets', compact('ticket'));
     }
+// public function reviewticket($hash)
+// {
+//     $userId = Auth::id();
+
+//     Log::info('Access review ticket page - start', [
+//         'hash'   => $hash,
+//         'user'   => $userId,
+//         'ip'     => request()->ip(),
+//         'agent' => request()->userAgent(),
+//     ]);
+
+//     $ticket = Tickets::with([
+//             'user.employee',
+//             'attachments',
+//         ])
+//         ->where('user_id', $userId)
+//         ->get()
+//         ->first(function ($ticket) use ($hash) {
+//             $hashedId = substr(
+//                 hash('sha256', $ticket->id . env('APP_KEY')),
+//                 0,
+//                 8
+//             );
+//             return hash_equals($hashedId, $hash);
+//         });
+
+//     if (! $ticket) {
+//         Log::warning('Review ticket access failed - ticket not found', [
+//             'hash' => $hash,
+//             'user' => $userId,
+//         ]);
+
+//         abort(404, 'Ticket not found');
+//     }
+
+//     Log::info('Review ticket page loaded', [
+//         'ticket_id' => $ticket->id,
+//         'status'    => $ticket->status,
+//         'user'      => $userId,
+//     ]);
+
+//     return view('pages.reviewtickets', compact('ticket'));
+// }
 public function reviewticket($hash)
 {
     $userId = Auth::id();
+    $user   = Auth::user();
 
     Log::info('Access review ticket page - start', [
-        'hash'   => $hash,
-        'user'   => $userId,
-        'ip'     => request()->ip(),
-        'agent' => request()->userAgent(),
+        'hash'  => $hash,
+        'user'  => $userId,
+        'roles' => $user->getRoleNames(),
     ]);
 
-    $ticket = Tickets::with([
-            'user.employee',
-            'attachments',
-        ])
-        ->where('user_id', $userId)
-        ->get()
-        ->first(function ($ticket) use ($hash) {
-            $hashedId = substr(
-                hash('sha256', $ticket->id . env('APP_KEY')),
-                0,
-                8
-            );
-            return hash_equals($hashedId, $hash);
-        });
+    $query = Tickets::with([
+        'user.employee',
+        'attachments',
+    ]);
+
+    // ✅ hanya HUMAN yang dibatasi user_id
+    if ($user->hasRole('human')) {
+        $query->where('user_id', $userId);
+    }
+
+    $ticket = $query->get()->first(function ($ticket) use ($hash) {
+        $hashedId = substr(
+            hash('sha256', $ticket->id . env('APP_KEY')),
+            0,
+            8
+        );
+        return hash_equals($hashedId, $hash);
+    });
 
     if (! $ticket) {
         Log::warning('Review ticket access failed - ticket not found', [
@@ -393,6 +439,7 @@ public function reviewticket($hash)
 
     return view('pages.reviewtickets', compact('ticket'));
 }
+
 public function storeReview(Request $request, $hash)
 {
     Log::info('Submit review attempt', [

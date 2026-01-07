@@ -1,11 +1,8 @@
 <?php
-
 namespace App\Services;
-
 use App\Models\Tickets;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
-
 class TicketOverdueService
 {
     public function markOverdue(): int

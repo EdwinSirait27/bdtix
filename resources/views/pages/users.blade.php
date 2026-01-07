@@ -447,8 +447,8 @@
                         </path>
                     </svg>
                 </div>
-                <p class="text-2xl md:text-3xl font-bold mb-1">5</p>
-                <p class="text-orange-100 text-xs">Admin accounts</p>
+                <p class="text-2xl md:text-3xl font-bold mb-1">Edwin Sirait</p>
+                <p class="text-orange-100 text-xs">namanya juga yang buat ya mau gimana</p>
             </div>
         </div>
 
@@ -496,9 +496,27 @@
                 <div id="users-table-wrapper" class="overflow-x-auto -mx-4 md:mx-0" style="display: none;">
                     <div class="inline-block min-w-full align-middle">
                         <div class="overflow-hidden">
+                            <div class="flex gap-2 mb-4">
+                                <button id="checkAllBtn"
+                                    class="px-4 py-2 bg-slate-600 text-white rounded hover:bg-slate-700">
+                                    Check All
+                                </button>
+
+                                <button id="uncheckAllBtn"
+                                    class="px-4 py-2 bg-slate-600 text-white rounded hover:bg-slate-700">
+                                    Uncheck All
+                                </button>
+
+                                <button id="updateRoleHumanBtn"
+                                    class="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700">
+                                    Update Role to Human
+                                </button>
+                            </div>
+
                             <table class="min-w-full divide-y divide-slate-700" id="users-table">
                                 <thead class="bg-slate-900">
                                     <tr>
+                                        <th class="text-center">Selext</th>
                                         <th class="text-center">Username</th>
                                         <th class="text-center">Employee Name</th>
                                         <th class="text-center">Company</th>
@@ -510,7 +528,6 @@
                                     </tr>
                                 </thead>
                                 <tbody class="bg-slate-800 divide-y divide-slate-700">
-                                    <!-- DataTable will populate this -->
                                 </tbody>
                             </table>
                         </div>
@@ -531,6 +548,7 @@
 
     @push('scripts')
         <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script>
             toastr.options = {
                 closeButton: true,
@@ -559,6 +577,14 @@
                     ],
                     ajax: "{{ route('users.users') }}",
                     columns: [{
+                            data: 'checkbox',
+                            name: 'checkbox',
+                            orderable: false,
+                            searchable: false,
+                            width: '5%',
+                            className: 'text-center'
+                        },
+                        {
                             data: 'username',
                             name: 'username',
                             width: '10%'
@@ -740,6 +766,72 @@
                 $(window).on('resize', function() {
                     if ($(window).width() < 768) {
                         renderMobileCards();
+                    }
+                });
+            });
+        </script>
+        <script>
+            // CHECK ALL
+            $('#checkAllBtn').on('click', function() {
+                $('.user-checkbox').prop('checked', true);
+            });
+
+            // UNCHECK ALL
+            $('#uncheckAllBtn').on('click', function() {
+                $('.user-checkbox').prop('checked', false);
+            });
+
+            // UPDATE ROLE TO HUMAN
+            $('#updateRoleHumanBtn').on('click', function() {
+
+                let userIds = [];
+                $('.user-checkbox:checked').each(function() {
+                    userIds.push($(this).val());
+                });
+
+                if (userIds.length === 0) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'No user selected',
+                        text: 'Please select at least one user'
+                    });
+                    return;
+                }
+
+                Swal.fire({
+                    title: 'Update Role?',
+                    text: 'Selected users will be assigned role HUMAN',
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes, Update',
+                    cancelButtonText: 'Cancel',
+                    confirmButtonColor: '#4f46e5'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: "{{ route('users.bulkUpdateRole') }}",
+                            type: "POST",
+                            data: {
+                                _token: "{{ csrf_token() }}",
+                                user_ids: userIds
+                            },
+                            success: function() {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Success',
+                                    text: 'Role updated successfully'
+                                });
+
+                                $('#users-table').DataTable().ajax.reload(null, false);
+                            },
+                            error: function() {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Error',
+                                    text: 'Failed to update role'
+                                });
+                            }
+                        });
                     }
                 });
             });

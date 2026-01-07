@@ -313,7 +313,7 @@
                 @endif
             </div>
             <div class="flex space-x-3 pt-4">
-                <a href="{{ route('alltickets') }}"
+                <a href="{{ route('dashboard') }}"
                     class="flex-1 py-3.5 bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 font-semibold rounded-xl transition-all duration-200 flex items-center justify-center space-x-2">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
