@@ -738,7 +738,7 @@
                     </div>
                     @endif
                     @if($ticket->attachments->count())
-                    <div>
+                    {{-- <div>
                         <p class="text-xs text-slate-500 mb-2">Attachments</p>
                         <div class="space-y-2">
                             @foreach ($ticket->attachments as $file)
@@ -750,7 +750,30 @@
                                 </a>
                             @endforeach
                         </div>
-                    </div>
+                    </div> --}}
+                    <div>
+    <p class="text-xs text-slate-500 mb-2">Attachments</p>
+
+    <div class="space-y-2">
+        @foreach ($ticket->attachments as $file)
+            <a href="{{ $ticket->attachment_url }}" target="_blank"
+                class="flex items-center space-x-2 text-sm text-blue-400
+                       hover:text-blue-300 hover:underline">
+
+                {{-- Folder / Files Icon --}}
+                <svg class="w-4 h-4" fill="none" stroke="currentColor"
+                     viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M3 7a2 2 0 012-2h5l2 2h7a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V7z" />
+                </svg>
+
+                <span>See files</span>
+            </a>
+        @endforeach
+    </div>
+</div>
+
                     @endif
                 </div>
             </details>
