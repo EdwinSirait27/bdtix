@@ -177,6 +177,7 @@ class TicketController extends Controller
                 'queue_number',
                 'title',
                 'executor_id',
+                'notes_executor',
                 'priority',
                 'finished',
                 'estimation',

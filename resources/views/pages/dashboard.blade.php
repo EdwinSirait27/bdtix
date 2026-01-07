@@ -1548,7 +1548,7 @@
                                     </div>
                                     <div class="user-card-field">
                                         <div class="user-card-label">Notes IT</div>
-                                        <div class="user-card-value">${ticket.executor_notes || 'N/A'}</div>
+                                        <div class="user-card-value">${ticket.notes_executor || 'N/A'}</div>
                                     </div>
                                     <div class="user-card-field">
                                         <div class="user-card-label">Finished</div>
