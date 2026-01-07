@@ -839,6 +839,7 @@
                         <div>
                                @role('human')
                                <p class="text-xs text-slate-500 mb-2">Your Comment</p>
+                               <p class="text-sm text-slate-300 italic">"{{ $ticket->review->comment }}"</p>
                         @endrole
                         @role('admin|executor')
                         <p class="text-xs text-slate-500 mb-2">Comment By : {{ $ticket->user->employee->employee_name }}</p>
