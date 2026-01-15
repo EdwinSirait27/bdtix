@@ -6,6 +6,8 @@ use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Http\Request;
 use App\Models\Tickets;
 use Carbon\Carbon;
+use App\Models\TicketReview;
+
 
 class ResolveTicketController extends Controller
 {
@@ -23,8 +25,20 @@ class ResolveTicketController extends Controller
         $onprogressticket = Tickets::where('executor_id', auth()->id())
             ->where('status', 'Progress')
             ->count();
+                        $executorId = auth()->id();
+$avgRating = TicketReview::where('executor_id', $executorId)
+    ->whereHas('ticket', function ($q) {
+        $q->where('status', 'closed');
+    })
+    ->avg('rating');
+$totalReviewedTickets = TicketReview::where('executor_id', $executorId)
+    ->whereHas('ticket', function ($q) {
+        $q->where('status', 'closed');
+    })
+    ->count();
 
-        return view('pages.resolvetickets', compact('todaysticket', 'onprogressticket', 'highprior'));
+
+        return view('pages.resolvetickets', compact('todaysticket', 'onprogressticket', 'highprior','avgRating', 'totalReviewedTickets'));
     }
 
     public function getReviewtickets(Request $request)
@@ -46,6 +60,43 @@ class ResolveTicketController extends Controller
                 'created_at',
                 'status',
             ]);
+            $search = $request->input('search.value');
+
+if ($search) {
+    $query->where(function ($q) use ($search) {
+        $q->where('queue_number', 'like', "%{$search}%")
+          ->orWhere('title', 'like', "%{$search}%")
+          ->orWhere('description', 'like', "%{$search}%")
+          ->orWhere('category', 'like', "%{$search}%");
+        //   ->orWhere('status', 'like', "%{$search}%");
+    });
+}
+      // =========================
+    // FILTER: STATUS
+    // =========================
+    // if ($request->filled('status')) {
+    //     $query->where('status', $request->status);
+    // }
+
+    // =========================
+    // FILTER: CATEGORY
+    // =========================
+    if ($request->filled('category')) {
+        $query->where('category', $request->category);
+    }
+    if ($request->filled('priority')) {
+        $query->where('priority', $request->priority);
+    }
+
+    // =========================
+    // FILTER: DATE RANGE
+    // =========================
+    if ($request->filled('date_from') && $request->filled('date_to')) {
+        $query->whereBetween('created_at', [
+            $request->date_from . ' 00:00:00',
+            $request->date_to . ' 23:59:59',
+        ]);
+    } 
         return DataTables::eloquent($query)
              ->addColumn('employee_name', function ($ticket) {
         return optional($ticket->user?->employee)->employee_name ?? '-';

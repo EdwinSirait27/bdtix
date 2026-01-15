@@ -21,12 +21,14 @@ class Tickets extends Model
         'attachment_url',
         'executor_id',
         'priority',
+        'progressed_at',
         'notes_executor',
         'finished',
         'estimation',
     ];
     protected $casts = [
     'estimation' => 'datetime',
+    'progressed_at' => 'datetime',
     'finished'   => 'datetime',
     'created_at'   => 'datetime',
 ];
@@ -36,10 +38,6 @@ class Tickets extends Model
             $model->id ??= (string) Str::uuid();
         });
     }
-    public function user()
-    {
-        return $this->belongsTo(User::class, 'user_id', 'id');
-    }
     public function executor()
     {
         return $this->belongsTo(User::class, 'executor_id', 'id');
@@ -47,6 +45,10 @@ class Tickets extends Model
     public function attachments()
     {
         return $this->hasMany(Ticketattachments::class, 'ticket_id', 'id');
+    }
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id', 'id');
     }
     public function review()
 {

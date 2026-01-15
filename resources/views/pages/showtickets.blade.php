@@ -40,7 +40,7 @@
             </div>
 
             <div class="bg-white dark:bg-slate-900 rounded-xl p-5 shadow">
-                <p class="text-xs text-slate-500 uppercase">Priority</p>
+                <p class="text-xs text-slate-500 uppercase">Dificulty</p>
                 <p class="font-semibold mt-1">
                     {{ ucfirst($ticket->priority ?? '-') }}
                 </p>
@@ -113,13 +113,60 @@
                 </div>
             </div>
         @endif
+
+        @if ($ticket->review)
+            <div class="bg-gradient-to-br from-green-900/20 to-emerald-900/20 border border-green-700/30 rounded-2xl p-6">
+                <div class="flex items-start space-x-3 mb-4">
+                    <div class="w-10 h-10 rounded-xl bg-green-500/20 flex items-center justify-center">
+                        <svg class="w-5 h-5 text-green-400" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd"
+                                d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                clip-rule="evenodd" />
+                        </svg>
+                    </div>
+                    <div class="flex-1">
+                        <h3 class="text-lg font-bold text-green-400 mb-1">Review Submitted</h3>
+                        <p class="text-sm text-slate-400">Thank you for your feedback!</p>
+                    </div>
+                </div>
+                @if ($ticket->review->rating)
+                    <div class="bg-slate-900/50 rounded-xl p-4 space-y-3">
+                        <div>
+
+                            <p class="text-xs text-slate-500 mb-2">Reviewed By :
+                                {{ $ticket->user->employee->employee_name }}
+                            </p>
+                            <div class="flex items-center space-x-2">
+                                <div class="flex text-yellow-400 text-lg">
+                                    @for ($i = 1; $i <= 5; $i++)
+                                        {{ $i <= $ticket->review->rating ? '★' : '☆' }}
+                                    @endfor
+                                </div>
+                                <span class="text-sm text-slate-400">({{ $ticket->review->rating }}/5)</span>
+                                <p class="text-sm text-slate-500 italic">No rating provided</p>
+
+                            </div>
+                        </div>
+                @endif
+                @if ($ticket->review->comment)
+                    <div>
+                        @role('admin|executor')
+                            <p class="text-xs text-slate-500 mb-2">Comment By :
+                                {{ $ticket->user->employee->employee_name }}</p>
+                            <p class="text-sm text-slate-300 italic">"{{ $ticket->review->comment }}"</p>
+                        @endrole
+                    </div>
+                @else
+                    <p class="text-sm text-slate-500 italic">No comment provided</p>
+                @endif
+            </div>
         {{-- Back Button --}}
         <div class="flex justify-end">
-            <a href="{{ route('alltickets') }}"
+            <a href="{{ route('dashboard') }}"
                 class="inline-flex items-center px-5 py-2.5 rounded-xl
                   bg-slate-200 dark:bg-slate-700 text-slate-800 dark:text-white
                   hover:bg-slate-300 dark:hover:bg-slate-600 transition">
-                Back to Tickets
+                Back to Dashboard
             </a>
         </div>
     </div>

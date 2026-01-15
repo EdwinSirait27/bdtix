@@ -440,15 +440,15 @@
             <div
                 class="bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl md:rounded-2xl p-4 md:p-6 text-white shadow-lg">
                 <div class="flex items-center justify-between mb-2">
-                    <h3 class="text-xs md:text-sm font-semibold opacity-90">High Priority</h3>
+                    <h3 class="text-xs md:text-sm font-semibold opacity-90">High Dificulty</h3>
                     <svg class="w-6 h-6 md:w-8 md:h-8 opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z">
                         </path>
                     </svg>
                 </div>
-                <p class="text-2xl md:text-3xl font-bold mb-1">{{$highprior ?? 0}}</p>
-                <p class="text-orange-100 text-xs">High Priority Ticket</p>
+                <p class="text-2xl md:text-3xl font-bold mb-1">{{ $highprior ?? 0 }}</p>
+                <p class="text-orange-100 text-xs">High Dificulty Ticket</p>
             </div>
         </div>
         {{-- Main Content Card --}}
@@ -491,7 +491,6 @@
                     </div>
                 </div>
 
-                {{-- Desktop Table View --}}
                 <div id="users-table-wrapper" class="overflow-x-auto -mx-4 md:mx-0" style="display: none;">
                     <div class="inline-block min-w-full align-middle">
                         <div class="overflow-hidden">
@@ -511,17 +510,14 @@
                                     </tr>
                                 </thead>
                                 <tbody class="bg-slate-800 divide-y divide-slate-700">
-                                    <!-- DataTable will populate this -->
                                 </tbody>
                             </table>
                         </div>
                     </div>
                 </div>
 
-                {{-- Mobile Cards View --}}
                 <div id="mobile-cards-view" style="display: none;">
                     <div id="mobile-cards-container">
-                        <!-- Cards will be populated here -->
                     </div>
                     <div id="mobile-pagination"></div>
                     <div id="mobile-info" class="mobile-info-text"></div>
@@ -590,12 +586,11 @@
                             name: 'status',
                             width: '15%'
                         },
-                        // { data: 'executor', name: 'employees_tables.employee_name', width: '15%' },
                         {
                             data: 'executor_employee_name',
                             name: 'employees_tables.employee_name',
                             width: '15%',
-                             orderable: false,
+                            orderable: false,
                             searchable: false
                         },
                         {
@@ -744,11 +739,11 @@
             else if (status === 'Closed') cls = 'bg-slate-600';
 
             return `
-                <span class="inline-flex items-center gap-2 px-3 py-1 text-xs font-semibold text-white rounded-full ${cls}">
-                    <span class="w-2 h-2 rounded-full bg-white"></span>
-                    ${status}
-                </span>
-            `;
+                        <span class="inline-flex items-center gap-2 px-3 py-1 text-xs font-semibold text-white rounded-full ${cls}">
+                            <span class="w-2 h-2 rounded-full bg-white"></span>
+                            ${status}
+                        </span>
+                    `;
         })()}
     </div>
 </div>

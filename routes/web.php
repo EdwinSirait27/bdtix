@@ -55,10 +55,10 @@ Route::middleware(['auth', 'role:admin|human|executor'])->group(function () {
 
 Route::middleware(['auth', 'role:admin|executor'])->group(function () {
     Route::match(['GET', 'POST'], '/allticketforadmins/allticketforadmins', [dashboardController::class, 'getAllticketforadmins'])->name('allticketforadmins.allticketforadmins');
-    Route::get('/alltickets', [TicketController::class, 'allTickets'])->name('alltickets');
+    // Route::get('/alltickets', [TicketController::class, 'allTickets'])->name('alltickets');
     Route::get('/resolvetickets', [ResolveTicketController::class, 'allReview'])->name('resolvetickets');
     Route::match(['GET', 'POST'], '/resolveticket/resolveticket', [ResolveTicketController::class, 'getReviewtickets'])->name('resolveticket.resolveticket');
-    Route::match(['GET', 'POST'], '/alltickets/alltickets', [TicketController::class, 'getAlltickets'])->name('alltickets.alltickets');
+    // Route::match(['GET', 'POST'], '/alltickets/alltickets', [TicketController::class, 'getAlltickets'])->name('alltickets.alltickets');
     Route::get('/showtickets/{hash}', [dashboardController::class, 'show'])->name('showtickets');
     Route::get('/showalltickets/{hash}', [TicketController::class, 'showalltickets'])->name('showalltickets');
     Route::get('/editalltickets/{hash}', [TicketController::class, 'editalltickets'])->name('editalltickets');
@@ -82,7 +82,6 @@ Route::middleware(['auth', 'role:human'])->group(function () {
     Route::match(['GET', 'POST'], '/allmytickets/allmytickets', [TicketController::class, 'getAllmytickets'])->name('allmytickets.allmytickets');
     Route::post('/ticketreq', [TicketController::class, 'store'])->middleware('throttle:15,1')->name('ticketreq');
     Route::get('/showmytickets/{hash}', [TicketController::class, 'show'])->name('showmytickets');
-    // Route::get('/editmytickets/{hash}', [TicketController::class, 'edit'])->name('editmytickets');
     Route::get('/editmytickets/{hash}', [TicketController::class, 'editmyticket'])->name('editmytickets');
     Route::put(
         'updatemytickets/{hash}',

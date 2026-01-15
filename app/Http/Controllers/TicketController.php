@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Tickets;
+use App\Models\TicketReview;
 use Illuminate\Support\Facades\Log;
 use App\Models\Ticketattachments;
 use Illuminate\Support\Facades\Http;
@@ -43,6 +44,17 @@ class TicketController extends Controller
         $onprogressticket = Tickets::where('executor_id', $executorId)
             ->where('status', 'Progress')
             ->count();
+//             $executorId = auth()->id();
+// $avgRating = TicketReview::where('executor_id', $executorId)
+//     ->whereHas('ticket', function ($q) {
+//         $q->where('status', 'closed');
+//     })
+//     ->avg('rating');
+// $totalReviewedTickets = TicketReview::where('executor_id', $executorId)
+//     ->whereHas('ticket', function ($q) {
+//         $q->where('status', 'closed');
+//     })
+//     ->count();
 
         return view(
             'pages.resolvetickets',
@@ -186,6 +198,50 @@ class TicketController extends Controller
                 'created_at',
                 'status',
             ]);
+        // =========================
+        // SEARCH (for mobile ajax)
+        // =========================
+        $search = $request->input('search.value');
+
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('queue_number', 'like', "%{$search}%")
+                    ->orWhere('title', 'like', "%{$search}%")
+                    ->orWhere('description', 'like', "%{$search}%")
+                    ->orWhere('category', 'like', "%{$search}%")
+                    ->orWhere('status', 'like', "%{$search}%");
+            });
+        }
+        // =========================
+        // FILTER: STATUS
+        // =========================
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        // =========================
+        // FILTER: CATEGORY
+        // =========================
+        if ($request->filled('category')) {
+            $query->where('category', $request->category);
+        }
+        if ($request->filled('priority')) {
+            $query->where('priority', $request->priority);
+        }
+
+        // =========================
+        // FILTER: DATE RANGE
+        // =========================
+        if ($request->filled('date_from') && $request->filled('date_to')) {
+            $query->whereBetween('created_at', [
+                $request->date_from . ' 00:00:00',
+                $request->date_to . ' 23:59:59',
+            ]);
+        }
+          else {
+        // default: hari ini
+        $query->whereDate('created_at', Carbon::today());
+    }
         return DataTables::eloquent($query)
             ->addColumn('employee_name', function ($ticket) {
                 return optional($ticket->user?->employee)->employee_name ?? '-';
@@ -195,7 +251,7 @@ class TicketController extends Controller
                 return $ticket->executor?->employee?->employee_name ?? 'empty';
             })
             ->orderColumn('executor_employee_name', function ($query, $order) {})
-           
+
             ->addColumn('action', function ($ticket) {
 
                 $idHashed = substr(hash('sha256', $ticket->id . env('APP_KEY')), 0, 8);
@@ -269,7 +325,7 @@ class TicketController extends Controller
                 // ================= REVIEW BUTTON =================
                 $reviewBtn = '';
 
-                if (in_array($ticket->status, ['Closed', 'Overdue'])) {
+                if (in_array($ticket->status, ['Closed'])) {
                     $reviewBtn = '
     <a href="' . route("reviewtickets", $idHashed) . '"
        class="inline-flex items-center justify-center p-2
@@ -299,29 +355,24 @@ class TicketController extends Controller
                 return $editBtn . $showBtn . $reviewBtn;
             })
 
-           
+
 
             ->editColumn('created_at', function ($ticket) {
                 return optional($ticket->created_at)
                     ->timezone('Asia/Makassar')
-                    ->format('d-m-Y H:i');
+                    ->translatedFormat('d F Y H:i');
             })
+
             ->editColumn('estimation', function ($ticket) {
                 return $ticket->estimation
-                    ? $ticket->estimation
-                    ->timezone('Asia/Makassar')
-                    ->format('d-m-Y H:i')
+                    ? $ticket->estimation->timezone('Asia/Makassar')->translatedFormat('d F Y H:i')
                     : 'empty';
             })
             ->editColumn('finished', function ($ticket) {
                 return $ticket->finished
-                    ? $ticket->finished
-                    ->timezone('Asia/Makassar')
-                    ->format('d-m-Y H:i')
+                    ? $ticket->finished->timezone('Asia/Makassar')->translatedFormat('d F Y H:i')
                     : 'empty';
             })
-
-
 
             ->rawColumns(['action'])
             ->make(true);
@@ -348,110 +399,38 @@ class TicketController extends Controller
         if (! $ticket) {
             abort(404, 'Ticket not found');
         }
+        $status = ($ticket->status);
+
+        $map = [
+            'Open'     => 'bg-blue-600 text-white',
+            'Progress' => 'bg-yellow-500 text-white',
+            'Overdue'  => 'bg-red-500 text-white',
+            'Closed'   => 'bg-green-600 text-white',
+        ];
+
+        // fallback
+        $ticket->badge_class = $map[$status] ?? 'bg-slate-500 text-white';
         return view('pages.showmytickets', compact('ticket'));
     }
-// public function reviewticket($hash)
-// {
-//     $userId = Auth::id();
-
-//     Log::info('Access review ticket page - start', [
-//         'hash'   => $hash,
-//         'user'   => $userId,
-//         'ip'     => request()->ip(),
-//         'agent' => request()->userAgent(),
-//     ]);
-
-//     $ticket = Tickets::with([
-//             'user.employee',
-//             'attachments',
-//         ])
-//         ->where('user_id', $userId)
-//         ->get()
-//         ->first(function ($ticket) use ($hash) {
-//             $hashedId = substr(
-//                 hash('sha256', $ticket->id . env('APP_KEY')),
-//                 0,
-//                 8
-//             );
-//             return hash_equals($hashedId, $hash);
-//         });
-
-//     if (! $ticket) {
-//         Log::warning('Review ticket access failed - ticket not found', [
-//             'hash' => $hash,
-//             'user' => $userId,
-//         ]);
-
-//         abort(404, 'Ticket not found');
-//     }
-
-//     Log::info('Review ticket page loaded', [
-//         'ticket_id' => $ticket->id,
-//         'status'    => $ticket->status,
-//         'user'      => $userId,
-//     ]);
-
-//     return view('pages.reviewtickets', compact('ticket'));
-// }
-public function reviewticket($hash)
-{
-    $userId = Auth::id();
-    $user   = Auth::user();
-
-    Log::info('Access review ticket page - start', [
-        'hash'  => $hash,
-        'user'  => $userId,
-        'roles' => $user->getRoleNames(),
-    ]);
-
-    $query = Tickets::with([
-        'user.employee',
-        'attachments',
-    ]);
-
-    // ✅ hanya HUMAN yang dibatasi user_id
-    if ($user->hasRole('human')) {
-        $query->where('user_id', $userId);
-    }
-
-    $ticket = $query->get()->first(function ($ticket) use ($hash) {
-        $hashedId = substr(
-            hash('sha256', $ticket->id . env('APP_KEY')),
-            0,
-            8
-        );
-        return hash_equals($hashedId, $hash);
-    });
-
-    if (! $ticket) {
-        Log::warning('Review ticket access failed - ticket not found', [
-            'hash' => $hash,
-            'user' => $userId,
+    public function reviewticket($hash)
+    {
+        $userId = Auth::id();
+        $user   = Auth::user();
+        Log::info('Access review ticket page - start', [
+            'hash'  => $hash,
+            'user'  => $userId,
+            'roles' => $user->getRoleNames(),
         ]);
+        $query = Tickets::with([
+            'user.employee',
+            'attachments',
+        ]);
+        // ✅ hanya HUMAN yang dibatasi user_id
+        if ($user->hasRole('human')) {
+            $query->where('user_id', $userId);
+        }
 
-        abort(404, 'Ticket not found');
-    }
-
-    Log::info('Review ticket page loaded', [
-        'ticket_id' => $ticket->id,
-        'status'    => $ticket->status,
-        'user'      => $userId,
-    ]);
-
-    return view('pages.reviewtickets', compact('ticket'));
-}
-
-public function storeReview(Request $request, $hash)
-{
-    Log::info('Submit review attempt', [
-        'hash' => $hash,
-        'user' => auth()->id(),
-        'ip'   => $request->ip(),
-    ]);
-
-    $ticket = Tickets::where('user_id', auth()->id())
-        ->get()
-        ->first(function ($ticket) use ($hash) {
+        $ticket = $query->get()->first(function ($ticket) use ($hash) {
             $hashedId = substr(
                 hash('sha256', $ticket->id . env('APP_KEY')),
                 0,
@@ -460,62 +439,100 @@ public function storeReview(Request $request, $hash)
             return hash_equals($hashedId, $hash);
         });
 
-    if (!$ticket) {
-        Log::warning('Review submit failed - ticket not found', [
+        if (! $ticket) {
+            Log::warning('Review ticket access failed - ticket not found', [
+                'hash' => $hash,
+                'user' => $userId,
+            ]);
+
+            abort(404, 'Ticket not found');
+        }
+
+        Log::info('Review ticket page loaded', [
+            'ticket_id' => $ticket->id,
+            'status'    => $ticket->status,
+            'user'      => $userId,
+        ]);
+
+        return view('pages.reviewtickets', compact('ticket'));
+    }
+
+    public function storeReview(Request $request, $hash)
+    {
+        Log::info('Submit review attempt', [
             'hash' => $hash,
             'user' => auth()->id(),
+            'ip'   => $request->ip(),
         ]);
-        abort(404);
-    }
-     if ($ticket->user_id !== auth()->id()) {
-        abort(403);
-    }
 
-    // 🔐 Status valid
-    if (!in_array($ticket->status, ['Closed', 'Finished'])) {
-        return back()->with('error', 'Ticket is not completed, cannot be reviewed.');
-    }
+        $ticket = Tickets::where('user_id', auth()->id())
+            ->get()
+            ->first(function ($ticket) use ($hash) {
+                $hashedId = substr(
+                    hash('sha256', $ticket->id . env('APP_KEY')),
+                    0,
+                    8
+                );
+                return hash_equals($hashedId, $hash);
+            });
 
-    // 🔐 Harus ada executor
-    if (!$ticket->executor_id) {
-        return back()->with('error', 'Ticket does not have an executor yet.');
-    }
-    if ($ticket->review) {
-        Log::warning('Review submit blocked - already reviewed', [
+        if (!$ticket) {
+            Log::warning('Review submit failed - ticket not found', [
+                'hash' => $hash,
+                'user' => auth()->id(),
+            ]);
+            abort(404);
+        }
+        if ($ticket->user_id !== auth()->id()) {
+            abort(403);
+        }
+
+        // 🔐 Status valid
+        if (!in_array($ticket->status, ['Closed', 'Finished'])) {
+            return back()->with('error', 'Ticket is not completed, cannot be reviewed.');
+        }
+
+        // 🔐 Harus ada executor
+        if (!$ticket->executor_id) {
+            return back()->with('error', 'Ticket does not have an executor yet.');
+        }
+        if ($ticket->review) {
+            Log::warning('Review submit blocked - already reviewed', [
+                'ticket_id' => $ticket->id,
+                'user'      => auth()->id(),
+            ]);
+
+            return back()->with('error', 'This ticket has already been reviewed.');
+        }
+        if ($ticket->user_id !== auth()->id()) {
+            return redirect()
+                ->back()
+                ->with('error', 'executor tidak butuh validasi dirinya sendiri:).');
+        }
+        abort_if(!in_array($ticket->status, ['Closed', 'Finished']), 403);
+        abort_if(!$ticket->executor_id, 422);
+        abort_if($ticket->review, 409);
+
+        $validated = $request->validate([
+            'rating'  => 'required|integer|min:1|max:5',
+            'comment' => 'nullable|string|max:500',
+        ]);
+
+        $ticket->review()->create([
+            'id'          => (string) Str::uuid(),
+            'ticket_id'   => $ticket->id,
+            'user_id'     => auth()->id(),
+            'executor_id' => $ticket->executor_id,
+            'rating'      => $validated['rating'],
+            'comment'     => $validated['comment'] ?? null,
+        ]);
+        Log::info('Ticket reviewed successfully', [
             'ticket_id' => $ticket->id,
-            'user'      => auth()->id(),
+            'rating'    => $validated['rating'],
         ]);
 
-        return back()->with('error', 'This ticket has already been reviewed.');
+        return back()->with('success', 'Thank you, your review has been saved successfully.');
     }
-
-
-    // lanjut logic lama
-        abort_if($ticket->user_id !== auth()->id(), 403);
-    abort_if(!in_array($ticket->status, ['Closed', 'Finished']), 403);
-    abort_if(!$ticket->executor_id, 422);
-    abort_if($ticket->review, 409);
-
-    $validated = $request->validate([
-        'rating'  => 'required|integer|min:1|max:5',
-        'comment' => 'nullable|string|max:500',
-    ]);
-
-    $ticket->review()->create([
-        'id'          => (string) Str::uuid(),
-        'ticket_id'   => $ticket->id,
-        'user_id'     => auth()->id(),
-        'executor_id' => $ticket->executor_id,
-        'rating'      => $validated['rating'],
-        'comment'     => $validated['comment'] ?? null,
-    ]);
-    Log::info('Ticket reviewed successfully', [
-        'ticket_id' => $ticket->id,
-        'rating'    => $validated['rating'],
-    ]);
-
-    return back()->with('success', 'Thank you, your review has been saved successfully.');
-}
 
 
 
@@ -549,7 +566,7 @@ public function storeReview(Request $request, $hash)
 
         abort(403, 'Unauthorized action.');
     }
-  
+
     public function updatemytickets(Request $request, string $hash)
     {
         $ticket = $this->findTicketByHash($hash);
@@ -586,8 +603,8 @@ public function storeReview(Request $request, $hash)
             ->with('success', 'Ticket successfully updated');
     }
 
-   
-  
+
+
     public function showalltickets($hash)
     {
         $ticket = Tickets::with([
@@ -757,7 +774,6 @@ public function storeReview(Request $request, $hash)
             ->rawColumns(['action'])
             ->make(true);
     }
-
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -788,7 +804,6 @@ public function storeReview(Request $request, $hash)
             ]);
 
             DB::commit(); // ⬅️ WAJIB selesai dulu
-
             /**
              * ============================
              * PREPARE TEMP FILES
@@ -796,52 +811,41 @@ public function storeReview(Request $request, $hash)
              */
             $tempFiles = [];
             if ($request->hasFile('attachments')) {
-    foreach ($request->file('attachments') as $file) {
-        $path = $file->store('tmp/tickets');
-
-        $originalName = pathinfo(
-            $file->getClientOriginalName(),
-            PATHINFO_FILENAME
-        );
-
-        $extension = $file->getClientOriginalExtension();
-
-        $tempFiles[] = [
-            'path' => $path,
-            'name' => $originalName . '.' . $extension, // ✅ ADA TITIK
-            'mime' => $file->getClientMimeType(),       // ✅ WAJIB
-        ];
-    }
-
-    ProcessTicketAttachmentsJob::dispatch(
-        $ticket->id,
-        $tempFiles,
-        auth()->id()
-    )
-    ->onQueue('ticket-heavy')
-    ->afterCommit();
-}
-
-
+                foreach ($request->file('attachments') as $file) {
+                    $path = $file->store('tmp/tickets');
+                    $originalName = pathinfo(
+                        $file->getClientOriginalName(),
+                        PATHINFO_FILENAME
+                    );
+                    $extension = $file->getClientOriginalExtension();
+                    $tempFiles[] = [
+                        'path' => $path,
+                        'name' => $originalName . '.' . $extension, // ✅ ADA TITIK
+                        'mime' => $file->getClientMimeType(),       // ✅ WAJIB
+                    ];
+                }
+                ProcessTicketAttachmentsJob::dispatch(
+                    $ticket->id,
+                    $tempFiles,
+                    auth()->id()
+                )
+                    ->onQueue('ticket-heavy')
+                    ->afterCommit();
+            }
             // 🔔 WA HARUS SELALU DIKIRIM
             SendTicketWhatsappJob::dispatch($ticket->id)
                 ->onQueue('notification')
                 ->afterCommit();
-
             return redirect()
                 ->route('dashboard')
                 ->with('success', 'Ticket has been successfully submitted and is being processed.');
         } catch (\Throwable $e) {
-
             DB::rollBack();
 
             Log::critical('TICKET_STORE_FAILED', [
                 'error' => $e->getMessage(),
             ]);
-
             return back()->with('error', 'failed send ticket');
         }
     }
 }
-
- 

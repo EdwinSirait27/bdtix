@@ -18,7 +18,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/plugins/monthSelect/style.css">
     @vite('resources/css/app.css')
     <meta name="theme-color" content="#0F172A">
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -61,7 +61,7 @@
                                 </a>
                             </li>
                             @role('admin|executor')
-                                <li>
+                                {{-- <li>
                                     <a href="{{ route('alltickets') }}"
                                         class="group flex gap-x-3 rounded-lg p-3 text-sm leading-6 font-semibold transition-all
                                    {{ request()->routeIs('alltickets')
@@ -75,7 +75,7 @@
                                         </svg>
                                         All Tickets
                                     </a>
-                                </li>
+                                </li> --}}
                                   <li>
                                 <a href="{{ route('resolvetickets') }}"
                                    class="group flex gap-x-3 rounded-lg p-3 text-sm leading-6 font-semibold transition-all
@@ -92,7 +92,7 @@
                             </li>
                             @endrole
                             @role('human')
-                                <li>
+                                {{-- <li>
                                     <a href="{{ route('mytickets') }}"
                                         class="group flex gap-x-3 rounded-lg p-3 text-sm leading-6 font-semibold transition-all
                                    {{ request()->routeIs('mytickets')
@@ -108,7 +108,7 @@
                                         <span
                                             class="ml-auto inline-flex items-center rounded-full bg-blue-900 px-2.5 py-0.5 text-xs font-bold text-blue-300">{{ $openTicketCount ?? 0 }}</span>
                                     </a>
-                                </li>
+                                </li> --}}
                             @endrole
                             @role('admin')
                                 <li>

@@ -50,6 +50,7 @@
                 <div class="flex-1">
                     <h3 class="text-sm font-semibold text-blue-400 mb-1">Tickets from
                         {{ optional($ticket->user->employee)->employee_name }}</h3>
+                    <p class="text-xs text-slate-400 leading-relaxed">Date : {{ $createdat }}
                     <p class="text-xs text-slate-400 leading-relaxed">Queue Number : {{ optional($ticket)->queue_number }}
                     </p>
                 </div>
@@ -178,7 +179,7 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                     </svg>
-                    <span>Priority Level</span>
+                    <span>Dificulty Level</span>
                     <span class="text-red-400">*</span>
                 </label>
                 <div class="grid grid-cols-3 gap-3">
@@ -318,7 +319,7 @@
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                     </svg>
-                    <span>Back</span>
+                    <span>Back to Dashboard</span>
                 </a>
 
                 @if ($ticket->status === 'Open')
