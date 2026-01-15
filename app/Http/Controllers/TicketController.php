@@ -238,10 +238,10 @@ class TicketController extends Controller
                 $request->date_to . ' 23:59:59',
             ]);
         }
-          else {
-        // default: hari ini
-        $query->whereDate('created_at', Carbon::today());
-    }
+    //       else {
+    //     // default: hari ini
+    //     $query->whereDate('created_at', Carbon::today());
+    // }
         return DataTables::eloquent($query)
             ->addColumn('employee_name', function ($ticket) {
                 return optional($ticket->user?->employee)->employee_name ?? '-';

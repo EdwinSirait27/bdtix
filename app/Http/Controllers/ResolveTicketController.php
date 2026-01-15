@@ -157,24 +157,20 @@ if ($search) {
 
                 return $showBtn . $reviewBtn;
             })
-            ->editColumn('created_at', function ($ticket) {
+           ->editColumn('created_at', function ($ticket) {
                 return optional($ticket->created_at)
                     ->timezone('Asia/Makassar')
-                    ->format('d-m-Y H:i');
+                    ->translatedFormat('d F Y H:i');
             })
-            ->editColumn('estimation', function ($ticket) {
-                return $ticket->estimation
-                    ? $ticket->estimation
+           ->editColumn('estimation', function ($ticket) {
+                return optional($ticket->estimation)
                     ->timezone('Asia/Makassar')
-                    ->format('d-m-Y H:i')
-                    : 'empty';
+                    ->translatedFormat('d F Y H:i');
             })
-            ->editColumn('finished', function ($ticket) {
-                return $ticket->finished
-                    ? $ticket->finished
+             ->editColumn('finished', function ($ticket) {
+                return optional($ticket->finished)
                     ->timezone('Asia/Makassar')
-                    ->format('d-m-Y H:i')
-                    : 'empty';
+                    ->translatedFormat('d F Y H:i');
             })
             ->rawColumns(['action'])
             ->make(true);

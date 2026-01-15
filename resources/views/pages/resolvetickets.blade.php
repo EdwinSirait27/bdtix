@@ -571,14 +571,20 @@
                                 <label for="dateFrom" class="text-xs text-slate-300">Date From</label>
 
                                 <input type="date" id="dateFrom" placeholder="YYYY-MM-DD"
-                                    class="px-3 py-2 bg-slate-600 border border-white/10 rounded-lg text-white
-                                    focus:outline-none focus:ring-2 focus:ring-cyan-500">
+                                   class="px-3 py-2 rounded w-40
+               bg-slate-600 text-white
+               placeholder-white
+               border border-slate-500
+               focus:outline-none focus:ring-2 focus:ring-slate-400">
                             </div>
                             <div class="flex flex-col gap-1">
                                 <label for="dateTo" class="text-xs text-slate-300">To</label>
                                 <input placeholder="YYYY-MM-DD" type="date" id="dateTo"
-                                    class="px-3 py-2 bg-slate-600 border border-white/10 rounded-lg text-white
-                                    focus:outline-none focus:ring-2 focus:ring-cyan-500">
+                                    class="px-3 py-2 rounded w-40
+               bg-slate-600 text-white
+               placeholder-white
+               border border-slate-500
+               focus:outline-none focus:ring-2 focus:ring-slate-400">
                             </div>
 
                             <div class="flex flex-col gap-1">
