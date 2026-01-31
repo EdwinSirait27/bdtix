@@ -163,6 +163,29 @@
             @enderror
         </div>
         <div>
+            <label for="executor_name" class="block text-sm font-semibold text-slate-300 mb-2 flex items-center space-x-2">
+                <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" />
+                </svg>
+                <span>Executor Name</span>
+                <span class="text-red-400">*</span>
+            </label>
+            <input type="text" id="executor_name" name="executor_name" placeholder="Example: Executor"
+                class="w-full px-4 py-3.5 bg-slate-800 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                value="{{ old('employee_name', optional($ticket->executor?->employee)->employee_name ?? '-') }}" disabled>
+            @error('title')
+                <p class="mt-2 text-sm text-red-400 flex items-center space-x-1">
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd"
+                            d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                            clip-rule="evenodd" />
+                    </svg>
+                    <span>{{ $message }}</span>
+                </p>
+            @enderror
+        </div>
+        <div>
             <label class="block text-sm font-semibold text-slate-300 mb-3 flex items-center space-x-2">
                 <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -304,7 +327,7 @@
                 </p>
             @enderror
         </div>
-        <div id="finished-wrapper" class="hidden">
+        {{-- <div id="finished-wrapper" class="hidden">
             <label for="finished" class="block text-sm font-semibold text-slate-300 mb-2 flex items-center space-x-2">
                 <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -318,6 +341,35 @@
             <input type="datetime-local" id="finished" name="finished"
                 value="{{ old('finished') ?? $ticket->finished }}"
                 class="w-full px-4 py-3.5 bg-slate-800 border border-slate-700 rounded-xl text-white">
+
+            @error('finished')
+                <p class="mt-2 text-sm text-red-400 flex items-center space-x-1">
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd"
+                            d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                            clip-rule="evenodd" />
+                    </svg>
+                    <span>{{ $message }}</span>
+                </p>
+            @enderror
+        </div> --}}
+         <div>
+            <label for="finished" class="block text-sm font-semibold text-slate-300 mb-2 flex items-center space-x-2">
+                <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M8 7V3m8 4V3M3 11h18M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+                <span>Finished</span>
+                <span class="text-red-400">*</span>
+            </label>
+
+
+            <input type="datetime-local" id="finished" name="finished"
+                value="{{ old('finished') ?? $ticket->finished }}"
+                class="w-full px-4 py-3.5 bg-slate-800 border border-slate-700 rounded-xl text-white">
+
+
+
 
             @error('finished')
                 <p class="mt-2 text-sm text-red-400 flex items-center space-x-1">
@@ -428,6 +480,20 @@
         <script>
             document.addEventListener('DOMContentLoaded', function() {
                 const estimationInput = document.getElementById('estimation');
+
+                flatpickr(estimationInput, {
+                    enableTime: true,
+                    dateFormat: "Y-m-d H:i",
+                    time_24hr: true,
+                    defaultDate: estimationInput.value || null,
+                    minDate: estimationInput.value ? null : "today",
+                    allowInput: true
+                });
+            });
+        </script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const estimationInput = document.getElementById('finished');
 
                 flatpickr(estimationInput, {
                     enableTime: true,

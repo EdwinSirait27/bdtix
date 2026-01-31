@@ -27,8 +27,9 @@ class dashboardController extends Controller
         $finishedtickettoyou = Tickets::whereNotNull('finished')
             ->where('executor_id', auth()->id())
             ->count();
-
         $onprogressticket = Tickets::where('status', 'Progress')->count();
+        $opentickets = Tickets::where('status', 'Open')->count();
+        $closedtickets = Tickets::where('status', 'Closed')->count();
 
         $closedticket = Tickets::whereNotNull('finished')->count();
 
@@ -64,6 +65,9 @@ class dashboardController extends Controller
             ->count();
         $onprogresstickethuman = Tickets::where('user_id', auth()->id())
             ->where('status', 'Progress')
+            ->count();
+        $closedtickethuman = Tickets::where('user_id', auth()->id())
+            ->where('status', 'Closed')
             ->count();
 
 
@@ -187,9 +191,6 @@ class dashboardController extends Controller
             ->pluck('priority')
             ->sort(fn($a, $b) => array_search($a, $order) <=> array_search($b, $order))
             ->values();
-
-
-
         // =========================
         // 📦 AGGREGATE EXECUTOR
         // =========================
@@ -223,14 +224,9 @@ class dashboardController extends Controller
             ];
         });
 
-
-
-
-
-
-
         return view('pages.dashboard', compact(
             'userhuman',
+            'closedtickets',
             'alltickethuman',
             'overduetickethuman',
             'todaystickethuman',
@@ -240,6 +236,7 @@ class dashboardController extends Controller
             'assignedtoyou',
             'todaysticket',
             'onprogressticket',
+            'opentickets',
             'closedticket',
             'overdueticket',
             'adminCount',
@@ -247,9 +244,15 @@ class dashboardController extends Controller
             'executors',
             'priorities',
             'categories',
+            'closedtickethuman',
             'executorStats'
         ));
     }
+    // testing
+// public function index(){
+//     $opentickets = Tickets::where('status','Open')->count();
+//     return view('pages.dashboard',compact('opentickets'));
+// }
     public function aboutUs()
     {
         return view('pages.about');
@@ -257,15 +260,17 @@ class dashboardController extends Controller
 
     public function getAllticketforadmins(Request $request)
     {
-        $query = Tickets::with('user.employee', 'user.employee.store')
+        $query = Tickets::with('user.employee', 'user.employee.store','executor.employee')
             ->select([
                 'id',
                 'user_id',
                 'queue_number',
                 'title',
                 'description',
+                'executor_id',
                 'category',
                 'priority',
+                'finished',
                 'status',
                 'created_at'
             ]);
@@ -289,6 +294,21 @@ class dashboardController extends Controller
         if ($request->filled('status')) {
             $query->where('status', $request->status);
         }
+        if ($request->status === 'On Progress') {
+            $query->where('status', 'On Progress');
+            }
+       if ($request->filteropen === 'Open') {
+    $query->where('status', 'Open');
+}
+       if ($request->filterprogress === 'Progress') {
+    $query->where('status', 'Progress');
+}
+       if ($request->filterclosed === 'Closed') {
+    $query->where('status', 'Closed');
+}
+       if ($request->filteroverdue === 'Overdue') {
+    $query->where('status', 'Overdue');
+}
 
         if ($request->filter === 'today') {
     $query->whereDate('created_at', Carbon::today());
@@ -318,6 +338,7 @@ class dashboardController extends Controller
         //     // default: hari ini
         //     $query->whereDate('created_at', Carbon::today());
         // }
+
         // =========================
         // FILTER: EMPLOYEE
         // =========================
@@ -328,12 +349,17 @@ class dashboardController extends Controller
         }
 
         return DataTables::eloquent($query)
+        ->addIndexColumn() 
             ->addColumn('employee_name', function ($ticket) {
                 return optional($ticket->user?->employee)->employee_name ?? '-';
             })
             ->addColumn('store_name', function ($ticket) {
                 return optional($ticket->user?->employee->store)->name ?? '-';
             })
+            ->addColumn('executor_name', function ($ticket) {
+    return optional($ticket->executor?->employee)->employee_name ?? '-';
+})
+
             ->orderColumn('employee_name', function ($query, $order) {
                 $query->join('users', 'users.id', '=', 'tickets.user_id')
                     ->join('employees', 'employees.id', '=', 'users.employee_id')
@@ -344,6 +370,12 @@ class dashboardController extends Controller
                     ->timezone('Asia/Makassar')
                     ->translatedFormat('d F Y H:i');
             })
+          ->editColumn('finished', function ($ticket) {
+    return $ticket->finished
+        ? $ticket->finished->timezone('Asia/Makassar')->translatedFormat('d F Y H:i')
+        : '-';
+})
+
             ->addColumn('action', function ($ticket) {
                 $idHashed = substr(hash('sha256', $ticket->id . env('APP_KEY')), 0, 8);
                 $employee = e($ticket->user->employee->employee_name ?? '-');

@@ -10,4 +10,4 @@ Artisan::command('inspire', function () {
 Schedule::command('tickets:mark-overdue')->everyMinute();
 Schedule::call(function () {
     app(AutoReviewService::class)->run();
-})->dailyAt('00:30');
+})->everyFiveMinutes();

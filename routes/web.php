@@ -42,6 +42,18 @@ Route::middleware('throttle:15,1')->group(function () {
 
 Route::middleware(['auth', 'role:admin|human|executor'])->group(function () {
     Route::get('/dashboard', [dashboardController::class, 'dashboardPage'])->name('dashboard');
+    // routes/web.php
+Route::get('/dashboard/filteropen', [dashboardController::class, 'dashboardPage'])
+    ->name('dashboard.filteropen');
+Route::get('/dashboard/filterprogress', [dashboardController::class, 'dashboardPage'])
+    ->name('dashboard.filterprogress');
+Route::get('/dashboard/filteroverdue', [dashboardController::class, 'dashboardPage'])
+    ->name('dashboard.filteroverdue');
+Route::get('/dashboard/filterclosed', [dashboardController::class, 'dashboardPage'])
+    ->name('dashboard.filterclosed');
+Route::get('/dashboard/filteronprogress', [dashboardController::class, 'dashboardPage'])
+    ->name('dashboard.filteronprogress');
+
     Route::get('/editopenticket/{hash}', [dashboardController::class, 'edit'])->name('editopenticket');
     Route::get('/showopenticket/{hash}', [dashboardController::class, 'show'])->name('showopenticket');
     Route::post('/logout', [AuthController::class, 'logout'])

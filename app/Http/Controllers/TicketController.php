@@ -243,6 +243,8 @@ class TicketController extends Controller
     //     $query->whereDate('created_at', Carbon::today());
     // }
         return DataTables::eloquent($query)
+        ->addIndexColumn() 
+
             ->addColumn('employee_name', function ($ticket) {
                 return optional($ticket->user?->employee)->employee_name ?? '-';
             })

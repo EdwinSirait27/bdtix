@@ -468,34 +468,26 @@
         <div class="space-y-4 md:space-y-6">
             {{-- Statistics Cards --}}
             <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
+                {{-- <a href="{{ route('dashboard.filtertoday', ['filter' => 'Open']) }}" class="block"> --}}
+                    <a href="{{ route('dashboard.filteropen', ['filteropen' => 'Open']) }}" class="block">
+
                 <div
                     class="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl md:rounded-2xl p-4 md:p-6 text-white shadow-lg">
                     <div class="flex items-center justify-between mb-2">
-                        <h3 class="text-xs md:text-sm font-semibold opacity-90">Open</h3>
+                        <h3 class="text-xs md:text-sm font-semibold opacity-90">All Open Tickets</h3>
                         <svg class="w-6 h-6 md:w-8 md:h-8 opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z">
                             </path>
                         </svg>
                     </div>
-                    <p class="text-2xl md:text-3xl font-bold mb-1">{{ $todaysticket ?? 0 }}</p>
-                    <p class="text-blue-100 text-xs">Todays's Unchecked Tickets</p>
+                    <p class="text-2xl md:text-3xl font-bold mb-1">{{ $opentickets ?? 0 }}</p>
+                    <p class="text-blue-100 text-xs">Open Tickets</p>
                 </div>
-               {{-- <div id="todayBox"
-    class="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl md:rounded-2xl p-4 md:p-6 text-white shadow-lg cursor-pointer hover:opacity-90 transition">
-    
-    <div class="flex items-center justify-between mb-2">
-        <h3 class="text-xs md:text-sm font-semibold opacity-90">Open</h3>
-        <svg class="w-6 h-6 md:w-8 md:h-8 opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
-        </svg>
-    </div>
+            </a>
+              
 
-    <p class="text-2xl md:text-3xl font-bold mb-1">{{ $todaysticket ?? 0 }}</p>
-    <p class="text-blue-100 text-xs">Today's Unchecked Tickets</p>
-</div> --}}
-
+                    <a href="{{ route('dashboard.filterprogress', ['filterprogress' => 'Progress']) }}" class="block">
 
                 <div
                     class="bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-xl md:rounded-2xl p-4 md:p-6 text-white shadow-lg">
@@ -509,6 +501,9 @@
                     <p class="text-2xl md:text-3xl font-bold mb-1">{{ $onprogressticket ?? 0 }}</p>
                     <p class="text-emerald-100 text-xs">On Progress Tickets</p>
                 </div>
+            </a>
+                    <a href="{{ route('dashboard.filterclosed', ['filterclosed' => 'Closed']) }}" class="block">
+
                 <div
                     class="bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl md:rounded-2xl p-4 md:p-6 text-white shadow-lg">
                     <div class="flex items-center justify-between mb-2">
@@ -518,9 +513,12 @@
                                 d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path>
                         </svg>
                     </div>
-                    <p class="text-2xl md:text-3xl font-bold mb-1">{{ $closedticket ?? 0 }}</p>
+                    <p class="text-2xl md:text-3xl font-bold mb-1">{{ $closedtickets ?? 0 }}</p>
                     <p class="text-purple-100 text-xs">Closed Tickets</p>
                 </div>
+            </a>
+                    <a href="{{ route('dashboard.filteroverdue', ['filteroverdue' => 'Overdue']) }}" class="block">
+    
                 <div
                     class="bg-gradient-to-br from-red-500 to-red-600 rounded-xl md:rounded-2xl p-4 md:p-6 text-white shadow-lg">
                     <div class="flex items-center justify-between mb-2">
@@ -534,6 +532,8 @@
                     <p class="text-2xl md:text-3xl font-bold mb-1">{{ $overdueticket ?? 0 }}</p>
                     <p class="text-orange-100 text-xs">Overdue's Ticket</p>
                 </div>
+            </a>
+
             </div>
             <div class="space-y-4">
                 <div class="bg-white/3 p-4 rounded-lg shadow-sm">
@@ -813,13 +813,16 @@
                                     <table class="min-w-full divide-y divide-slate-700" id="users-table">
                                         <thead class="bg-slate-900">
                                             <tr>
-                                                <th class="text-center">Queue</th>
+                                                <th class="text-center">No.</th>
                                                 <th class="text-center">Users</th>
                                                 <th class="text-center">Location</th>
+                                                <th class="text-center">Executor</th>
                                                 <th class="text-center">Title</th>
                                                 <th class="text-center">Category</th>
                                                 <th class="text-center">Dificulty</th>
                                                 <th class="text-center">Created</th>
+                                                <th class="text-center">Queue</th>
+                                                <th class="text-center">Finished</th>
                                                 <th class="text-center">Status</th>
                                                 <th class="text-center">Action</th>
 
@@ -1056,6 +1059,18 @@
                         toastr.error(@json(session('error')));
                     @endif
                 </script>
+                <script src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script>
+    const urlParams  = new URLSearchParams(window.location.search);
+    const filterOpen = urlParams.get('filteropen');
+    const filterProgress = urlParams.get('filterprogress');
+    const filterOverdue = urlParams.get('filteroverdue');
+    const filterClosed = urlParams.get('filterclosed');
+</script>
+
+
                 <script>
                     $(function() {
                         var table = $('#users-table').DataTable({
@@ -1074,18 +1089,20 @@
                                     d.priority = $('#filterPriority').val();
                                     d.date_from = $('#dateFrom').val();
                                     d.date_to = $('#dateTo').val();
+                                     d.filteropen = filterOpen;
+                                     d.filterprogress = filterProgress;
+                                     d.filteroverdue = filterOverdue;
+                                     d.filterclosed = filterClosed;
                                 }
                             },
                             columnDefs: [{
                                 targets: '_all',
                                 className: 'dt-center'
                             }],
-                            columns: [{
-                                    data: 'queue_number',
-                                    name: 'queue_number',
-                                    width: '5%',
-                                    className: 'text-center'
-                                },
+                            columns: [
+                                { data: 'DT_RowIndex', name: 'DT_RowIndex', width: '5%', orderable: false, searchable: false },
+                                 
+                          
                                 {
                                     data: 'employee_name',
                                     name: 'employees_tables.employee_name',
@@ -1103,6 +1120,12 @@
                                     searchable: false
                                 },
                                 {
+                                    data: 'executor_name',
+                                    name: 'executor_name',
+                                    width: '15%',
+                                    className: 'text-center'
+                                },
+                                {
                                     data: 'title',
                                     name: 'title',
                                     width: '15%',
@@ -1111,7 +1134,7 @@
                                 {
                                     data: 'category',
                                     name: 'category',
-                                    width: '15%',
+                                    width: '10%',
                                     className: 'text-center'
                                 },
                                 {
@@ -1131,11 +1154,22 @@
                                     width: '20%',
                                     className: 'text-center'
                                 },
-
+                                  {
+                                    data: 'queue_number',
+                                    name: 'queue_number',
+                                    width: '5%',
+                                    className: 'text-center'
+                                },
+{
+                                    data: 'finished',
+                                    name: 'finished',
+                                    width: '20%',
+                                    className: 'text-center'
+                                },
                                 {
                                     data: 'status',
                                     name: 'status',
-                                    width: '15%',
+                                    width: '10%',
                                     className: 'text-center',
                                     render: function(data, type, row) {
                                         if (!data) return '-';
@@ -1184,7 +1218,34 @@
                                 }
                             },
                             pageLength: 10,
-                            dom: '<"flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-4"<"length-wrapper"l><"info-wrapper"i>>rtip',
+                            
+    dom:
+    '<"flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-4"' +
+        '<"length-wrapper flex items-center gap-2"lB>' +
+        '<"info-wrapper"i>' +
+    '>' +
+    'rtip',
+buttons: [
+    {
+        extend: 'excelHtml5',
+        text: 'Export Excel',
+        filename: function () {
+            let d = new Date();
+            let yyyy = d.getFullYear();
+            let mm = String(d.getMonth() + 1).padStart(2, '0');
+            let dd = String(d.getDate()).padStart(2, '0');
+            return `IT Ticket Export_${yyyy}-${mm}-${dd}`;
+        },
+        title: 'Ticket Export',
+        className: 'px-3 py-2 bg-green-600 text-white rounded hover:bg-green-700 text-sm',
+        exportOptions: {
+            columns: ':not(:last-child)'
+        }
+    }
+],
+
+
+
                             initComplete: function() {
                                 $('#loading-state').hide();
                                 $('#users-table-wrapper').fadeIn();
@@ -1223,7 +1284,7 @@
                         $('#table-search').on('keyup', function() {
                             table.search(this.value).draw();
                         });
-                       
+
 
 
                         // Function to render mobile cards
@@ -1277,6 +1338,14 @@
                                         <div class="user-card-value">${ticket.created_at || 'N/A'}</div>
                                     </div>
                                     <div class="user-card-field">
+                                        <div class="user-card-label">Executor</div>
+                                        <div class="user-card-value">${ticket.executor_employee_name || 'N/A'}</div>
+                                    </div>
+                                        <div class="user-card-field">
+                                            <div class="user-card-label">Finished</div>
+                                            <div class="user-card-value">${ticket.finished || 'N/A'}</div>
+                                        </div>
+                                    <div class="user-card-field">
                                     <div class="user-card-label">Status</div>
                                     <div class="user-card-value">
                                     ${(() => {
@@ -1289,8 +1358,8 @@
                                         else if (status === 'Closed') cls = 'bg-green-600';
                                     
                                         return `
-                                                                                                                                                                            <span class="inline-flex items-center gap-2 px-3 py-1 text-xs font-semibold text-white rounded-full ${cls}">
-                                                                                                                                                                            <span class="w-2 h-2 rounded-full bg-white"></span>${status}</span>`;
+                                                                                                                                                                                            <span class="inline-flex items-center gap-2 px-3 py-1 text-xs font-semibold text-white rounded-full ${cls}">
+                                                                                                                                                                                            <span class="w-2 h-2 rounded-full bg-white"></span>${status}</span>`;
                                     })()}
                                 </div>
                             </div>
@@ -1376,7 +1445,7 @@
                                 d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                         </svg>
                     </div>
-                    <p class="text-2xl md:text-3xl font-bold mb-1">{{ $onprogressticket ?? 0 }}</p>
+                    <p class="text-2xl md:text-3xl font-bold mb-1">{{ $onprogresstickethuman ?? 0 }}</p>
                     <p class="text-emerald-100 text-xs">My On Progress Tickets</p>
                 </div>
                 <div
@@ -1390,7 +1459,7 @@
                             </path>
                         </svg>
                     </div>
-                    <p class="text-2xl md:text-3xl font-bold mb-1">{{ $closedticket ?? 0 }}</p>
+                    <p class="text-2xl md:text-3xl font-bold mb-1">{{ $closedtickethuman ?? 0 }}</p>
                     <p class="text-purple-100 text-xs">My Closed Tickets</p>
                 </div>
                 <div
@@ -1524,12 +1593,14 @@
                                 <table class="min-w-full divide-y divide-slate-700" id="users-table">
                                     <thead class="bg-slate-900">
                                         <tr>
-                                            <th class="text-center">Queue</th>
+                                            <th class="text-center">No.</th>
                                             <th class="text-center">Title</th>
                                             <th class="text-center">Categories</th>
                                             <th class="text-center">Executor</th>
                                             <th class="text-center">Priority</th>
                                             <th class="text-center">Created</th>
+                                            <th class="text-center">Queue</th>
+
                                             <th class="text-center">Estimation</th>
                                             <th class="text-center">Finished</th>
                                             <th class="text-center">Status</th>
@@ -1683,11 +1754,10 @@
                             targets: '_all',
                             className: 'dt-center'
                         }],
-                        columns: [{
-                                data: 'queue_number',
-                                name: 'queue_number',
-                                width: '5%'
-                            },
+                        columns: [
+                                { data: 'DT_RowIndex', name: 'DT_RowIndex', width: '5%', orderable: false, searchable: false },
+                            
+                       
 
                             {
                                 data: 'title',
@@ -1723,6 +1793,11 @@
                                 render: function(data) {
                                     return data ? data : 'empty';
                                 }
+                            },
+                             {
+                                data: 'queue_number',
+                                name: 'queue_number',
+                                width: '5%'
                             },
                             {
                                 data: 'estimation',
@@ -1762,10 +1837,10 @@
                                         badgeClass = 'bg-red-500 text-black';
                                     }
                                     return `
-            <span class="px-3 py-1 rounded-full text-xs font-semibold ${badgeClass}">
-                ${data}
-            </span>
-        `;
+                                       <span class="px-3 py-1 rounded-full text-xs font-semibold ${badgeClass}">
+                                   ${data}
+                                   </span>
+                                   `;
                                 }
                             },
 
@@ -1900,8 +1975,8 @@
                                         else if (status === 'Overdue') cls = 'bg-red-500';
                                         else if (status === 'Closed') cls = 'bg-green-600';
                                         return `
-                                                            <span class="inline-flex items-center gap-2 px-3 py-1 text-xs font-semibold text-white rounded-full ${cls}">
-                                                            <span class="w-2 h-2 rounded-full bg-white"></span>${status}</span>`;
+                                                                        <span class="inline-flex items-center gap-2 px-3 py-1 text-xs font-semibold text-white rounded-full ${cls}">
+                                                                        <span class="w-2 h-2 rounded-full bg-white"></span>${status}</span>`;
                                     })()}
                                 </div>
                             </div>

@@ -42,19 +42,33 @@ class TicketOverdueService
         foreach ($tickets as $ticket) {
             $createdAt = Carbon::parse($ticket->created_at);
             // tentukan batas waktu berdasarkan priority
-            switch (strtolower($ticket->priority)) {
-                case 'Low':
-                    $dueTime = $createdAt->copy()->addHour(); // 1 jam
-                    break;
-                case 'Medium':
-                    $dueTime = $createdAt->copy()->addHours(12); // 12 jam
-                    break;
-                case 'High':
-                    $dueTime = $createdAt->copy()->addWeek(); // 1 minggu
-                    break;
-                default:
-                    continue 2; // skip kalau priority tidak valid
-            }
+            // switch ($ticket->priority) {
+            //     case 'Low':
+            //         $dueTime = $createdAt->copy()->addHour(); 
+            //         break;
+            //     case 'Medium':
+            //         $dueTime = $createdAt->copy()->addHours(12);
+            //         break;
+            //     case 'High':
+            //         $dueTime = $createdAt->copy()->addWeek(); // 1 minggu
+            //         break;
+            //     default:
+            //         continue 2; // skip kalau priority tidak valid
+            // }
+            switch ($ticket->priority) {
+    case 'Low':
+        $dueTime = $createdAt->copy()->addMinutes(3);
+        break;
+
+    case 'Medium':
+        $dueTime = $createdAt->copy()->addMinutes(5);
+        break;
+    case 'High':
+        $dueTime = $createdAt->copy()->addMinutes(7);
+        break;
+    default:
+        continue 2; // skip kalau priority tidak valid
+}
             if ($now->greaterThan($dueTime)) {
                 $oldStatus = $ticket->status;
                 $ticket->update([
