@@ -416,26 +416,27 @@
             <div
                 class="bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-xl md:rounded-2xl p-4 md:p-6 text-white shadow-lg">
                 <div class="flex items-center justify-between mb-2">
-                    <h3 class="text-xs md:text-sm font-semibold opacity-90">Active Today</h3>
+                    <h3 class="text-xs md:text-sm font-semibold opacity-90">Yang Maha Besar</h3>
                     <svg class="w-6 h-6 md:w-8 md:h-8 opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                     </svg>
                 </div>
-                <p class="text-2xl md:text-3xl font-bold mb-1">24</p>
-                <p class="text-emerald-100 text-xs">Users online</p>
+                <p class="text-2xl md:text-xl font-bold mb-1">Christopher Edwin Sirait, S.Kom</p>
+                <p class="text-emerald-100 text-xs">~bukan sarjana kaleng"</p>
             </div>
             <div
                 class="bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl md:rounded-2xl p-4 md:p-6 text-white shadow-lg">
                 <div class="flex items-center justify-between mb-2">
-                    <h3 class="text-xs md:text-sm font-semibold opacity-90">New This Week</h3>
+                    <h3 class="text-xs md:text-sm font-semibold opacity-90">1 Thessalonians 5:17</h3>
                     <svg class="w-6 h-6 md:w-8 md:h-8 opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path>
-                    </svg>
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+        d="M12 2v20M7 7h10" />
+</svg>
+
                 </div>
-                <p class="text-2xl md:text-3xl font-bold mb-1">8</p>
-                <p class="text-purple-100 text-xs">New registrations</p>
+                <p class="text-2xl md:text-3xl font-bold mb-1">pray without ceasing</p>
+                <p class="text-purple-100 text-xs">Christ is King!</p>
             </div>
             <div
                 class="bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl md:rounded-2xl p-4 md:p-6 text-white shadow-lg">

@@ -160,14 +160,14 @@
                     <p class="text-sm text-slate-500 italic">No comment provided</p>
                 @endif
             </div>
-        {{-- Back Button --}}
-        <div class="flex justify-end">
-            <a href="{{ route('dashboard') }}"
-                class="inline-flex items-center px-5 py-2.5 rounded-xl
+            {{-- Back Button --}}
+            <div class="flex justify-end">
+                <a href="{{ route('dashboard') }}"
+                    class="inline-flex items-center px-5 py-2.5 rounded-xl
                   bg-slate-200 dark:bg-slate-700 text-slate-800 dark:text-white
                   hover:bg-slate-300 dark:hover:bg-slate-600 transition">
-                Back to Dashboard
-            </a>
-        </div>
+                    Back to Dashboard
+                </a>
+            </div>
     </div>
 @endsection

@@ -19,7 +19,8 @@ class ProfileController extends Controller
             $openticket = Tickets::where('user_id', auth()->id())
             ->where('status', 'Open')
             ->count();
+            $handled = Tickets::where('executor_id',auth()->id())->count();
 
-        return view('pages.profile',compact('allticket','user','overdueticket','openticket'));
+        return view('pages.profile',compact('allticket','user','overdueticket','openticket','handled'));
     }
 }

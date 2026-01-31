@@ -379,7 +379,7 @@ class dashboardController extends Controller
             ->addColumn('action', function ($ticket) {
                 $idHashed = substr(hash('sha256', $ticket->id . env('APP_KEY')), 0, 8);
                 $employee = e($ticket->user->employee->employee_name ?? '-');
-                $isClosed = strtolower($ticket->status) === 'closed';
+                $isClosed = $ticket->status === 'Closed';
                 // =========================
                 // CHECK 1 MENIT DARICREATED_AT
                 // =========================

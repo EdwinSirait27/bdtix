@@ -8,7 +8,59 @@ use Illuminate\Support\Facades\Log;
 
 class TicketOverdueService
 {
-    // public function markOverdue(): int
+   
+public function markOverdue(): int
+{
+    $now = Carbon::now();
+    $count = 0;
+    Tickets::whereIn('status', ['Open', 'Progress'])
+        ->whereNotNull('priority')
+        ->chunk(100, function ($tickets) use ($now, &$count) {
+
+            foreach ($tickets as $ticket) {
+                $createdAt = $ticket->created_at;
+
+                switch ($ticket->priority) {
+                    case 'Low':
+                        $dueTime = $createdAt->copy()->addMinutes(3);
+                        break;
+
+                    case 'Medium':
+                        $dueTime = $createdAt->copy()->addMinutes(5);
+                        break;
+
+                    case 'High':
+                        $dueTime = $createdAt->copy()->addMinutes(7);
+                        break;
+
+                    default:
+                        continue;
+                }
+
+                if ($now->greaterThan($dueTime)) {
+                    $oldStatus = $ticket->status;
+
+                    $ticket->update([
+                        'status' => 'Overdue',
+                    ]);
+
+                    Log::info('TICKET_MARKED_OVERDUE', [
+                        'ticket_id'  => $ticket->id,
+                        'priority'   => $ticket->priority,
+                        'old_status' => $oldStatus,
+                        'created_at' => $createdAt->toDateTimeString(),
+                        'due_time'   => $dueTime->toDateTimeString(),
+                        'now'        => $now->toDateTimeString(),
+                    ]);
+
+                    $count++;
+                }
+            }
+        });
+
+    return $count;
+}
+ // public function markOverdue(): int
     // {
     //     $now = Carbon::now();
     //     $tickets = Tickets::whereIn('status', ['Open', 'Progress', 'Closed'])
@@ -31,17 +83,50 @@ class TicketOverdueService
 
     //     return $tickets->count();
     // }
-    public function markOverdue(): int
-    {
-        $now = Carbon::now();
+//     public function markOverdue(): int
+//     {
+//         $now = Carbon::now();
 
-        $tickets = Tickets::whereIn('status', ['Open', 'Progress'])
-            ->whereNotNull('priority')
-            ->get();
-        $count = 0;
-        foreach ($tickets as $ticket) {
-            $createdAt = Carbon::parse($ticket->created_at);
-            // tentukan batas waktu berdasarkan priority
+//         $tickets = Tickets::whereIn('status', ['Open', 'Progress'])
+//             ->whereNotNull('priority')
+//             ->get();
+//         $count = 0;
+//         foreach ($tickets as $ticket) {
+//             $createdAt = Carbon::parse($ticket->created_at);
+            
+//             switch ($ticket->priority) {
+//     case 'Low':
+//         $dueTime = $createdAt->copy()->addMinutes(3);
+//         break;
+
+//     case 'Medium':
+//         $dueTime = $createdAt->copy()->addMinutes(5);
+//         break;
+//     case 'High':
+//         $dueTime = $createdAt->copy()->addMinutes(7);
+//         break;
+//     default:
+//         continue 2; // skip kalau priority tidak valid
+// }
+//             if ($now->greaterThan($dueTime)) {
+//                 $oldStatus = $ticket->status;
+//                 $ticket->update([
+//                     'status' => 'Overdue',
+//                 ]);
+//                 Log::info('TICKET_MARKED_OVERDUE', [
+//                     'ticket_id'  => $ticket->id,
+//                     'priority'   => $ticket->priority,
+//                     'old_status' => $oldStatus,
+//                     'created_at' => $createdAt->toDateTimeString(),
+//                     'due_time'   => $dueTime->toDateTimeString(),
+//                     'now'        => $now->toDateTimeString(),
+//                 ]);
+//                 $count++;
+//             }
+//         }
+//         return $count;
+//     }
+    // tentukan batas waktu berdasarkan priority
             // switch ($ticket->priority) {
             //     case 'Low':
             //         $dueTime = $createdAt->copy()->addHour(); 
@@ -55,36 +140,4 @@ class TicketOverdueService
             //     default:
             //         continue 2; // skip kalau priority tidak valid
             // }
-            switch ($ticket->priority) {
-    case 'Low':
-        $dueTime = $createdAt->copy()->addMinutes(3);
-        break;
-
-    case 'Medium':
-        $dueTime = $createdAt->copy()->addMinutes(5);
-        break;
-    case 'High':
-        $dueTime = $createdAt->copy()->addMinutes(7);
-        break;
-    default:
-        continue 2; // skip kalau priority tidak valid
-}
-            if ($now->greaterThan($dueTime)) {
-                $oldStatus = $ticket->status;
-                $ticket->update([
-                    'status' => 'Overdue',
-                ]);
-                Log::info('TICKET_MARKED_OVERDUE', [
-                    'ticket_id'  => $ticket->id,
-                    'priority'   => $ticket->priority,
-                    'old_status' => $oldStatus,
-                    'created_at' => $createdAt->toDateTimeString(),
-                    'due_time'   => $dueTime->toDateTimeString(),
-                    'now'        => $now->toDateTimeString(),
-                ]);
-                $count++;
-            }
-        }
-        return $count;
-    }
 }

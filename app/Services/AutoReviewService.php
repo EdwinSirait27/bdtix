@@ -11,10 +11,9 @@ class AutoReviewService
 {
     public function run(): int
     {
-        $tickets = Tickets::whereIn('status', ['Closed'])
-            ->whereNull('review') // belum ada review
-            ->whereNotNull('finished') // harus ada datetime patokan
-            ->where('finished', '<=', Carbon::now()->subDay()) // finished + 1 hari
+        $tickets = Tickets::where('status','Closed')
+            ->whereNull('review') 
+            ->where('finished', '<=', Carbon::now()->subDay())
             ->get();
 
         foreach ($tickets as $ticket) {

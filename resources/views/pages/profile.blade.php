@@ -16,7 +16,7 @@
                 <div class="relative">
                     <div
                         class="w-20 h-20 rounded-2xl bg-gradient-to-br from-blue-600 to-cyan-600 shadow-lg shadow-blue-500/30 flex items-center justify-center text-2xl font-bold text-white">
-                        {{ strtoupper(substr(Auth::user()->Employee->employee_name ?? 'U', 0, 2)) }}
+                        {{ strtoupper(substr(Auth::user()->employee->employee_name ?? 'U', 0, 2)) }}
                     </div>
                     <div
                         class="absolute -bottom-1 -right-1 w-6 h-6 bg-green-500 rounded-full border-3 border-slate-900 flex items-center justify-center">
@@ -29,12 +29,16 @@
                 <div class="flex-1">
                     <h2 class="text-xl font-bold text-white">{{ Auth::user()->Employee->employee_name ?? 'User Name' }}</h2>
                     <p class="text-sm text-slate-400 mt-0.5">Position :
-                        {{ Auth::user()->Employee->position->name ?? 'user@company.com' }}</p>
+                        {{ Auth::user()->Employee->position->name ?? 'Edwgans' }}</p>
                     <div class="flex items-center space-x-2 mt-2">
-                        <span
+                        {{-- <span
                             class="px-3 py-1 bg-blue-500/20 text-blue-400 text-xs font-semibold rounded-lg border border-blue-500/30">
-                            {{ Auth::user()->role ?? 'User' }}
-                        </span>
+                            {{ Auth::user()->roles ?? 'Edwin Sirait' }}
+                        </span> --}}
+                        <span class="px-3 py-1 bg-blue-500/20 text-blue-400 text-xs font-semibold rounded-lg border border-blue-500/30">
+    {{ Auth::user()->getRoleNames()->join(', ') }}
+</span>
+
                         <span
                             class="px-3 py-1 bg-green-500/20 text-green-400 text-xs font-semibold rounded-lg border border-green-500/30">
                             Active
@@ -48,10 +52,20 @@
         </div>
         {{-- Stats Cards --}}
         <div class="grid grid-cols-3 gap-3">
+    @role('admin|executor')
+
+            <div class="bg-slate-800/50 backdrop-blur-sm rounded-xl p-4 border border-slate-700">
+                <div class="text-2xl font-bold text-white">{{$handled ?? 0}}</div>
+                <div class="text-xs text-slate-400 mt-1">Tickets handled by you</div>
+            </div>
+            @endrole
+    @role('human')
             <div class="bg-slate-800/50 backdrop-blur-sm rounded-xl p-4 border border-slate-700">
                 <div class="text-2xl font-bold text-white">{{$allticket ?? 0}}</div>
                 <div class="text-xs text-slate-400 mt-1">Total Tickets</div>
             </div>
+    @endrole
+
             <div class="bg-slate-800/50 backdrop-blur-sm rounded-xl p-4 border border-slate-700">
                 <div class="text-2xl font-bold text-blue-400">{{$overdueticket ?? 0}}</div>
                 <div class="text-xs text-slate-400 mt-1">Overdue's Ticket</div>
