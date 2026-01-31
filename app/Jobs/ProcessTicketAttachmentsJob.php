@@ -64,8 +64,7 @@ class ProcessTicketAttachmentsJob implements ShouldQueue
                     continue;
                 }
 
-                // $content  = Storage::get($file['path']);
-                // $filename = time() . '_' . Str::slug($file['name']);
+              
 $originalName = pathinfo($file['name'], PATHINFO_FILENAME);
 // $extension    = pathinfo($file['name'], PATHINFO_EXTENSION);
 $extension = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
@@ -73,7 +72,7 @@ $filename = time() . '_' . Str::slug($originalName) . '.' . $extension;
                 NextcloudService::upload(
     $basePath,
     $filename,
-    Storage::path($file['path']), // 🔥 BUKAN Storage::get
+    Storage::path($file['path']), 
     $file['mime']
 );
 

@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Tickets;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
+use App\Jobs\SendOverdueTicketWhatsapp;
 
 class TicketOverdueService
 {
@@ -36,14 +37,13 @@ public function markOverdue(): int
                     default:
                         continue;
                 }
-
                 if ($now->greaterThan($dueTime)) {
                     $oldStatus = $ticket->status;
-
                     $ticket->update([
                         'status' => 'Overdue',
                     ]);
-
+SendOverdueTicketWhatsapp::dispatch($ticket->id)
+                        ->onQueue('whatsappoverdue');
                     Log::info('TICKET_MARKED_OVERDUE', [
                         'ticket_id'  => $ticket->id,
                         'priority'   => $ticket->priority,
