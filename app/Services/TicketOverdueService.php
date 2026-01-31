@@ -22,21 +22,18 @@ public function markOverdue(): int
                 $createdAt = $ticket->created_at;
 
                 switch ($ticket->priority) {
-                    case 'Low':
-                        $dueTime = $createdAt->copy()->addMinutes(3);
-                        break;
-
-                    case 'Medium':
-                        $dueTime = $createdAt->copy()->addMinutes(5);
-                        break;
-
-                    case 'High':
-                        $dueTime = $createdAt->copy()->addMinutes(7);
-                        break;
-
-                    default:
-                        continue;
-                }
+                case 'Low':
+                    $dueTime = $createdAt->copy()->addHour(); 
+                    break;
+                case 'Medium':
+                    $dueTime = $createdAt->copy()->addHours(12);
+                    break;
+                case 'High':
+                    $dueTime = $createdAt->copy()->addWeek(); // 1 minggu
+                    break;
+                default:
+                    continue 2; // skip kalau priority tidak valid
+            }
                 if ($now->greaterThan($dueTime)) {
                     $oldStatus = $ticket->status;
                     $ticket->update([

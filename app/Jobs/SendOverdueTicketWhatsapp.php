@@ -50,10 +50,7 @@ $ticket = Tickets::with('executor.employee')
         $employee = $user?->employee;
         $store = $employee?->store;
         $phoneNumber  = $employee->telp_number ?? '-';
-        // $progressAt  = $ticket->progressed_at ?? '-';
-    //    $progress = optional($ticket->progressed_at)
-    //         ->timezone('Asia/Makassar')
-    //         ->format('d-m-Y H:i');
+       
 $estimation = $ticket->estimation
     ? $ticket->estimation->timezone('Asia/Makassar')->format('d-m-Y H:i')
     : '-';
@@ -71,7 +68,7 @@ $estimation = $ticket->estimation
             "Location: {$store->name}",
             "Phone Number: {$phoneNumber}",
             "Title: {$ticket->title}",
-            "Priority: {$priorities}",
+            "Dificulty: {$priorities}",
             "Executor: {$executorName}",
            "Progress: " . (
     $ticket->progressed_at

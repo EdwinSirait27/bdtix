@@ -695,7 +695,7 @@ class dashboardController extends Controller
                 "Phone: {$phoneNumber}\n" .
                 "Title: {$ticket->title}\n" .
                 "Category: {$ticket->category}\n" .
-                "Priority: {$ticket->priority}\n" .
+                "Dificulty: {$ticket->priority}\n" .
                 "Executor: {$executorName}\n" .
                 "Notes IT: {$ticket->notes_executor}\n" .
                 "Estimation: {$estimationDate}\n" .
