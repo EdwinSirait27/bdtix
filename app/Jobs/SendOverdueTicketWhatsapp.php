@@ -51,9 +51,9 @@ $ticket = Tickets::with('executor.employee')
         $store = $employee?->store;
         $phoneNumber  = $employee->telp_number ?? '-';
         // $progressAt  = $ticket->progressed_at ?? '-';
-        $progressAt = $ticket->progressed_at
-    ? $ticket->progressed_at->timezone('Asia/Makassar')->format('d-m-Y H:i')
-    : '-';
+    //    $progress = optional($ticket->progressed_at)
+    //         ->timezone('Asia/Makassar')
+    //         ->format('d-m-Y H:i');
 $estimation = $ticket->estimation
     ? $ticket->estimation->timezone('Asia/Makassar')->format('d-m-Y H:i')
     : '-';
@@ -63,7 +63,6 @@ $estimation = $ticket->estimation
             ->timezone('Asia/Makassar')
             ->format('d-m-Y H:i');
         $executorName = $ticket->executor?->employee?->employee_name ?? '-';
-
         $message = implode("\n", [
             "WARNING TICKET OVERDUE ALERT",
             "Queue: {$ticket->queue_number}",
@@ -74,11 +73,15 @@ $estimation = $ticket->estimation
             "Title: {$ticket->title}",
             "Priority: {$priorities}",
             "Executor: {$executorName}",
-            "Progress: {$progressAt}",
+           "Progress: " . (
+    $ticket->progressed_at
+        ? $ticket->progressed_at->timezone('Asia/Makassar')->format('d-m-Y H:i')
+        : '-'
+),
             "Notes IT: {$notesit}",
             "Estimation: {$estimation}",
             "Ticket Link: {$adminUrl}",
-            "ayo dihajar tim!!!.",
+            "ayo dihajar tim testing!!!.",
         ]);
         Http::timeout(10)->post(
             'http://127.0.0.1:3000/send-message',
