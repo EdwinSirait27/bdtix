@@ -24,7 +24,10 @@ class SendOverdueTicketWhatsapp implements ShouldQueue
             'ticket_id' => $this->ticketId,
         ]);
 
-        $ticket = Tickets::find($this->ticketId);
+        // $ticket = Tickets::find($this->ticketId);
+        $ticket = Tickets::with([
+    'executor.employee',
+])->find($this->ticketId);
 
         if (! $ticket || $ticket->status !== 'Overdue') {
             Log::warning('WA_OVERDUE_JOB_SKIPPED', [
@@ -43,13 +46,18 @@ class SendOverdueTicketWhatsapp implements ShouldQueue
         $employee = $user?->employee;
         $store = $employee?->store;
         $phoneNumber  = $employee->telp_number ?? '-';
-        $progressAt  = $ticket->progressed_at ?? '-';
+        // $progressAt  = $ticket->progressed_at ?? '-';
+        $progressAt = $ticket->progressed_at
+    ? $ticket->progressed_at->timezone('Asia/Makassar')->format('d-m-Y H:i')
+    : '-';
+
         $priorities = $ticket->priority ?? '-';
         $notesit = $ticket->notes_executor ?? '-';
         $createdAt = optional($ticket->created_at)
             ->timezone('Asia/Makassar')
             ->format('d-m-Y H:i');
-        $executorName = optional($ticket->executor?->employee)->employee_name ?? '-';
+        $executorName = $ticket->executor?->employee?->employee_name ?? '-';
+
         $message = implode("\n", [
             "WARNING TICKET OVERDUE ALERT",
             "Queue: {$ticket->queue_number}",
