@@ -43,14 +43,13 @@ class SendOverdueTicketWhatsapp implements ShouldQueue
         $employee = $user?->employee;
         $store = $employee?->store;
         $phoneNumber  = $employee->telp_number ?? '-';
-        $progressAt  = $ticket->progress_at ?? '-';
+        $progressAt  = $ticket->progressed_at ?? '-';
         $priorities = $ticket->priority ?? '-';
         $notesit = $ticket->notes_executor ?? '-';
         $createdAt = optional($ticket->created_at)
             ->timezone('Asia/Makassar')
             ->format('d-m-Y H:i');
-        $executorName = auth()->user()->employee->employee_name
-            ?? auth()->user()->username ?? '-';
+        $executorName = optional($ticket->executor?->employee)->employee_name ?? '-';
         $message = implode("\n", [
             "WARNING TICKET OVERDUE ALERT",
             "Queue: {$ticket->queue_number}",
