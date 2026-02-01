@@ -356,9 +356,14 @@ class dashboardController extends Controller
             ->addColumn('store_name', function ($ticket) {
                 return optional($ticket->user?->employee->store)->name ?? '-';
             })
-            ->addColumn('executor_name', function ($ticket) {
-                return optional($ticket->executor?->employee)->employee_name ?? '-';
+            // ->addColumn('executor_name', function ($ticket) {
+            //     return optional($ticket->executor?->employee)->employee_name ?? '-';
+            // })
+            ->addColumn('executor_employee_name', function ($ticket) {
+                return $ticket->executor?->employee?->employee_name ?? 'empty';
             })
+            ->orderColumn('executor_employee_name', function ($query, $order) {})
+
 
             ->orderColumn('employee_name', function ($query, $order) {
                 $query->join('users', 'users.id', '=', 'tickets.user_id')

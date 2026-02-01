@@ -1119,12 +1119,19 @@
                                     orderable: false,
                                     searchable: false
                                 },
+                                // {
+                                //     data: 'executor_name',
+                                //     name: 'executor_name',
+                                //     width: '15%',
+                                //     className: 'text-center'
+                                // },
                                 {
-                                    data: 'executor_name',
-                                    name: 'executor_name',
-                                    width: '15%',
-                                    className: 'text-center'
-                                },
+                                data: 'executor_employee_name',
+                                name: 'employees_tables.employee_name',
+                                width: '15%',
+                                orderable: false,
+                                searchable: false
+                            },
                                 {
                                     data: 'title',
                                     name: 'title',
@@ -1340,6 +1347,18 @@ buttons: [
                                     <div class="user-card-field">
                                         <div class="user-card-label">Executor</div>
                                         <div class="user-card-value">${ticket.executor_employee_name || 'N/A'}</div>
+                                    </div>
+                                    <div class="user-card-field">
+                                        <div class="user-card-label">Progress At</div>
+                                        <div class="user-card-value">${ticket.progressed_at || 'N/A'}</div>
+                                    </div>
+                                    <div class="user-card-field">
+                                        <div class="user-card-label">Estimation</div>
+                                        <div class="user-card-value">${ticket.estimation || 'N/A'}</div>
+                                    </div>
+                                    <div class="user-card-field">
+                                        <div class="user-card-label">Estimation To</div>
+                                        <div class="user-card-value">${ticket.estimation_to || 'N/A'}</div>
                                     </div>
                                         <div class="user-card-field">
                                             <div class="user-card-label">Finished</div>
@@ -1952,9 +1971,17 @@ buttons: [
                                         <div class="user-card-label">Dificulty</div>
                                         <div class="user-card-value">${ticket.priority || 'N/A'}</div>
                                     </div>
-                                     <div class="user-card-field">
+                                    <div class="user-card-field">
+                                        <div class="user-card-label">Progress At</div>
+                                        <div class="user-card-value">${ticket.progressed_at || 'N/A'}</div>
+                                    </div>
+                                    <div class="user-card-field">
                                         <div class="user-card-label">Estimation</div>
                                         <div class="user-card-value">${ticket.estimation || 'N/A'}</div>
+                                    </div>
+                                    <div class="user-card-field">
+                                        <div class="user-card-label">Estimation To</div>
+                                        <div class="user-card-value">${ticket.estimation_to || 'N/A'}</div>
                                     </div>
                                      <div class="user-card-field">
                                         <div class="user-card-label">Notes IT</div>

@@ -75,17 +75,21 @@ class TicketOverdueService
 
                 // 2️⃣ Tentukan due time
                 switch ($ticket->priority) {
+                    // case 'Low':
+                    //     $dueTime = $baseTime->copy()->addHour();
+                    //     break;
+
+                    
                     case 'Low':
-                        $dueTime = $baseTime->copy()->addHour();
+    $dueTime = $baseTime->copy()->addMinutes(2);
+    break;
+case 'Medium':
+                        $dueTime = $baseTime->addMinutes(2);
                         break;
-
-                    case 'Medium':
-                        $dueTime = $baseTime->copy()->addHours(12);
-                        break;
-
                     case 'High':
                         $dueTime = $baseTime->copy()->addWeek();
                         break;
+    
 
                     default:
                         continue 2;
