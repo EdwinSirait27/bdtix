@@ -13,5 +13,5 @@ Schedule::command('ticket:auto-review')
     ->runInBackground();
 
 Schedule::command('tickets:send-overdue-reminder')
-    ->dailyAt('15:15')
+    ->dailyAt('15:23')
     ->withoutOverlapping();
