@@ -611,6 +611,7 @@ class dashboardController extends Controller
         elseif ($ticket->status === 'Overdue') {
             // OVERDUE TO PROGRESS
             $status   = 'Progress';
+            $finished = NULL;
              $progressedAt = $ticket->progressed_at;
         } else {
             abort(403, 'Status ticket tidak valid');
@@ -720,7 +721,7 @@ class dashboardController extends Controller
                 "Estimation: {$estimationDate} to: {$estimationToDate}\n" .
                 "Finished: {$finishedDate}\n" .
                 "Status: {$ticket->status}\n" .
-                "Ticket Link:\n{$ticketUrl}";
+                "Tickets Link:\n{$ticketUrl}";
             Http::timeout(15)->post('http://127.0.0.1:3000/send-message', [
                 'group_id' => '120363405189832865@g.us',
                 'text'     => $message,

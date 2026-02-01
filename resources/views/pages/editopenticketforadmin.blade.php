@@ -255,8 +255,7 @@
                 @enderror
             </div>
 
-            {{-- <div>
-            <div class="grid grid-cols-2 gap-2">
+            <div>
 
                 <label for="estimation"
                     class="block text-sm font-semibold text-slate-300 mb-2 flex items-center space-x-2">
@@ -286,25 +285,29 @@
                         <span>{{ $message }}</span>
                     </p>
                 @enderror
-                <label for="estimation"
+
+            </div>
+            <div>
+
+                <label for="estimation_to"
                     class="block text-sm font-semibold text-slate-300 mb-2 flex items-center space-x-2">
                     <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M8 7V3m8 4V3M3 11h18M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                     </svg>
-                    <span>Estimation</span>
+                    <span>Estimation To</span>
                     <span class="text-red-400">*</span>
                 </label>
 
 
-                <input type="datetime-local" id="estimation" name="estimation"
-                    value="{{ old('estimation') ?? $ticket->estimation }}"
+                <input type="datetime-local" id="estimation_to" name="estimation_to"
+                    value="{{ old('estimation_to') ?? $ticket->estimation_to }}"
                     class="w-full px-4 py-3.5 bg-slate-800 border border-slate-700 rounded-xl text-white" required>
 
 
 
 
-                @error('estimation')
+                @error('estimation_to')
                     <p class="mt-2 text-sm text-red-400 flex items-center space-x-1">
                         <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                             <path fill-rule="evenodd"
@@ -314,8 +317,11 @@
                         <span>{{ $message }}</span>
                     </p>
                 @enderror
-            </div> --}}
-            {{-- <div class="space-y-2">
+
+            </div>
+
+
+    {{-- <div class="space-y-2">
 
     <label for="estimation"
         class="block text-sm font-semibold text-slate-300 flex items-center gap-2">
@@ -373,7 +379,7 @@
     @enderror
 
 </div> --}}
-<div class="grid grid-cols-2 gap-4">
+    {{-- <div class="grid grid-cols-2 gap-4">
 
     <div class="space-y-2">
  <label for="estimation"
@@ -435,83 +441,79 @@
     @enderror
     </div>
 
-</div>
+</div> --}}
 
 
-            <div>
-                <label class="block text-sm font-semibold text-slate-300 mb-2 flex items-center space-x-2">
-                    <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
-                    </svg>
-                    <span>Attachments</span>
-                </label>
-                @if ($ticket->attachments->count())
-                    <ul class="space-y-2">
-                        @foreach ($ticket->attachments as $file)
-                            <li class="flex items-center gap-2">
-                                <svg class="w-4 h-4 text-slate-400" fill="currentColor" viewBox="0 0 20 20">
-                                    <path
-                                        d="M8 2a4 4 0 00-4 4v8a6 6 0 0012 0V6a2 2 0 10-4 0v7a1 1 0 102 0V6a4 4 0 00-8 0v8a4 4 0 008 0V6" />
-                                </svg>
-                                <a href="{{ $ticket->attachment_url }}" target="_blank"
-                                    class="text-blue-400 hover:underline text-sm">
-                                    {{ $file->file_name }}
-                                </a>
-                            </li>
-                        @endforeach
-                    </ul>
-                @else
-                    <p class="text-sm text-slate-500">No attachments</p>
-                @endif
-            </div>
-            <div class="flex space-x-3 pt-4">
-                <a href="{{ route('dashboard') }}"
-                    class="flex-1 py-3.5 bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 font-semibold rounded-xl transition-all duration-200 flex items-center justify-center space-x-2">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                    <span>Back to Dashboard</span>
-                </a>
-
-                @if ($ticket->status === 'Open')
-                    <input type="hidden" name="status" value="Progress">
-                    <button type="submit" name="action" value="take"
-                        class="flex-1 py-3.5 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white font-semibold rounded-xl shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center space-x-2">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+    <div>
+        <label class="block text-sm font-semibold text-slate-300 mb-2 flex items-center space-x-2">
+            <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
+            </svg>
+            <span>Attachments</span>
+        </label>
+        @if ($ticket->attachments->count())
+            <ul class="space-y-2">
+                @foreach ($ticket->attachments as $file)
+                    <li class="flex items-center gap-2">
+                        <svg class="w-4 h-4 text-slate-400" fill="currentColor" viewBox="0 0 20 20">
+                            <path
+                                d="M8 2a4 4 0 00-4 4v8a6 6 0 0012 0V6a2 2 0 10-4 0v7a1 1 0 102 0V6a4 4 0 00-8 0v8a4 4 0 008 0V6" />
                         </svg>
-                        <span>take this ticket</span>
+                        <a href="{{ $ticket->attachment_url }}" target="_blank"
+                            class="text-blue-400 hover:underline text-sm">
+                            {{ $file->file_name }}
+                        </a>
+                    </li>
+                @endforeach
+            </ul>
+        @else
+            <p class="text-sm text-slate-500">No attachments</p>
+        @endif
+    </div>
+    <div class="flex space-x-3 pt-4">
+        <a href="{{ route('dashboard') }}"
+            class="flex-1 py-3.5 bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 font-semibold rounded-xl transition-all duration-200 flex items-center justify-center space-x-2">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+            <span>Back to Dashboard</span>
+        </a>
 
-                    </button>
-                @endif
-                {{-- @if (in_array($ticket->status, ['Progress', 'Overdue'])) --}}
-                @if ($ticket->status === 'Progress')
+        @if ($ticket->status === 'Open')
+            <input type="hidden" name="status" value="Progress">
+            <button type="submit" name="action" value="take"
+                class="flex-1 py-3.5 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white font-semibold rounded-xl shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center space-x-2">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                </svg>
+                <span>take this ticket</span>
 
-
-                    <input type="hidden" name="status" value="Closed">
-                    <button type="submit" name="action" value="close"
-                        class="flex-1 py-3.5 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white font-semibold rounded-xl shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center space-x-2">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                        </svg>
-                        <span>Closed this Ticket</span>
-                    </button>
-                @endif
-                @if ($ticket->status === 'Overdue')
-
-
-                    <input type="hidden" name="status" value="Closed">
-                    <button type="submit" name="action" value="close"
-                        class="flex-1 py-3.5 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white font-semibold rounded-xl shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center space-x-2">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                        </svg>
-                        <span>Update this Ticket</span>
-                    </button>
-                @endif
-            </div>
-        </form>
+            </button>
+        @endif
+        {{-- @if (in_array($ticket->status, ['Progress', 'Overdue'])) --}}
+        @if ($ticket->status === 'Progress')
+            <input type="hidden" name="status" value="Closed">
+            <button type="submit" name="action" value="close"
+                class="flex-1 py-3.5 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white font-semibold rounded-xl shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center space-x-2">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                </svg>
+                <span>Closed this Ticket</span>
+            </button>
+        @endif
+        @if ($ticket->status === 'Overdue')
+            <input type="hidden" name="status" value="Closed">
+            <button type="submit" name="action" value="close"
+                class="flex-1 py-3.5 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white font-semibold rounded-xl shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center space-x-2">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                </svg>
+                <span>Update this Ticket</span>
+            </button>
+        @endif
+    </div>
+    </form>
     </div>
     @push('scripts')
         <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
