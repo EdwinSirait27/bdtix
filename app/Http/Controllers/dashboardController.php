@@ -249,10 +249,10 @@ class dashboardController extends Controller
         ));
     }
     // testing
-// public function index(){
-//     $opentickets = Tickets::where('status','Open')->count();
-//     return view('pages.dashboard',compact('opentickets'));
-// }
+    // public function index(){
+    //     $opentickets = Tickets::where('status','Open')->count();
+    //     return view('pages.dashboard',compact('opentickets'));
+    // }
     public function aboutUs()
     {
         return view('pages.about');
@@ -260,7 +260,7 @@ class dashboardController extends Controller
 
     public function getAllticketforadmins(Request $request)
     {
-        $query = Tickets::with('user.employee', 'user.employee.store','executor.employee')
+        $query = Tickets::with('user.employee', 'user.employee.store', 'executor.employee')
             ->select([
                 'id',
                 'user_id',
@@ -296,23 +296,23 @@ class dashboardController extends Controller
         }
         if ($request->status === 'On Progress') {
             $query->where('status', 'On Progress');
-            }
-       if ($request->filteropen === 'Open') {
-    $query->where('status', 'Open');
-}
-       if ($request->filterprogress === 'Progress') {
-    $query->where('status', 'Progress');
-}
-       if ($request->filterclosed === 'Closed') {
-    $query->where('status', 'Closed');
-}
-       if ($request->filteroverdue === 'Overdue') {
-    $query->where('status', 'Overdue');
-}
+        }
+        if ($request->filteropen === 'Open') {
+            $query->where('status', 'Open');
+        }
+        if ($request->filterprogress === 'Progress') {
+            $query->where('status', 'Progress');
+        }
+        if ($request->filterclosed === 'Closed') {
+            $query->where('status', 'Closed');
+        }
+        if ($request->filteroverdue === 'Overdue') {
+            $query->where('status', 'Overdue');
+        }
 
         if ($request->filter === 'today') {
-    $query->whereDate('created_at', Carbon::today());
-}
+            $query->whereDate('created_at', Carbon::today());
+        }
 
 
         // =========================
@@ -333,7 +333,7 @@ class dashboardController extends Controller
                 $request->date_from . ' 00:00:00',
                 $request->date_to . ' 23:59:59',
             ]);
-        } 
+        }
         // else {
         //     // default: hari ini
         //     $query->whereDate('created_at', Carbon::today());
@@ -349,7 +349,7 @@ class dashboardController extends Controller
         }
 
         return DataTables::eloquent($query)
-        ->addIndexColumn() 
+            ->addIndexColumn()
             ->addColumn('employee_name', function ($ticket) {
                 return optional($ticket->user?->employee)->employee_name ?? '-';
             })
@@ -357,8 +357,8 @@ class dashboardController extends Controller
                 return optional($ticket->user?->employee->store)->name ?? '-';
             })
             ->addColumn('executor_name', function ($ticket) {
-    return optional($ticket->executor?->employee)->employee_name ?? '-';
-})
+                return optional($ticket->executor?->employee)->employee_name ?? '-';
+            })
 
             ->orderColumn('employee_name', function ($query, $order) {
                 $query->join('users', 'users.id', '=', 'tickets.user_id')
@@ -370,11 +370,11 @@ class dashboardController extends Controller
                     ->timezone('Asia/Makassar')
                     ->translatedFormat('d F Y H:i');
             })
-          ->editColumn('finished', function ($ticket) {
-    return $ticket->finished
-        ? $ticket->finished->timezone('Asia/Makassar')->translatedFormat('d F Y H:i')
-        : '-';
-})
+            ->editColumn('finished', function ($ticket) {
+                return $ticket->finished
+                    ? $ticket->finished->timezone('Asia/Makassar')->translatedFormat('d F Y H:i')
+                    : '-';
+            })
 
             ->addColumn('action', function ($ticket) {
                 $idHashed = substr(hash('sha256', $ticket->id . env('APP_KEY')), 0, 8);
@@ -607,11 +607,14 @@ class dashboardController extends Controller
             $status   = 'Closed';
             $finished = now();
             $progressedAt = $ticket->progressed_at;
+        } 
+        elseif ($ticket->status === 'Overdue') {
+            // OVERDUE TO PROGRESS
+            $status   = 'Progress';
+             $progressedAt = $ticket->progressed_at;
         } else {
             abort(403, 'Status ticket tidak valid');
         }
-
-
         DB::transaction(function () use ($validated, $ticket, $status, $finished, $progressedAt, $oldStatus) {
 
             $estimation = !empty($validated['estimation'])
@@ -675,44 +678,30 @@ class dashboardController extends Controller
             $userName     = $ticket->user->employee->employee_name;
             $locationName = $ticket->user->employee->store->name ?? '-';
             $phoneNumber  = $ticket->user->employee->telp_number ?? '-';
+            $isOpenToProgress =
+                $oldStatus === 'Open' &&
+                $ticket->status === 'Progress';
 
-            // // =========================
-            // // STATUS TRANSITION CHECK
-            // // =========================
-            // $isClosedFromProgress =
-            //     $oldStatus === 'Progress' &&
-            //     $ticket->status === 'Closed';
+            $isProgressToClosed =
+                $oldStatus === 'Progress' &&
+                $ticket->status === 'Closed';
+            $isOverdueToProgress =
+                $oldStatus === 'Overdue' &&
+                $ticket->status === 'Progress';
 
-            // $titleMessage = $isClosedFromProgress
-            //     ? '*IT Ticket Closed Review*'
-            //     : '*IT Ticket Updated*';
-
-            // $ticketUrl = $isClosedFromProgress
-            //     ? $reviewUrl
-            //     : $adminUrl;
             // =========================
-// STATUS TRANSITION
-// =========================
-$isOpenToProgress =
-    $oldStatus === 'Open' &&
-    $ticket->status === 'Progress';
-
-$isProgressToClosed =
-    $oldStatus === 'Progress' &&
-    $ticket->status === 'Closed';
-
-// =========================
-// TITLE & LINK
-// =========================
-$titleMessage = '*IT Ticket Updated*';
-$ticketUrl    = $adminUrl;
-
-if ($isProgressToClosed) {
-    $titleMessage = '*IT Ticket Closed Review*';
-    $ticketUrl    = $reviewUrl;
-}
-
-
+            // TITLE & LINK
+            // =========================
+            $titleMessage = 'IT Ticket Updated';
+            $ticketUrl    = $adminUrl;
+            if ($isProgressToClosed) {
+                $titleMessage = 'IT Ticket Closed Review';
+                $ticketUrl    = $reviewUrl;
+            }
+            if ($isOverdueToProgress) {
+                $titleMessage = 'IT Ticket Overdue to Prosses';
+                $ticketUrl    = $adminUrl;
+            }
             // =========================
             // MESSAGE
             // =========================
@@ -728,7 +717,7 @@ if ($isProgressToClosed) {
                 "Dificulty: {$ticket->priority}\n" .
                 "Executor: {$executorName}\n" .
                 "Notes IT: {$ticket->notes_executor}\n" .
-                "Estimation: {$estimationDate} to: {$estimationDate}\n" .
+                "Estimation: {$estimationDate} to: {$estimationToDate}\n" .
                 "Finished: {$finishedDate}\n" .
                 "Status: {$ticket->status}\n" .
                 "Ticket Link:\n{$ticketUrl}";

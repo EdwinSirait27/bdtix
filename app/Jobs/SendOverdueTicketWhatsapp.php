@@ -11,6 +11,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Http;
+
 class SendOverdueTicketWhatsapp implements ShouldQueue
 {
     use Dispatchable, Queueable, SerializesModels;
@@ -24,9 +25,9 @@ class SendOverdueTicketWhatsapp implements ShouldQueue
             'ticket_id' => $this->ticketId,
         ]);
 
-$ticket = Tickets::with('executor.employee')
-    ->find($this->ticketId)
-    ?->fresh();
+        $ticket = Tickets::with('executor.employee')
+            ->find($this->ticketId)
+            ?->fresh();
 
 
         if (! $ticket || $ticket->status !== 'Overdue') {
@@ -46,10 +47,10 @@ $ticket = Tickets::with('executor.employee')
         $employee = $user?->employee;
         $store = $employee?->store;
         $phoneNumber  = $employee->telp_number ?? '-';
-       
-$estimation = $ticket->estimation
-    ? $ticket->estimation->timezone('Asia/Makassar')->format('d-m-Y H:i')
-    : '-';
+
+        $estimation = $ticket->estimation
+            ? $ticket->estimation->timezone('Asia/Makassar')->format('d-m-Y H:i')
+            : '-';
         $priorities = $ticket->priority ?? '-';
         $notesit = $ticket->notes_executor ?? '-';
         $createdAt = optional($ticket->created_at)
@@ -66,15 +67,15 @@ $estimation = $ticket->estimation
             "Title: {$ticket->title}",
             "Dificulty: {$priorities}",
             "Executor: {$executorName}",
-           "Progress: " . (
-    $ticket->progressed_at
-        ? $ticket->progressed_at->timezone('Asia/Makassar')->format('d-m-Y H:i')
-        : '-'
-),
+            "Progress: " . (
+                $ticket->progressed_at
+                ? $ticket->progressed_at->timezone('Asia/Makassar')->format('d-m-Y H:i')
+                : '-'
+            ),
             "Notes IT: {$notesit}",
             "Estimation: {$estimation}",
             "Ticket Link: {$adminUrl}",
-            "ayo dihajar tim testing!!!.",
+            "ayo dihajar tim!!!.",
         ]);
         Http::timeout(10)->post(
             'http://127.0.0.1:3000/send-message',
