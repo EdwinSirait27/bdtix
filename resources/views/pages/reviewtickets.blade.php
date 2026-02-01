@@ -73,7 +73,7 @@
                         <p class="text-sm font-medium text-slate-300">{{ $ticket->category }}</p>
                     </div>
                     <div>
-                        <p class="text-xs text-slate-500 mb-1">Priority</p>
+                        <p class="text-xs text-slate-500 mb-1">Dificulty</p>
                         <p class="text-sm font-medium text-slate-300">
                             {{ $ticket->priority === 'High' ? '🔴 High' : ($ticket->priority === 'Medium' ? '🟡 Medium' : '🟢 Low') }}
                         </p>
@@ -84,6 +84,12 @@
                             {{ $ticket->estimation->format('d F Y H:i') }}
                         </p>
                     </div>
+                       <div>
+    <p class="text-xs text-slate-500 mb-1">Estimation To</p>
+    <p class="text-sm font-medium text-slate-300">
+        {{ optional($ticket->estimation_to)->format('d F Y H:i') ?? '-' }}
+    </p>
+</div>
                     <div>
                         <p class="text-xs text-slate-500 mb-1">Finished</p>
                         <p class="text-sm font-medium text-slate-300">
@@ -128,7 +134,7 @@
                 </div>
             </div>
 
-            @if (in_array($ticket->status, ['Closed', 'Overdue']) && !$ticket->review)
+            @if (in_array($ticket->status, ['Closed']) && !$ticket->review)
                 <form method="POST" action="{{ route('reviewticketsfromhuman', request()->route('hash')) }}" class="space-y-6">
                     @csrf
                     @method('PUT')
@@ -354,7 +360,7 @@
                         <p class="text-sm font-medium text-slate-300">{{ $ticket->category }}</p>
                     </div>
                     <div>
-                        <p class="text-xs text-slate-500 mb-1">Priority</p>
+                        <p class="text-xs text-slate-500 mb-1">Dificulty</p>
                         <p class="text-sm font-medium text-slate-300">
                             {{ $ticket->priority === 'High' ? '🔴 High' : ($ticket->priority === 'Medium' ? '🟡 Medium' : '🟢 Low') }}
                         </p>
@@ -365,6 +371,13 @@
                             {{ $ticket->estimation->format('d F Y H:i') }}
                         </p>
                     </div>
+                   <div>
+    <p class="text-xs text-slate-500 mb-1">Estimation To</p>
+    <p class="text-sm font-medium text-slate-300">
+        {{ optional($ticket->estimation_to)->format('d F Y H:i') ?? '-' }}
+    </p>
+</div>
+
                     <div>
                         <p class="text-xs text-slate-500 mb-1">Finished</p>
                         <p class="text-sm font-medium text-slate-300">

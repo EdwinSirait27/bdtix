@@ -296,6 +296,35 @@
             @enderror
         </div>
         <div>
+            <label for="estimation_to" class="block text-sm font-semibold text-slate-300 mb-2 flex items-center space-x-2">
+                <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M8 7V3m8 4V3M3 11h18M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+                <span>Estimation To</span>
+                <span class="text-red-400">*</span>
+            </label>
+
+
+            <input type="datetime-local" id="estimation_to" name="estimation_to"
+                value="{{ old('estimation_to') ?? $ticket->estimation_to }}"
+                class="w-full px-4 py-3.5 bg-slate-800 border border-slate-700 rounded-xl text-white">
+
+
+
+
+            @error('estimation_to')
+                <p class="mt-2 text-sm text-red-400 flex items-center space-x-1">
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd"
+                            d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                            clip-rule="evenodd" />
+                    </svg>
+                    <span>{{ $message }}</span>
+                </p>
+            @enderror
+        </div>
+        <div>
             <label for="status" class="block text-sm font-semibold text-slate-300 mb-2 flex items-center space-x-2">
                 <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -487,6 +516,20 @@
                     time_24hr: true,
                     defaultDate: estimationInput.value || null,
                     minDate: estimationInput.value ? null : "today",
+                    allowInput: true
+                });
+            });
+        </script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const estimationToInput = document.getElementById('estimation_to');
+
+                flatpickr(estimationToInput, {
+                    enableTime: true,
+                    dateFormat: "Y-m-d H:i",
+                    time_24hr: true,
+                    defaultDate: estimationToInput.value || null,
+                    minDate: estimationToInput.value ? null : "today",
                     allowInput: true
                 });
             });
