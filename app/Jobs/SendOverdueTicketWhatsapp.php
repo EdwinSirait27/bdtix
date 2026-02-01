@@ -24,10 +24,6 @@ class SendOverdueTicketWhatsapp implements ShouldQueue
             'ticket_id' => $this->ticketId,
         ]);
 
-        // $ticket = Tickets::find($this->ticketId);
-//         $ticket = Tickets::with([
-//     'executor.employee',
-// ])->find($this->ticketId);
 $ticket = Tickets::with('executor.employee')
     ->find($this->ticketId)
     ?->fresh();

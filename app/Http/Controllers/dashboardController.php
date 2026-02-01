@@ -588,6 +588,7 @@ class dashboardController extends Controller
             'priority'        => 'required|string',
             'finished'        => 'nullable|date',
             'estimation'      => 'nullable|date',
+            'estimation_to'      => 'nullable|date',
         ]);
         // =========================
         // STATUS SYNC (SERVER SIDE)
@@ -616,6 +617,9 @@ class dashboardController extends Controller
             $estimation = !empty($validated['estimation'])
                 ? Carbon::parse($validated['estimation'])
                 : null;
+            $estimationTo = !empty($validated['estimation_to'])
+                ? Carbon::parse($validated['estimation_to'])
+                : null;
 
             $data = [
                 'category'        => $validated['category'],
@@ -624,6 +628,7 @@ class dashboardController extends Controller
                 'priority'        => $validated['priority'],
                 'finished'        => $finished,
                 'estimation'      => $estimation,
+                'estimation_to'      => $estimationTo,
                 'executor_id'     => auth()->id(),
             ];
 
@@ -663,25 +668,50 @@ class dashboardController extends Controller
             $estimationDate = $ticket->estimation
                 ?->timezone('Asia/Makassar')
                 ?->format('d-m-Y H:i') ?? '-';
+            $estimationToDate = $ticket->estimation_to
+                ?->timezone('Asia/Makassar')
+                ?->format('d-m-Y H:i') ?? '-';
 
             $userName     = $ticket->user->employee->employee_name;
             $locationName = $ticket->user->employee->store->name ?? '-';
             $phoneNumber  = $ticket->user->employee->telp_number ?? '-';
 
-            // =========================
-            // STATUS TRANSITION CHECK
-            // =========================
-            $isClosedFromProgress =
-                $oldStatus === 'Progress' &&
-                $ticket->status === 'Closed';
+            // // =========================
+            // // STATUS TRANSITION CHECK
+            // // =========================
+            // $isClosedFromProgress =
+            //     $oldStatus === 'Progress' &&
+            //     $ticket->status === 'Closed';
 
-            $titleMessage = $isClosedFromProgress
-                ? '*IT Ticket Closed Review*'
-                : '*IT Ticket Updated*';
+            // $titleMessage = $isClosedFromProgress
+            //     ? '*IT Ticket Closed Review*'
+            //     : '*IT Ticket Updated*';
 
-            $ticketUrl = $isClosedFromProgress
-                ? $reviewUrl
-                : $adminUrl;
+            // $ticketUrl = $isClosedFromProgress
+            //     ? $reviewUrl
+            //     : $adminUrl;
+            // =========================
+// STATUS TRANSITION
+// =========================
+$isOpenToProgress =
+    $oldStatus === 'Open' &&
+    $ticket->status === 'Progress';
+
+$isProgressToClosed =
+    $oldStatus === 'Progress' &&
+    $ticket->status === 'Closed';
+
+// =========================
+// TITLE & LINK
+// =========================
+$titleMessage = '*IT Ticket Updated*';
+$ticketUrl    = $adminUrl;
+
+if ($isProgressToClosed) {
+    $titleMessage = '*IT Ticket Closed Review*';
+    $ticketUrl    = $reviewUrl;
+}
+
 
             // =========================
             // MESSAGE
@@ -698,7 +728,7 @@ class dashboardController extends Controller
                 "Dificulty: {$ticket->priority}\n" .
                 "Executor: {$executorName}\n" .
                 "Notes IT: {$ticket->notes_executor}\n" .
-                "Estimation: {$estimationDate}\n" .
+                "Estimation: {$estimationDate} to: {$estimationDate}\n" .
                 "Finished: {$finishedDate}\n" .
                 "Status: {$ticket->status}\n" .
                 "Ticket Link:\n{$ticketUrl}";
@@ -708,7 +738,7 @@ class dashboardController extends Controller
             ]);
             Log::info('WA_UPDATE_SUCCESS', [
                 'ticket_id' => $ticket->id,
-                'type'      => $isClosedFromProgress ? 'REVIEW' : 'UPDATE',
+                'type'      => $isProgressToClosed ? 'REVIEW' : 'UPDATE',
             ]);
         } catch (\Throwable $e) {
             Log::warning('WA_UPDATE_FAILED', [

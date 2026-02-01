@@ -255,7 +255,9 @@
                 @enderror
             </div>
 
-            <div>
+            {{-- <div>
+            <div class="grid grid-cols-2 gap-2">
+
                 <label for="estimation"
                     class="block text-sm font-semibold text-slate-300 mb-2 flex items-center space-x-2">
                     <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -284,7 +286,157 @@
                         <span>{{ $message }}</span>
                     </p>
                 @enderror
-            </div>
+                <label for="estimation"
+                    class="block text-sm font-semibold text-slate-300 mb-2 flex items-center space-x-2">
+                    <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M8 7V3m8 4V3M3 11h18M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                    <span>Estimation</span>
+                    <span class="text-red-400">*</span>
+                </label>
+
+
+                <input type="datetime-local" id="estimation" name="estimation"
+                    value="{{ old('estimation') ?? $ticket->estimation }}"
+                    class="w-full px-4 py-3.5 bg-slate-800 border border-slate-700 rounded-xl text-white" required>
+
+
+
+
+                @error('estimation')
+                    <p class="mt-2 text-sm text-red-400 flex items-center space-x-1">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd"
+                                d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                                clip-rule="evenodd" />
+                        </svg>
+                        <span>{{ $message }}</span>
+                    </p>
+                @enderror
+            </div> --}}
+            {{-- <div class="space-y-2">
+
+    <label for="estimation"
+        class="block text-sm font-semibold text-slate-300 flex items-center gap-2">
+        <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M8 7V3m8 4V3M3 11h18M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+        </svg>
+        <span>Estimation</span>
+        <span class="text-red-400">*</span>
+    </label>
+
+    <input type="datetime-local"
+        id="estimation"
+        name="estimation"
+        value="{{ old('estimation', $ticket->estimation) }}"
+        class="w-full px-4 py-3.5 bg-slate-800 border border-slate-700 rounded-xl text-white"
+        required>
+
+    @error('estimation')
+        <p class="text-sm text-red-400 flex items-center gap-1">
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd"
+                    d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                    clip-rule="evenodd" />
+            </svg>
+            <span>{{ $message }}</span>
+        </p>
+    @enderror
+    <label for="estimation"
+        class="block text-sm font-semibold text-slate-300 flex items-center gap-2">
+        <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M8 7V3m8 4V3M3 11h18M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+        </svg>
+        <span>Estimation</span>
+        <span class="text-red-400">*</span>
+    </label>
+
+    <input type="datetime-local"
+        id="estimation"
+        name="estimation"
+        value="{{ old('estimation', $ticket->estimation) }}"
+        class="w-full px-4 py-3.5 bg-slate-800 border border-slate-700 rounded-xl text-white"
+        required>
+
+    @error('estimation')
+        <p class="text-sm text-red-400 flex items-center gap-1">
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd"
+                    d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                    clip-rule="evenodd" />
+            </svg>
+            <span>{{ $message }}</span>
+        </p>
+    @enderror
+
+</div> --}}
+<div class="grid grid-cols-2 gap-4">
+
+    <div class="space-y-2">
+ <label for="estimation"
+        class="block text-sm font-semibold text-slate-300 flex items-center gap-2">
+        <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M8 7V3m8 4V3M3 11h18M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+        </svg>
+        <span>Estimation</span>
+        <span class="text-red-400">*</span>
+    </label>
+
+    <input type="datetime-local"
+        id="estimation"
+        name="estimation"
+        value="{{ old('estimation', $ticket->estimation) }}"
+        class="w-full px-4 py-3.5 bg-slate-800 border border-slate-700 rounded-xl text-white"
+        required>
+
+    @error('estimation')
+        <p class="text-sm text-red-400 flex items-center gap-1">
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd"
+                    d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                    clip-rule="evenodd" />
+            </svg>
+            <span>{{ $message }}</span>
+        </p>
+    @enderror
+    </div>
+
+    <div class="space-y-2">
+        <label for="estimation_to"
+        class="block text-sm font-semibold text-slate-300 flex items-center gap-2">
+        <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M8 7V3m8 4V3M3 11h18M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+        </svg>
+        <span>Estimation To</span>
+        <span class="text-red-400">*</span>
+    </label>
+
+    <input type="datetime-local"
+        id="estimation_to"
+        name="estimation_to"
+        value="{{ old('estimation_to', $ticket->estimation_to) }}"
+        class="w-full px-4 py-3.5 bg-slate-800 border border-slate-700 rounded-xl text-white"
+        required>
+
+    @error('estimation_to')
+        <p class="text-sm text-red-400 flex items-center gap-1">
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd"
+                    d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                    clip-rule="evenodd" />
+            </svg>
+            <span>{{ $message }}</span>
+        </p>
+    @enderror
+    </div>
+
+</div>
+
 
             <div>
                 <label class="block text-sm font-semibold text-slate-300 mb-2 flex items-center space-x-2">
@@ -333,7 +485,8 @@
 
                     </button>
                 @endif
-                @if ($ticket->status === 'Progress','Overdue')
+                @if (in_array($ticket->status, ['Progress', 'Overdue']))
+
                     <input type="hidden" name="status" value="Closed">
                     <button type="submit" name="action" value="close"
                         class="flex-1 py-3.5 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white font-semibold rounded-xl shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center space-x-2">
@@ -392,6 +545,20 @@
                     time_24hr: true,
                     defaultDate: estimationInput.value || null,
                     minDate: estimationInput.value ? null : "today",
+                    allowInput: true
+                });
+            });
+        </script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const estimationtoInput = document.getElementById('estimation_to');
+
+                flatpickr(estimationtoInput, {
+                    enableTime: true,
+                    dateFormat: "Y-m-d H:i",
+                    time_24hr: true,
+                    defaultDate: estimationtoInput.value || null,
+                    minDate: estimationtoInput.value ? null : "today",
                     allowInput: true
                 });
             });

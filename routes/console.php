@@ -11,3 +11,7 @@ Schedule::command('ticket:auto-review')
     ->everyFiveMinutes()
     ->withoutOverlapping()
     ->runInBackground();
+
+Schedule::command('tickets:send-overdue-reminder')
+    ->dailyAt('14:00')
+    ->withoutOverlapping();

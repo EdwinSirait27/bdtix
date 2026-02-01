@@ -20,6 +20,8 @@ class Tickets extends Model
         'attachment_folder',
         'attachment_url',
         'executor_id',
+        'last_overdue_reminder_at',
+        'estimation_to',
         'priority',
         'progressed_at',
         'notes_executor',
@@ -28,8 +30,10 @@ class Tickets extends Model
     ];
     protected $casts = [
     'estimation' => 'datetime',
+    'estimation_to' => 'datetime',
     'progressed_at' => 'datetime',
     'finished'   => 'datetime',
+    'last_overdue_reminder_at'   => 'datetime',
     'created_at'   => 'datetime',
 ];
     protected static function booted()
