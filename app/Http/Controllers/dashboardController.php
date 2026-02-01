@@ -267,6 +267,9 @@ class dashboardController extends Controller
                 'queue_number',
                 'title',
                 'description',
+                'progressed_at',
+                'estimation',
+                'estimation_to',
                 'executor_id',
                 'category',
                 'priority',
@@ -375,6 +378,22 @@ class dashboardController extends Controller
                     ->timezone('Asia/Makassar')
                     ->translatedFormat('d F Y H:i');
             })
+            ->editColumn('progressed_at', function ($ticket) {
+                return optional($ticket->progressed_at)
+                    ->timezone('Asia/Makassar')
+                    ->translatedFormat('d F Y H:i');
+            })
+            ->editColumn('estimation', function ($ticket) {
+                return optional($ticket->estimation)
+                    ->timezone('Asia/Makassar')
+                    ->translatedFormat('d F Y H:i');
+            })
+            ->editColumn('estimation_to', function ($ticket) {
+                return optional($ticket->estimation)
+                    ->timezone('Asia/Makassar')
+                    ->translatedFormat('d F Y H:i');
+            })
+            
             ->editColumn('finished', function ($ticket) {
                 return $ticket->finished
                     ? $ticket->finished->timezone('Asia/Makassar')->translatedFormat('d F Y H:i')

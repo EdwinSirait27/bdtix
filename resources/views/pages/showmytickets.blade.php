@@ -76,9 +76,21 @@
             </p>
         </div>
         <div class="bg-white dark:bg-slate-900 rounded-xl p-5 shadow-lg">
+            <p class="text-xs text-slate-500 dark:text-slate-400 uppercase">Progressed At</p>
+            <p class="font-semibold mt-1 text-slate-900 dark:text-white text-sm sm:text-base">
+                {{ $ticket->progressed_at->format('d F Y H:i') ?? '-' }}
+            </p>
+        </div>
+        <div class="bg-white dark:bg-slate-900 rounded-xl p-5 shadow-lg">
             <p class="text-xs text-slate-500 dark:text-slate-400 uppercase">Estimation</p>
             <p class="font-semibold mt-1 text-slate-900 dark:text-white text-sm sm:text-base">
-                {{ $ticket->estimation->format('d F Y H:i') }}
+                {{ $ticket->estimation->format('d F Y H:i') ?? '-' }}
+            </p>
+        </div>
+        <div class="bg-white dark:bg-slate-900 rounded-xl p-5 shadow-lg">
+            <p class="text-xs text-slate-500 dark:text-slate-400 uppercase">Estimation To</p>
+            <p class="font-semibold mt-1 text-slate-900 dark:text-white text-sm sm:text-base">
+                {{ $ticket->estimation_to->format('d F Y H:i') ?? '-' }}
 
 
 
@@ -89,7 +101,9 @@
             <p class="text-xs text-slate-500 dark:text-slate-400 uppercase">Finished</p>
             <p class="font-semibold mt-1 text-slate-900 dark:text-white text-sm sm:text-base">
                 {{-- {{ $ticket->finished ?? '-' }} --}}
-                {{ $ticket->finished->format('d F Y H:i') }}
+                {{-- {{ $ticket->finished->format('d F Y H:i') }} --}}
+                {{ $ticket->finished?->format('d F Y H:i') ?? '-' }}
+
             </p>
         </div>
     </div>

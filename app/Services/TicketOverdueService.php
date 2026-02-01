@@ -87,7 +87,7 @@ case 'Medium':
                         $dueTime = $baseTime->addMinutes(2);
                         break;
                     case 'High':
-                        $dueTime = $baseTime->copy()->addWeek();
+                        $dueTime = $baseTime->addMinutes(2);
                         break;
     
 

@@ -193,6 +193,8 @@ class TicketController extends Controller
                 'priority',
                 'finished',
                 'estimation',
+                'estimation_to',
+                'progressed_at',
                 'description',
                 'category',
                 'created_at',
@@ -368,6 +370,16 @@ class TicketController extends Controller
             ->editColumn('estimation', function ($ticket) {
                 return $ticket->estimation
                     ? $ticket->estimation->timezone('Asia/Makassar')->translatedFormat('d F Y H:i')
+                    : 'empty';
+            })
+            ->editColumn('estimation_to', function ($ticket) {
+                return $ticket->estimation_to
+                    ? $ticket->estimation_to->timezone('Asia/Makassar')->translatedFormat('d F Y H:i')
+                    : 'empty';
+            })
+            ->editColumn('progressed_at', function ($ticket) {
+                return $ticket->progressed_at
+                    ? $ticket->progressed_at->timezone('Asia/Makassar')->translatedFormat('d F Y H:i')
                     : 'empty';
             })
             ->editColumn('finished', function ($ticket) {
