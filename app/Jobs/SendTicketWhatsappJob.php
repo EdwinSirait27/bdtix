@@ -71,7 +71,7 @@ class SendTicketWhatsappJob implements ShouldQueue
             // BASE MESSAGE
             // =============================
             $lines = [
-                "*IT Ticket Update*",
+                "IT Ticket Created",
                 "Queue: {$ticket->queue_number}",
                 "Date: {$createdAt}",
                 "User: {$userName}",
@@ -80,10 +80,9 @@ class SendTicketWhatsappJob implements ShouldQueue
                 "Title: {$ticket->title}",
                 "Category: {$ticket->category}",
                 "Description: {$ticket->description}",
-                "*Ticket Link*",
-                $editTicketUrl,
+                "Status: {$ticket->status}",
+                "Ticket Link: {$$editTicketUrl}",
             ];
-
             // =============================
             // 🔥 ONLY IF PROGRESS → CLOSED
             // =============================

@@ -51,6 +51,9 @@ class SendOverdueTicketWhatsapp implements ShouldQueue
         $estimation = $ticket->estimation
             ? $ticket->estimation->timezone('Asia/Makassar')->format('d-m-Y H:i')
             : '-';
+        $estimationTo = $ticket->estimation_to
+            ? $ticket->estimation_to->timezone('Asia/Makassar')->format('d-m-Y H:i')
+            : '-';
         $priorities = $ticket->priority ?? '-';
         $notesit = $ticket->notes_executor ?? '-';
         $createdAt = optional($ticket->created_at)
@@ -74,6 +77,7 @@ class SendOverdueTicketWhatsapp implements ShouldQueue
             ),
             "Notes IT: {$notesit}",
             "Estimation: {$estimation}",
+            "Estimation To: {$estimationTo}",
             "Ticket Link: {$adminUrl}",
             "ayo dihajar tim!!!.",
         ]);

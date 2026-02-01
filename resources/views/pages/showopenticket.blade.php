@@ -342,6 +342,7 @@
                     <option value="Open" @selected(old('status', $ticket->status) === 'Open')>Open</option>
                     <option value="Progress" @selected(old('status', $ticket->status) === 'Progress')>In Progress</option>
                     <option value="Closed" @selected(old('status', $ticket->status) === 'Closed')>Closed</option>
+                    <option value="Overdue" @selected(old('status', $ticket->status) === 'Overdue')>Overdue</option>
                 </select>
             </div>
 

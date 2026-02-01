@@ -378,20 +378,35 @@ class dashboardController extends Controller
                     ->timezone('Asia/Makassar')
                     ->translatedFormat('d F Y H:i');
             })
-            ->editColumn('progressed_at', function ($ticket) {
-                return optional($ticket->progressed_at)
-                    ->timezone('Asia/Makassar')
-                    ->translatedFormat('d F Y H:i');
+            // ->editColumn('progressed_at', function ($ticket) {
+            //     return optional($ticket->progressed_at)
+            //         ->timezone('Asia/Makassar')
+            //         ->translatedFormat('d F Y H:i');
+            // })
+            // ->editColumn('estimation', function ($ticket) {
+            //     return optional($ticket->estimation)
+            //         ->timezone('Asia/Makassar')
+            //         ->translatedFormat('d F Y H:i');
+            // })
+            // ->editColumn('estimation_to', function ($ticket) {
+            //     return optional($ticket->estimation)
+            //         ->timezone('Asia/Makassar')
+            //         ->translatedFormat('d F Y H:i');
+            // })
+              ->editColumn('progressed_at', function ($ticket) {
+                return $ticket->progressed_at
+                    ? $ticket->progressed_at->timezone('Asia/Makassar')->translatedFormat('d F Y H:i')
+                    : '-';
             })
-            ->editColumn('estimation', function ($ticket) {
-                return optional($ticket->estimation)
-                    ->timezone('Asia/Makassar')
-                    ->translatedFormat('d F Y H:i');
+              ->editColumn('estimation', function ($ticket) {
+                return $ticket->estimation
+                    ? $ticket->estimation->timezone('Asia/Makassar')->translatedFormat('d F Y H:i')
+                    : '-';
             })
-            ->editColumn('estimation_to', function ($ticket) {
-                return optional($ticket->estimation)
-                    ->timezone('Asia/Makassar')
-                    ->translatedFormat('d F Y H:i');
+              ->editColumn('estimation_to', function ($ticket) {
+                return $ticket->estimation_to
+                    ? $ticket->estimation_to->timezone('Asia/Makassar')->translatedFormat('d F Y H:i')
+                    : '-';
             })
             
             ->editColumn('finished', function ($ticket) {
@@ -742,7 +757,8 @@ class dashboardController extends Controller
                 "Dificulty: {$ticket->priority}\n" .
                 "Executor: {$executorName}\n" .
                 "Notes IT: {$ticket->notes_executor}\n" .
-                "Estimation: {$estimationDate} to: {$estimationToDate}\n" .
+                "Estimation: {$estimationDate}\n" .
+                "Estimation To: {$estimationToDate}\n" .
                 "Finished: {$finishedDate}\n" .
                 "Status: {$ticket->status}\n" .
                 "Tickets Link:\n{$ticketUrl}";
