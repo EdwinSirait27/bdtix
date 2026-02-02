@@ -25,7 +25,7 @@
                     <span
                         class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs sm:text-sm font-semibold {{ $ticket->badge_class }}">
                         <span class="w-2 h-2 rounded-full bg-white"></span>
-                        {{ strtoupper($ticket->status) }}
+                        {{ $ticket->status }}
                     </span>
 
                 </div>
@@ -102,7 +102,8 @@
             <p class="font-semibold mt-1 text-slate-900 dark:text-white text-sm sm:text-base">
                 {{-- {{ $ticket->finished ?? '-' }} --}}
                 {{-- {{ $ticket->finished->format('d F Y H:i') }} --}}
-                {{ $ticket->finished?->format('d F Y H:i') ?? '-' }}
+                {{-- {{ $ticket->finished?->format('d F Y H:i') ?? '-' }} --}}
+                {{ $ticket->finished->format('d F Y H:i') ?? '-' }}
 
             </p>
         </div>
