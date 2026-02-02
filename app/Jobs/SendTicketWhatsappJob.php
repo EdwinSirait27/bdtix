@@ -80,7 +80,7 @@ class SendTicketWhatsappJob implements ShouldQueue
                 "Title: {$ticket->title}",
                 "Category: {$ticket->category}",
                 "Description: {$ticket->description}",
-                "Status: {$ticket->status}",
+                "Status: Open",
                 "Ticket Link: {$$editTicketUrl}",
             ];
             // =============================

@@ -736,6 +736,7 @@ class dashboardController extends Controller
             $ticketUrl    = $adminUrl;
             if ($isProgressToClosed) {
                 $titleMessage = 'IT Ticket Closed Review';
+                $closednoted = 'Mohon review kinerja tim IT. Terima kasih.';
                 $ticketUrl    = $reviewUrl;
             }
             if ($isOverdueToProgress) {
@@ -761,7 +762,8 @@ class dashboardController extends Controller
                 "Estimation To: {$estimationToDate}\n" .
                 "Finished: {$finishedDate}\n" .
                 "Status: {$ticket->status}\n" .
-                "Tickets Link:\n{$ticketUrl}";
+                "Tickets Link: {$ticketUrl}\n" .
+                "{$closednoted}";
             Http::timeout(15)->post('http://127.0.0.1:3000/send-message', [
                 'group_id' => '120363405189832865@g.us',
                 'text'     => $message,
