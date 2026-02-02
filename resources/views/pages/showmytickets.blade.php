@@ -33,7 +33,7 @@
         </div>
 
         {{-- Ticket Meta --}}
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 sm:gap-6">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
             <div class="bg-white dark:bg-slate-900 rounded-xl p-5 shadow-lg">
                 <p class="text-xs text-slate-500 dark:text-slate-400 uppercase">Created By</p>
                 <p class="font-semibold mt-1 text-slate-900 dark:text-white text-sm sm:text-base">
@@ -57,7 +57,14 @@
         <div class="bg-white dark:bg-slate-900 rounded-xl p-5 shadow-lg">
             <p class="text-xs text-slate-500 dark:text-slate-400 uppercase">Dificulty</p>
             <p class="font-semibold mt-1 text-slate-900 dark:text-white text-sm sm:text-base">
-                {{ ucfirst($ticket->priority ?? '-') }}
+            <span class="inline-flex px-3 py-1 text-xs font-semibold rounded-full border
+    {{ $ticket->priority === 'Low' ? 'bg-green-100 text-green-700 border-green-300' :
+       ($ticket->priority === 'Medium' ? 'bg-yellow-100 text-yellow-700 border-yellow-300' :
+       ($ticket->priority === 'High' ? 'bg-red-100 text-red-700 border-red-300' :
+        'bg-slate-100 text-slate-600 border-slate-300')) }}">
+    {{ ucfirst($ticket->priority ?? '-') }}
+</span>
+
             </p>
         </div>
 
@@ -84,30 +91,23 @@
         <div class="bg-white dark:bg-slate-900 rounded-xl p-5 shadow-lg">
             <p class="text-xs text-slate-500 dark:text-slate-400 uppercase">Estimation</p>
             <p class="font-semibold mt-1 text-slate-900 dark:text-white text-sm sm:text-base">
-                {{ $ticket->estimation->format('d F Y H:i') ?? '-' }}
+                {{ $estimationDate}}
             </p>
         </div>
         <div class="bg-white dark:bg-slate-900 rounded-xl p-5 shadow-lg">
             <p class="text-xs text-slate-500 dark:text-slate-400 uppercase">Estimation To</p>
             <p class="font-semibold mt-1 text-slate-900 dark:text-white text-sm sm:text-base">
-                {{ $ticket->estimation_to->format('d F Y H:i') ?? '-' }}
-
-
-
+                {{ $estimationToDate }}
             </p>
         </div>
 
         <div class="bg-white dark:bg-slate-900 rounded-xl p-5 shadow-lg">
             <p class="text-xs text-slate-500 dark:text-slate-400 uppercase">Finished</p>
             <p class="font-semibold mt-1 text-slate-900 dark:text-white text-sm sm:text-base">
-                {{-- {{ $ticket->finished ?? '-' }} --}}
-                {{-- {{ $ticket->finished->format('d F Y H:i') }} --}}
-                {{-- {{ $ticket->finished?->format('d F Y H:i') ?? '-' }} --}}
-                {{ $ticket->finished->format('d F Y H:i') ?? '-' }}
-
+                {{ $finishedat}}
             </p>
         </div>
-    </div>
+    {{-- </div> --}}
 
     {{-- Description --}}
 

@@ -421,10 +421,22 @@ class TicketController extends Controller
             'Overdue'  => 'bg-red-500 text-white',
             'Closed'   => 'bg-green-600 text-white',
         ];
+         $estimationDate = $ticket->estimation
+                ?->timezone('Asia/Makassar')
+                ?->format('d-m-Y H:i') ?? '-';
+            $estimationToDate = $ticket->estimation_to
+                ?->timezone('Asia/Makassar')
+                ?->format('d-m-Y H:i') ?? '-';
+            $estimationToDate = $ticket->estimation_to
+                ?->timezone('Asia/Makassar')
+                ?->format('d-m-Y H:i') ?? '-';
+            $finishedat = $ticket->finished
+                ?->timezone('Asia/Makassar')
+                ?->format('d-m-Y H:i') ?? '-';
 
         // fallback
         $ticket->badge_class = $map[$status] ?? 'bg-slate-500 text-white';
-        return view('pages.showmytickets', compact('ticket'));
+        return view('pages.showmytickets', compact('ticket','estimationDate','estimationToDate','finishedat'));
     }
     public function reviewticket($hash)
     {
