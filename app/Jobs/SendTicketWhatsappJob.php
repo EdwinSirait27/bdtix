@@ -40,21 +40,17 @@ class SendTicketWhatsappJob implements ShouldQueue
                 ]);
                 return;
             }
-
+            
             $hash = substr(
                 hash('sha256', $ticket->id . config('app.key')),
                 0,
                 8
             );
-
             $editTicketUrl = config('app.url') . '/editopenticketforadmin/' . $hash;
             $reviewTicketUrl = config('app.url') . '/reviewtickets/' . $hash;
-
             $user = User::with('employee.store')->find($ticket->user_id);
-
             $employee = $user?->employee;
             $store    = $employee?->store;
-
             $createdAt = optional($ticket->created_at)
                 ->timezone('Asia/Makassar')
                 ->format('d-m-Y H:i') ?? '-';
@@ -81,7 +77,7 @@ class SendTicketWhatsappJob implements ShouldQueue
                 "Category: {$ticket->category}",
                 "Description: {$ticket->description}",
                 "Status: Open",
-                "Ticket Link: {$$editTicketUrl}",
+                "Ticket Link: {$editTicketUrl}",
             ];
             // =============================
             // 🔥 ONLY IF PROGRESS → CLOSED
