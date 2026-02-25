@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <title>IT Departments Ticketing</title>
-    <link rel="icon" type="image/png" href="https://cloud.mjm-bali.co.id/index.php/s/CHRczpYqozMHjoD/download">
+    <link rel="icon" type="image/x-icon" href="{{ asset('img/AsianBaylogomark.ico') }}">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     </script>
@@ -15,13 +15,11 @@
 </head>
 
 <body class="bg-slate-950 text-gray-100">
-
     <div
         class="min-h-screen bg-slate-900 flex flex-col 
         mx-auto w-full 
         max-w-md md:max-w-full
         px-4 md:px-0">
-
         <div
             class="relative px-6 pt-12 pb-8 bg-gradient-to-br from-slate-900 via-slate-900 to-slate-800 border-b border-slate-800">
 
@@ -39,15 +37,10 @@
                     English
                 </a>
             </div>
-
             <div class="flex flex-col items-center space-y--1">
                 <div class="relative">
-                    <img src="https://cloud.mjm-bali.co.id/index.php/s/fMMRXmq5cdkApNc/download"
-                        class="w-40 h-40 select-none pointer-events-none" draggable="false" alt="icon">
-
-
-
-
+                    <img src="{{ asset('img/AsianBay.png') }}" class="w-40 h-40 select-none pointer-events-none"
+                        draggable="false" alt="icon">
                 </div>
 
                 <div class="text-center">
@@ -148,8 +141,8 @@
                     {{-- Company Info --}}
                     <div class="space-y-3">
                         <div class="flex items-center space-x-2">
-                            <img src="https://cloud.mjm-bali.co.id/index.php/s/fMMRXmq5cdkApNc/download"
-                                class="w-8 h-8 select-none pointer-events-none" draggable="false" alt="icon">
+                            <img src="{{ asset('img/AsianBay.png') }}"
+                                class="w-10 h-10 select-none pointer-events-none" draggable="false" alt="icon">
                             <h3 class="text-sm font-bold text-slate-900 text-white">{{ __('auth.departemen') }}
                             </h3>
                         </div>
@@ -172,22 +165,18 @@
             </div>
         </footer>
     </div>
-
     <div class="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
         <div class="absolute top-0 right-0 w-96 h-96 bg-blue-900/20 rounded-full filter blur-3xl"></div>
         <div class="absolute bottom-0 left-0 w-96 h-96 bg-cyan-900/20 rounded-full filter blur-3xl"></div>
     </div>
-
     <div class="fixed inset-0 -z-10 opacity-[0.02] pointer-events-none"
         style="background-image: linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px); background-size: 50px 50px;">
     </div>
-
     <script>
         document.getElementById('togglePassword').addEventListener('click', function() {
             const input = document.getElementById('password');
             const iconShow = document.getElementById('iconShow');
             const iconHide = document.getElementById('iconHide');
-
             if (input.type === "password") {
                 input.type = "text";
                 iconShow.classList.add('hidden');
@@ -199,7 +188,6 @@
             }
         });
     </script>
-
     <style>
         @keyframes pulse-slow {
 
@@ -219,7 +207,6 @@
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-
     <script>
         toastr.options = {
             closeButton: true,
@@ -227,16 +214,13 @@
             positionClass: "toast-top-right",
             timeOut: "3000"
         };
-
         @if (session('success'))
             toastr.success(@json(session('success')));
         @endif
-
         @if (session('error'))
             toastr.error(@json(session('error')));
         @endif
     </script>
-
 </body>
 
 </html>

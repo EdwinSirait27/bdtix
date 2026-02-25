@@ -3,13 +3,11 @@
 @section('header', 'Users')
 @section('subtitle', 'Manage system users and permissions')
 @section('content')
-
     <style>
         /* Base DataTables Styling */
         .dataTables_wrapper {
             font-family: inherit;
         }
-
         .dataTables_wrapper .dataTables_length,
         .dataTables_wrapper .dataTables_filter,
         .dataTables_wrapper .dataTables_info,
@@ -17,14 +15,12 @@
             color: #ffffff;
             font-size: 0.875rem;
         }
-
         .dark .dataTables_wrapper .dataTables_length,
         .dark .dataTables_wrapper .dataTables_filter,
         .dark .dataTables_wrapper .dataTables_info,
         .dark .dataTables_wrapper .dataTables_paginate {
             color: #ffffff;
         }
-
         .dataTables_wrapper .dataTables_length select,
         .dataTables_wrapper .dataTables_filter input {
             border: 1px solid #e2e8f0;
@@ -33,19 +29,16 @@
             font-size: 0.875rem;
             margin: 0 0.5rem;
         }
-
         .dark .dataTables_wrapper .dataTables_length select,
         .dark .dataTables_wrapper .dataTables_filter input {
             border-color: #475569;
             background-color: #334155;
             color: #f1f5f9;
         }
-
         /* Table Styling - Desktop Only */
         #users-table {
             width: 100% !important;
         }
-
         #users-table thead {
             background: linear-gradient(to right, #000000, #000000);
             color: rgb(255, 255, 255);

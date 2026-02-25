@@ -1,7 +1,5 @@
 <?php
-
 namespace App\Http\Controllers;
-
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
@@ -13,10 +11,8 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use App\Services\NextcloudService;
 use Illuminate\Support\Facades\Http;
-
 class dashboardController extends Controller
 {
-
     public function dashboardPage()
     {
         $user = Auth::user();
@@ -69,11 +65,6 @@ class dashboardController extends Controller
         $closedtickethuman = Tickets::where('user_id', auth()->id())
             ->where('status', 'Closed')
             ->count();
-
-
-        // =========================
-        // 📅 FILTER INPUT
-        // =========================
         $month     = request('month');     // ex: 2026-01
         $quarter   = request('quarter');   // ex: Q1
         $year      = request('year');      // ex: 2026
@@ -81,14 +72,11 @@ class dashboardController extends Controller
         $dateTo    = request('to');        // ex: 2026-01-31
         $category  = request('category');  // ex: Network
         $categories = Tickets::distinct()->pluck('category');
-
         // =========================
         // 📦 BASE TICKETS QUERY
         // =========================
         $ticketBase = Tickets::query();
-
         // ====== FILTERS ======
-
         // Per bulan
         if ($month) {
             $ticketBase->whereYear('created_at', substr($month, 0, 4))
