@@ -1,5 +1,6 @@
 <?php
-
+use App\Http\Controllers\TicketAttachmentController;
+use App\Http\Controllers\TicketExecutorAttachmentController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\dashboardController;
@@ -42,6 +43,9 @@ Route::middleware('throttle:15,1')->group(function () {
 
 Route::middleware(['auth', 'role:admin|human|executor'])->group(function () {
     Route::get('/dashboard', [dashboardController::class, 'dashboardPage'])->name('dashboard');
+    Route::post('/tickets/{ticketId}/attachments', [TicketAttachmentController::class, 'store'])->name('attachments.store');
+    Route::delete('/tickets/{ticketId}/attachments/{attachmentId}', [TicketAttachmentController::class, 'destroy'])->name('attachments.destroy');
+ 
     // routes/web.php
 Route::get('/dashboard/filteropen', [dashboardController::class, 'dashboardPage'])
     ->name('dashboard.filteropen');
@@ -67,6 +71,8 @@ Route::get('/dashboard/filteronprogress', [dashboardController::class, 'dashboar
 
 Route::middleware(['auth', 'role:admin|executor'])->group(function () {
     Route::match(['GET', 'POST'], '/allticketforadmins/allticketforadmins', [dashboardController::class, 'getAllticketforadmins'])->name('allticketforadmins.allticketforadmins');
+    Route::post('/tickets/{ticketId}/executor-attachments', [TicketExecutorAttachmentController::class, 'store'])->name('executor.attachments.store');
+    Route::delete('/tickets/{ticketId}/executor-attachments/{attachmentId}', [TicketExecutorAttachmentController::class, 'destroy'])->name('executor.attachments.destroy');
     // Route::get('/alltickets', [TicketController::class, 'allTickets'])->name('alltickets');
     Route::get('/resolvetickets', [ResolveTicketController::class, 'allReview'])->name('resolvetickets');
     Route::match(['GET', 'POST'], '/resolveticket/resolveticket', [ResolveTicketController::class, 'getReviewtickets'])->name('resolveticket.resolveticket');

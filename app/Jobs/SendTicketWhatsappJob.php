@@ -25,6 +25,13 @@ class SendTicketWhatsappJob implements ShouldQueue
 
     public function handle(): void
     {
+        if (!config('services.whatsapp.enabled')) {
+            Log::info('WA_JOB_SKIPPED_DISABLED', [
+                'ticket_id'  => $this->ticketId,
+                'old_status' => $this->oldStatus,
+            ]);
+            return;
+        }
 
         Log::info('WA_JOB_START', [
             'ticket_id'  => $this->ticketId,
@@ -101,9 +108,9 @@ class SendTicketWhatsappJob implements ShouldQueue
             }
 
             $response = Http::timeout(10)->post(
-                'http://127.0.0.1:3000/send-message',
+                config('services.whatsapp.endpoint'),
                 [
-                    'group_id' => '120363405189832865@g.us',
+                    'group_id' => config('services.whatsapp.group_id'),
                     'text'     => $message,
                 ]
             );

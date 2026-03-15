@@ -174,8 +174,6 @@
                 <p id="uploadInfo" class="hidden text-sm text-slate-400 text-center mt-3">
                     ⏳ File is being uploaded, please do not close the page...
                 </p>
-
-
             </div>
         </form>
     </div>
@@ -183,12 +181,10 @@
     <div id="sourceModal" class="fixed inset-0 bg-black/60 hidden items-center justify-center z-50">
         <div class="bg-slate-900 rounded-xl p-6 w-80 text-center">
             <h3 class="text-lg font-semibold mb-4 text-white">Pilih Sumber</h3>
-
             <button onclick="openCamera()"
                 class="w-full mb-3 px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white">
                 Open Camera
             </button>
-
             <button onclick="openFilePicker()"
                 class="w-full mb-3 px-4 py-2 rounded-lg bg-slate-700 hover:bg-slate-600 text-white">
                 Upload Files
@@ -209,16 +205,10 @@
             const uploadInfo = document.getElementById('uploadInfo');
 
             form.addEventListener('submit', (e) => {
-                e.preventDefault(); // ⛔ stop submit sementara
-
-                // disable button
+                e.preventDefault();
                 btn.disabled = true;
                 btn.classList.add('opacity-70', 'cursor-not-allowed');
-
-                // ganti text
                 text.textContent = btn.dataset.loading;
-
-                // ganti icon jadi spinner
                 icon.innerHTML = `
             <circle class="opacity-25" cx="12" cy="12" r="10"
                 stroke="currentColor" stroke-width="4"></circle>
@@ -227,19 +217,13 @@
                    a4 4 0 00-4 4H4z"></path>
         `;
                 icon.classList.add('animate-spin');
-
-                // tampilkan info upload
                 uploadInfo.classList.remove('hidden');
-
-                // ✅ kasih waktu browser render UI dulu
                 requestAnimationFrame(() => {
-                    form.submit(); // 🚀 lanjut submit asli
+                    form.submit();
                 });
             });
         });
     </script>
-
-
     <script>
         // Character counter for description
         const description = document.getElementById('description');
@@ -324,7 +308,6 @@
 
         function openCamera() {
             if (!activeInputId) return;
-
             const input = document.getElementById(activeInputId);
             input.setAttribute('capture', 'environment');
             input.click();

@@ -7,11 +7,11 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
 
-class Ticketattachments extends Model
+class TicketExecutorAttachment extends Model
 {
     use SoftDeletes;
 
-    protected $table = 'ticket_attachment';
+    protected $table = 'ticket_executor_attachments';
 
     public $incrementing = false;
     protected $keyType = 'string';
@@ -19,7 +19,7 @@ class Ticketattachments extends Model
     protected $fillable = [
         'id',
         'ticket_id',
-        'user_id',
+        'executor_id',
         'file_name',
         'file_path',
         'original_name',
@@ -44,9 +44,9 @@ class Ticketattachments extends Model
         return $this->belongsTo(Tickets::class);
     }
 
-    public function user(): BelongsTo
+    public function executor(): BelongsTo
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'executor_id');
     }
 
     public function getHumanSizeAttribute(): string

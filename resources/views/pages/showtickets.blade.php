@@ -80,15 +80,26 @@
                 {!! nl2br(e($ticket->notes_executor ?? '-')) !!}
             </div>
         </div>
-        @if (!empty($ticket->attachment_url))
+        @if ($ticket->attachments->count())
             <div class="bg-white dark:bg-slate-900 rounded-2xl shadow p-6">
                 <h3 class="text-lg font-bold mb-4">Attachments</h3>
-
-                <a href="{{ $ticket->attachment_url }}" target="_blank"
-                    class="inline-flex items-center gap-2 px-4 py-2 rounded-lg
-              bg-indigo-600 text-white hover:bg-indigo-700 transition">
-                    Open Attachment Folder
-                </a>
+                <ul class="space-y-2">
+                    @foreach ($ticket->attachments as $file)
+                        <li class="flex items-center gap-2">
+                            <svg class="w-4 h-4 text-slate-400" fill="currentColor" viewBox="0 0 20 20">
+                                <path
+                                    d="M8 2a4 4 0 00-4 4v8a6 6 0 0012 0V6a2 2 0 10-4 0v7a1 1 0 102 0V6a4 4 0 00-8 0v8a4 4 0 008 0V6" />
+                            </svg>
+                            <a href="{{ $file->web_view_link }}" target="_blank"
+                                class="text-blue-500 hover:underline text-sm">
+                                {{ $file->original_name ?? $file->file_name }}
+                            </a>
+                            @if (!empty($file->human_size))
+                                <span class="text-xs text-slate-500">({{ $file->human_size }})</span>
+                            @endif
+                        </li>
+                    @endforeach
+                </ul>
             </div>
         @endif
         @if ($ticket->replies && $ticket->replies->count())

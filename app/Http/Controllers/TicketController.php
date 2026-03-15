@@ -16,7 +16,7 @@ use Carbon\Carbon;
 use App\Services\NextcloudService;
 use PHPUnit\Framework\Attributes\Ticket;
 use Yajra\DataTables\Facades\DataTables;
-use App\Jobs\ProcessTicketAttachmentsJob;
+use App\Jobs\UploadAttachmentToGoogleDrive;
 use App\Jobs\SendTicketWhatsappJob;
 
 class TicketController extends Controller
@@ -564,7 +564,7 @@ class TicketController extends Controller
 
     private function findTicketByHash(string $hash): Tickets
     {
-        $ticket = Tickets::with('user.employee')
+        $ticket = Tickets::with('user.employee', 'executorAttachments')
             ->whereRaw(
                 "SUBSTRING(SHA2(CONCAT(id, ?), 256), 1, 8) = ?",
                 [config('app.key'), $hash]
@@ -835,30 +835,38 @@ class TicketController extends Controller
              * PREPARE TEMP FILES
              * ============================
              */
-            $tempFiles = [];
             if ($request->hasFile('attachments')) {
+                $owner = auth()->user();
+                $folderIdentity = $owner?->employee?->nip ?? $owner?->nip ?? (string) $owner->id;
+                $filePrefix = $folderIdentity;
+
                 foreach ($request->file('attachments') as $file) {
-                    $path = $file->store('tmp/tickets');
-                    $originalName = pathinfo(
-                        $file->getClientOriginalName(),
-                        PATHINFO_FILENAME
-                    );
-                    $extension = $file->getClientOriginalExtension();
-                    $tempFiles[] = [
-                        'path' => $path,
-                        'name' => $originalName . '.' . $extension, // ✅ ADA TITIK
-                        'mime' => $file->getClientMimeType(),       // ✅ WAJIB
-                    ];
+                    $tempPath = $file->store('temp-attachments', 'local');
+
+                    $attachment = Ticketattachments::create([
+                        'id'            => (string) Str::uuid(),
+                        'ticket_id'     => $ticket->id,
+                        'user_id'       => auth()->id(),
+                        'file_name'     => $file->getClientOriginalName(),
+                        'file_path'     => $tempPath,
+                        'original_name' => $file->getClientOriginalName(),
+                        'mime_type'     => $file->getMimeType(),
+                        'size'          => $file->getSize(),
+                        'status'        => 'pending',
+                    ]);
+
+                    UploadAttachmentToGoogleDrive::dispatch(
+                        $attachment->id,
+                        $tempPath,
+                        $folderIdentity,
+                        $ticket->category,
+                        'user',
+                        'user',
+                        $filePrefix
+                    )->onQueue('ticket-heavy')->afterCommit();
                 }
-                ProcessTicketAttachmentsJob::dispatch(
-                    $ticket->id,
-                    $tempFiles,
-                    auth()->id()
-                )
-                    ->onQueue('ticket-heavy')
-                    ->afterCommit();
             }
-            // 🔔 WA HARUS SELALU DIKIRIM
+
             SendTicketWhatsappJob::dispatch($ticket->id)
                 ->onQueue('notification')
                 ->afterCommit();
@@ -875,3 +883,4 @@ class TicketController extends Controller
         }
     }
 }
+

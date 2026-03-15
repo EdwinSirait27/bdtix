@@ -27,6 +27,8 @@ class Tickets extends Model
         'notes_executor',
         'finished',
         'estimation',
+        'duration_type',
+        'duration_value',
     ];
     protected $casts = [
     'estimation' => 'datetime',
@@ -49,6 +51,10 @@ class Tickets extends Model
     public function attachments()
     {
         return $this->hasMany(Ticketattachments::class, 'ticket_id', 'id');
+    }
+    public function executorAttachments()
+    {
+        return $this->hasMany(TicketExecutorAttachment::class, 'ticket_id', 'id');
     }
     public function user()
     {

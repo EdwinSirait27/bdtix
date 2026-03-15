@@ -172,6 +172,65 @@
                     </p>
                 @enderror
             </div>
+
+            <div id="executor-attachments">
+                <label class="block text-sm font-semibold text-slate-300 mb-2 flex items-center space-x-2">
+                    <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
+                    </svg>
+                    <span>Attachments</span>
+                </label>
+                <div class="border border-slate-700 rounded-xl p-5 bg-slate-800/40 min-h-[110px]">
+                    <ul id="executor-attachments-list" class="space-y-2 text-sm text-slate-300">
+                        <li class="text-slate-500">No files selected</li>
+                    </ul>
+                </div>
+                <div class="mt-3 flex flex-col sm:flex-row gap-3">
+                    <button type="button" id="executor-select-files"
+                        class="px-4 py-2.5 bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 rounded-lg transition">
+                        Select Files
+                    </button>
+                    <button type="button" id="executor-upload-btn"
+                        class="px-4 py-2.5 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white rounded-lg transition">
+                        Upload
+                    </button>
+                </div>
+                <p class="mt-2 text-xs text-slate-500">
+                    Max 10 files, 20MB each.
+                </p>
+            </div>
+
+            <div>
+                <label class="block text-sm font-semibold text-slate-300 mb-2 flex items-center space-x-2">
+                    <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
+                    </svg>
+                    <span>Executor Attachments</span>
+                </label>
+                <div class="border border-slate-700 rounded-xl p-5 bg-slate-800/40 min-h-[110px]">
+                    @if ($ticket->executorAttachments->count())
+                        <ul class="space-y-2 text-sm text-slate-300">
+                            @foreach ($ticket->executorAttachments as $file)
+                                <li class="flex items-center gap-2">
+                                    <svg class="w-4 h-4 text-slate-400" fill="currentColor" viewBox="0 0 20 20">
+                                        <path
+                                            d="M8 2a4 4 0 00-4 4v8a6 6 0 0012 0V6a2 2 0 10-4 0v7a1 1 0 102 0V6a4 4 0 00-8 0v8a4 4 0 008 0V6" />
+                                    </svg>
+                                    <a href="{{ $file->web_view_link }}" target="_blank"
+                                        class="text-blue-400 hover:underline text-sm">
+                                        {{ $file->original_name }}
+                                    </a>
+                                    <span class="text-xs text-slate-500">({{ $file->human_size }})</span>
+                                </li>
+                            @endforeach
+                        </ul>
+                    @else
+                        <p class="text-sm text-slate-500">No executor attachments</p>
+                    @endif
+                </div>
+            </div>
           
             <div class="flex space-x-3 pt-4">
                 <a href="{{ route('dashboard') }}"
@@ -189,6 +248,15 @@
                     <span>Updata my ticket</span>
                 </button>
             </div>
+        </form>
+        <form id="executor-attachments-form"
+            action="{{ route('attachments.store', $ticket->id) }}"
+            method="POST"
+            enctype="multipart/form-data"
+            class="hidden">
+            @csrf
+            <input type="file" id="executor-files-input" name="files[]" multiple
+                accept=".jpg,.jpeg,.png,.gif,.pdf,.doc,.docx,.xls,.xlsx,.zip,.txt" style="display:none">
         </form>
     </div>
     @push('scripts')
@@ -226,6 +294,84 @@
                 toastr.error(@json(session('error')));
             @endif
         </script>
-       
+        <script>
+    const executorFilesInput = document.getElementById('executor-files-input');
+    const executorSelectFiles = document.getElementById('executor-select-files');
+    const executorList = document.getElementById('executor-attachments-list');
+    const executorUploadBtn = document.getElementById('executor-upload-btn');
+
+    const renderSelectedFiles = () => {
+        const files = [...(executorFilesInput?.files || [])];
+        executorList.innerHTML = '';
+        if (!files.length) {
+            executorList.innerHTML = '<li class="text-slate-500">No files selected</li>';
+            return;
+        }
+        files.forEach((file) => {
+            const li = document.createElement('li');
+            li.className = 'flex items-center gap-2';
+            li.innerHTML = `<span class="text-slate-400">•</span><span>${file.name}</span>`;
+            executorList.appendChild(li);
+        });
+    };
+
+    executorSelectFiles?.addEventListener('click', () => executorFilesInput?.click());
+    executorFilesInput?.addEventListener('change', renderSelectedFiles);
+
+    executorUploadBtn?.addEventListener('click', async () => {
+        const files = [...(executorFilesInput?.files || [])];
+
+        if (!files.length) {
+            toastr?.error('Please choose at least one file.');
+            return;
+        }
+
+        executorUploadBtn.disabled = true;
+        executorUploadBtn.textContent = 'Uploading...';
+
+        try {
+            const formData = new FormData();
+            files.forEach(file => formData.append('files[]', file));
+            formData.append('_token', document.querySelector('meta[name="csrf-token"]').content);
+
+            const uploadUrl = "{{ route('attachments.store', $ticket->id) }}";
+
+            const response = await fetch(uploadUrl, {
+                method: 'POST',
+                body: formData,
+                credentials: 'same-origin',
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data?.message || 'Upload failed.');
+            }
+
+            toastr?.success(data?.message || 'Upload successful.');
+            executorFilesInput.value = '';
+            renderSelectedFiles();
+
+            if (Array.isArray(data?.attachments) && data.attachments.length) {
+                data.attachments.forEach((file) => {
+                    const li = document.createElement('li');
+                    li.className = 'flex items-center gap-2';
+                    li.innerHTML = `
+                        <a href="${file.web_view_link}" target="_blank"
+                           class="text-blue-400 hover:underline">${file.original_name}</a>
+                        <span class="text-xs text-slate-500">(${file.size})</span>`;
+                    executorList.appendChild(li);
+                });
+            }
+
+        } catch (error) {
+            toastr?.error(error.message || 'Upload failed.');
+        } finally {
+            executorUploadBtn.disabled = false;
+            executorUploadBtn.textContent = 'Upload';
+        }
+    });
+</script>
+        
     @endpush
 @endsection

@@ -6,9 +6,7 @@
     <style>
         .select2-container--default .select2-selection--single {
             background-color: #1e293b;
-            /* slate-800 */
             border: 1px solid #334155;
-            /* slate-700 */
             border-radius: 0.75rem;
             height: 52px;
             display: flex;
@@ -104,11 +102,8 @@
                     <span class="text-red-400">*</span>
                 </label>
                 <div class="relative">
-                    {{-- <select id="category" name="category" required
-                        class="w-full px-4 py-3.5 bg-slate-800 border border-slate-700 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 appearance-none cursor-pointer"> --}}
                     <select id="category" name="category" required
                         class="select2 w-full bg-slate-800 border border-slate-700 rounded-xl text-white">
-
                         <option value="">Choose Categories...</option>
                         <option value="Hardware & Software"
                             {{ old('category', $ticket->category) == 'Hardware & Software' ? 'selected' : '' }}>
@@ -173,59 +168,19 @@
                     </p>
                 @enderror
             </div>
-            <div>
-                <label class="block text-sm font-semibold text-slate-300 mb-3 flex items-center space-x-2">
-                    <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+
+            @error('priority')
+                <p class="mt-2 text-sm text-red-400 flex items-center space-x-1">
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd"
+                            d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                            clip-rule="evenodd" />
                     </svg>
-                    <span>Dificulty Level</span>
-                    <span class="text-red-400">*</span>
-                </label>
-                <div class="grid grid-cols-3 gap-3">
-                    <label class="relative cursor-pointer">
-                        <input type="radio" name="priority" value="Low" id="Low" class="peer sr-only"
-                            required @checked(old('priority', $ticket->priority ?? '') === 'Low')>
+                    <span>{{ $message }}</span>
+                </p>
+            @enderror
 
-                        <div
-                            class="px-4 py-3 bg-slate-800 border-2 border-slate-700 rounded-xl text-center transition-all peer-checked:border-green-500 peer-checked:bg-green-500/10 hover:border-slate-600">
-                            <div class="text-2xl mb-1">🟢</div>
-                            <div class="text-xs font-semibold text-slate-400 peer-checked:text-green-400">Low</div>
-                        </div>
-                    </label>
-                    <label class="relative cursor-pointer">
-                        <input type="radio" name="priority" value="Medium" id="Medium" class="peer sr-only"
-                            @checked(old('priority', $ticket->priority ?? '') === 'Medium')>
-
-                        <div
-                            class="px-4 py-3 bg-slate-800 border-2 border-slate-700 rounded-xl text-center transition-all peer-checked:border-yellow-500 peer-checked:bg-yellow-500/10 hover:border-slate-600">
-                            <div class="text-2xl mb-1">🟡</div>
-                            <div class="text-xs font-semibold text-slate-400 peer-checked:text-yellow-400">Mid</div>
-                        </div>
-                    </label>
-                    <label class="relative cursor-pointer">
-                        <input type="radio" name="priority" value="High" id="High" class="peer sr-only"
-                            @checked(old('priority', $ticket->priority ?? '') === 'High')>
-
-                        <div
-                            class="px-4 py-3 bg-slate-800 border-2 border-slate-700 rounded-xl text-center transition-all peer-checked:border-red-500 peer-checked:bg-red-500/10 hover:border-slate-600">
-                            <div class="text-2xl mb-1">🔴</div>
-                            <div class="text-xs font-semibold text-slate-400 peer-checked:text-red-400">High</div>
-                        </div>
-                    </label>
-                </div>
-                @error('priority')
-                    <p class="mt-2 text-sm text-red-400 flex items-center space-x-1">
-                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd"
-                                d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
-                                clip-rule="evenodd" />
-                        </svg>
-                        <span>{{ $message }}</span>
-                    </p>
-                @enderror
-            </div>
-            <div>
+            <div class="-mt-4">
                 <label for="notes_executor"
                     class="block text-sm font-semibold text-slate-300 mb-2 flex items-center space-x-2">
                     <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -255,25 +210,63 @@
                 @enderror
             </div>
 
-            <div>
-
-                <label for="estimation"
+            <div class="mt-4">
+                <label for="duration_type"
                     class="block text-sm font-semibold text-slate-300 mb-2 flex items-center space-x-2">
                     <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M8 7V3m8 4V3M3 11h18M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                     </svg>
-                    <span>Estimation</span>
+                    <span>Duration</span>
                     <span class="text-red-400">*</span>
                 </label>
 
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6">
+                    <div>
+                        <select id="duration_type" name="duration_type"
+                            class="w-full px-3 sm:px-4 py-2.5 sm:py-3.5 bg-slate-800 border border-slate-700 rounded-lg sm:rounded-xl text-sm sm:text-base text-white" required>
+                            <option value="">Choose Type</option>
+                            <option value="hour" {{ old('duration_type') == 'hour' ? 'selected' : '' }}>Hour</option>
+                            <option value="day" {{ old('duration_type') == 'day' ? 'selected' : '' }}>Day</option>
+                            <option value="week" {{ old('duration_type') == 'week' ? 'selected' : '' }}>Week</option>
+                        </select>
+                        @error('duration_type')
+                            <p class="mt-2 text-sm text-red-400 flex items-center space-x-1">
+                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd"
+                                        d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                                        clip-rule="evenodd" />
+                                </svg>
+                                <span>{{ $message }}</span>
+                            </p>
+                        @enderror
+                    </div>
+                    <div>
+                        <select id="duration_value_select"
+                            class="w-full px-3 sm:px-4 py-2.5 sm:py-3.5 bg-slate-800 border border-slate-700 rounded-lg sm:rounded-xl text-sm sm:text-base text-white" required>
+                            <option value="">Choose Duration</option>
+                        </select>
+                        <input type="time" id="duration_hour_time"
+                            class="hidden w-full px-3 sm:px-4 py-2.5 sm:py-3.5 bg-slate-800 border border-slate-700 rounded-lg sm:rounded-xl text-sm sm:text-base text-white"
+                            step="3600">
+                        <input type="hidden" id="duration_value" name="duration_value"
+                            value="{{ old('duration_value') }}">
+                        @error('duration_value')
+                            <p class="mt-2 text-sm text-red-400 flex items-center space-x-1">
+                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd"
+                                        d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                                        clip-rule="evenodd" />
+                                </svg>
+                                <span>{{ $message }}</span>
+                            </p>
+                        @enderror
+                    </div>
+                </div>
 
                 <input type="datetime-local" id="estimation" name="estimation"
                     value="{{ old('estimation') ?? $ticket->estimation }}"
-                    class="w-full px-4 py-3.5 bg-slate-800 border border-slate-700 rounded-xl text-white" required>
-
-
-
+                    class="hidden">
 
                 @error('estimation')
                     <p class="mt-2 text-sm text-red-400 flex items-center space-x-1">
@@ -285,28 +278,12 @@
                         <span>{{ $message }}</span>
                     </p>
                 @enderror
-
             </div>
-            <div>
 
-                <label for="estimation_to"
-                    class="block text-sm font-semibold text-slate-300 mb-2 flex items-center space-x-2">
-                    <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M8 7V3m8 4V3M3 11h18M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                    </svg>
-                    <span>Estimation To</span>
-                    <span class="text-red-400">*</span>
-                </label>
-
-
+            <div class="hidden">
                 <input type="datetime-local" id="estimation_to" name="estimation_to"
                     value="{{ old('estimation_to') ?? $ticket->estimation_to }}"
-                    class="w-full px-4 py-3.5 bg-slate-800 border border-slate-700 rounded-xl text-white" required>
-
-
-
-
+                    class="w-full px-4 py-3.5 bg-slate-800 border border-slate-700 rounded-xl text-white">
                 @error('estimation_to')
                     <p class="mt-2 text-sm text-red-400 flex items-center space-x-1">
                         <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
@@ -317,204 +294,117 @@
                         <span>{{ $message }}</span>
                     </p>
                 @enderror
-
             </div>
 
+            {{-- Attachment Section --}}
+            <div class="mt-4">
+                <label class="block text-sm font-semibold text-slate-300 mb-2 flex items-center space-x-2">
+                    <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
+                    </svg>
+                    <span>Attachments</span>
+                </label>
 
-    {{-- <div class="space-y-2">
+                {{-- Attachment dari user --}}
+                @if ($ticket->attachments->count())
+                    <ul class="space-y-2 mb-3">
+                        @foreach ($ticket->attachments as $file)
+                            <li class="flex items-center gap-2">
+                                <svg class="w-4 h-4 text-slate-400" fill="currentColor" viewBox="0 0 20 20">
+                                    <path
+                                        d="M8 2a4 4 0 00-4 4v8a6 6 0 0012 0V6a2 2 0 10-4 0v7a1 1 0 102 0V6a4 4 0 00-8 0v8a4 4 0 008 0V6" />
+                                </svg>
+                                <a href="{{ $file->web_view_link }}" target="_blank"
+                                    class="text-blue-400 hover:underline text-sm">
+                                    {{ $file->original_name ?? $file->file_name }}
+                                </a>
+                            </li>
+                        @endforeach
+                    </ul>
+                @else
+                    <p class="text-sm text-slate-500 mb-3">No attachments</p>
+                @endif
 
-    <label for="estimation"
-        class="block text-sm font-semibold text-slate-300 flex items-center gap-2">
-        <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M8 7V3m8 4V3M3 11h18M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-        </svg>
-        <span>Estimation</span>
-        <span class="text-red-400">*</span>
-    </label>
+                {{-- Kotak file list executor --}}
+                <div class="border border-slate-700 rounded-xl p-4 bg-slate-800/40 min-h-[100px]">
+                    <ul id="admin-executor-attachments-list" class="space-y-1 text-sm text-slate-300">
+                        <li id="executor-empty-text" class="text-slate-500">No files selected</li>
+                    </ul>
+                </div>
 
-    <input type="datetime-local"
-        id="estimation"
-        name="estimation"
-        value="{{ old('estimation', $ticket->estimation) }}"
-        class="w-full px-4 py-3.5 bg-slate-800 border border-slate-700 rounded-xl text-white"
-        required>
+                {{-- Tombol --}}
+                <div class="mt-3 flex flex-col sm:flex-row gap-3">
+                    <button type="button" id="admin-executor-select-files"
+                        class="px-4 py-2.5 bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 rounded-lg transition">
+                        Select Files
+                    </button>
+                    <button type="button" id="admin-executor-upload-btn"
+                        class="px-4 py-2.5 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white rounded-lg transition">
+                        Upload
+                    </button>
+                </div>
+                <p class="mt-2 text-xs text-slate-500">Max 10 files, 20MB each.</p>
+            </div>
 
-    @error('estimation')
-        <p class="text-sm text-red-400 flex items-center gap-1">
-            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                <path fill-rule="evenodd"
-                    d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
-                    clip-rule="evenodd" />
-            </svg>
-            <span>{{ $message }}</span>
-        </p>
-    @enderror
-    <label for="estimation"
-        class="block text-sm font-semibold text-slate-300 flex items-center gap-2">
-        <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M8 7V3m8 4V3M3 11h18M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-        </svg>
-        <span>Estimation</span>
-        <span class="text-red-400">*</span>
-    </label>
+            {{-- Action Buttons --}}
+            <div class="flex space-x-3 pt-4">
+                <a href="{{ route('dashboard') }}"
+                    class="flex-1 py-3.5 bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 font-semibold rounded-xl transition-all duration-200 flex items-center justify-center space-x-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                    <span>Back to Dashboard</span>
+                </a>
 
-    <input type="datetime-local"
-        id="estimation"
-        name="estimation"
-        value="{{ old('estimation', $ticket->estimation) }}"
-        class="w-full px-4 py-3.5 bg-slate-800 border border-slate-700 rounded-xl text-white"
-        required>
-
-    @error('estimation')
-        <p class="text-sm text-red-400 flex items-center gap-1">
-            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                <path fill-rule="evenodd"
-                    d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
-                    clip-rule="evenodd" />
-            </svg>
-            <span>{{ $message }}</span>
-        </p>
-    @enderror
-
-</div> --}}
-    {{-- <div class="grid grid-cols-2 gap-4">
-
-    <div class="space-y-2">
- <label for="estimation"
-        class="block text-sm font-semibold text-slate-300 flex items-center gap-2">
-        <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M8 7V3m8 4V3M3 11h18M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-        </svg>
-        <span>Estimation</span>
-        <span class="text-red-400">*</span>
-    </label>
-
-    <input type="datetime-local"
-        id="estimation"
-        name="estimation"
-        value="{{ old('estimation', $ticket->estimation) }}"
-        class="w-full px-4 py-3.5 bg-slate-800 border border-slate-700 rounded-xl text-white"
-        required>
-
-    @error('estimation')
-        <p class="text-sm text-red-400 flex items-center gap-1">
-            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                <path fill-rule="evenodd"
-                    d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
-                    clip-rule="evenodd" />
-            </svg>
-            <span>{{ $message }}</span>
-        </p>
-    @enderror
-    </div>
-
-    <div class="space-y-2">
-        <label for="estimation_to"
-        class="block text-sm font-semibold text-slate-300 flex items-center gap-2">
-        <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M8 7V3m8 4V3M3 11h18M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-        </svg>
-        <span>Estimation To</span>
-        <span class="text-red-400">*</span>
-    </label>
-
-    <input type="datetime-local"
-        id="estimation_to"
-        name="estimation_to"
-        value="{{ old('estimation_to', $ticket->estimation_to) }}"
-        class="w-full px-4 py-3.5 bg-slate-800 border border-slate-700 rounded-xl text-white"
-        required>
-
-    @error('estimation_to')
-        <p class="text-sm text-red-400 flex items-center gap-1">
-            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                <path fill-rule="evenodd"
-                    d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
-                    clip-rule="evenodd" />
-            </svg>
-            <span>{{ $message }}</span>
-        </p>
-    @enderror
-    </div>
-
-</div> --}}
-
-
-    <div>
-        <label class="block text-sm font-semibold text-slate-300 mb-2 flex items-center space-x-2">
-            <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
-            </svg>
-            <span>Attachments</span>
-        </label>
-        @if ($ticket->attachments->count())
-            <ul class="space-y-2">
-                @foreach ($ticket->attachments as $file)
-                    <li class="flex items-center gap-2">
-                        <svg class="w-4 h-4 text-slate-400" fill="currentColor" viewBox="0 0 20 20">
-                            <path
-                                d="M8 2a4 4 0 00-4 4v8a6 6 0 0012 0V6a2 2 0 10-4 0v7a1 1 0 102 0V6a4 4 0 00-8 0v8a4 4 0 008 0V6" />
+                @if ($ticket->status === 'Open')
+                    <input type="hidden" name="status" value="Progress">
+                    <button type="submit" name="action" value="take"
+                        class="flex-1 py-3.5 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white font-semibold rounded-xl shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center space-x-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                         </svg>
-                        <a href="{{ $ticket->attachment_url }}" target="_blank"
-                            class="text-blue-400 hover:underline text-sm">
-                            {{ $file->file_name }}
-                        </a>
-                    </li>
-                @endforeach
-            </ul>
-        @else
-            <p class="text-sm text-slate-500">No attachments</p>
-        @endif
-    </div>
-    <div class="flex space-x-3 pt-4">
-        <a href="{{ route('dashboard') }}"
-            class="flex-1 py-3.5 bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 font-semibold rounded-xl transition-all duration-200 flex items-center justify-center space-x-2">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-            </svg>
-            <span>Back to Dashboard</span>
-        </a>
+                        <span>take this ticket</span>
+                    </button>
+                @endif
 
-        @if ($ticket->status === 'Open')
-            <input type="hidden" name="status" value="Progress">
-            <button type="submit" name="action" value="take"
-                class="flex-1 py-3.5 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white font-semibold rounded-xl shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center space-x-2">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                </svg>
-                <span>take this ticket</span>
+                @if ($ticket->status === 'Progress')
+                    <input type="hidden" name="status" value="Closed">
+                    <button type="submit" name="action" value="close"
+                        class="flex-1 py-3.5 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white font-semibold rounded-xl shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center space-x-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                        </svg>
+                        <span>Closed this Ticket</span>
+                    </button>
+                @endif
 
-            </button>
-        @endif
-        {{-- @if (in_array($ticket->status, ['Progress', 'Overdue'])) --}}
-        @if ($ticket->status === 'Progress')
-            <input type="hidden" name="status" value="Closed">
-            <button type="submit" name="action" value="close"
-                class="flex-1 py-3.5 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white font-semibold rounded-xl shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center space-x-2">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                </svg>
-                <span>Closed this Ticket</span>
-            </button>
-        @endif
-        @if ($ticket->status === 'Overdue')
-            <input type="hidden" name="status" value="Closed">
-            <button type="submit" name="action" value="close"
-                class="flex-1 py-3.5 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white font-semibold rounded-xl shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center space-x-2">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                </svg>
-                <span>Update this Ticket</span>
-            </button>
-        @endif
+                @if ($ticket->status === 'Overdue')
+                    <input type="hidden" name="status" value="Closed">
+                    <button type="submit" name="action" value="close"
+                        class="flex-1 py-3.5 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white font-semibold rounded-xl shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center space-x-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                        </svg>
+                        <span>Update this Ticket</span>
+                    </button>
+                @endif
+            </div>
+
+            {{-- Hidden form untuk upload executor --}}
+            <form id="admin-executor-attachments-form"
+                action="{{ route('executor.attachments.store', $ticket->id) }}"
+                method="POST"
+                enctype="multipart/form-data"
+                class="hidden">
+                @csrf
+                <input type="file" id="admin-executor-files-input" name="files[]" multiple
+                    accept=".jpg,.jpeg,.png,.gif,.pdf,.doc,.docx,.xls,.xlsx,.zip,.txt" style="display:none">
+            </form>
+
+        </form>
     </div>
-    </form>
-    </div>
+
     @push('scripts')
         <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
@@ -529,6 +419,7 @@
                 });
             });
         </script>
+
         <script>
             const description = document.getElementById('description');
             const charCount = document.getElementById('charCount');
@@ -536,6 +427,7 @@
                 charCount.textContent = this.value.length;
             });
         </script>
+
         <script>
             toastr.options = {
                 closeButton: true,
@@ -550,11 +442,11 @@
                 toastr.error(@json(session('error')));
             @endif
         </script>
+
         <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
         <script>
             document.addEventListener('DOMContentLoaded', function() {
                 const estimationInput = document.getElementById('estimation');
-
                 flatpickr(estimationInput, {
                     enableTime: true,
                     dateFormat: "Y-m-d H:i",
@@ -565,10 +457,10 @@
                 });
             });
         </script>
+
         <script>
             document.addEventListener('DOMContentLoaded', function() {
                 const estimationtoInput = document.getElementById('estimation_to');
-
                 flatpickr(estimationtoInput, {
                     enableTime: true,
                     dateFormat: "Y-m-d H:i",
@@ -578,6 +470,277 @@
                     allowInput: true
                 });
             });
+        </script>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const durationType = document.getElementById('duration_type');
+                const durationValueSelect = document.getElementById('duration_value_select');
+                const durationHourTime = document.getElementById('duration_hour_time');
+                const durationValueInput = document.getElementById('duration_value');
+                const estimationInput = document.getElementById('estimation');
+                const estimationToInput = document.getElementById('estimation_to');
+
+                if (!durationType || !durationValueSelect || !durationHourTime || !durationValueInput || !estimationInput || !estimationToInput) {
+                    return;
+                }
+
+                const ranges = {
+                    hour: { min: 1, max: 24, label: 'Hour' },
+                    day: { min: 2, max: 6, label: 'Day' },
+                    week: { min: 1, max: 4, label: 'Week' },
+                };
+
+                const formatDateTimeLocal = (date) => {
+                    const yyyy = date.getFullYear();
+                    const mm = String(date.getMonth() + 1).padStart(2, '0');
+                    const dd = String(date.getDate()).padStart(2, '0');
+                    const hh = String(date.getHours()).padStart(2, '0');
+                    const mi = String(date.getMinutes()).padStart(2, '0');
+                    return `${yyyy}-${mm}-${dd}T${hh}:${mi}`;
+                };
+
+                const syncStartTime = () => {
+                    if (!estimationInput.value) {
+                        estimationInput.value = formatDateTimeLocal(new Date());
+                    }
+                };
+
+                const buildDurationOptions = () => {
+                    const type = durationType.value;
+                    durationValueSelect.innerHTML = '';
+                    if (!ranges[type]) {
+                        durationValueSelect.appendChild(new Option('Choose type first...', ''));
+                        return;
+                    }
+                    durationValueSelect.appendChild(new Option('Choose duration...', ''));
+                    const { min, max, label } = ranges[type];
+                    for (let i = min; i <= max; i++) {
+                        durationValueSelect.appendChild(new Option(`${i} ${label}`, i));
+                    }
+                };
+
+                const syncDurationValue = () => {
+                    const type = durationType.value;
+                    if (type === 'hour') {
+                        const value = durationHourTime.value;
+                        if (!value) { durationValueInput.value = ''; return; }
+                        const parts = value.split(':');
+                        const hours = parseInt(parts[0] || '0', 10);
+                        durationValueInput.value = hours ? String(hours) : '';
+                        return;
+                    }
+                    durationValueInput.value = durationValueSelect.value || '';
+                };
+
+                const computeEstimationTo = () => {
+                    syncStartTime();
+                    const type = durationType.value;
+                    const value = parseInt(durationValueInput.value || '0', 10);
+                    if (!type || !value || !estimationInput.value) return;
+                    const start = new Date(estimationInput.value);
+                    if (Number.isNaN(start.getTime())) return;
+                    let minutes = 0;
+                    if (type === 'hour') minutes = value * 60;
+                    if (type === 'day') minutes = value * 24 * 60;
+                    if (type === 'week') minutes = value * 7 * 24 * 60;
+                    const end = new Date(start.getTime() + minutes * 60000);
+                    estimationToInput.value = formatDateTimeLocal(end);
+                };
+
+                durationType.addEventListener('change', () => {
+                    const type = durationType.value;
+                    if (type === 'hour') {
+                        durationValueSelect.classList.add('hidden');
+                        durationHourTime.classList.remove('hidden');
+                    } else {
+                        durationValueSelect.classList.remove('hidden');
+                        durationHourTime.classList.add('hidden');
+                        buildDurationOptions();
+                    }
+                    syncDurationValue();
+                    computeEstimationTo();
+                });
+                durationValueSelect.addEventListener('change', () => { syncDurationValue(); computeEstimationTo(); });
+                durationHourTime.addEventListener('change', () => { syncDurationValue(); computeEstimationTo(); });
+
+                const showTimePicker = () => {
+                    if (durationHourTime && typeof durationHourTime.showPicker === 'function') {
+                        durationHourTime.showPicker();
+                    }
+                };
+                durationHourTime.addEventListener('focus', showTimePicker);
+                durationHourTime.addEventListener('click', showTimePicker);
+
+                buildDurationOptions();
+                syncDurationValue();
+                computeEstimationTo();
+            });
+        </script>
+
+        {{-- Script attachment executor dengan tombol ✕ per file --}}
+        <script>
+            (function () {
+                const filesInput     = document.getElementById('admin-executor-files-input');
+                const selectBtn      = document.getElementById('admin-executor-select-files');
+                const uploadBtn      = document.getElementById('admin-executor-upload-btn');
+                const list           = document.getElementById('admin-executor-attachments-list');
+                const emptyText      = document.getElementById('executor-empty-text');
+                const CSRF           = document.querySelector('meta[name="csrf-token"]')?.content
+                                    ?? document.querySelector('input[name="_token"]')?.value;
+                const UPLOAD_URL     = "{{ route('executor.attachments.store', $ticket->id) }}";
+                const DELETE_URL     = (id) => `/tickets/{{ $ticket->id }}/executor-attachments/${id}`;
+
+                let pendingFiles  = [];
+                let uploadedFiles = [];
+
+                // Klik Select Files
+                selectBtn?.addEventListener('click', () => filesInput?.click());
+
+                // Pilih file
+                filesInput?.addEventListener('change', function () {
+                    const MAX      = 10;
+                    const MAX_SIZE = 20 * 1024 * 1024;
+                    for (const f of this.files) {
+                        if (pendingFiles.length + uploadedFiles.length >= MAX) {
+                            toastr.warning('Maksimal 10 file.');
+                            break;
+                        }
+                        if (f.size > MAX_SIZE) {
+                            toastr.error(`${f.name} melebihi 20MB.`);
+                            continue;
+                        }
+                        if (!pendingFiles.find(x => x.name === f.name && x.size === f.size)) {
+                            pendingFiles.push(f);
+                        }
+                    }
+                    this.value = '';
+                    renderList();
+                });
+
+                // Upload
+                uploadBtn?.addEventListener('click', async () => {
+                    if (!pendingFiles.length) {
+                        toastr.error('Pilih file terlebih dahulu.');
+                        return;
+                    }
+                    uploadBtn.disabled = true;
+                    uploadBtn.textContent = 'Uploading...';
+
+                    const formData = new FormData();
+                    pendingFiles.forEach(f => formData.append('files[]', f));
+
+                    try {
+                        const res  = await fetch(UPLOAD_URL, {
+                            method: 'POST',
+                            headers: { 'X-CSRF-TOKEN': CSRF, 'Accept': 'application/json' },
+                            body: formData,
+                            credentials: 'same-origin',
+                        });
+                        const data = await res.json();
+                        if (!res.ok) throw new Error(data?.message || 'Upload gagal.');
+
+                        uploadedFiles.push(...(data.attachments ?? []));
+                        pendingFiles = [];
+                        renderList();
+                        toastr.success(data?.message || 'Upload berhasil!');
+                    } catch (err) {
+                        toastr.error(err.message || 'Upload gagal.');
+                    } finally {
+                        uploadBtn.disabled = false;
+                        uploadBtn.textContent = 'Upload';
+                    }
+                });
+
+                function removePending(index) {
+                    pendingFiles.splice(index, 1);
+                    renderList();
+                }
+
+                function removeUploaded(index) {
+                    const file = uploadedFiles[index];
+                    if (!file?.id) {
+                        uploadedFiles.splice(index, 1);
+                        renderList();
+                        return;
+                    }
+                    fetch(DELETE_URL(file.id), {
+                        method: 'DELETE',
+                        headers: { 'X-CSRF-TOKEN': CSRF, 'Accept': 'application/json' }
+                    })
+                    .then(res => {
+                        if (!res.ok) throw new Error();
+                        uploadedFiles.splice(index, 1);
+                        renderList();
+                        toastr.success('File berhasil dihapus.');
+                    })
+                    .catch(() => toastr.error('Gagal menghapus file.'));
+                }
+
+                function renderList() {
+                    const allEmpty = !pendingFiles.length && !uploadedFiles.length;
+                    list.querySelectorAll('.exec-row').forEach(el => el.remove());
+                    emptyText.style.display = allEmpty ? 'block' : 'none';
+
+                    // File sudah terupload
+                    uploadedFiles.forEach((f, i) => {
+                        list.insertAdjacentHTML('beforeend', buildRow(
+                            f.original_name, f.size, true, i, 'uploaded'
+                        ));
+                    });
+
+                    // File pending
+                    pendingFiles.forEach((f, i) => {
+                        list.insertAdjacentHTML('beforeend', buildRow(
+                            f.name, f.size, false, i, 'pending'
+                        ));
+                    });
+
+                    // Pasang event ✕
+                    list.querySelectorAll('.exec-row .btn-remove').forEach(btn => {
+                        btn.addEventListener('click', () => {
+                            const type  = btn.dataset.type;
+                            const index = parseInt(btn.dataset.index);
+                            if (type === 'uploaded') removeUploaded(index);
+                            else removePending(index);
+                        });
+                    });
+                }
+
+                function buildRow(name, size, uploaded, index, type) {
+                    const ext = name.split('.').pop().toLowerCase();
+                    let icon = '📎';
+                    if (['png','jpg','jpeg','gif','webp'].includes(ext)) icon = '🖼';
+                    else if (ext === 'pdf') icon = '📄';
+                    else if (['doc','docx'].includes(ext)) icon = '📝';
+                    else if (['xls','xlsx'].includes(ext)) icon = '📊';
+                    else if (ext === 'zip') icon = '🗜';
+
+                    const badge = uploaded
+                        ? `<span class="text-xs text-green-400 ml-1">(uploaded)</span>`
+                        : '';
+                    return `
+                    <li class="exec-row flex items-center justify-between px-3 py-2 bg-slate-700/60 rounded-lg mb-1">
+                        <div class="flex items-center gap-2 min-w-0">
+                            <span style="font-size:16px;">${icon}</span>
+                            <span class="text-sm text-slate-200 truncate">${name}${badge}</span>
+                            <span class="text-xs text-slate-400 shrink-0">${fmtSize(size)}</span>
+                        </div>
+                        <button type="button"
+                            class="btn-remove text-slate-400 hover:text-red-400 transition-colors text-base leading-none px-2 shrink-0"
+                            data-type="${type}"
+                            data-index="${index}"
+                            title="Hapus">✕</button>
+                    </li>`;
+                }
+
+                function fmtSize(b) {
+                    if (!b) return '';
+                    if (b < 1024) return b + ' B';
+                    if (b < 1048576) return (b / 1024).toFixed(1) + ' KB';
+                    return (b / 1048576).toFixed(1) + ' MB';
+                }
+            })();
         </script>
     @endpush
 @endsection

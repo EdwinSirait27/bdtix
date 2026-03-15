@@ -29,6 +29,19 @@ class ProcessTicketAttachmentsJob implements ShouldQueue
 
     public function handle(): void
     {
+        if (!config('services.nextcloud.enabled')) {
+            Log::info('ATTACHMENT_JOB_SKIPPED_NEXTCLOUD_DISABLED', [
+                'ticket_id' => $this->ticketId,
+                'files'     => count($this->files),
+            ]);
+            foreach ($this->files as $file) {
+                if (isset($file['path']) && Storage::exists($file['path'])) {
+                    Storage::delete($file['path']);
+                }
+            }
+            return;
+        }
+
         Log::info('ATTACHMENT_JOB_START', [
             'ticket_id' => $this->ticketId,
             'files'     => count($this->files),

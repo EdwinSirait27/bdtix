@@ -189,7 +189,7 @@
 
                                         <div class="space-y-2">
                                             @foreach ($ticket->attachments as $file)
-                                                <a href="{{ $ticket->attachment_url }}" target="_blank"
+                                                <a href="{{ $file->web_view_link }}" target="_blank"
                                                     class="flex items-center space-x-2 text-sm text-blue-400
                        hover:text-blue-300 hover:underline">
 
@@ -199,7 +199,7 @@
                                                             d="M3 7a2 2 0 012-2h5l2 2h7a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V7z" />
                                                     </svg>
 
-                                                    <span>See files</span>
+                                                    <span>{{ $file->original_name ?? $file->file_name }}</span>
                                                 </a>
                                             @endforeach
                                         </div>
@@ -410,7 +410,7 @@
 
                                     <div class="space-y-2">
                                         @foreach ($ticket->attachments as $file)
-                                            <a href="{{ $ticket->attachment_url }}" target="_blank"
+                                            <a href="{{ $file->web_view_link }}" target="_blank"
                                                 class="flex items-center space-x-2 text-sm text-blue-400
                        hover:text-blue-300 hover:underline">
 
@@ -420,7 +420,7 @@
                                                         d="M3 7a2 2 0 012-2h5l2 2h7a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V7z" />
                                                 </svg>
 
-                                                <span>See files</span>
+                                                <span>{{ $file->original_name ?? $file->file_name }}</span>
                                             </a>
                                         @endforeach
                                     </div>
@@ -880,7 +880,7 @@
                                     <path
                                         d="M8 2a4 4 0 00-4 4v8a6 6 0 0012 0V6a2 2 0 10-4 0v7a1 1 0 102 0V6a4 4 0 00-8 0v8a4 4 0 008 0V6" />
                                 </svg>
-                                <a href="{{ $ticket->attachment_url }}" target="_blank"
+                                <a href="{{ $file->web_view_link }}" target="_blank"
                                     class="text-blue-400 hover:underline text-sm">
                                     {{ $file->file_name }}
                                 </a>
@@ -1339,7 +1339,7 @@
 
                                     <div class="space-y-2">
                                         @foreach ($ticket->attachments as $file)
-                                            <a href="{{ $ticket->attachment_url }}" target="_blank"
+                                            <a href="{{ $file->web_view_link }}" target="_blank"
                                                 class="flex items-center space-x-2 text-sm text-blue-400
                        hover:text-blue-300 hover:underline">
 
@@ -1349,7 +1349,7 @@
                                                         d="M3 7a2 2 0 012-2h5l2 2h7a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V7z" />
                                                 </svg>
 
-                                                <span>See files</span>
+                                                <span>{{ $file->original_name ?? $file->file_name }}</span>
                                             </a>
                                         @endforeach
                                     </div>
@@ -1478,3 +1478,4 @@
         </script>
     @endpush
 @endsection --}}
+

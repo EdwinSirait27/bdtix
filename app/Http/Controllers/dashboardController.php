@@ -616,7 +616,23 @@ class dashboardController extends Controller
             'finished'        => 'nullable|date',
             'estimation'      => 'nullable|date',
             'estimation_to'      => 'nullable|date',
+            'duration_type'   => 'required|in:hour,day,week',
+            'duration_value'  => 'required|integer|min:1',
         ]);
+        $durationLimits = [
+            'hour' => 24,
+            'day'  => 6,
+            'week' => 4,
+        ];
+        $durationType = $validated['duration_type'] ?? null;
+        $durationValue = (int) ($validated['duration_value'] ?? 0);
+        if (!isset($durationLimits[$durationType])) {
+            return back()->withErrors(['duration_type' => 'Duration type tidak valid'])->withInput();
+        }
+        $minDuration = $durationType === 'day' ? 2 : 1;
+        if ($durationValue < $minDuration || $durationValue > $durationLimits[$durationType]) {
+            return back()->withErrors(['duration_value' => 'Duration tidak valid untuk tipe tersebut'])->withInput();
+        }
         // =========================
         // STATUS SYNC (SERVER SIDE)
         // =========================
@@ -643,14 +659,21 @@ class dashboardController extends Controller
         } else {
             abort(403, 'Status ticket tidak valid');
         }
-        DB::transaction(function () use ($validated, $ticket, $status, $finished, $progressedAt, $oldStatus) {
+        DB::transaction(function () use ($validated, $ticket, $status, $finished, $progressedAt, $oldStatus, $durationType, $durationValue ) {
 
             $estimation = !empty($validated['estimation'])
                 ? Carbon::parse($validated['estimation'])
                 : null;
-            $estimationTo = !empty($validated['estimation_to'])
-                ? Carbon::parse($validated['estimation_to'])
-                : null;
+            $estimationTo = null;
+            if ($estimation) {
+                if ($durationType === 'hour') {
+                    $estimationTo = $estimation->copy()->addHours($durationValue);
+                } elseif ($durationType === 'day') {
+                    $estimationTo = $estimation->copy()->addDays($durationValue);
+                } elseif ($durationType === 'week') {
+                    $estimationTo = $estimation->copy()->addWeeks($durationValue);
+                }
+            }
 
             $data = [
                 'category'        => $validated['category'],
@@ -659,8 +682,10 @@ class dashboardController extends Controller
                 'priority'        => $validated['priority'],
                 'finished'        => $finished,
                 'estimation'      => $estimation,
-                'estimation_to'      => $estimationTo,
+                'estimation_to'   => $estimationTo,
                 'executor_id'     => auth()->id(),
+                'duration_type'   => $durationType, 
+                'duration_value'  => $durationValue,
             ];
 
             // ✅ hanya saat Open → Progress
