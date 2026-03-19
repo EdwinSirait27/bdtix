@@ -24,6 +24,10 @@ class TicketExecutorAttachmentController extends Controller
         ]);
 
         $ticket = Tickets::findOrFail($ticketId);
+        $isAdmin = Auth::user()?->hasRole('admin');
+        if (!$isAdmin && $ticket->executor_id !== Auth::id()) {
+            abort(403, 'You are not allowed to upload executor attachments for this ticket.');
+        }
         $owner = $ticket->user;
         $folderIdentity = $owner?->employee?->nip ?? $owner?->nip ?? $ticket->user_id ?? (string) $ticket->user_id;
         $filePrefix = Auth::user()->employee->nip ?? Auth::user()->nip ?? (string) Auth::id();
@@ -74,6 +78,11 @@ class TicketExecutorAttachmentController extends Controller
     public function destroy($ticketId, $attachmentId): JsonResponse
     {
         $attachment = TicketExecutorAttachment::findOrFail($attachmentId);
+        $ticket = $attachment->ticket;
+        $isAdmin = Auth::user()?->hasRole('admin');
+        if (!$ticket || (!$isAdmin && $ticket->executor_id !== Auth::id())) {
+            abort(403, 'You are not allowed to delete this attachment.');
+        }
         $attachment->delete();
 
         return response()->json(['message' => 'Attachment berhasil dihapus.']);

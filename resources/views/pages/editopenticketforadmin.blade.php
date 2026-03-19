@@ -599,17 +599,7 @@
 
                 // Pilih file
                 filesInput?.addEventListener('change', function () {
-                    const MAX      = 10;
-                    const MAX_SIZE = 20 * 1024 * 1024;
                     for (const f of this.files) {
-                        if (pendingFiles.length + uploadedFiles.length >= MAX) {
-                            toastr.warning('Maksimal 10 file.');
-                            break;
-                        }
-                        if (f.size > MAX_SIZE) {
-                            toastr.error(`${f.name} melebihi 20MB.`);
-                            continue;
-                        }
                         if (!pendingFiles.find(x => x.name === f.name && x.size === f.size)) {
                             pendingFiles.push(f);
                         }

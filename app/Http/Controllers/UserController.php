@@ -85,7 +85,7 @@ class UserController extends Controller
 {
     $request->validate([
         'user_ids'   => 'required|array',
-        'user_ids.*' => 'uuid'
+        'user_ids.*' => 'uuid|exists:users,id'
     ]);
 
     try {

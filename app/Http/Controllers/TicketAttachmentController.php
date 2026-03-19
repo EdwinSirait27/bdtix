@@ -24,6 +24,9 @@ class TicketAttachmentController extends Controller
         ]);
 
         $ticket = Tickets::findOrFail($ticketId);
+        if ($ticket->user_id !== Auth::id()) {
+            abort(403, 'You are not allowed to upload attachments for this ticket.');
+        }
         $owner = $ticket->user;
         $folderIdentity = $owner?->employee?->nip ?? $owner?->nip ?? $ticket->user_id ?? (string) $ticket->user_id;
         $filePrefix = Auth::user()->employee->nip ?? Auth::user()->nip ?? (string) Auth::id();
@@ -66,7 +69,7 @@ class TicketAttachmentController extends Controller
         }
 
         return response()->json([
-            'message'     => 'File diterima, sedang diproses ke Google Drive.',
+            'message'     => 'File berhasil diupload.',
             'attachments' => $attachments,
         ], 201);
     }
@@ -74,6 +77,10 @@ class TicketAttachmentController extends Controller
     public function destroy($ticketId, $attachmentId): JsonResponse
     {
         $attachment = Ticketattachments::findOrFail($attachmentId);
+        $ticket = $attachment->ticket;
+        if (!$ticket || $ticket->user_id !== Auth::id()) {
+            abort(403, 'You are not allowed to delete this attachment.');
+        }
         $attachment->delete();
 
         return response()->json(['message' => 'Attachment berhasil dihapus.']);

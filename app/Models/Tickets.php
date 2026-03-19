@@ -13,6 +13,7 @@ class Tickets extends Model
         'request_uuid',
         'user_id',
         'queue_number',
+        'queue_date',
         'title',
         'category',
         'description',
@@ -37,6 +38,7 @@ class Tickets extends Model
     'finished'   => 'datetime',
     'last_overdue_reminder_at'   => 'datetime',
     'created_at'   => 'datetime',
+    'queue_date'   => 'date',
 ];
     protected static function booted()
     {

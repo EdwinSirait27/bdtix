@@ -610,9 +610,9 @@ class dashboardController extends Controller
         // VALIDATION
         // =========================
         $validated = $request->validate([
-            'category'        => 'required|string',
+            'category'        => 'required|in:Hardware & Software,Network,Account & Access,Others',
             'notes_executor' => 'required|string|min:5|max:500',
-            'priority'        => 'required|string',
+            'priority'        => 'required|in:Low,Medium,High',
             'finished'        => 'nullable|date',
             'estimation'      => 'nullable|date',
             'estimation_to'      => 'nullable|date',

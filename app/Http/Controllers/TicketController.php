@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
@@ -596,7 +597,7 @@ class TicketController extends Controller
     public function updatemytickets(Request $request, string $hash)
     {
         $ticket = $this->findTicketByHash($hash);
-        if (in_array($ticket->status, ['Progress', 'Closed'])) {
+        if ($ticket->status !== 'Open') {
             abort(403, 'Ticket cannot be edited');
         }
         Log::info('TICKET_UPDATE_START', [
@@ -604,7 +605,7 @@ class TicketController extends Controller
         ]);
         $validated = $request->validate([
             'title'        => 'required|string',
-            'category'        => 'required|string',
+            'category'        => 'required|in:Hardware & Software,Network,Account & Access,Others',
             'description'        => 'required|string|min:5|max:500',
 
         ]);
@@ -803,84 +804,128 @@ class TicketController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'request_uuid'  => 'required|uuid|unique:ticket_tables,request_uuid',
+            'request_uuid'  => 'required|uuid',
             'title'         => 'required|string|max:150',
-            'category'      => 'required|string',
+            'category'      => 'required|in:Hardware & Software,Network,Account & Access,Others',
             'description'   => 'required|string|max:500',
             'attachments'   => 'nullable|array|max:3',
-            'attachments.*' => 'file|max:51200|mimes:jpg,jpeg,png,pdf,doc,docx,xls,xlsx',
+            'attachments.*' => 'file|max:20480|mimes:jpg,jpeg,png,gif,pdf,doc,docx,xls,xlsx,zip,txt',
 
         ]);
-        DB::beginTransaction();
-        try {
-            // 🔒 aman dari race queue number
-            $queueNumber = Tickets::whereDate('created_at', today())
-                ->lockForUpdate()
-                ->count() + 1;
-
-            $ticket = Tickets::create([
-                'id'           => (string) Str::uuid(),
-                'request_uuid' => $validated['request_uuid'],
-                'user_id'      => auth()->id(),
-                'queue_number' => $queueNumber,
-                'title'        => $validated['title'],
-                'category'     => $validated['category'],
-                'description'  => $validated['description'],
-                'status'       => 'Open',
-            ]);
-
-            DB::commit(); // ⬅️ WAJIB selesai dulu
-            /**
-             * ============================
-             * PREPARE TEMP FILES
-             * ============================
-             */
-            if ($request->hasFile('attachments')) {
-                $owner = auth()->user();
-                $folderIdentity = $owner?->employee?->nip ?? $owner?->nip ?? (string) $owner->id;
-                $filePrefix = $folderIdentity;
-
-                foreach ($request->file('attachments') as $file) {
-                    $tempPath = $file->store('temp-attachments', 'local');
-
-                    $attachment = Ticketattachments::create([
-                        'id'            => (string) Str::uuid(),
-                        'ticket_id'     => $ticket->id,
-                        'user_id'       => auth()->id(),
-                        'file_name'     => $file->getClientOriginalName(),
-                        'file_path'     => $tempPath,
-                        'original_name' => $file->getClientOriginalName(),
-                        'mime_type'     => $file->getMimeType(),
-                        'size'          => $file->getSize(),
-                        'status'        => 'pending',
-                    ]);
-
-                    UploadAttachmentToGoogleDrive::dispatch(
-                        $attachment->id,
-                        $tempPath,
-                        $folderIdentity,
-                        $ticket->category,
-                        'user',
-                        'user',
-                        $filePrefix
-                    )->onQueue('ticket-heavy')->afterCommit();
-                }
+        $existingTicket = Tickets::where('request_uuid', $validated['request_uuid'])->first();
+        if ($existingTicket) {
+            if ($existingTicket->user_id === auth()->id()) {
+                return redirect()
+                    ->route('dashboard')
+                    ->with('success', 'Ticket already submitted.');
             }
-
-            SendTicketWhatsappJob::dispatch($ticket->id)
-                ->onQueue('notification')
-                ->afterCommit();
-            return redirect()
-                ->route('dashboard')
-                ->with('success', 'Ticket has been successfully submitted and is being processed.');
-        } catch (\Throwable $e) {
-            DB::rollBack();
-
-            Log::critical('TICKET_STORE_FAILED', [
-                'error' => $e->getMessage(),
-            ]);
             return back()->with('error', 'failed send ticket');
         }
+        $attempts = 0;
+        $maxAttempts = 3;
+        $queueDate = now()->toDateString();
+
+        while ($attempts < $maxAttempts) {
+            $attempts++;
+            DB::beginTransaction();
+            try {
+                // Aman dari race condition: gunakan unique index + retry
+                $lastQueue = Tickets::where('queue_date', $queueDate)
+                    ->lockForUpdate()
+                    ->max('queue_number');
+                $queueNumber = ($lastQueue ?? 0) + 1;
+
+                $ticket = Tickets::create([
+                    'id'           => (string) Str::uuid(),
+                    'request_uuid' => $validated['request_uuid'],
+                    'user_id'      => auth()->id(),
+                    'queue_number' => $queueNumber,
+                    'queue_date'   => $queueDate,
+                    'title'        => $validated['title'],
+                    'category'     => $validated['category'],
+                    'description'  => $validated['description'],
+                    'status'       => 'Open',
+                ]);
+
+                DB::commit(); // ⬅️ WAJIB selesai dulu
+                /**
+                 * ============================
+                 * PREPARE TEMP FILES
+                 * ============================
+                 */
+                if ($request->hasFile('attachments')) {
+                    $owner = auth()->user();
+                    $folderIdentity = $owner?->employee?->nip ?? $owner?->nip ?? (string) $owner->id;
+                    $filePrefix = $folderIdentity;
+
+                    foreach ($request->file('attachments') as $file) {
+                        $tempPath = $file->store('temp-attachments', 'local');
+
+                        $attachment = Ticketattachments::create([
+                            'id'            => (string) Str::uuid(),
+                            'ticket_id'     => $ticket->id,
+                            'user_id'       => auth()->id(),
+                            'file_name'     => $file->getClientOriginalName(),
+                            'file_path'     => $tempPath,
+                            'original_name' => $file->getClientOriginalName(),
+                            'mime_type'     => $file->getMimeType(),
+                            'size'          => $file->getSize(),
+                            'status'        => 'pending',
+                        ]);
+
+                        UploadAttachmentToGoogleDrive::dispatch(
+                            $attachment->id,
+                            $tempPath,
+                            $folderIdentity,
+                            $ticket->category,
+                            'user',
+                            'user',
+                            $filePrefix
+                        )->onQueue('ticket-heavy')->afterCommit();
+                    }
+                }
+
+                SendTicketWhatsappJob::dispatch($ticket->id)
+                    ->onQueue('notification')
+                    ->afterCommit();
+                return redirect()
+                    ->route('dashboard')
+                    ->with('success', 'Ticket has been successfully submitted and is being processed.');
+            } catch (QueryException $e) {
+                DB::rollBack();
+                $isDuplicate = ($e->errorInfo[1] ?? null) === 1062;
+                if ($isDuplicate) {
+                    $duplicateKey = $e->errorInfo[2] ?? '';
+                    if (Str::contains($duplicateKey, 'ticket_queue_date_number_unique') && $attempts < $maxAttempts) {
+                        usleep(20000 * $attempts);
+                        continue;
+                    }
+                    if (Str::contains($duplicateKey, 'request_uuid')) {
+                        $existingTicket = Tickets::where('request_uuid', $validated['request_uuid'])->first();
+                        if ($existingTicket && $existingTicket->user_id === auth()->id()) {
+                            return redirect()
+                                ->route('dashboard')
+                                ->with('success', 'Ticket already submitted.');
+                        }
+                        return back()->with('error', 'failed send ticket');
+                    }
+                }
+
+                Log::critical('TICKET_STORE_FAILED', [
+                    'error' => $e->getMessage(),
+                ]);
+                return back()->with('error', 'failed send ticket');
+            } catch (\Throwable $e) {
+                DB::rollBack();
+
+                Log::critical('TICKET_STORE_FAILED', [
+                    'error' => $e->getMessage(),
+                ]);
+                return back()->with('error', 'failed send ticket');
+            }
+        }
+        return back()->with('error', 'failed send ticket');
     }
 }
+
 

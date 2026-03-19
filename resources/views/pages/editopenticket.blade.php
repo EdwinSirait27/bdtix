@@ -128,12 +128,6 @@
                     <span>Attachment (Optional)</span>
                 </label>
                 <div id="attachmentContainer"></div>
-                <p id="limitMessage" class="text-red-400 text-sm mt-2 hidden">
-                    Maximal 3 attachment.
-                </p>
-                <p id="minimumMessage" class="text-red-400 text-sm mt-2 hidden">
-                    Minimun 1 attachment.
-                </p>
                 <button type="button" id="btnAddAttachment"
                     class="mt-3 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm"
                     onclick="addAttachment()">
@@ -193,20 +187,8 @@
             charCount.textContent = this.value.length;
         });
         let attachmentCount = 0;
-        const maxAttachment = 3;
-        const minAttachment = 1;
-        document.addEventListener("DOMContentLoaded", function() {
-            initAttachment();
-        });
-
-        function initAttachment() {
-            if (attachmentCount < minAttachment) {
-                addAttachment();
-            }
-        }
 
         function addAttachment() {
-            if (attachmentCount >= maxAttachment) return;
             attachmentCount++;
             const id = "attachment_" + attachmentCount;
             const html = `
@@ -214,7 +196,7 @@
         <input type="file"
             id="${id}"
             name="attachments[]"
-            accept="image/*,.pdf,.doc,.docx"
+            accept=".jpg,.jpeg,.png,.gif,.pdf,.doc,.docx,.xls,.xlsx,.zip,.txt"
             class="hidden"
             onchange="updateFileName('${id}')">
         <label onclick="showSourceModal('${id}')"
@@ -230,7 +212,7 @@
                     Click to upload file
                 </p>
                 <p class="text-xs text-slate-600 mt-1">
-                    PNG, JPG, PDF, DOC (Max. 5MB)
+                    JPG, PNG, GIF, PDF, DOC, XLS, ZIP, TXT (Max. 20MB)
                 </p>
             </div>
         </label>
@@ -238,11 +220,6 @@
     `;
             document.getElementById("attachmentContainer")
                 .insertAdjacentHTML("beforeend", html);
-            if (attachmentCount >= maxAttachment) {
-                btnAddAttachment.disabled = true;
-                btnAddAttachment.classList.add("opacity-50", "cursor-not-allowed");
-                limitMessage.classList.remove("hidden");
-            }
         }
         let activeInputId = null;
 
@@ -275,18 +252,12 @@
         }
 
         function eraseAttachment() {
-            if (attachmentCount <= minAttachment) return;
+            if (attachmentCount <= 0) return;
             const lastId = "wrap_attachment_" + attachmentCount;
             const lastElement = document.getElementById(lastId);
             if (lastElement) {
                 lastElement.remove();
                 attachmentCount--;
-            }
-            if (attachmentCount < maxAttachment) {
-                const btnAdd = document.getElementById("btnAddAttachment");
-                btnAdd.disabled = false;
-                btnAdd.classList.remove("opacity-50", "cursor-not-allowed");
-                document.getElementById("limitMessage").classList.add("hidden");
             }
         }
 
