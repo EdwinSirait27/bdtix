@@ -14,9 +14,10 @@ class GoogleDriveServiceProvider extends ServiceProvider
     {
         \Storage::extend('google', function ($app, $config) {
             $client = new Client();
-            $client->setClientId($config['clientId']);
-            $client->setClientSecret($config['clientSecret']);
-            $client->refreshToken($config['refreshToken']);
+
+            // Ganti dari OAuth2 ke Service Account
+            $client->setAuthConfig(base_path($config['serviceAccountJson']));
+            $client->setScopes([Drive::DRIVE]);
 
             $service = new Drive($client);
             $adapter = new GoogleDriveAdapter($service, $config['folder']);

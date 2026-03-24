@@ -612,7 +612,6 @@ class dashboardController extends Controller
         $validated = $request->validate([
             'category'        => 'required|in:Hardware & Software,Network,Account & Access,Others',
             'notes_executor' => 'required|string|min:5|max:500',
-            'priority'        => 'required|in:Low,Medium,High',
             'finished'        => 'nullable|date',
             'estimation'      => 'nullable|date',
             'estimation_to'      => 'nullable|date',
@@ -679,7 +678,6 @@ class dashboardController extends Controller
                 'category'        => $validated['category'],
                 'notes_executor' => $validated['notes_executor'],
                 'status'          => $status,
-                'priority'        => $validated['priority'],
                 'finished'        => $finished,
                 'estimation'      => $estimation,
                 'estimation_to'   => $estimationTo,

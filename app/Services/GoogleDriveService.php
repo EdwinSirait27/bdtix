@@ -27,12 +27,12 @@ class GoogleDriveService
 
     public function __construct()
     {
-        $this->client = new Client();
-        $this->client->setClientId(config('filesystems.disks.google.clientId'));
-        $this->client->setClientSecret(config('filesystems.disks.google.clientSecret'));
-        $this->client->refreshToken(config('filesystems.disks.google.refreshToken'));
-        $this->client->addScope(Drive::DRIVE);
-        $this->driveService = new Drive($this->client);
+         $this->client = new Client();
+         $this->client->setClientId(config('filesystems.disks.google.clientId'));
+         $this->client->setClientSecret(config('filesystems.disks.google.clientSecret'));
+         $this->client->refreshToken(config('filesystems.disks.google.refreshToken'));
+         $this->client->addScope(Drive::DRIVE);
+         $this->driveService = new Drive($this->client);
     }
 
     /**

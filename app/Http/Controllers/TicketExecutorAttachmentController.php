@@ -66,6 +66,7 @@ class TicketExecutorAttachmentController extends Controller
                 'size'          => $attachment->size,
                 'status'        => 'pending',
                 'uploaded_at'   => $attachment->created_at->toDateTimeString(),
+                'drive_file_id' => $attachment->drive_file_id,
             ];
         }
 
