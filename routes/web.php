@@ -37,8 +37,7 @@ Route::middleware('throttle:15,1')->group(function () {
 // Route::post('/ticketreq', [TicketController::class, 'store'])->name('ticketreq')->middleware('auth');
 // Route::get('/showmytickets/{hash}', [TicketController::class, 'show'])->name('showmytickets')->middleware('auth');
 // Route::get('/editmytickets/{hash}', [TicketController::class, 'edit'])->name('editmytickets')->middleware('auth');
-// Route::get('/showalltickets/{hash}', [TicketController::class, 'showalltickets'])->name('showalltickets')->middleware('auth');
-// Route::get('/editalltickets/{hash}', [TicketController::class, 'editalltickets'])->name('editalltickets')->middleware('auth');
+
 
 
 Route::middleware(['auth', 'role:admin|human|executor'])->group(function () {
@@ -78,8 +77,6 @@ Route::middleware(['auth', 'role:admin|executor'])->group(function () {
     Route::match(['GET', 'POST'], '/resolveticket/resolveticket', [ResolveTicketController::class, 'getReviewtickets'])->name('resolveticket.resolveticket');
     // Route::match(['GET', 'POST'], '/alltickets/alltickets', [TicketController::class, 'getAlltickets'])->name('alltickets.alltickets');
     Route::get('/showtickets/{hash}', [dashboardController::class, 'show'])->name('showtickets');
-    Route::get('/showalltickets/{hash}', [TicketController::class, 'showalltickets'])->name('showalltickets');
-    Route::get('/editalltickets/{hash}', [TicketController::class, 'editalltickets'])->name('editalltickets');
 
     Route::put(
         'updateopenticketforadmin/{hash}',

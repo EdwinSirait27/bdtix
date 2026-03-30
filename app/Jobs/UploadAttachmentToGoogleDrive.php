@@ -22,43 +22,60 @@ class UploadAttachmentToGoogleDrive implements ShouldQueue
     public function __construct(
         public string $attachmentId,
         public string $tempPath,
-        public string $folderIdentity,
+        public string $folderIdentity, // NIP
         public string $category,
-        public string $type = 'user',
-        public string $modelType = 'user',
+        public string $type = 'user',      // user / executor
+        public string $modelType = 'user', // user / executor
         public ?string $filePrefix = null,
     ) {}
 
     public function handle(GoogleDriveService $driveService): void
-{
-    // Gunakan model yang sesuai
-    $attachment = $this->modelType === 'executor'
-        ? \App\Models\TicketExecutorAttachment::find($this->attachmentId)
-        : \App\Models\Ticketattachments::find($this->attachmentId);
+    {
+        // =============================
+        // 1. AMBIL MODEL
+        // =============================
+        $attachment = $this->modelType === 'executor'
+            ? TicketExecutorAttachment::find($this->attachmentId)
+            : Ticketattachments::find($this->attachmentId);
 
-    if (!$attachment) {
-        Log::warning("Attachment {$this->attachmentId} not found.");
-        return;
-    }
+        if (!$attachment) {
+            Log::warning("Attachment {$this->attachmentId} not found.");
+            return;
+        }
 
         try {
+            // =============================
+            // 2. PATH FILE TEMP
+            // =============================
             $tempFullPath = storage_path('app/private/' . $this->tempPath);
+
+            // fallback jika tidak ada di private
+            if (!file_exists($tempFullPath)) {
+                $tempFullPath = storage_path('app/' . $this->tempPath);
+            }
 
             if (!file_exists($tempFullPath)) {
                 Log::error("Temp file not found: {$tempFullPath}");
+                $attachment->update(['status' => 'failed']);
                 return;
             }
 
+            // =============================
+            // 3. UPLOAD KE GOOGLE DRIVE
+            // =============================
             $driveData = $driveService->uploadFromPath(
                 $tempFullPath,
                 $attachment->original_name,
                 $attachment->mime_type,
-                $this->folderIdentity,
-                $this->category,
-                $this->type,
-                $this->filePrefix
+                $this->folderIdentity, // NIP (string)
+                $this->category,       // category (string)
+                $this->type,           // user / executor
+                $this->filePrefix      // prefix opsional
             );
 
+            // =============================
+            // 4. UPDATE DB
+            // =============================
             $attachment->update([
                 'file_path'        => $driveData['web_view_link'],
                 'drive_file_id'    => $driveData['drive_file_id'],
@@ -68,11 +85,18 @@ class UploadAttachmentToGoogleDrive implements ShouldQueue
                 'status'           => 'uploaded',
             ]);
 
+            // =============================
+            // 5. HAPUS FILE TEMP
+            // =============================
             @unlink($tempFullPath);
 
+            Log::info("Attachment {$this->attachmentId} uploaded successfully.");
+
         } catch (\Exception $e) {
-            Log::error("Failed to upload: " . $e->getMessage());
+            Log::error("Failed to upload attachment {$this->attachmentId}: " . $e->getMessage());
+
             $attachment->update(['status' => 'failed']);
+
             throw $e;
         }
     }

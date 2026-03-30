@@ -7,7 +7,6 @@ use Google\Service\Drive;
 use Google\Service\Drive\DriveFile;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Log;
-use Carbon\Carbon;
 
 class GoogleDriveService
 {
@@ -27,16 +26,16 @@ class GoogleDriveService
 
     public function __construct()
     {
-         $this->client = new Client();
-         $this->client->setClientId(config('filesystems.disks.google.clientId'));
-         $this->client->setClientSecret(config('filesystems.disks.google.clientSecret'));
-         $this->client->refreshToken(config('filesystems.disks.google.refreshToken'));
-         $this->client->addScope(Drive::DRIVE);
-         $this->driveService = new Drive($this->client);
+        $this->client = new Client();
+        $this->client->setClientId(config('filesystems.disks.google.clientId'));
+        $this->client->setClientSecret(config('filesystems.disks.google.clientSecret'));
+        $this->client->refreshToken(config('filesystems.disks.google.refreshToken'));
+        $this->client->addScope(Drive::DRIVE);
+        $this->driveService = new Drive($this->client);
     }
 
     /**
-     * Upload attachment ke Google Drive
+     * Upload attachment dari UploadedFile (dipakai langsung dari controller)
      */
     public function uploadAttachment(
         UploadedFile $file,
@@ -44,13 +43,12 @@ class GoogleDriveService
         string $category,
         string $type = 'user',
         ?string $filePrefix = null
-    ): array
-    {
+    ): array {
         if (!in_array($category, self::VALID_CATEGORIES)) {
             throw new \InvalidArgumentException("Invalid category: {$category}");
         }
 
-        $folderId = $this->getOrCreateFolder($folderIdentity, $category, $type);
+        $folderId = $this->createFolderPath($folderIdentity, $category, $type);
 
         $fileName = $this->buildFileName($filePrefix ?: $folderIdentity, $file->getClientOriginalName());
 
@@ -70,8 +68,6 @@ class GoogleDriveService
 
         $this->setPublicReadPermission($uploaded->id);
 
-        $typeFolder = $type === 'executor' ? self::EXECUTOR_FOLDER_NAME : self::USER_FOLDER_NAME;
-
         return [
             'drive_file_id'    => $uploaded->id,
             'original_name'    => $uploaded->name,
@@ -80,23 +76,27 @@ class GoogleDriveService
             'web_view_link'    => $uploaded->webViewLink,
             'web_content_link' => $uploaded->webContentLink,
             'folder_id'        => $folderId,
-            'folder_path'      => self::ROOT_FOLDER_NAME . "/{$folderIdentity}/{$category}/{$typeFolder}",
         ];
     }
 
     /**
-     * Upload attachment dari path file sementara
+     * Upload attachment dari path file sementara (dipakai dari Job)
+     * Struktur folder: Ticketing Attachments / NIP / Category / User|Executor Attachments
      */
     public function uploadFromPath(
         string $filePath,
         string $fileName,
         string $mimeType,
-        string $folderIdentity,
-        string $category,
-        string $type = 'user',
+        string $folderIdentity, // NIP (string)
+        string $category,       // category (string)
+        string $type = 'user',  // user / executor
         ?string $filePrefix = null
     ): array {
-        $folderId = $this->getOrCreateFolder($folderIdentity, $category, $type);
+        if (!in_array($category, self::VALID_CATEGORIES)) {
+            throw new \InvalidArgumentException("Invalid category: {$category}");
+        }
+
+        $folderId = $this->createFolderPath($folderIdentity, $category, $type);
 
         $fileMetadata = new DriveFile([
             'name'    => $this->buildFileName($filePrefix ?: $folderIdentity, $fileName),
@@ -140,39 +140,36 @@ class GoogleDriveService
     }
 
     /**
-     * Dapatkan atau buat folder sesuai struktur:
-     *
-     * Ticketing Attachments/
-     * └── {NIP}/
-     *     └── {Category}/
-     *         ├── User Attachments/
-     *         └── Executor Attachments/
+     * Buat folder path sesuai alur:
+     * Ticketing Attachments / NIP / Category / User|Executor Attachments
      */
-    protected function getOrCreateFolder(string $nip, string $category, string $type = 'user'): string
+    protected function createFolderPath(string $nip, string $category, string $type = 'user'): string
     {
-        // Step 1: Cari atau buat folder "Ticketing Attachments" (di root Drive)
-        $rootId = $this->findOrCreateFolder(self::ROOT_FOLDER_NAME, null);
+        $folders = [
+            self::ROOT_FOLDER_NAME,
+            $nip,
+            $category,
+            $type === 'executor' ? self::EXECUTOR_FOLDER_NAME : self::USER_FOLDER_NAME,
+        ];
 
-        // Step 2: Cari atau buat folder {NIP} di dalam "Ticketing Attachments"
-        $nipId = $this->findOrCreateFolder($nip, $rootId);
+        $parentId = null;
+        foreach ($folders as $folderName) {
+            $parentId = $this->findOrCreateFolder($folderName, $parentId);
+        }
 
-        // Step 3: Cari atau buat folder {Category} di dalam {NIP}
-        $categoryId = $this->findOrCreateFolder($category, $nipId);
-
-        // Step 4: Cari atau buat folder "User Attachments" atau "Executor Attachments"
-        $typeFolderName = $type === 'executor' ? self::EXECUTOR_FOLDER_NAME : self::USER_FOLDER_NAME;
-        $typeId = $this->findOrCreateFolder($typeFolderName, $categoryId);
-
-        return $typeId;
+        return $parentId;
     }
 
+    /**
+     * Build nama file dengan prefix
+     */
     protected function buildFileName(string $prefix, string $originalName): string
     {
         return $prefix . '_' . $originalName;
     }
 
     /**
-     * Cari atau buat folder (idempotent — tidak duplikat)
+     * Cari folder atau buat jika belum ada
      */
     protected function findOrCreateFolder(string $name, ?string $parentId = null): string
     {

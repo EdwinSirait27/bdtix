@@ -26,9 +26,9 @@ class User extends Authenticatable
         'password',
         'remember_token',
     ];
-    public function Employee()
+    public function employee()
     {
-        return $this->belongsTo(Employee::class, 'employee_id');
+         return $this->belongsTo(\App\Models\Employee::class, 'employee_id');
     }
     public function findForAuth($username)
     {

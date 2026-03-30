@@ -19,6 +19,7 @@ use PHPUnit\Framework\Attributes\Ticket;
 use Yajra\DataTables\Facades\DataTables;
 use App\Jobs\UploadAttachmentToGoogleDrive;
 use App\Jobs\SendTicketWhatsappJob;
+use App\Helpers\DriveHelper;
 
 class TicketController extends Controller
 {
@@ -399,6 +400,7 @@ class TicketController extends Controller
             'user.employee',
             'executor.employee',
             'attachments',
+            'executorAttachments',
         ])
             ->where('user_id', $userId)
             ->get()
@@ -631,51 +633,6 @@ class TicketController extends Controller
     }
 
 
-
-    public function showalltickets($hash)
-    {
-        $ticket = Tickets::with([
-            'user.employee',
-            'attachments',
-        ])
-            ->get()
-            ->first(function ($ticket) use ($hash) {
-                $hashedId = substr(
-                    hash('sha256', $ticket->id . env('APP_KEY')),
-                    0,
-                    8
-                );
-                return hash_equals($hashedId, $hash);
-            });
-
-        if (! $ticket) {
-            abort(404, 'Ticket not found');
-        }
-
-        return view('pages.showalltickets', compact('ticket'));
-    }
-    public function editalltickets($hash)
-    {
-        $ticket = Tickets::with([
-            'user.employee',
-            'attachments',
-        ])
-            ->get()
-            ->first(function ($ticket) use ($hash) {
-                $hashedId = substr(
-                    hash('sha256', $ticket->id . env('APP_KEY')),
-                    0,
-                    8
-                );
-                return hash_equals($hashedId, $hash);
-            });
-
-        if (! $ticket) {
-            abort(404, 'Ticket not found');
-        }
-
-        return view('pages.editalltickets', compact('ticket'));
-    }
     public function getAlltickets(Request $request)
     {
         $query = Tickets::with(['user.employee', 'executor.employee'])
@@ -855,8 +812,8 @@ class TicketController extends Controller
                  */
                 if ($request->hasFile('attachments')) {
                     $owner = auth()->user();
-                    $folderIdentity = $owner?->employee?->nip ?? $owner?->nip ?? (string) $owner->id;
-                    $filePrefix = $folderIdentity;
+                    $folderIdentity = DriveHelper::getFolderIdentity($owner);
+                    $filePrefix = DriveHelper::getFilePrefix($owner);
 
                     foreach ($request->file('attachments') as $file) {
                         $tempPath = $file->store('temp-attachments', 'local');

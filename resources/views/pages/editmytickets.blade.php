@@ -102,7 +102,7 @@
                     <span class="text-red-400">*</span>
                 </label>
                 <div class="relative">
-                  <select id="category" name="category" required
+                    <select id="category" name="category" required
                         class="select2 w-full bg-slate-800 border border-slate-700 rounded-xl text-white">
                         <option value="">Choose Categories...</option>
                         <option value="Hardware & Software"
@@ -223,44 +223,46 @@
                 <p class="mt-2 text-xs text-slate-500">Max 10 files, 20MB each.</p>
             </div>
 
-            {{-- Executor Attachments (read only untuk user) --}}
-            <div>
-                <label class="block text-sm font-semibold text-slate-300 mb-2 flex items-center space-x-2">
-                    <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
-                    </svg>
-                    <span>Executor Attachments</span>
-                </label>
-                <div class="border border-slate-700 rounded-xl p-5 bg-slate-800/40 min-h-[80px]">
-                    @if ($ticket->executorAttachments->count())
-                        <ul class="space-y-2 text-sm text-slate-300">
-                            @foreach ($ticket->executorAttachments as $file)
-                                <li class="flex items-center gap-2">
-                                    <svg class="w-4 h-4 text-slate-400 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                                        <path d="M8 2a4 4 0 00-4 4v8a6 6 0 0012 0V6a2 2 0 10-4 0v7a1 1 0 102 0V6a4 4 0 00-8 0v8a4 4 0 008 0V6" />
-                                    </svg>
-                                    @if ($file->drive_file_id && $file->status === 'uploaded')
-                                        <button type="button"
-                                            onclick="openPreviewModal('https://drive.google.com/file/d/{{ $file->drive_file_id }}/preview', '{{ addslashes($file->original_name ?? $file->file_name) }}')"
-                                            class="text-sm text-blue-400 hover:underline text-left">
-                                            {{ $file->original_name ?? $file->file_name }}
-                                        </button>
-                                    @else
-                                        <span class="text-sm text-slate-400">
-                                            {{ $file->original_name ?? $file->file_name }}
-                                            <span class="text-xs text-yellow-500">(processing...)</span>
-                                        </span>
-                                    @endif
-                                    <span class="text-xs text-slate-500">({{ $file->human_size }})</span>
-                                </li>
-                            @endforeach
-                        </ul>
-                    @else
-                        <p class="text-sm text-slate-500">No executor attachments yet</p>
-                    @endif
+            {{-- Executor Attachments (hanya tampil jika status Closed) --}}
+            @if ($ticket->status === 'Closed')
+                <div>
+                    <label class="block text-sm font-semibold text-slate-300 mb-2 flex items-center space-x-2">
+                        <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
+                        </svg>
+                        <span>Executor Attachments</span>
+                    </label>
+                    <div class="border border-slate-700 rounded-xl p-5 bg-slate-800/40 min-h-[80px]">
+                        @if ($ticket->executorAttachments->count())
+                            <ul class="space-y-2 text-sm text-slate-300">
+                                @foreach ($ticket->executorAttachments as $file)
+                                    <li class="flex items-center gap-2">
+                                        <svg class="w-4 h-4 text-slate-400 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                            <path d="M8 2a4 4 0 00-4 4v8a6 6 0 0012 0V6a2 2 0 10-4 0v7a1 1 0 102 0V6a4 4 0 00-8 0v8a4 4 0 008 0V6" />
+                                        </svg>
+                                        @if ($file->drive_file_id && $file->status === 'uploaded')
+                                            <button type="button"
+                                                onclick="openPreviewModal('https://drive.google.com/file/d/{{ $file->drive_file_id }}/preview', '{{ addslashes($file->original_name ?? $file->file_name) }}')"
+                                                class="text-sm text-blue-400 hover:underline text-left">
+                                                {{ $file->original_name ?? $file->file_name }}
+                                            </button>
+                                        @else
+                                            <span class="text-sm text-slate-400">
+                                                {{ $file->original_name ?? $file->file_name }}
+                                                <span class="text-xs text-yellow-500">(processing...)</span>
+                                            </span>
+                                        @endif
+                                        <span class="text-xs text-slate-500">({{ $file->human_size }})</span>
+                                    </li>
+                                @endforeach
+                            </ul>
+                        @else
+                            <p class="text-sm text-slate-500">No executor attachments yet</p>
+                        @endif
+                    </div>
                 </div>
-            </div>
+            @endif
 
             <div class="flex space-x-3 pt-4">
                 <a href="{{ route('dashboard') }}"

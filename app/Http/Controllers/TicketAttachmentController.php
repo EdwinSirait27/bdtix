@@ -9,6 +9,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
+use App\Helpers\DriveHelper;
 
 class TicketAttachmentController extends Controller
 {
@@ -28,8 +29,8 @@ class TicketAttachmentController extends Controller
             abort(403, 'You are not allowed to upload attachments for this ticket.');
         }
         $owner = $ticket->user;
-        $folderIdentity = $owner?->employee?->nip ?? $owner?->nip ?? $ticket->user_id ?? (string) $ticket->user_id;
-        $filePrefix = Auth::user()->employee->nip ?? Auth::user()->nip ?? (string) Auth::id();
+        $folderIdentity = DriveHelper::getFolderIdentity($owner);
+        $filePrefix = DriveHelper::getFilePrefix(Auth::user());
         $category = $ticket->category;
         $attachments = [];
 
@@ -56,7 +57,7 @@ class TicketAttachmentController extends Controller
                 'user',
                 'user',
                 $filePrefix
-            );
+            )->onQueue('ticket-heavy');
 
             $attachments[] = [
                 'id'            => $attachment->id,
