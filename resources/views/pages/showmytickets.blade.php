@@ -223,5 +223,5 @@
                 if (e.target === this) closePreviewModal();
             });
         </script>
-    @endpushAZ
+    @endpush
 @endsection

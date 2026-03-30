@@ -53,7 +53,7 @@
             z-index: 9999;
         }
 
-        /* ✅ Flatpickr dark theme override */
+        /* Flatpickr dark theme override */
         .flatpickr-calendar {
             background: #1e293b !important;
             border: 1px solid #334155 !important;
@@ -232,7 +232,7 @@
                         <span class="text-red-400">*</span>
                     </label>
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6">
-                        {{-- ✅ Choose Type → Select2 --}}
+                        {{-- Choose Type → Select2 --}}
                         <div>
                             <select id="duration_type" name="duration_type"
                                 class="select2-duration w-full bg-slate-800 border border-slate-700 rounded-xl text-white" required>
@@ -253,12 +253,12 @@
                             @enderror
                         </div>
                         <div>
-                            {{-- ✅ Day/Week → Select2 --}}
+                            {{-- Day/Week → Select dropdown --}}
                             <select id="duration_value_select"
                                 class="w-full px-3 sm:px-4 py-2.5 sm:py-3.5 bg-slate-800 border border-slate-700 rounded-lg sm:rounded-xl text-sm sm:text-base text-white">
                                 <option value="">Choose type first...</option>
                             </select>
-                            {{-- ✅ Hour → Flatpickr time picker --}}
+                            {{-- Hour → Flatpickr time picker --}}
                             <input type="text" id="duration_hour_time"
                                 class="hidden w-full bg-slate-800 border border-slate-700 rounded-xl text-white"
                                 placeholder="Pick a time...">
@@ -351,7 +351,7 @@
                     <option value="Closed">Close this Ticket</option>
                 </select>
             </div>
-            @elseif (in_array($ticket->status, ['Progress']))
+            @elseif ($ticket->status === 'Progress')
                 <input type="hidden" name="status" id="ticketStatusInput" value="Closed">
             @endif
 
@@ -528,7 +528,7 @@
     </div>
 
     @push('scripts')
-        {{-- ✅ Flatpickr CSS --}}
+        {{-- Flatpickr CSS --}}
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 
         <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
@@ -545,19 +545,13 @@
                     dropdownParent: $('#category').parent()
                 });
 
-                // ✅ Select2: Duration Type (Hour/Day/Week)
+                // ✅ FIX: Select2 duration_type — TANPA dispatch redundant yang menyebabkan double trigger
                 @if ($ticket->status === 'Open')
                 $('#duration_type').select2({
                     placeholder: 'Choose Type...',
                     width: '100%',
                     dropdownParent: $('#duration_type').parent(),
                     minimumResultsForSearch: Infinity
-                });
-
-                // ✅ Trigger change setelah Select2 berubah agar JS duration ikut update
-                $('#duration_type').on('change', function () {
-                    const event = new Event('change', { bubbles: true });
-                    document.getElementById('duration_type').dispatchEvent(event);
                 });
                 @endif
 
@@ -623,7 +617,6 @@
                 const syncVal = () => {
                     const type = durationType.value;
                     if (type === 'hour') {
-                        // Ambil nilai dari Flatpickr
                         const v = fpHour.input.value;
                         if (!v) { durationValueInput.value = ''; return; }
                         const start = new Date(estimationInput.value);
@@ -658,7 +651,7 @@
                     estimationToInput.value = fmt(new Date(start.getTime() + mins * 60000));
                 };
 
-                // ✅ Inisialisasi Flatpickr untuk input jam (Hour)
+                // Inisialisasi Flatpickr untuk input jam (Hour)
                 const fpHour = flatpickr(durationHourTime, {
                     enableTime: true,
                     noCalendar: true,
@@ -674,7 +667,7 @@
                     }
                 });
 
-                // ✅ Listen perubahan dari Select2 duration_type via jQuery
+                // ✅ FIX: Hanya satu listener untuk duration_type via jQuery (tidak ada dispatch redundant)
                 $('#duration_type').on('change', function () {
                     const type = this.value;
                     if (type === 'hour') {
@@ -801,12 +794,15 @@
                 const statusSelect = document.getElementById('statusSelect');
                 const btnLabel     = document.getElementById('btn-close-label');
 
-                $('#statusSelect').on('change', function () {
-                    if (this.value === 'Progress') {
-                        btnLabel.textContent = 'Back to Progress';
-                    } else if (this.value === 'Closed') {
-                        btnLabel.textContent = 'Close this Ticket';
-                    }
+                // ✅ FIX: Bungkus dalam $(document).ready agar jQuery sudah siap saat listener dipasang
+                $(document).ready(function () {
+                    $('#statusSelect').on('change', function () {
+                        if (this.value === 'Progress') {
+                            btnLabel.textContent = 'Back to Progress';
+                        } else if (this.value === 'Closed') {
+                            btnLabel.textContent = 'Close this Ticket';
+                        }
+                    });
                 });
 
                 btnClose?.addEventListener('click', function () {
