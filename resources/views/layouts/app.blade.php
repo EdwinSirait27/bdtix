@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <title>@yield('title', 'IT Departments Ticketing')</title>
-    <link rel="icon" type="image/png" href="{{ asset('img/AsianBaylogomark.ico') }}">
+    <link rel="icon" type="image/png" href="{{ asset('img/AsianBay logomark.png') }}">
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.2/css/buttons.dataTables.min.css">
     <script>
         (function() {
@@ -210,7 +210,7 @@
                 <div class="px-4 sm:px-6 lg:px-8 py-4 lg:py-6">
                     <div class="flex items-center justify-between mb-4 lg:hidden">
                         <div class="flex items-center space-x-3">
-                            <img src="https://cloud.mjm-bali.co.id/index.php/s/fMMRXmq5cdkApNc/download"
+                            <img src="{{ asset('img/AsianBay.png') }}"
                                 class="w-16 h-16 select-none pointer-events-none" draggable="false" alt="icon">
                             <div>
                                 <h2 class="text-sm font-bold text-white">@yield('company', 'IT Departments')</h2>
@@ -266,8 +266,8 @@
                         {{-- Company Info --}}
                         <div class="space-y-3">
                             <div class="flex items-center space-x-2">
-                                <img src="https://cloud.mjm-bali.co.id/index.php/s/fMMRXmq5cdkApNc/download"
-                                    class="w-8 h-8 select-none pointer-events-none" draggable="false" alt="icon">
+                                <img src="{{ asset('img/AsianBay.png') }}"
+                                    class="w-12 h-12 select-none pointer-events-none" draggable="false" alt="icon">
                                 <h3 class="text-sm font-bold text-slate-900 text-white">{{ __('auth.departemen') }}
                                 </h3>
                             </div>

@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <title>@yield('title', 'IT Departments Ticketing')</title>
-    <link rel="icon" type="image/png" href="https://cloud.mjm-bali.co.id/index.php/s/J3Wob5N5LjzHwik/download">
+    <link rel="icon" type="image/png" href="{{ asset('img/AsianBay logomark.ico') }}">
     
     <!-- CRITICAL: Force dark mode IMMEDIATELY -->
     <script>
@@ -33,7 +33,7 @@
     <aside class="hidden lg:fixed lg:inset-y-0 lg:left-0 lg:z-50 lg:flex lg:w-72 lg:flex-col">
         <div class="flex grow flex-col gap-y-5 overflow-y-auto bg-slate-900 border-r border-slate-800 px-6 pb-4">
             <div class="flex h-24 shrink-0 items-center border-b border-slate-800">
-                <img src="https://cloud.mjm-bali.co.id/index.php/s/fMMRXmq5cdkApNc/download"
+                <img src="{{ asset('img/AsianBay.png') }}"
                     class="h-12 w-12 select-none pointer-events-none" draggable="false" alt="icon">
                 <div class="ml-3">
                     <h2 class="text-base font-bold text-white">IT Departments</h2>
@@ -211,7 +211,7 @@
                                         <p class="text-xs text-slate-400 truncate">
                                             {{ Auth::user()->employee->email ?? ' +62 812-3456-9999' }}</p>
                                     </div>
-                               </div>
+               </div>
                             </div>
                         </li>
                     @endauth
@@ -225,7 +225,7 @@
                 <div class="px-4 sm:px-6 lg:px-8 py-4 lg:py-6">
                     <div class="flex items-center justify-between mb-4 lg:hidden">
                         <div class="flex items-center space-x-3">
-                            <img src="https://cloud.mjm-bali.co.id/index.php/s/7ixWakyMn8JCe9F/download"
+                            <img src="{{ asset('img/AsianBay.png') }}"
                                 class="w-16 h-16 select-none pointer-events-none" draggable="false" alt="icon">
                             <div>
                                 <h2 class="text-sm font-bold text-white">@yield('company', 'IT Departments')</h2>

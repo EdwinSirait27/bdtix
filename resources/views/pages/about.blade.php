@@ -26,7 +26,7 @@
         </div>
         <div class="grid grid-cols-3 gap-3">
             <div class="bg-slate-800/50 backdrop-blur-sm rounded-xl p-4 border border-slate-700 text-center">
-                <div class="text-2xl font-bold text-blue-400">3</div>
+                <div class="text-2xl font-bold text-blue-400">4</div>
                 <div class="text-xs text-slate-400 mt-1">Member</div>
             </div>
             <div class="bg-slate-800/50 backdrop-blur-sm rounded-xl p-4 border border-slate-700 text-center">
@@ -43,6 +43,8 @@
             <h3 class="text-lg font-bold text-white">Meet Our Team</h3>
         </div>
         <div class="space-y-4">
+
+            {{-- Welky Setiawan --}}
             <div
                 class="bg-slate-800/50 backdrop-blur-sm rounded-2xl border border-slate-700 overflow-hidden hover:border-blue-500/50 transition-all duration-300 group">
                 <div class="p-5">
@@ -115,6 +117,8 @@
                     </div>
                 </div>
             </div>
+
+            {{-- Gede Arya --}}
             <div
                 class="bg-slate-800/50 backdrop-blur-sm rounded-2xl border border-slate-700 overflow-hidden hover:border-cyan-500/50 transition-all duration-300 group">
                 <div class="p-5">
@@ -137,7 +141,7 @@
                         <div class="flex-1 min-w-0">
                             <h4 class="text-lg font-bold text-white group-hover:text-cyan-400 transition-colors">Gede Arya
                             </h4>
-                            <p class="text-sm text-cyan-400 font-medium">IT Supoort</p>
+                            <p class="text-sm text-cyan-400 font-medium">IT Support</p>
                             <div class="flex items-center space-x-2 mt-2">
                                 <span
                                     class="px-2.5 py-1 bg-cyan-500/20 text-cyan-400 text-xs font-semibold rounded-lg border border-cyan-500/30">
@@ -165,8 +169,7 @@
                             <span class="px-3 py-1 bg-slate-700/50 text-slate-300 text-xs rounded-lg">Hardware</span>
                             <span class="px-3 py-1 bg-slate-700/50 text-slate-300 text-xs rounded-lg">Helpdesk</span>
                             <span class="px-3 py-1 bg-slate-700/50 text-slate-300 text-xs rounded-lg">Network</span>
-                            <span class="px-3 py-1 bg-slate-700/50 text-slate-300 text-xs rounded-lg">Desktop
-                                Support</span>
+                            <span class="px-3 py-1 bg-slate-700/50 text-slate-300 text-xs rounded-lg">Desktop Support</span>
                         </div>
                     </div>
                     <div class="mt-4 flex items-center space-x-3">
@@ -189,6 +192,8 @@
                     </div>
                 </div>
             </div>
+
+            {{-- Edwin Sirait --}}
             <div
                 class="bg-slate-800/50 backdrop-blur-sm rounded-2xl border border-slate-700 overflow-hidden hover:border-purple-500/50 transition-all duration-300 group">
                 <div class="p-5">
@@ -200,17 +205,14 @@
                                     ES
                                 </div>
                             </div>
-
                             <div
                                 class="absolute -bottom-1 -right-1 w-6 h-6 bg-green-500 rounded-full border-3 border-slate-800 flex items-center justify-center">
-                                <svg class="w-3 h-3 text-white" fill="none" stroke="currentColor"
-                                    viewBox="0 0 24 24">
+                                <svg class="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
                                         d="M5 13l4 4L19 7" />
                                 </svg>
                             </div>
                         </div>
-
                         <div class="flex-1 min-w-0">
                             <h4 class="text-lg font-bold text-white group-hover:text-purple-400 transition-colors">Edwin
                                 Sirait</h4>
@@ -222,12 +224,10 @@
                                 </span>
                                 <span
                                     class="px-2.5 py-1 bg-green-500/20 text-green-400 text-xs font-semibold rounded-lg border border-green-500/30">
-
                                     Online
                                 </span>
                             </div>
                         </div>
-
                         <div class="flex-shrink-0">
                             <svg class="w-6 h-6 text-slate-600 group-hover:text-purple-400 group-hover:translate-x-1 transition-all"
                                 fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -235,7 +235,6 @@
                             </svg>
                         </div>
                     </div>
-
                     <div class="mt-4 pt-4 border-t border-slate-700">
                         <p class="text-sm text-slate-400 leading-relaxed mb-3">
                             IT Developer with over 3 years of experience in web application development, backend
@@ -248,7 +247,6 @@
                             <span class="px-3 py-1 bg-slate-700/100 text-slate-300 text-xs rounded-lg">Server Administrators</span>
                         </div>
                     </div>
-
                     <div class="mt-4 flex items-center space-x-3">
                         <a href="mailto:it@mjm-bali.co.id"
                             class="flex-1 py-2 bg-slate-700/50 hover:bg-slate-700 text-slate-300 text-xs font-medium rounded-lg transition-colors flex items-center justify-center space-x-2">
@@ -269,6 +267,81 @@
                     </div>
                 </div>
             </div>
+
+            {{-- Jery Andrian - RED ✅ --}}
+            <div
+                class="bg-slate-800/50 backdrop-blur-sm rounded-2xl border border-slate-700 overflow-hidden hover:border-red-500/50 transition-all duration-300 group">
+                <div class="p-5">
+                    <div class="flex items-center space-x-4">
+                        <div class="relative flex-shrink-0">
+                            <div
+                                class="w-20 h-20 rounded-2xl bg-gradient-to-br from-red-600 to-red-800 overflow-hidden ring-2 ring-red-500/30 group-hover:ring-red-500/60 transition-all">
+                                <div class="w-full h-full flex items-center justify-center text-3xl font-bold text-white">
+                                    JA
+                                </div>
+                            </div>
+                            <div
+                                class="absolute -bottom-1 -right-1 w-6 h-6 bg-green-500 rounded-full border-3 border-slate-800 flex items-center justify-center">
+                                <svg class="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
+                                        d="M5 13l4 4L19 7" />
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <h4 class="text-lg font-bold text-white group-hover:text-red-400 transition-colors">Jery Andrian</h4>
+                            <p class="text-sm text-red-400 font-medium">IT Support</p>
+                            <div class="flex items-center space-x-2 mt-2">
+                                <span
+                                    class="px-2.5 py-1 bg-red-500/20 text-red-400 text-xs font-semibold rounded-lg border border-red-500/30">
+                                    Junior
+                                </span>
+                                <span
+                                    class="px-2.5 py-1 bg-green-500/20 text-green-400 text-xs font-semibold rounded-lg border border-green-500/30">
+                                    Online
+                                </span>
+                            </div>
+                        </div>
+                        <div class="flex-shrink-0">
+                            <svg class="w-6 h-6 text-slate-600 group-hover:text-red-400 group-hover:translate-x-1 transition-all"
+                                fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="mt-4 pt-4 border-t border-slate-700">
+                        <p class="text-sm text-slate-400 leading-relaxed mb-3">
+                            Junior IT Support with approximately 1 year of experience, focusing on network troubleshooting
+                            and system development. Eager to grow and contribute to enterprise IT operations with a strong
+                            foundation in both networking and development disciplines.
+                        </p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="px-3 py-1 bg-slate-700/50 text-slate-300 text-xs rounded-lg">Network</span>
+                            <span class="px-3 py-1 bg-slate-700/50 text-slate-300 text-xs rounded-lg">Development</span>
+                            <span class="px-3 py-1 bg-slate-700/50 text-slate-300 text-xs rounded-lg">Helpdesk</span>
+                        </div>
+                    </div>
+                    <div class="mt-4 flex items-center space-x-3">
+                        <a href="mailto:it@mjm-bali.co.id"
+                            class="flex-1 py-2 bg-slate-700/50 hover:bg-slate-700 text-slate-300 text-xs font-medium rounded-lg transition-colors flex items-center justify-center space-x-2">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                            </svg>
+                            <span>Email</span>
+                        </a>
+                        <a href="tel:+6281234567893"
+                            class="flex-1 py-2 bg-slate-700/50 hover:bg-slate-700 text-slate-300 text-xs font-medium rounded-lg transition-colors flex items-center justify-center space-x-2">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                            </svg>
+                            <span>Call</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
         </div>
         <div
             class="bg-gradient-to-r from-blue-500/10 to-cyan-500/10 border border-blue-500/30 rounded-2xl p-5 text-center">
@@ -283,14 +356,14 @@
             </a>
         </div>
     </div>
-    <footer class="bg-dark dark:bg-slate-900  mt-auto">
+    <footer class="bg-dark dark:bg-slate-900 mt-auto">
         <div class="px-4 sm:px-6 lg:px-8 py-6 lg:py-8">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
                 {{-- Company Info --}}
                 <div class="space-y-3">
                     <div class="flex items-center space-x-2">
-                        <img src="https://cloud.mjm-bali.co.id/index.php/s/fMMRXmq5cdkApNc/download"
-                            class="w-8 h-8 select-none pointer-events-none" draggable="false" alt="icon">
+                        <img src="{{ asset('img/AsianBay.png') }}"
+                            class="w-12 h-12 select-none pointer-events-none" draggable="false" alt="icon">
                         <h3 class="text-sm font-bold text-slate-900 text-white">{{ __('auth.departemen') }}
                         </h3>
                     </div>

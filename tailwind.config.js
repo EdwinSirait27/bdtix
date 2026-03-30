@@ -39,5 +39,16 @@ export default {
       }
     },
   },
+  safelist: [
+    'from-red-600',
+    'to-red-800',
+    'ring-red-500/30',
+    'group-hover:ring-red-500/60',
+    'hover:border-red-500/50',
+    'group-hover:text-red-400',
+    'text-red-400',
+    'bg-red-500/20',
+    'border-red-500/30',
+  ],
   plugins: [],
 }
