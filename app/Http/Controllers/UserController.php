@@ -116,20 +116,71 @@ class UserController extends Controller
         $userRoles = $user->getRoleNames()->toArray();
         return view('pages.editusers', compact('user', 'roles', 'userRoles'));
     }
+    // public function update(Request $request, $hash)
+    // {
+    //     $user = User::all()->first(function ($u) use ($hash) {
+    //         return substr(hash('sha256', $u->id . env('APP_KEY')), 0, 8) === $hash;
+    //     });
+    //     abort_if(!$user, 404);
+    //     $request->validate([
+    //         'roles' => 'nullable|array',
+    //         'roles.*' => 'exists:roles,name',
+    //     ]);
+    //     // Sync role (hapus lama + insert baru)
+    //     $user->syncRoles($request->roles ?? []);
+    //     return redirect()
+    //         ->route('users')
+    //         ->with('success', 'Role Updated Successfully');
+    // }
     public function update(Request $request, $hash)
-    {
-        $user = User::all()->first(function ($u) use ($hash) {
-            return substr(hash('sha256', $u->id . env('APP_KEY')), 0, 8) === $hash;
-        });
-        abort_if(!$user, 404);
-        $request->validate([
-            'roles' => 'nullable|array',
-            'roles.*' => 'exists:roles,name',
-        ]);
-        // Sync role (hapus lama + insert baru)
-        $user->syncRoles($request->roles ?? []);
-        return redirect()
-            ->route('users')
-            ->with('success', 'Role Updated Successfully');
+{
+    Log::info('Update role started', [
+        'hash' => $hash,
+        'request_roles' => $request->roles,
+    ]);
+
+    $user = User::all()->first(function ($u) use ($hash) {
+        return substr(hash('sha256', $u->id . env('APP_KEY')), 0, 8) === $hash;
+    });
+
+    if (!$user) {
+        Log::warning('User not found for hash', ['hash' => $hash]);
+        abort(404);
     }
+
+    Log::info('User found', [
+        'user_id' => $user->id,
+        'username' => $user->username,
+        'current_roles' => $user->getRoleNames(),
+    ]);
+
+    $request->validate([
+        'roles' => 'nullable|array',
+        'roles.*' => 'exists:roles,name',
+    ]);
+
+    Log::info('Validation passed', [
+        'roles' => $request->roles,
+    ]);
+
+    try {
+        $user->syncRoles($request->roles ?? []);
+
+        Log::info('Roles synced successfully', [
+            'user_id' => $user->id,
+            'new_roles' => $user->getRoleNames(),
+        ]);
+    } catch (\Exception $e) {
+        Log::error('Failed to sync roles', [
+            'error' => $e->getMessage(),
+            'user_id' => $user->id,
+        ]);
+
+        throw $e; // biar tetap kelihatan error aslinya
+    }
+
+    return redirect()
+        ->route('users')
+        ->with('success', 'Role Updated Successfully');
+}
 }
