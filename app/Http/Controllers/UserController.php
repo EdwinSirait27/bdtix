@@ -81,29 +81,59 @@ class UserController extends Controller
             ->rawColumns(['roles', 'action', 'checkbox'])
             ->make(true);
     }
-    public function bulkUpdateRole(Request $request)
+public function bulkUpdateRole(Request $request)
 {
+    Log::info('Bulk update role started', [
+        'user_ids' => $request->user_ids,
+    ]);
+
     $request->validate([
         'user_ids'   => 'required|array',
-        'user_ids.*' => 'uuid|exists:users,id'
+        'user_ids.*' => 'uuid'
     ]);
 
     try {
-        User::whereIn('id', $request->user_ids)
-            ->get()
-            ->each(fn ($user) => $user->syncRoles('human'));
+        $users = User::whereIn('id', $request->user_ids)->get();
+
+        Log::info('Users fetched for bulk role update', [
+            'count' => $users->count(),
+            'ids' => $users->pluck('id'),
+        ]);
+
+        $users->each(function ($user) {
+            Log::info('Updating role for user', [
+                'user_id' => $user->id,
+                'username' => $user->username,
+                'current_roles' => $user->getRoleNames(),
+            ]);
+
+            $user->syncRoles('human');
+
+            Log::info('Role updated', [
+                'user_id' => $user->id,
+                'new_roles' => $user->getRoleNames(),
+            ]);
+        });
+
+        Log::info('Bulk update role finished successfully');
 
         return redirect()
             ->route('users')
             ->with('success', 'Role Updated Successfully');
+
     } catch (\Exception $e) {
-        Log::error('Bulk update error', ['message' => $e->getMessage()]);
+        Log::error('Bulk update error', [
+            'message' => $e->getMessage(),
+            'trace' => $e->getTraceAsString(),
+            'user_ids' => $request->user_ids,
+        ]);
 
         return redirect()
             ->route('users')
             ->with('error', 'Role error update');
     }
 }
+
 
 
     public function edit($hash)
@@ -132,55 +162,21 @@ class UserController extends Controller
     //         ->route('users')
     //         ->with('success', 'Role Updated Successfully');
     // }
-    public function update(Request $request, $hash)
-{
-    Log::info('Update role started', [
-        'hash' => $hash,
-        'request_roles' => $request->roles,
-    ]);
-
-    $user = User::all()->first(function ($u) use ($hash) {
-        return substr(hash('sha256', $u->id . env('APP_KEY')), 0, 8) === $hash;
-    });
-
-    if (!$user) {
-        Log::warning('User not found for hash', ['hash' => $hash]);
-        abort(404);
-    }
-
-    Log::info('User found', [
-        'user_id' => $user->id,
-        'username' => $user->username,
-        'current_roles' => $user->getRoleNames(),
-    ]);
-
-    $request->validate([
-        'roles' => 'nullable|array',
-        'roles.*' => 'exists:roles,name',
-    ]);
-
-    Log::info('Validation passed', [
-        'roles' => $request->roles,
-    ]);
-
-    try {
+   public function update(Request $request, $hash)
+    {
+        $user = User::all()->first(function ($u) use ($hash) {
+            return substr(hash('sha256', $u->id . env('APP_KEY')), 0, 8) === $hash;
+        });
+        abort_if(!$user, 404);
+        $request->validate([
+            'roles' => 'nullable|array',
+            'roles.*' => 'exists:roles,name',
+        ]);
+        // Sync role (hapus lama + insert baru)
         $user->syncRoles($request->roles ?? []);
-
-        Log::info('Roles synced successfully', [
-            'user_id' => $user->id,
-            'new_roles' => $user->getRoleNames(),
-        ]);
-    } catch (\Exception $e) {
-        Log::error('Failed to sync roles', [
-            'error' => $e->getMessage(),
-            'user_id' => $user->id,
-        ]);
-
-        throw $e; // biar tetap kelihatan error aslinya
+        return redirect()
+            ->route('users')
+            ->with('success', 'Role Updated Successfully');
     }
 
-    return redirect()
-        ->route('users')
-        ->with('success', 'Role Updated Successfully');
-}
 }
