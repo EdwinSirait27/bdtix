@@ -82,9 +82,9 @@ class SendOverdueTicketWhatsapp implements ShouldQueue
             "ayo dihajar tim!!!.",
         ]);
         Http::timeout(10)->post(
-            'http://127.0.0.1:3000/send-message',
+            'http://127.0.0.1:3001/send-message',
             [
-                'group_id' => '120363405189832865@g.us',
+                'group_id' => '120363424946872780@g.us',
                 'text'     => $message,
             ]
         );

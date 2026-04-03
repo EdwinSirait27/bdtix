@@ -48,8 +48,8 @@ return [
 
     'whatsapp' => [
         'enabled' => env('WHATSAPP_ENABLED', false),
-        'endpoint' => env('WHATSAPP_ENDPOINT', 'http://127.0.0.1:3000/send-message'),
-        'group_id' => env('WHATSAPP_GROUP_ID', '120363405189832865@g.us'),
+        'endpoint' => env('WHATSAPP_ENDPOINT', 'http://127.0.0.1:3001/send-message'),
+        'group_id' => env('WHATSAPP_GROUP_ID', '120363424946872780@g.us'),
     ],
 
 ];
