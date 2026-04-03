@@ -144,7 +144,7 @@
             </a>
         @endauth
 
-        <a href="{{ route('about') }}"
+        {{-- <a href="{{ route('about') }}"
             class="relative flex flex-col items-center justify-center flex-1 py-3
           {{ request()->routeIs('about') ? 'text-blue-400' : 'text-slate-400 hover:text-white' }}
           transition">
@@ -161,7 +161,7 @@
             </svg>
 
             <span>About</span>
-        </a>
+        </a> --}}
         @guest
             <a href="{{ route('login') }}"
                 class="relative flex flex-col items-center justify-center flex-1 py-3

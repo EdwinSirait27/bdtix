@@ -4,8 +4,8 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <title>IT Departments Ticketing</title>
-    <link rel="icon" type="image/x-icon" href="{{ asset('img/AsianBaylogomark.ico') }}">
+    <title>BD Departments Ticketing</title>
+    <link rel="icon" type="image/png" href="{{ asset('img/AsianBay logomark.ico') }}">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     </script>
@@ -24,10 +24,10 @@
             class="relative px-6 pt-12 pb-8 bg-gradient-to-br from-slate-900 via-slate-900 to-slate-800 border-b border-slate-800">
 
             <div class="absolute top-3 right-3 flex items-center space-x-2">
-                <a href="{{ route('about') }}"
+                {{-- <a href="{{ route('about') }}"
                     class="text-slate-300 hover:text-white text-sm font-medium transition-colors">
                     About
-                </a>
+                </a> --}}
                 <a href="{{ route('lang.switch', 'id') }}"
                     class="text-slate-300 hover:text-white text-sm font-medium transition-colors">
                     Indonesia
@@ -138,7 +138,6 @@
         <footer class="bg-dark dark:bg-slate-900 mt-auto">
             <div class="px-4 sm:px-6 lg:px-8 py-6 lg:py-8">
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
-                    {{-- Company Info --}}
                     <div class="space-y-3">
                         <div class="flex items-center space-x-2">
                             <img src="{{ asset('img/AsianBay.png') }}"
@@ -154,11 +153,10 @@
 
                 </div>
 
-                {{-- Bottom Bar --}}
                 <div class="mt-6 pt-6 border-t border-slate-200 dark:border-slate-800">
                     <div class="flex flex-col sm:flex-row justify-between items-center space-y-2 sm:space-y-0">
                         <p class="text-xs text-slate-500 dark:text-slate-400">
-                            © {{ date('Y') }} SerTix. Developed by Edwin Sirait
+                            © {{ date('Y') }} BDSerTix. Developed by Edwin Sirait
                         </p>
                     </div>
                 </div>

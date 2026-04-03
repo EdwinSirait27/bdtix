@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <title>@yield('title', 'IT Departments Ticketing')</title>
+    <title>@yield('title', 'BD Departments Ticketing')</title>
     <link rel="icon" type="image/png" href="{{ asset('img/AsianBay logomark.ico') }}">
     
     <!-- CRITICAL: Force dark mode IMMEDIATELY -->
@@ -36,7 +36,7 @@
                 <img src="{{ asset('img/AsianBay.png') }}"
                     class="h-12 w-12 select-none pointer-events-none" draggable="false" alt="icon">
                 <div class="ml-3">
-                    <h2 class="text-base font-bold text-white">IT Departments</h2>
+                    <h2 class="text-base font-bold text-white">BD Departments</h2>
                     <p class="text-xs text-slate-400 font-medium">Ticketing System</p>
                 </div>
             </div>
@@ -228,7 +228,7 @@
                             <img src="{{ asset('img/AsianBay.png') }}"
                                 class="w-16 h-16 select-none pointer-events-none" draggable="false" alt="icon">
                             <div>
-                                <h2 class="text-sm font-bold text-white">@yield('company', 'IT Departments')</h2>
+                                <h2 class="text-sm font-bold text-white">@yield('company', 'BD Departments')</h2>
                                 <p class="text-xs text-slate-400 font-medium">Ticketing</p>
                             </div>
                         </div>

@@ -15,7 +15,7 @@ Route::middleware('throttle:15,1')->group(function () {
         session(['applocale' => $lang]);
         return back();
     })->name('lang.switch');
-    Route::get('/about', [dashboardController::class, 'aboutUs'])->name('about');
+    // Route::get('/about', [dashboardController::class, 'aboutUs'])->name('about');
     Route::post('/login', [AuthController::class, 'login'])->name('login.post');
 });
 // Route::post('/logout', [AuthController::class, 'logout'])->name('logout.post');

@@ -829,7 +829,6 @@ class TicketController extends Controller
                             'size'          => $file->getSize(),
                             'status'        => 'pending',
                         ]);
-
                         UploadAttachmentToGoogleDrive::dispatch(
                             $attachment->id,
                             $tempPath,
@@ -841,7 +840,6 @@ class TicketController extends Controller
                         )->onQueue('ticket-heavy')->afterCommit();
                     }
                 }
-
                 SendTicketWhatsappJob::dispatch($ticket->id)
                     ->onQueue('notification')
                     ->afterCommit();
