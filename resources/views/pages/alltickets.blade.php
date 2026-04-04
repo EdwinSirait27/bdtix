@@ -707,6 +707,10 @@
                                         <div class="user-card-value">${ticket.category || 'N/A'}</div>
                                     </div>
                                     <div class="user-card-field">
+                                        <div class="user-card-label">Sub Categories</div>
+                                        <div class="user-card-value">${ticket.sub_category || 'N/A'}</div>
+                                    </div>
+                                    <div class="user-card-field">
                                         <div class="user-card-label">Description</div>
                                         <div class="user-card-value">${ticket.description || 'N/A'}</div>
                                     </div>

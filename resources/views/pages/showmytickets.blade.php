@@ -1,7 +1,7 @@
 @extends('layouts.app')
-@section('title', 'Tickets Queue' . ($ticket->queue_number ?? ''))
-@section('header', 'Detail Ticket ')
-@section('subtitle', 'Detail and ticket status')
+@section('title', 'BD Tickets Queue' . ($ticket->queue_number ?? ''))
+@section('header', 'BD Detail Ticket ')
+@section('subtitle', 'BD Detail and ticket status')
 @section('content')
     <div class="max-w-7xl mx-auto space-y-6 px-4 sm:px-6 lg:px-8">
         {{-- Ticket Info --}}
@@ -41,6 +41,12 @@
                 </p>
             </div>
             <div class="bg-white dark:bg-slate-900 rounded-xl p-5 shadow-lg">
+                <p class="text-xs text-slate-500 dark:text-slate-400 uppercase">Sub Category</p>
+                <p class="font-semibold mt-1 text-slate-900 dark:text-white text-sm sm:text-base">
+                    {{ $ticket->sub_category ?? '-' }}
+                </p>
+            </div>
+            <div class="bg-white dark:bg-slate-900 rounded-xl p-5 shadow-lg">
                 <p class="text-xs text-slate-500 dark:text-slate-400 uppercase">Description User</p>
                 <p class="font-semibold mt-1 text-slate-900 dark:text-white text-sm sm:text-base">
                     {{ $ticket->description ?? '-' }}
@@ -58,7 +64,7 @@
 
         {{-- Notes IT --}}
         <div class="bg-white dark:bg-slate-900 rounded-xl p-5 shadow-lg">
-            <p class="text-xs text-slate-500 dark:text-slate-400 uppercase">Notes IT</p>
+            <p class="text-xs text-slate-500 dark:text-slate-400 uppercase">Notes BD</p>
             <p class="font-semibold mt-1 text-slate-900 dark:text-white text-sm sm:text-base">
                 {{ $ticket->notes_executor ?? '-' }}
             </p>

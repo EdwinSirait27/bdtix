@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Role;
 use Illuminate\Support\Facades\Log;
+
 class UserController extends Controller
 {
     public function users()
@@ -81,6 +82,105 @@ class UserController extends Controller
             ->rawColumns(['roles', 'action', 'checkbox'])
             ->make(true);
     }
+//      public function update(Request $request, $hash)
+//     {
+//         $user = User::all()->first(function ($u) use ($hash) {
+//             return substr(hash('sha256', $u->id . env('APP_KEY')), 0, 8) === $hash;
+//         });
+//         abort_if(!$user, 404);
+//         $request->validate([
+//             'roles' => 'nullable|array',
+//             'roles.*' => 'exists:roles,name',
+//         ]);
+//         $user->syncRoles($request->roles ?? []);
+//         return redirect()
+//             ->route('users')
+//             ->with('success', 'Role Updated Successfully');
+//     }
+// public function bulkUpdateRole(Request $request)
+// {
+//     Log::info('Bulk update role started', [
+//         'user_ids' => $request->user_ids,
+//     ]);
+
+//     $request->validate([
+//         'user_ids'   => 'required|array',
+//         'user_ids.*' => 'uuid'
+//     ]);
+
+//     try {
+//         $users = User::whereIn('id', $request->user_ids)->get();
+
+//         Log::info('Users fetched for bulk role update', [
+//             'count' => $users->count(),
+//             'ids' => $users->pluck('id'),
+//         ]);
+
+//         $users->each(function ($user) {
+//             Log::info('Updating role for user', [
+//                 'user_id' => $user->id,
+//                 'username' => $user->username,
+//                 'current_roles' => $user->getRoleNames(),
+//             ]);
+
+//             $user->syncRoles('human');
+
+//             Log::info('Role updated', [
+//                 'user_id' => $user->id,
+//                 'new_roles' => $user->getRoleNames(),
+//             ]);
+//         });
+
+//         Log::info('Bulk update role finished successfully');
+
+//         return redirect()
+//             ->route('users')
+//             ->with('success', 'Role Updated Successfully');
+
+//     } catch (\Exception $e) {
+//         Log::error('Bulk update error', [
+//             'message' => $e->getMessage(),
+//             'trace' => $e->getTraceAsString(),
+//             'user_ids' => $request->user_ids,
+//         ]);
+
+//         return redirect()
+//             ->route('users')
+//             ->with('error', 'Role error update');
+//     }
+// }
+public function update(Request $request, $hash)
+{
+    $user = User::all()->first(function ($u) use ($hash) {
+        return substr(hash('sha256', $u->id . env('APP_KEY')), 0, 8) === $hash;
+    });
+    abort_if(!$user, 404);
+
+    $request->validate([
+        'roles' => 'nullable|array',
+        'roles.*' => 'exists:roles,name',
+    ]);
+
+    $roles = $request->roles ?? [];
+
+    // Simpan semua role ke all_roles_bdtix
+    $user->update(['all_roles_bdtix' => $roles]);
+
+    // Cek active_role_bdtix masih ada di role baru
+    $activeRole = $user->active_role_bdtix;
+    if (!in_array($activeRole, $roles)) {
+        $activeRole = $roles[0] ?? null;
+        $user->update(['active_role_bdtix' => $activeRole]);
+    }
+
+    // Sync Spatie ke active role saja
+    $user->syncRoles($activeRole ? [$activeRole] : []);
+
+    return redirect()
+        ->route('users')
+        ->with('success', 'Role Updated Successfully');
+}
+
 public function bulkUpdateRole(Request $request)
 {
     Log::info('Bulk update role started', [
@@ -100,22 +200,19 @@ public function bulkUpdateRole(Request $request)
             'ids' => $users->pluck('id'),
         ]);
 
-        $users->each(function ($user) {
-            Log::info('Updating role for user', [
-                'user_id' => $user->id,
-                'username' => $user->username,
-                'current_roles' => $user->getRoleNames(),
-            ]);
+    $users->each(function ($user) {
+        $user->update([
+            'all_roles_bdtix'   => ['human'],
+            'active_role_bdtix' => 'human',
+        ]);
 
-            $user->syncRoles('human');
-
-            Log::info('Role updated', [
+        $user->syncRoles(['human']);
+         Log::info('Role updated', [
                 'user_id' => $user->id,
                 'new_roles' => $user->getRoleNames(),
             ]);
-        });
-
-        Log::info('Bulk update role finished successfully');
+    });
+            Log::info('Bulk update role finished successfully');
 
         return redirect()
             ->route('users')
@@ -132,6 +229,8 @@ public function bulkUpdateRole(Request $request)
             ->route('users')
             ->with('error', 'Role error update');
     }
+
+  
 }
 
 
@@ -146,37 +245,7 @@ public function bulkUpdateRole(Request $request)
         $userRoles = $user->getRoleNames()->toArray();
         return view('pages.editusers', compact('user', 'roles', 'userRoles'));
     }
-    // public function update(Request $request, $hash)
-    // {
-    //     $user = User::all()->first(function ($u) use ($hash) {
-    //         return substr(hash('sha256', $u->id . env('APP_KEY')), 0, 8) === $hash;
-    //     });
-    //     abort_if(!$user, 404);
-    //     $request->validate([
-    //         'roles' => 'nullable|array',
-    //         'roles.*' => 'exists:roles,name',
-    //     ]);
-    //     // Sync role (hapus lama + insert baru)
-    //     $user->syncRoles($request->roles ?? []);
-    //     return redirect()
-    //         ->route('users')
-    //         ->with('success', 'Role Updated Successfully');
-    // }
-   public function update(Request $request, $hash)
-    {
-        $user = User::all()->first(function ($u) use ($hash) {
-            return substr(hash('sha256', $u->id . env('APP_KEY')), 0, 8) === $hash;
-        });
-        abort_if(!$user, 404);
-        $request->validate([
-            'roles' => 'nullable|array',
-            'roles.*' => 'exists:roles,name',
-        ]);
-        // Sync role (hapus lama + insert baru)
-        $user->syncRoles($request->roles ?? []);
-        return redirect()
-            ->route('users')
-            ->with('success', 'Role Updated Successfully');
-    }
+  
+  
 
 }

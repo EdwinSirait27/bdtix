@@ -61,6 +61,8 @@ Route::get('/dashboard/filteronprogress', [dashboardController::class, 'dashboar
     Route::get('/showopenticket/{hash}', [dashboardController::class, 'show'])->name('showopenticket');
     Route::post('/logout', [AuthController::class, 'logout'])
         ->name('logout.post');
+    Route::post('/updateroles', [ProfileController::class, 'updateActiveRole'])
+        ->name('profile.update-active-role');
     Route::get('/profile', [ProfileController::class, 'profile'])->name('profile');
     Route::get('/editopenticketforadmin/{hash}', [dashboardController::class, 'edit'])->name('editopenticketforadmin');
     Route::get('/showopenticketforadmin/{hash}', [dashboardController::class, 'show'])->name('showopenticketforadmin');
@@ -90,6 +92,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::post('/updateusers/{hash}/update', [UserController::class, 'update'])->name('updateusers');
     Route::post('/users/bulk-update-role', [UserController::class, 'bulkUpdateRole'])
         ->name('users.bulkUpdateRole');
+        
 });
 Route::middleware(['auth', 'role:human'])->group(function () {
     Route::get('/openticket', [TicketController::class, 'openTicket'])->name('openticket');

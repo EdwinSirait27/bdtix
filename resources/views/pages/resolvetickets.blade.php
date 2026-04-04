@@ -1,6 +1,6 @@
 @extends('layouts.app')
-@section('title', 'Resolved Tickets')
-@section('header', 'Resolved Tickets')
+@section('title', 'BD Resolved Tickets')
+@section('header', 'BD Resolved Tickets')
 @section('subtitle', 'Manage Resolved Tickets Ticketing System')
 @section('content')
     <style>
@@ -475,7 +475,7 @@
                     </svg>
                 </div>
                 <p class="text-2xl md:text-3xl font-bold mb-1" id="total-users"></p>
-                <p class="text-blue-100 text-xs">Resolve Tickets</p>
+                <p class="text-blue-100 text-xs">BD Resolve Tickets</p>
             </div>
             <div
                 class="bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-xl md:rounded-2xl p-4 md:p-6 text-white shadow-lg">
@@ -551,9 +551,9 @@
 
                                 <select id="filterCategory" class="select2">
                                     <option value="">All Category</option>
-                                    <option value="Hardware & Software">Hardware & Software</option>
-                                    <option value="Network">Network</option>
-                                    <option value="Account & Access">Account & Access</option>
+                                    <option value="Plumbing">Plumbing</option>
+                                    <option value="Building">Building</option>
+                                    <option value="Mechanical Engineering">Mechanical Engineering</option>
                                     <option value="Others">Others</option>
                                 </select>
                             </div>
@@ -643,6 +643,7 @@
                                             <th class="text-center">User</th>
                                         <th class="text-center">Title</th>
                                         <th class="text-center">Categories</th>
+                                        <th class="text-center">SCat</th>
                                         <th class="text-center">Dificulty</th>
                                         <th class="text-center">Estimation</th>
                                         <th class="text-center">Finished</th>
@@ -823,6 +824,11 @@
                             name: 'category',
                             width: '10%'
                         },
+                        {
+                            data: 'sub_category',
+                            name: 'sub_category',
+                            width: '10%'
+                        },
                         // { data: 'executor', name: 'employees_tables.employee_name', width: '15%' },
                         
                         {
@@ -972,6 +978,10 @@
                                     <div class="user-card-field">
                                         <div class="user-card-label">Categories</div>
                                         <div class="user-card-value">${ticket.category || 'N/A'}</div>
+                                    </div>
+                                    <div class="user-card-field">
+                                        <div class="user-card-label">Sub Categories</div>
+                                        <div class="user-card-value">${ticket.sub_category || 'N/A'}</div>
                                     </div>
                                     <div class="user-card-field">
                                         <div class="user-card-label">Description</div>

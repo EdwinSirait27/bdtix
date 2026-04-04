@@ -464,7 +464,7 @@
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
     </style>
-    @role('admin|executor')
+    @role('executor')
         <div class="space-y-4 md:space-y-6">
             {{-- Statistics Cards --}}
             <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
@@ -724,10 +724,11 @@
 
                                     <select id="filterCategory" class="select2">
                                         <option value="">All Category</option>
-                                        <option value="Hardware & Software">Hardware & Software</option>
-                                        <option value="Network">Network</option>
-                                        <option value="Account & Access">Account & Access</option>
-                                        <option value="Others">Others</option>
+                                       
+                                    <option value="Plumbing">Plumbing</option>
+                                    <option value="Building">Building</option>
+                                    <option value="Mechanical Engineering">Mechanical Engineering</option>
+                                    <option value="Others">Others</option>
                                     </select>
                                 </div>
                                 <div class="flex flex-col gap-1">
@@ -819,6 +820,7 @@
                                                 <th class="text-center">Executor</th>
                                                 <th class="text-center">Title</th>
                                                 <th class="text-center">Category</th>
+                                                <th class="text-center">SCat</th>
                                                 <th class="text-center">Dificulty</th>
                                                 <th class="text-center">Created</th>
                                                 <th class="text-center">Queue</th>
@@ -1145,6 +1147,12 @@
                                     className: 'text-center'
                                 },
                                 {
+                                    data: 'sub_category',
+                                    name: 'sub_category',
+                                    width: '10%',
+                                    className: 'text-center'
+                                },
+                                {
                                     data: 'priority',
                                     name: 'priority',
                                     width: '5%',
@@ -1335,6 +1343,10 @@ buttons: [
                                         <div class="user-card-label">Categories</div>
                                         <div class="user-card-value">${ticket.category || 'N/A'}</div>
                                     </div>
+                                    <div class="user-card-field">
+                                        <div class="user-card-label">Sub Categories</div>
+                                        <div class="user-card-value">${ticket.sub_category || 'N/A'}</div>
+                                    </div>
                                   
                                     <div class="user-card-field">
                                         <div class="user-card-label">Dificulty</div>
@@ -1524,9 +1536,9 @@ buttons: [
 
                                 <select id="filterCategory" class="select2">
                                     <option value="">All Category</option>
-                                    <option value="Hardware & Software">Hardware & Software</option>
-                                    <option value="Network">Network</option>
-                                    <option value="Account & Access">Account & Access</option>
+                                    <option value="Plumbing">Plumbing</option>
+                                    <option value="Building">Building</option>
+                                    <option value="Mechanical Engineering">Mechanical Engineering</option>
                                     <option value="Others">Others</option>
                                 </select>
                             </div>
@@ -1615,6 +1627,7 @@ buttons: [
                                             <th class="text-center">No.</th>
                                             <th class="text-center">Title</th>
                                             <th class="text-center">Categories</th>
+                                            <th class="text-center">SCat</th>
                                             <th class="text-center">Executor</th>
                                             <th class="text-center">Priority</th>
                                             <th class="text-center">Created</th>
@@ -1788,6 +1801,11 @@ buttons: [
                                 name: 'category',
                                 width: '15%'
                             },
+                            {
+                                data: 'sub_category',
+                                name: 'sub_category',
+                                width: '15%'
+                            },
 
                             {
                                 data: 'executor_employee_name',
@@ -1958,6 +1976,10 @@ buttons: [
                                     <div class="user-card-field">
                                         <div class="user-card-label">Categories</div>
                                         <div class="user-card-value">${ticket.category || 'N/A'}</div>
+                                    </div>
+                                    <div class="user-card-field">
+                                        <div class="user-card-label">Sub Categories</div>
+                                        <div class="user-card-value">${ticket.sub_category || 'N/A'}</div>
                                     </div>
                                     <div class="user-card-field">
                                         <div class="user-card-label">Description</div>

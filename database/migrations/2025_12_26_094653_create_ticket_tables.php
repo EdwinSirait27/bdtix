@@ -16,9 +16,15 @@ return new class extends Migration
             $table->uuid('request_uuid')->unique()->nullable();
             $table->string('title', 150)->nullable();
             $table->enum('category', [
-                'Hardware & Software',
-                'Network',
-                'Account & Access',
+                'Building',
+                'Plumbing',
+                'Mechanical Engineering',
+                'Others'
+                ])->nullable();
+                $table->string('remark',150)->default('Project');
+            $table->enum('sub_category', [
+                'Maintenance',
+                'Renovation',
                 'Others'
             ])->nullable();
             $table->text('description')->nullable();

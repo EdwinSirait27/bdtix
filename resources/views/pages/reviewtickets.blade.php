@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('company', 'IT Departments')
+@section('company', 'BD Departments')
 @section('header', 'Review Ticket')
 @section('subtitle', 'Rate your experience with this ticket')
 @section('content')
@@ -73,6 +73,10 @@
                         <p class="text-sm font-medium text-slate-300">{{ $ticket->category }}</p>
                     </div>
                     <div>
+                        <p class="text-xs text-slate-500 mb-1">Sub Category</p>
+                        <p class="text-sm font-medium text-slate-300">{{ $ticket->sub_category }}</p>
+                    </div>
+                    <div>
                         <p class="text-xs text-slate-500 mb-1">Dificulty</p>
                         <p class="text-sm font-medium text-slate-300">
                             {{ $ticket->priority === 'High' ? '🔴 High' : ($ticket->priority === 'Medium' ? '🟡 Medium' : '🟢 Low') }}
@@ -105,7 +109,7 @@
                     </div>
                     @if ($ticket->notes_executor)
                         <div>
-                            <p class="text-xs text-slate-500 mb-1">Notes IT</p>
+                            <p class="text-xs text-slate-500 mb-1">Notes BD</p>
                             <p class="text-sm text-slate-300">{{ $ticket->notes_executor }}</p>
                         </div>
                     @endif
@@ -356,6 +360,10 @@
                         <p class="text-sm font-medium text-slate-300">{{ $ticket->category }}</p>
                     </div>
                     <div>
+                        <p class="text-xs text-slate-500 mb-1">Sub Category</p>
+                        <p class="text-sm font-medium text-slate-300">{{ $ticket->sub_category }}</p>
+                    </div>
+                    <div>
                         <p class="text-xs text-slate-500 mb-1">Dificulty</p>
                         <p class="text-sm font-medium text-slate-300">
                             {{ $ticket->priority === 'High' ? '🔴 High' : ($ticket->priority === 'Medium' ? '🟡 Medium' : '🟢 Low') }}
@@ -389,7 +397,7 @@
                     </div>
                     @if ($ticket->notes_executor)
                         <div>
-                            <p class="text-xs text-slate-500 mb-1">Notes IT</p>
+                            <p class="text-xs text-slate-500 mb-1">Notes BD</p>
                             <p class="text-sm text-slate-300">{{ $ticket->notes_executor }}</p>
                         </div>
                     @endif

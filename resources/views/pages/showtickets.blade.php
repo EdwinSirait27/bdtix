@@ -1,7 +1,7 @@
 @extends('layouts.app')
-@section('title', 'Tickets Queue' . $ticket->queue_number)
-@section('header', 'Ticket Detail')
-@section('subtitle', 'Detail dan status ticket')
+@section('title', 'BD Tickets Queue' . $ticket->queue_number)
+@section('header', 'BD Ticket Detail')
+@section('subtitle', 'Detail and status tickets')
 @section('content')
     <div class="max-w-10xl mx-auto space-y-12">
 
@@ -53,6 +53,12 @@
                 </p>
             </div>
             <div class="bg-white dark:bg-slate-900 rounded-xl p-5 shadow">
+                <p class="text-xs text-slate-500 uppercase">Sub Category</p>
+                <p class="font-semibold mt-1">
+                    {{ $ticket->sub_category ?? '-' }}
+                </p>
+            </div>
+            <div class="bg-white dark:bg-slate-900 rounded-xl p-5 shadow">
                 <p class="text-xs text-slate-500 uppercase">Executor</p>
                 <p class="font-semibold mt-1">
                     {{ $ticket->executor ?? '-' }}
@@ -75,7 +81,7 @@
             </div>
         </div>
         <div class="bg-white dark:bg-slate-900 rounded-2xl shadow p-6">
-            <h3 class="text-lg font-bold mb-3">Notes from IT</h3>
+            <h3 class="text-lg font-bold mb-3">Notes from BD</h3>
             <div class="prose dark:prose-invert max-w-none text-sm">
                 {!! nl2br(e($ticket->notes_executor ?? '-')) !!}
             </div>

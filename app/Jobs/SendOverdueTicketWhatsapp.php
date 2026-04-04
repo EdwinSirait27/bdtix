@@ -68,6 +68,8 @@ class SendOverdueTicketWhatsapp implements ShouldQueue
             "Location: {$store->name}",
             "Phone Number: {$phoneNumber}",
             "Title: {$ticket->title}",
+            "Categories: {$ticket->category}",
+            "Sub Categories: {$ticket->sub_category}",
             "Dificulty: {$priorities}",
             "Executor: {$executorName}",
             "Progress: " . (
@@ -75,11 +77,11 @@ class SendOverdueTicketWhatsapp implements ShouldQueue
                 ? $ticket->progressed_at->timezone('Asia/Makassar')->format('d-m-Y H:i')
                 : '-'
             ),
-            "Notes IT: {$notesit}",
+            "BD Notes: {$notesit}",
             "Estimation: {$estimation}",
             "Estimation To: {$estimationTo}",
             "Ticket Link: {$adminUrl}",
-            "ayo dihajar tim!!!.",
+            "dibantu tim BD!!!.",
         ]);
         Http::timeout(10)->post(
             'http://127.0.0.1:3001/send-message',

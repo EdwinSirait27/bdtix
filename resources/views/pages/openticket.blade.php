@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('company', 'IT Departments')
+@section('company', 'BD Departments')
 @section('header', 'Create a New Ticket')
 @section('subtitle', 'Report your problem or request')
 @section('content')
@@ -62,9 +62,10 @@
                     <select id="category" name="category" required
                         class="w-full px-4 py-3.5 bg-slate-800 border border-slate-700 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 appearance-none cursor-pointer">
                         <option value="" class="bg-slate-800">Choose Categories...</option>
-                        <option value="Hardware & Software" class="bg-slate-800">Hardware & Software</option>
-                        <option value="Network" class="bg-slate-800">Network</option>
-                        <option value="Account & Access" class="bg-slate-800">Account & Access</option>
+
+                         <option value="Plumbing" class="bg-slate-800">Plumbing</option>
+                        <option value="Building" class="bg-slate-800">Building</option>
+                        <option value="Mechanical Engineering" class="bg-slate-800">Mechanical Engineering</option>
                         <option value="Others" class="bg-slate-800">Others</option>
                     </select>
                     <div class="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none">
@@ -74,6 +75,41 @@
                     </div>
                 </div>
                 @error('category')
+                    <p class="mt-2 text-sm text-red-400 flex items-center space-x-1">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd"
+                                d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                                clip-rule="evenodd" />
+                        </svg>
+                        <span>{{ $message }}</span>
+                    </p>
+                @enderror
+            </div>
+            <div>
+                <label for="sub_category" class="block text-sm font-semibold text-slate-300 mb-2 flex items-center space-x-2">
+                    <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                    </svg>
+                    <span>Sub Categories</span>
+                    <span class="text-red-400">*</span>
+                </label>
+                <div class="relative">
+                    <select id="sub_category" name="sub_category" required
+                        class="w-full px-4 py-3.5 bg-slate-800 border border-slate-700 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 appearance-none cursor-pointer">
+                        <option value="" class="bg-slate-800">Choose Sub Categories...</option>
+
+                         <option value="Maintenance" class="bg-slate-800">Maintenance</option>
+                        <option value="Renovation" class="bg-slate-800">Renovation</option>
+                        <option value="Others" class="bg-slate-800">Others</option>
+                    </select>
+                    <div class="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none">
+                        <svg class="w-5 h-5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </div>
+                </div>
+                @error('sub_category')
                     <p class="mt-2 text-sm text-red-400 flex items-center space-x-1">
                         <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                             <path fill-rule="evenodd"
@@ -173,7 +209,7 @@
     <!-- Modal pilih sumber -->
     <div id="sourceModal" class="fixed inset-0 bg-black/60 hidden items-center justify-center z-50">
         <div class="bg-slate-900 rounded-xl p-6 w-80 text-center">
-            <h3 class="text-lg font-semibold mb-4 text-white">Pilih Sumber</h3>
+            <h3 class="text-lg font-semibold mb-4 text-white">Choose Source</h3>
             <button onclick="openCamera()"
                 class="w-full mb-3 px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white">
                 Open Camera

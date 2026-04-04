@@ -5,12 +5,15 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Tickets;
+use App\Services\UserRoleService;
+use App\Models\User;
 
 class ProfileController extends Controller
 {
     public function profile()
     {
         $user = Auth::user();
+        $roles = $user->getRoleNames();
          $allticket = Tickets::where('user_id', auth()->id())
             ->count();
             $overdueticket = Tickets::where('user_id', auth()->id())
@@ -21,6 +24,28 @@ class ProfileController extends Controller
             ->count();
             $handled = Tickets::where('executor_id',auth()->id())->count();
 
-        return view('pages.profile',compact('allticket','user','overdueticket','openticket','handled'));
+        return view('pages.profile',compact('roles','allticket','user','overdueticket','openticket','handled'));
     }
+   public function updateActiveRole(Request $request)
+{
+    $request->validate([
+        'role' => 'required|string',
+    ]);
+
+    $user = auth()->user();
+
+    // validasi dari all_roles_bdtix, bukan Spatie
+    $allRoles = $user->all_roles_bdtix ?? [];
+    if (!in_array($request->role, $allRoles)) {
+        return redirect()->back()->withErrors(['role' => 'Invalid role selected']);
+    }
+
+    // simpan active role
+    $user->update(['active_role_bdtix' => $request->role]);
+
+    // sync Spatie ke role yang dipilih
+    $user->syncRoles([$request->role]);
+
+    return redirect()->back()->with('success', 'Active role updated successfully!');
+}
 }

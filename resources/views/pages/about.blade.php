@@ -1,5 +1,5 @@
 @extends('layouts.layout-theme-toggle')
-@section('company', 'IT Departments')
+@section('company', 'BD Departments')
 @section('header', 'About Us')
 @section('subtitle', 'Our Team')
 @section('content')

@@ -500,6 +500,7 @@
                                         <th class="text-center">Queue</th>
                                         <th class="text-center">Title</th>
                                         <th class="text-center">Categories</th>
+                                        <th class="text-center">Scat</th>
                                         <th class="text-center">Status</th>
                                         <th class="text-center">Executor</th>
                                         <th class="text-center">Priority</th>
@@ -575,6 +576,11 @@
                         {
                             data: 'category',
                             name: 'category',
+                            width: '15%'
+                        },
+                        {
+                            data: 'sub_category',
+                            name: 'sub_category',
                             width: '15%'
                         },
                         {
@@ -699,6 +705,10 @@
                                     <div class="user-card-field">
                                         <div class="user-card-label">Categories</div>
                                         <div class="user-card-value">${ticket.category || 'N/A'}</div>
+                                    </div>
+                                    <div class="user-card-field">
+                                        <div class="user-card-label">Sub Categories</div>
+                                        <div class="user-card-value">${ticket.sub_category || 'N/A'}</div>
                                     </div>
                                     <div class="user-card-field">
                                         <div class="user-card-label">Description</div>

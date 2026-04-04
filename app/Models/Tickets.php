@@ -16,6 +16,8 @@ class Tickets extends Model
         'queue_date',
         'title',
         'category',
+        'remark',
+        'sub_category',
         'description',
         'status',
         'attachment_folder',

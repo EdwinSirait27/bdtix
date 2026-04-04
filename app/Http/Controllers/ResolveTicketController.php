@@ -70,6 +70,7 @@ class ResolveTicketController extends Controller
                 'estimation',
                 'description',
                 'category',
+                'sub_category',
                 'created_at',
                 'status',
             ]);
@@ -81,12 +82,16 @@ class ResolveTicketController extends Controller
                 $q->where('queue_number', 'like', "%{$search}%")
                     ->orWhere('title', 'like', "%{$search}%")
                     ->orWhere('description', 'like', "%{$search}%")
-                    ->orWhere('category', 'like', "%{$search}%");
+                    ->orWhere('category', 'like', "%{$search}%")
+                    ->orWhere('sub_category', 'like', "%{$search}%");
             });
         }
 
         if ($request->filled('category')) {
             $query->where('category', $request->category);
+        }
+        if ($request->filled('sub_category')) {
+            $query->where('sub_category', $request->sub_category);
         }
 
         if ($request->filled('priority')) {

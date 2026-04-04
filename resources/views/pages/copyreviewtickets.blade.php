@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('company', 'IT Departments')
+@section('company', 'BD Departments')
 @section('header', 'Review Ticket')
 @section('subtitle', 'Rate your experience with this ticket')
 @section('content')

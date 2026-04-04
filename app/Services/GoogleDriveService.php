@@ -13,14 +13,14 @@ class GoogleDriveService
     protected Client $client;
     protected Drive $driveService;
 
-    const ROOT_FOLDER_NAME     = 'Ticketing Attachments';
+    const ROOT_FOLDER_NAME     = 'Ticketing BD Attachments';
     const USER_FOLDER_NAME     = 'User Attachments';
     const EXECUTOR_FOLDER_NAME = 'Executor Attachments';
 
     const VALID_CATEGORIES = [
-        'Hardware & Software',
-        'Account & Access',
-        'Network',
+        'Plumbing',
+        'Building',
+        'Mechanical Engineering',
         'Others',
     ];
 
@@ -134,7 +134,7 @@ class GoogleDriveService
             $this->driveService->files->delete($driveFileId);
             return true;
         } catch (\Exception $e) {
-            Log::error('Gagal hapus file dari Drive: ' . $e->getMessage());
+            Log::error('Failed to erase file on drive: ' . $e->getMessage());
             return false;
         }
     }

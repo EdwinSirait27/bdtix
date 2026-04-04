@@ -83,6 +83,8 @@ class TicketController extends Controller
                 'estimation',
                 'description',
                 'category',
+                'remark',
+                'sub_category',
                 'status',
             ]);
 
@@ -198,7 +200,9 @@ class TicketController extends Controller
                 'estimation_to',
                 'progressed_at',
                 'description',
+                'remark',
                 'category',
+                'sub_category',
                 'created_at',
                 'status',
             ]);
@@ -213,6 +217,7 @@ class TicketController extends Controller
                     ->orWhere('title', 'like', "%{$search}%")
                     ->orWhere('description', 'like', "%{$search}%")
                     ->orWhere('category', 'like', "%{$search}%")
+                    ->orWhere('sub_category', 'like', "%{$search}%")
                     ->orWhere('status', 'like', "%{$search}%");
             });
         }
@@ -228,6 +233,9 @@ class TicketController extends Controller
         // =========================
         if ($request->filled('category')) {
             $query->where('category', $request->category);
+        }
+        if ($request->filled('sub_category')) {
+            $query->where('sub_category', $request->sub_category);
         }
         if ($request->filled('priority')) {
             $query->where('priority', $request->priority);
@@ -607,7 +615,8 @@ class TicketController extends Controller
         ]);
         $validated = $request->validate([
             'title'        => 'required|string',
-            'category'        => 'required|in:Hardware & Software,Network,Account & Access,Others',
+            'category'        => 'required|in:Plumbing,Building,Mechanical Engineering,Others',
+            'sub_category'        => 'required|in:Maintenance,Renovation,Others',
             'description'        => 'required|string|min:5|max:500',
 
         ]);
@@ -618,6 +627,7 @@ class TicketController extends Controller
             $ticket->update([
                 'title'        => $validated['title'],
                 'category'        => $validated['category'],
+                'sub_category'        => $validated['sub_category'],
                 'description' => $validated['description'],
                 'status'          => 'Open',
             ]);
@@ -647,6 +657,8 @@ class TicketController extends Controller
                 'estimation',
                 'description',
                 'category',
+                'remark',
+                'sub_category',
                 'created_at',
                 'status',
             ]);
@@ -763,7 +775,9 @@ class TicketController extends Controller
         $validated = $request->validate([
             'request_uuid'  => 'required|uuid',
             'title'         => 'required|string|max:150',
-            'category'      => 'required|in:Hardware & Software,Network,Account & Access,Others',
+            'category'      => 'required|in:Plumbing,Building,Mechanical Engineering,Others',
+            'sub_category'      => 'required|in:Maintenance,Renovation,Others',
+            // 'remark'      => 'nullable',
             'description'   => 'required|string|max:500',
             'attachments'   => 'nullable|array|max:3',
             'attachments.*' => 'file|max:20480|mimes:jpg,jpeg,png,gif,pdf,doc,docx,xls,xlsx,zip,txt',
@@ -800,8 +814,10 @@ class TicketController extends Controller
                     'queue_date'   => $queueDate,
                     'title'        => $validated['title'],
                     'category'     => $validated['category'],
+                    'sub_category'     => $validated['sub_category'],
                     'description'  => $validated['description'],
                     'status'       => 'Open',
+                    'remark'       => 'Project',
                 ]);
 
                 DB::commit(); // ⬅️ WAJIB selesai dulu

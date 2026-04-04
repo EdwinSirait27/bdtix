@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('company', 'IT Departments')
+@section('company', 'BD Departments')
 @section('header', 'Edit My Tickets')
 @section('subtitle', 'Answer problem or request from users')
 @section('content')
@@ -105,17 +105,18 @@
                     <select id="category" name="category" required
                         class="select2 w-full bg-slate-800 border border-slate-700 rounded-xl text-white">
                         <option value="">Choose Categories...</option>
-                        <option value="Hardware & Software"
-                            {{ old('category', $ticket->category) == 'Hardware & Software' ? 'selected' : '' }}>
-                            Hardware & Software
+                        <option value="Plumbing" {{ old('category', $ticket->category) == 'Plumbing' ? 'selected' : '' }}>
+                            Plumbing
                         </option>
-                        <option value="Network" {{ old('category', $ticket->category) == 'Network' ? 'selected' : '' }}>
-                            Network
+                        <option value="Building"
+                            {{ old('category', $ticket->category) == 'Building' ? 'selected' : '' }}>
+                            Building
                         </option>
-                        <option value="Account & Access"
-                            {{ old('category', $ticket->category) == 'Account & Access' ? 'selected' : '' }}>
-                            Account & Access
+                        <option value="Mechanical Engineering"
+                            {{ old('category', $ticket->category) == 'Mechanical Engineering' ? 'selected' : '' }}>
+                            Mechanical Engineering
                         </option>
+                       
                         <option value="Others" {{ old('category', $ticket->category) == 'Others' ? 'selected' : '' }}>
                             Others
                         </option>
@@ -127,6 +128,48 @@
                     </div>
                 </div>
                 @error('category')
+                    <p class="mt-2 text-sm text-red-400 flex items-center space-x-1">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd"
+                                d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                                clip-rule="evenodd" />
+                        </svg>
+                        <span>{{ $message }}</span>
+                    </p>
+                @enderror
+            </div>
+            <div>
+                <label for="sub_category" class="block text-sm font-semibold text-slate-300 mb-2 flex items-center space-x-2">
+                    <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                    </svg>
+                    <span>Sub Categories</span>
+                    <span class="text-red-400">*</span>
+                </label>
+                <div class="relative">
+                    <select id="sub_category" name="sub_category" required
+                        class="select2 w-full bg-slate-800 border border-slate-700 rounded-xl text-white">
+                        <option value="">Choose Sub Categories...</option>
+                        <option value="Maintenance" {{ old('sub_category', $ticket->sub_category) == 'Maintenance' ? 'selected' : '' }}>
+                            Maintenance
+                        </option>
+                        <option value="Renovation"
+                            {{ old('sub_category', $ticket->sub_category) == 'Renovation' ? 'selected' : '' }}>
+                            Renovation
+                        </option>
+                       
+                        <option value="Others" {{ old('sub_category', $ticket->sub_category) == 'Others' ? 'selected' : '' }}>
+                            Others
+                        </option>
+                    </select>
+                    <div class="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none">
+                        <svg class="w-5 h-5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </div>
+                </div>
+                @error('sub_category')
                     <p class="mt-2 text-sm text-red-400 flex items-center space-x-1">
                         <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                             <path fill-rule="evenodd"
@@ -297,7 +340,7 @@
     <div id="userSourceModal"
         class="fixed inset-0 bg-black/70 hidden items-center justify-center z-50">
         <div class="bg-slate-900 rounded-xl p-6 w-80 text-center border border-slate-800">
-            <h3 class="text-lg font-semibold mb-4 text-white">Pilih Sumber</h3>
+            <h3 class="text-lg font-semibold mb-4 text-white">Choose Source</h3>
             <button type="button" id="userOpenCamera"
                 class="w-full mb-3 px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white">
                 Open Camera
@@ -341,6 +384,11 @@
                     placeholder: 'Choose Category...',
                     width: '100%',
                     dropdownParent: $('#category').parent()
+                });
+                $('#sub_category').select2({
+                    placeholder: 'Choose Sub Category...',
+                    width: '100%',
+                    dropdownParent: $('#sub_category').parent()
                 });
             });
         </script>

@@ -1,7 +1,7 @@
 @extends('layouts.app')
-@section('title', 'Tickets Queue' . ($ticket->queue_number ?? ''))
-@section('header', 'Ticket Detail')
-@section('subtitle', 'Detail dan status ticket')
+@section('title', 'BD Tickets Queue' . ($ticket->queue_number ?? ''))
+@section('header', 'BD Ticket Detail')
+@section('subtitle', 'Detail and status tickets')
 @section('content')
     <div class="max-w-10xl mx-auto space-y-12">
 
@@ -45,6 +45,12 @@
                 <p class="text-xs text-slate-500 uppercase">Category</p>
                 <p class="font-semibold mt-1">
                     {{ $ticket->category ?? '-' }}
+                </p>
+            </div>
+            <div class="bg-white dark:bg-slate-900 rounded-xl p-5 shadow">
+                <p class="text-xs text-slate-500 uppercase">Sub Category</p>
+                <p class="font-semibold mt-1">
+                    {{ $ticket->sub_category ?? '-' }}
                 </p>
             </div>
             <div class="bg-white dark:bg-slate-900 rounded-xl p-5 shadow">

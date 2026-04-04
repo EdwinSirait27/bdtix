@@ -1,18 +1,15 @@
 @extends('layouts.app')
-@section('company', 'IT Departments')
+@section('company', 'BD Departments')
 @section('header', 'Profile')
 @section('subtitle', 'your account information')
 @section('content')
     <div class="px-4 space-y-6">
-        {{-- Profile Header Card --}}
         <div
             class="bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl p-6 border border-slate-700 shadow-xl relative overflow-hidden">
-            {{-- Background Decoration --}}
             <div class="absolute top-0 right-0 w-32 h-32 bg-blue-600/10 rounded-full blur-2xl"></div>
             <div class="absolute bottom-0 left-0 w-32 h-32 bg-cyan-600/10 rounded-full blur-2xl"></div>
 
             <div class="relative flex items-center space-x-4">
-                {{-- Avatar --}}
                 <div class="relative">
                     <div
                         class="w-20 h-20 rounded-2xl bg-gradient-to-br from-blue-600 to-cyan-600 shadow-lg shadow-blue-500/30 flex items-center justify-center text-2xl font-bold text-white">
@@ -25,58 +22,46 @@
                         </svg>
                     </div>
                 </div>
-                {{-- User Info --}}
                 <div class="flex-1">
                     <h2 class="text-xl font-bold text-white">{{ Auth::user()->Employee->employee_name ?? 'User Name' }}</h2>
                     <p class="text-sm text-slate-400 mt-0.5">Position :
                         {{ Auth::user()->Employee->position->name ?? 'Edwgans' }}</p>
                     <div class="flex items-center space-x-2 mt-2">
-                        {{-- <span
+                        <span
                             class="px-3 py-1 bg-blue-500/20 text-blue-400 text-xs font-semibold rounded-lg border border-blue-500/30">
-                            {{ Auth::user()->roles ?? 'Edwin Sirait' }}
-                        </span> --}}
-                        <span class="px-3 py-1 bg-blue-500/20 text-blue-400 text-xs font-semibold rounded-lg border border-blue-500/30">
-    {{ Auth::user()->getRoleNames()->join(', ') }}
-</span>
-
+                            {{ Auth::user()->getRoleNames()->join(', ') }}
+                        </span>
                         <span
                             class="px-3 py-1 bg-green-500/20 text-green-400 text-xs font-semibold rounded-lg border border-green-500/30">
                             Active
                         </span>
                     </div>
                 </div>
-                {{-- Edit Button --}}
-              
-            </a> 
+                </a>
             </div>
         </div>
-        {{-- Stats Cards --}}
         <div class="grid grid-cols-3 gap-3">
-    @role('admin|executor')
-
-            <div class="bg-slate-800/50 backdrop-blur-sm rounded-xl p-4 border border-slate-700">
-                <div class="text-2xl font-bold text-white">{{$handled ?? 0}}</div>
-                <div class="text-xs text-slate-400 mt-1">Tickets handled by you</div>
-            </div>
+            @role('executor')
+                <div class="bg-slate-800/50 backdrop-blur-sm rounded-xl p-4 border border-slate-700">
+                    <div class="text-2xl font-bold text-white">{{ $handled ?? 0 }}</div>
+                    <div class="text-xs text-slate-400 mt-1">Tickets handled by you</div>
+                </div>
             @endrole
-    @role('human')
+            @role('human')
+                <div class="bg-slate-800/50 backdrop-blur-sm rounded-xl p-4 border border-slate-700">
+                    <div class="text-2xl font-bold text-white">{{ $allticket ?? 0 }}</div>
+                    <div class="text-xs text-slate-400 mt-1">Total Tickets</div>
+                </div>
+            @endrole
             <div class="bg-slate-800/50 backdrop-blur-sm rounded-xl p-4 border border-slate-700">
-                <div class="text-2xl font-bold text-white">{{$allticket ?? 0}}</div>
-                <div class="text-xs text-slate-400 mt-1">Total Tickets</div>
-            </div>
-    @endrole
-
-            <div class="bg-slate-800/50 backdrop-blur-sm rounded-xl p-4 border border-slate-700">
-                <div class="text-2xl font-bold text-blue-400">{{$overdueticket ?? 0}}</div>
+                <div class="text-2xl font-bold text-blue-400">{{ $overdueticket ?? 0 }}</div>
                 <div class="text-xs text-slate-400 mt-1">Overdue's Ticket</div>
             </div>
             <div class="bg-slate-800/50 backdrop-blur-sm rounded-xl p-4 border border-slate-700">
-                <div class="text-2xl font-bold text-green-400">{{$openticket ?? 0}}</div>
+                <div class="text-2xl font-bold text-green-400">{{ $openticket ?? 0 }}</div>
                 <div class="text-xs text-slate-400 mt-1">Unchecked Tickets</div>
             </div>
         </div>
-
-        {{-- Account Information --}}
         <div class="bg-slate-800/50 backdrop-blur-sm rounded-2xl border border-slate-700 overflow-hidden">
             <div class="px-5 py-4 border-b border-slate-700">
                 <h3 class="font-semibold text-white flex items-center space-x-2">
@@ -88,9 +73,6 @@
                 </h3>
             </div>
             <div class="divide-y divide-slate-700">
-
-
-                {{-- Email --}}
                 <a href="#"
                     class="flex items-center justify-between px-5 py-4 hover:bg-slate-700/30 transition-colors group">
                     <div class="flex items-center space-x-3">
@@ -166,7 +148,8 @@
                     class="flex items-center justify-between px-5 py-4 hover:bg-slate-700/30 transition-colors group">
                     <div class="flex items-center space-x-3">
                         <div class="w-10 h-10 rounded-xl bg-slate-700/50 flex items-center justify-center">
-                            <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
                                 <rect x="2" y="5" width="20" height="14" rx="2" ry="2"
                                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                                 <line x1="2" y1="10" x2="22" y2="10" stroke-width="2"
@@ -182,10 +165,7 @@
                                 {{ Auth::user()->employee->employee_pengenal ?? 'user@company.com' }}</div>
                         </div>
                     </div>
-
                 </a>
-
-                {{-- Phone --}}
                 <a href="#"
                     class="flex items-center justify-between px-5 py-4 hover:bg-slate-700/30 transition-colors group">
                     <div class="flex items-center space-x-3">
@@ -202,18 +182,23 @@
                                 {{ Auth::user()->employee->telp_number ?? ' +62 812-3456-9999' }}</div>
                         </div>
                     </div>
-
                 </a>
-
-                {{-- Department --}}
-
-
             </div>
         </div>
-
-
-
-        {{-- Logout Button --}}
+      <form method="POST" action="{{ route('profile.update-active-role') }}">
+    @csrf
+    <label for="active_role_bdtix" class="text-sm text-white">Select Active Role</label>
+    <select name="role" id="active_role_bdtix" class="mt-1 block w-full rounded-lg bg-slate-800 text-white p-2 border border-slate-700">
+        @foreach ($user->all_roles_bdtix ?? [] as $role)
+            <option value="{{ $role }}" {{ $user->active_role_bdtix == $role ? 'selected' : '' }}>
+                {{ ucfirst($role) }}
+            </option>
+        @endforeach
+    </select>
+    <button type="submit" class="mt-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition">
+        Update Active Role
+    </button>
+</form>
         <form method="POST" action="{{ route('logout.post') }}">
             @csrf
             <button type="submit"
@@ -227,80 +212,22 @@
             </button>
         </form>
     </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+ <script>
+        toastr.options = {
+            closeButton: true,
+            progressBar: true,
+            positionClass: "toast-top-right",
+            timeOut: "3000"
+        };
+        @if (session('success'))
+            toastr.success(@json(session('success')));
+        @endif
+
+        @if (session('error'))
+            toastr.error(@json(session('error')));
+        @endif
+    </script>
 @endsection
-{{-- Settings Menu --}}
-{{-- <div class="bg-slate-800/50 backdrop-blur-sm rounded-2xl border border-slate-700 overflow-hidden">
-        <div class="px-5 py-4 border-b border-slate-700">
-            <h3 class="font-semibold text-white flex items-center space-x-2">
-                <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
-                </svg>
-                <span>Pengaturan</span>
-            </h3>
-        </div>
-        
-        <div class="divide-y divide-slate-700">
-            <a href="#" class="flex items-center justify-between px-5 py-4 hover:bg-slate-700/30 transition-colors group">
-                <div class="flex items-center space-x-3">
-                    <div class="w-10 h-10 rounded-xl bg-slate-700/50 flex items-center justify-center">
-                        <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
-                        </svg>
-                    </div>
-                    <div class="text-sm text-white font-medium">Ubah Password</div>
-                </div>
-                <svg class="w-5 h-5 text-slate-500 group-hover:text-slate-400 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-                </svg>
-            </a>
-
-            <a href="#" class="flex items-center justify-between px-5 py-4 hover:bg-slate-700/30 transition-colors group">
-                <div class="flex items-center space-x-3">
-                    <div class="w-10 h-10 rounded-xl bg-slate-700/50 flex items-center justify-center">
-                        <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
-                        </svg>
-                    </div>
-                    <div class="text-sm text-white font-medium">Notifikasi</div>
-                </div>
-                <div class="flex items-center space-x-2">
-                    <span class="text-xs text-slate-500">Aktif</span>
-                    <svg class="w-5 h-5 text-slate-500 group-hover:text-slate-400 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-                    </svg>
-                </div>
-            </a>
-
-            <a href="#" class="flex items-center justify-between px-5 py-4 hover:bg-slate-700/30 transition-colors group">
-                <div class="flex items-center space-x-3">
-                    <div class="w-10 h-10 rounded-xl bg-slate-700/50 flex items-center justify-center">
-                        <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"/>
-                        </svg>
-                    </div>
-                    <div class="text-sm text-white font-medium">Bahasa</div>
-                </div>
-                <div class="flex items-center space-x-2">
-                    <span class="text-xs text-slate-500">Indonesia</span>
-                    <svg class="w-5 h-5 text-slate-500 group-hover:text-slate-400 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-                    </svg>
-                </div>
-            </a>
-
-            <a href="#" class="flex items-center justify-between px-5 py-4 hover:bg-slate-700/30 transition-colors group">
-                <div class="flex items-center space-x-3">
-                    <div class="w-10 h-10 rounded-xl bg-slate-700/50 flex items-center justify-center">
-                        <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                        </svg>
-                    </div>
-                    <div class="text-sm text-white font-medium">Bantuan & Dukungan</div>
-                </div>
-                <svg class="w-5 h-5 text-slate-500 group-hover:text-slate-400 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-                </svg>
-            </a>
-        </div>
-    </div> --}}

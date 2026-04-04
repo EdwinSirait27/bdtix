@@ -69,7 +69,9 @@ class dashboardController extends Controller
         $dateFrom  = request('from');
         $dateTo    = request('to');
         $category  = request('category');
+        $sub_category  = request('sub_category');
         $categories = Tickets::distinct()->pluck('category');
+        $sub_categories = Tickets::distinct()->pluck('sub_category');
 
         $ticketBase = Tickets::query();
 
@@ -102,6 +104,9 @@ class dashboardController extends Controller
 
         if ($category) {
             $ticketBase->where('category', $category);
+        }
+        if ($sub_category) {
+            $ticketBase->where('sub_category', $sub_category);
         }
 
         $executorIds = DB::connection('mysql')
@@ -197,6 +202,7 @@ class dashboardController extends Controller
             'executors',
             'priorities',
             'categories',
+            'sub_categories',
             'closedtickethuman',
             'executorStats'
         ));
@@ -221,6 +227,7 @@ class dashboardController extends Controller
                 'estimation_to',
                 'executor_id',
                 'category',
+                'sub_category',
                 'priority',
                 'finished',
                 'status',
@@ -235,6 +242,7 @@ class dashboardController extends Controller
                     ->orWhere('title', 'like', "%{$search}%")
                     ->orWhere('description', 'like', "%{$search}%")
                     ->orWhere('category', 'like', "%{$search}%")
+                    ->orWhere('sub_category', 'like', "%{$search}%")
                     ->orWhere('status', 'like', "%{$search}%");
             });
         }
@@ -264,6 +272,9 @@ class dashboardController extends Controller
 
         if ($request->filled('category')) {
             $query->where('category', $request->category);
+        }
+        if ($request->filled('sub_category')) {
+            $query->where('sub_category', $request->sub_category);
         }
         if ($request->filled('priority')) {
             $query->where('priority', $request->priority);
@@ -473,7 +484,8 @@ class dashboardController extends Controller
         $isOpenStatus = $ticket->status === 'Open';
 
         $validated = $request->validate([
-            'category'       => 'required|in:Hardware & Software,Network,Account & Access,Others',
+            'category'       => 'required|in:Plumbing,Building,Mechanical Engineering,Others',
+            'sub_category'       => 'required|in:Maintenance,Renovation,Others',
             'notes_executor' => 'required|string|min:5|max:500',
             'finished'       => 'nullable|date',
             'estimation'     => 'nullable|date',
@@ -572,6 +584,7 @@ class dashboardController extends Controller
 
             $data = [
                 'category'       => $validated['category'],
+                'sub_category'       => $validated['sub_category'],
                 'notes_executor' => $validated['notes_executor'],
                 'status'         => $status,
                 'finished'       => $finished,
@@ -654,17 +667,19 @@ class dashboardController extends Controller
                 "Phone: {$phoneNumber}\n" .
                 "Title: {$ticket->title}\n" .
                 "Category: {$ticket->category}\n" .
+                "Sub Category: {$ticket->sub_category}\n" .
+                "Remark: {$ticket->remark}\n" .
                 "Dificulty: {$ticket->priority}\n" .
                 "Executor: {$executorName}\n" .
-                "Notes IT: {$ticket->notes_executor}\n" .
+                "BD Notes: {$ticket->notes_executor}\n" .
                 "Started At: {$estimationDate}\n" .
                 "Est. Deadline: {$estimationToDate}\n" .
                 "Finished: {$finishedDate}\n" .
                 "Status: {$ticket->status}\n" .
                 "Tickets Link: {$ticketUrl}\n";
 
-            Http::timeout(15)->post('http://127.0.0.1:3000/send-message', [
-                'group_id' => '120363405189832865@g.us',
+            Http::timeout(15)->post('http://127.0.0.1:3001/send-message', [
+                'group_id' => '120363424946872780@g.us',
                 'text'     => $message,
             ]);
 

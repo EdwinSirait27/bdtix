@@ -11,7 +11,6 @@ use Illuminate\Support\Facades\DB;
 
 class User extends Authenticatable
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable, HasRoles;
     protected $connection = 'hrx';
     protected $table = 'users';
@@ -21,14 +20,19 @@ class User extends Authenticatable
     protected $fillable = [
         'username',
         'password',
+        'active_role_bdtix',
+        'all_roles_bdtix',
     ];
     protected $hidden = [
         'password',
         'remember_token',
     ];
+    protected $casts = [
+    'all_roles_bdtix' => 'array',
+];
     public function employee()
     {
-         return $this->belongsTo(\App\Models\Employee::class, 'employee_id');
+         return $this->belongsTo(Employee::class, 'employee_id');
     }
     public function findForAuth($username)
     {

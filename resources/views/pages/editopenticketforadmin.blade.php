@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('company', 'IT Departments')
+@section('company', 'BD Departments')
 @section('header', 'Edit Ticket')
 @section('subtitle', 'Answer problem or request from users')
 @section('content')
@@ -116,7 +116,7 @@
 
             @if ($errors->has('conflict'))
                 <div class="mb-4 p-4 rounded bg-yellow-50 text-yellow-800 border border-yellow-300">
-                    <strong>Caution!</strong><br>
+                    <strong>Alert!</strong><br>
                     {{ $errors->first('conflict') }}
                 </div>
             @endif
@@ -151,13 +151,42 @@
                     <select id="category" name="category" required
                         class="select2 w-full bg-slate-800 border border-slate-700 rounded-xl text-white">
                         <option value="">Choose Categories...</option>
-                        <option value="Hardware & Software" {{ old('category', $ticket->category) == 'Hardware & Software' ? 'selected' : '' }}>Hardware & Software</option>
-                        <option value="Network" {{ old('category', $ticket->category) == 'Network' ? 'selected' : '' }}>Network</option>
-                        <option value="Account & Access" {{ old('category', $ticket->category) == 'Account & Access' ? 'selected' : '' }}>Account & Access</option>
+                        <option value="Plumbing" {{ old('category', $ticket->category) == 'Plumbing' ? 'selected' : '' }}>Plumbing</option>
+                        <option value="Building" {{ old('category', $ticket->category) == 'Building' ? 'selected' : '' }}>Building</option>
+                        <option value="Mechanical Engineering" {{ old('category', $ticket->category) == 'Mechanical Engineering' ? 'selected' : '' }}>Mechanical Engineering</option>
                         <option value="Others" {{ old('category', $ticket->category) == 'Others' ? 'selected' : '' }}>Others</option>
                     </select>
                 </div>
                 @error('category')
+                    <p class="mt-2 text-sm text-red-400 flex items-center space-x-1">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd"
+                                d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                                clip-rule="evenodd" />
+                        </svg>
+                        <span>{{ $message }}</span>
+                    </p>
+                @enderror
+            </div>
+            <div>
+                <label for="sub_category" class="block text-sm font-semibold text-slate-300 mb-2 flex items-center space-x-2">
+                    <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                    </svg>
+                    <span>Sub Categories</span>
+                    <span class="text-red-400">*</span>
+                </label>
+                <div class="relative">
+                    <select id="sub_category" name="sub_category" required
+                        class="select2 w-full bg-slate-800 border border-slate-700 rounded-xl text-white">
+                        <option value="">Choose Sub Categories...</option>
+                        <option value="Maintenance" {{ old('sub_category', $ticket->sub_category) == 'Maintenance' ? 'selected' : '' }}>Maintenance</option>
+                        <option value="Renovation" {{ old('sub_category', $ticket->sub_category) == 'Renovation' ? 'selected' : '' }}>Renovation</option>
+                        <option value="Others" {{ old('sub_category', $ticket->sub_category) == 'Others' ? 'selected' : '' }}>Others</option>
+                    </select>
+                </div>
+                @error('sub_category')
                     <p class="mt-2 text-sm text-red-400 flex items-center space-x-1">
                         <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                             <path fill-rule="evenodd"
@@ -263,7 +292,7 @@
                                 class="hidden w-full bg-slate-800 border border-slate-700 rounded-xl text-white"
                                 placeholder="Pick a time...">
                             <p id="duration-hour-help" class="mt-2 text-xs text-slate-500 hidden">
-                                Pilih jam pengerjaan. Durasi dihitung otomatis dari waktu sekarang.
+                                Select the desired time. The duration is automatically calculated from the current time..
                             </p>
                             <input type="hidden" id="duration_value" name="duration_value" value="{{ old('duration_value') }}">
                             @error('duration_value')
@@ -404,7 +433,7 @@
                         <span>Executor Attachments</span>
                         @if (in_array($ticket->status, ['Progress', 'Overdue']))
                             <span class="text-red-400">*</span>
-                            <span class="text-xs text-slate-500">(wajib sebelum close ticket)</span>
+                            <span class="text-xs text-slate-500">(send attachment before closing the ticket)</span>
                         @endif
                     </label>
 
@@ -435,7 +464,7 @@
                     @else
                         @if (in_array($ticket->status, ['Progress', 'Overdue']))
                             <div class="border border-slate-700 rounded-xl p-4 bg-slate-800/40 mb-3">
-                                <p class="text-sm text-slate-500">Belum ada attachment. Upload bukti pengerjaan sebelum menutup ticket.</p>
+                                <p class="text-sm text-slate-500">There are no attachments yet. Please upload proof of work before closing the ticket..</p>
                             </div>
                         @endif
                     @endif
@@ -503,7 +532,7 @@
     {{-- Modal: Pilih Sumber --}}
     <div id="executorSourceModal" class="fixed inset-0 bg-black/70 hidden items-center justify-center" style="z-index:9999;">
         <div class="bg-slate-900 rounded-xl p-6 w-80 text-center border border-slate-800 shadow-2xl">
-            <h3 class="text-lg font-semibold mb-4 text-white">Pilih Sumber</h3>
+            <h3 class="text-lg font-semibold mb-4 text-white">Choose Type</h3>
             <button type="button" id="executorOpenCamera" class="w-full mb-3 px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white transition">Open Camera</button>
             <button type="button" id="executorOpenFiles" class="w-full mb-3 px-4 py-2 rounded-lg bg-slate-700 hover:bg-slate-600 text-white transition">Upload Files</button>
             <button type="button" id="executorCloseSource" class="w-full px-4 py-2 text-slate-400 hover:text-white transition">Abort</button>
@@ -529,8 +558,7 @@
 
     @push('scripts')
         {{-- Flatpickr CSS --}}
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-
+      
         <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
@@ -543,6 +571,11 @@
                     placeholder: 'Choose Category...',
                     width: '100%',
                     dropdownParent: $('#category').parent()
+                });
+                $('#sub_category').select2({
+                    placeholder: 'Choose Sub Category...',
+                    width: '100%',
+                    dropdownParent: $('#sub_category').parent()
                 });
 
                 // ✅ FIX: Select2 duration_type — TANPA dispatch redundant yang menyebabkan double trigger
@@ -783,7 +816,7 @@
                 function submitWithAttachmentCheck() {
                     const total = existingCount + uploadedCount;
                     if (total === 0) {
-                        toastr.error('Wajib upload minimal 1 attachment bukti pengerjaan sebelum menutup ticket.');
+                        toastr.error('upload at least 1 attachment as proof of work before closing the ticket.');
                         document.getElementById('admin-executor-attachment-container')?.scrollIntoView({ behavior: 'smooth' });
                         return;
                     }
