@@ -565,34 +565,77 @@
         <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
         <script>
-            $(document).ready(function () {
-                // Select2: Category
-                $('#category').select2({
-                    placeholder: 'Choose Category...',
-                    width: '100%',
-                    dropdownParent: $('#category').parent()
-                });
-                $('#sub_category').select2({
-                    placeholder: 'Choose Sub Category...',
-                    width: '100%',
-                    dropdownParent: $('#sub_category').parent()
-                });
-                $('#duration_type').select2({
-                    placeholder: 'Choose Duration...',
-                    width: '100%',
-                    dropdownParent: $('#duration_type').parent(),
-                    minimumResultsForSearch: Infinity
-                });
+            // $(document).ready(function () {
+            //     // Select2: Category
+            //     $('#category').select2({
+            //         placeholder: 'Choose Category...',
+            //         width: '100%',
+            //         dropdownParent: $('#category').parent()
+            //     });
+            //     $('#sub_category').select2({
+            //         placeholder: 'Choose Sub Category...',
+            //         width: '100%',
+            //         dropdownParent: $('#sub_category').parent()
+            //     });
+            //     $('#duration_type').select2({
+            //         placeholder: 'Choose Duration...',
+            //         width: '100%',
+            //         dropdownParent: $('#duration_type').parent()
+            //     });
 
-                @if ($ticket->status === 'Overdue')
-                $('#statusSelect').select2({
-                    placeholder: 'Overdue — Choose action...',
-                    width: '100%',
-                    dropdownParent: $('#statusSelect').parent(),
-                    minimumResultsForSearch: Infinity
-                });
-                @endif
-            });
+            //     @if ($ticket->status === 'Overdue')
+            //     $('#statusSelect').select2({
+            //         placeholder: 'Overdue — Choose action...',
+            //         width: '100%',
+            //         dropdownParent: $('#statusSelect').parent(),
+            //         minimumResultsForSearch: Infinity
+            //     });
+            //     @endif
+                
+            // });
+            $(document).ready(function () {
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
+    // Category & Sub Category tetap pakai select2
+    $('#category').select2({
+        placeholder: 'Choose Category...',
+        width: '100%',
+        dropdownParent: $('#category').parent()
+    });
+
+    $('#sub_category').select2({
+        placeholder: 'Choose Sub Category...',
+        width: '100%',
+        dropdownParent: $('#sub_category').parent()
+    });
+
+    // ✅ duration_type hanya select2 di desktop
+    if (!isMobile) {
+        $('#duration_type').select2({
+            placeholder: 'Choose Duration...',
+            width: '100%',
+            dropdownParent: $('#duration_type').parent(),
+            minimumResultsForSearch: Infinity
+        });
+    }
+
+    @if ($ticket->status === 'Overdue')
+    $('#statusSelect').select2({
+        placeholder: 'Overdue — Choose action...',
+        width: '100%',
+        dropdownParent: $('#statusSelect').parent(),
+        minimumResultsForSearch: Infinity
+    });
+    $('#duration_type').on('change', function () {
+        handleDurationChange($(this).val());
+    });
+
+    $('#duration_type').on('select2:select', function (e) {
+        handleDurationChange(e.params.data.id);
+    });
+
+    @endif
+});
         </script>
 
         <script>
@@ -697,36 +740,21 @@
                 });
 
                 // ✅ FIX: Hanya satu listener untuk duration_type via jQuery (tidak ada dispatch redundant)
-                // $('#duration_type').on('change', function () {
-                //     const type = this.value;
-                //     if (type === 'hour') {
-                //         durationValueSelect.classList.add('hidden');
-                //         durationHourTime.classList.remove('hidden');
-                //     } else {
-                //         durationValueSelect.classList.remove('hidden');
-                //         durationHourTime.classList.add('hidden');
-                //         buildOpts();
-                //     }
-                //     syncReq();
-                //     syncVal();
-                //     calcEnd();
-                // });
-               $('#duration_type').on('change', function () {
-    const type = $(this).val();
-
-    if (type === 'hour') {
-        durationValueSelect.classList.add('hidden');
-        durationHourTime.classList.remove('hidden');
-    } else {
-        durationValueSelect.classList.remove('hidden');
-        durationHourTime.classList.add('hidden');
-        buildOpts();
-    }
-
-    syncReq();
-    syncVal();
-    calcEnd();
-});
+                $('#duration_type').on('change', function () {
+                    const type = this.value;
+                    if (type === 'hour') {
+                        durationValueSelect.classList.add('hidden');
+                        durationHourTime.classList.remove('hidden');
+                    } else {
+                        durationValueSelect.classList.remove('hidden');
+                        durationHourTime.classList.add('hidden');
+                        buildOpts();
+                    }
+                    syncReq();
+                    syncVal();
+                    calcEnd();
+                });
+              
 
                 durationValueSelect.addEventListener('change', () => { syncVal(); calcEnd(); });
 
