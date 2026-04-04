@@ -1141,6 +1141,7 @@
                             <select id="duration_type" name="duration_type"
                                 class="select2-duration w-full bg-slate-800 border border-slate-700 rounded-xl text-white" required>
                                 <option value="">Choose Type</option>
+                                <option value="">Choose</option>
                                 <option value="hour" {{ old('duration_type') == 'hour' ? 'selected' : '' }}>Hour</option>
                                 <option value="day" {{ old('duration_type') == 'day' ? 'selected' : '' }}>Day</option>
                                 <option value="week" {{ old('duration_type') == 'week' ? 'selected' : '' }}>Week</option>
