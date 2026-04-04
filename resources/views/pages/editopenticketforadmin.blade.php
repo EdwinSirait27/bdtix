@@ -249,7 +249,7 @@
                  - Status Open     → form duration (executor mengisi)
                  - Status Progress / Overdue → read-only info panel
             ============================================================ --}}
-            <br>
+            
             @if ($ticket->status === 'Open')
                 {{-- Form Duration: hanya saat Take Ticket --}}
                 <div class="mt-4">
@@ -265,7 +265,7 @@
                         {{-- Choose Type → Select2 --}}
                         <div>
                             <select id="duration_type" name="duration_type"
-                                class="select2-duration w-full bg-slate-800 border border-slate-700 rounded-xl text-white" required>
+                                class="select2 w-full bg-slate-800 border border-slate-700 rounded-xl text-white" required>
                                 <option value="">Choose Type</option>
                                 <option value="hour" {{ old('duration_type') == 'hour' ? 'selected' : '' }}>Hour</option>
                                 <option value="day" {{ old('duration_type') == 'day' ? 'selected' : '' }}>Day</option>
@@ -578,16 +578,21 @@
                     width: '100%',
                     dropdownParent: $('#sub_category').parent()
                 });
+                $('#duration_type').select2({
+                    placeholder: 'Choose Duration...',
+                    width: '100%',
+                    dropdownParent: $('#duration_type').parent()
+                });
 
                 // ✅ FIX: Select2 duration_type — TANPA dispatch redundant yang menyebabkan double trigger
-                @if ($ticket->status === 'Open')
-                $('#duration_type').select2({
-                    placeholder: 'Choose Type...',
-                    width: '100%',
-                    dropdownParent: $('#duration_type').parent(),
-                    minimumResultsForSearch: Infinity
-                });
-                @endif
+                // @if ($ticket->status === 'Open')
+                // $('#duration_type').select2({
+                //     placeholder: 'Choose Type...',
+                //     width: '100%',
+                //     dropdownParent: $('#duration_type').parent(),
+                //     minimumResultsForSearch: Infinity
+                // });
+                // @endif
 
                 @if ($ticket->status === 'Overdue')
                 $('#statusSelect').select2({
