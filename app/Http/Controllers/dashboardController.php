@@ -647,14 +647,14 @@ class dashboardController extends Controller
             $isProgressToClosed  = $oldStatus === 'Progress' && $ticket->status === 'Closed';
             $isOverdueToProgress = $oldStatus === 'Overdue' && $ticket->status === 'Progress';
 
-            $titleMessage = 'IT Ticket Updated';
+            $titleMessage = 'BD Ticket Updated';
             $ticketUrl    = $adminUrl;
             if ($isProgressToClosed) {
-                $titleMessage = 'IT Ticket Closed Review';
+                $titleMessage = 'BD Ticket Closed Review';
                 $ticketUrl    = $reviewUrl;
             }
             if ($isOverdueToProgress) {
-                $titleMessage = 'IT Ticket Overdue to Prosses';
+                $titleMessage = 'BD Ticket Overdue to Prosses';
                 $ticketUrl    = $adminUrl;
             }
 

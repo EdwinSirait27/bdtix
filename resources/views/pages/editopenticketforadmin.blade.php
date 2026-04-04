@@ -249,6 +249,7 @@
                  - Status Open     → form duration (executor mengisi)
                  - Status Progress / Overdue → read-only info panel
             ============================================================ --}}
+            <br>
             @if ($ticket->status === 'Open')
                 {{-- Form Duration: hanya saat Take Ticket --}}
                 <div class="mt-4">
