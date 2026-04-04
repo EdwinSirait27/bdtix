@@ -580,7 +580,8 @@
                 $('#duration_type').select2({
                     placeholder: 'Choose Duration...',
                     width: '100%',
-                    dropdownParent: $('#duration_type').parent()
+                    dropdownParent: $('#duration_type').parent(),
+                    minimumResultsForSearch: Infinity
                 });
 
                 @if ($ticket->status === 'Overdue')
@@ -710,8 +711,8 @@
                 //     syncVal();
                 //     calcEnd();
                 // });
-                $('#duration_type').on('select2:select', function (e) {
-    const type = e.params.data.id;
+               $('#duration_type').on('change', function () {
+    const type = $(this).val();
 
     if (type === 'hour') {
         durationValueSelect.classList.add('hidden');
