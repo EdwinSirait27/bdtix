@@ -262,7 +262,6 @@
                         <span class="text-red-400">*</span>
                     </label>
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6">
-                        {{-- Choose Type → Select2 --}}
                         <div>
                             <select id="duration_type" name="duration_type"
                                 class="select2 w-full bg-slate-800 border border-slate-700 rounded-xl text-white" required>
@@ -584,16 +583,6 @@
                     dropdownParent: $('#duration_type').parent()
                 });
 
-                // ✅ FIX: Select2 duration_type — TANPA dispatch redundant yang menyebabkan double trigger
-                // @if ($ticket->status === 'Open')
-                // $('#duration_type').select2({
-                //     placeholder: 'Choose Type...',
-                //     width: '100%',
-                //     dropdownParent: $('#duration_type').parent(),
-                //     minimumResultsForSearch: Infinity
-                // });
-                // @endif
-
                 @if ($ticket->status === 'Overdue')
                 $('#statusSelect').select2({
                     placeholder: 'Overdue — Choose action...',
@@ -707,20 +696,36 @@
                 });
 
                 // ✅ FIX: Hanya satu listener untuk duration_type via jQuery (tidak ada dispatch redundant)
-                $('#duration_type').on('change', function () {
-                    const type = this.value;
-                    if (type === 'hour') {
-                        durationValueSelect.classList.add('hidden');
-                        durationHourTime.classList.remove('hidden');
-                    } else {
-                        durationValueSelect.classList.remove('hidden');
-                        durationHourTime.classList.add('hidden');
-                        buildOpts();
-                    }
-                    syncReq();
-                    syncVal();
-                    calcEnd();
-                });
+                // $('#duration_type').on('change', function () {
+                //     const type = this.value;
+                //     if (type === 'hour') {
+                //         durationValueSelect.classList.add('hidden');
+                //         durationHourTime.classList.remove('hidden');
+                //     } else {
+                //         durationValueSelect.classList.remove('hidden');
+                //         durationHourTime.classList.add('hidden');
+                //         buildOpts();
+                //     }
+                //     syncReq();
+                //     syncVal();
+                //     calcEnd();
+                // });
+                $('#duration_type').on('select2:select', function (e) {
+    const type = e.params.data.id;
+
+    if (type === 'hour') {
+        durationValueSelect.classList.add('hidden');
+        durationHourTime.classList.remove('hidden');
+    } else {
+        durationValueSelect.classList.remove('hidden');
+        durationHourTime.classList.add('hidden');
+        buildOpts();
+    }
+
+    syncReq();
+    syncVal();
+    calcEnd();
+});
 
                 durationValueSelect.addEventListener('change', () => { syncVal(); calcEnd(); });
 
