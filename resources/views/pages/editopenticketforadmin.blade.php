@@ -1032,14 +1032,12 @@
                     <select id="category" name="category" required
                         class="select2 w-full bg-slate-800 border border-slate-700 rounded-xl text-white">
                         <option value="">Choose Categories...</option>
-                        <option value="Hardware & Software"
-                            {{ old('category', $ticket->category) == 'Hardware & Software' ? 'selected' : '' }}>Hardware &
-                            Software</option>
-                        <option value="Network" {{ old('category', $ticket->category) == 'Network' ? 'selected' : '' }}>
-                            Network</option>
-                        <option value="Account & Access"
-                            {{ old('category', $ticket->category) == 'Account & Access' ? 'selected' : '' }}>Account &
-                            Access</option>
+                        <option value="Building"
+                            {{ old('category', $ticket->category) == 'Building' ? 'selected' : '' }}>Building</option>
+                        <option value="Plumbing" {{ old('category', $ticket->category) == 'Plumbing' ? 'selected' : '' }}>
+                            Plumbing</option>
+                        <option value="Mechanical Engineering"
+                            {{ old('category', $ticket->category) == 'Mechanical Engineering' ? 'selected' : '' }}>Mechanical Engineering</option>
                         <option value="Others" {{ old('category', $ticket->category) == 'Others' ? 'selected' : '' }}>
                             Others</option>
                     </select>
