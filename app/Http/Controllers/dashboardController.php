@@ -11,70 +11,276 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Http;
 class dashboardController extends Controller
 {
-    public function dashboardPage()
+    // public function dashboardPage()
+    // {
+    //     $user = Auth::user();
+    //     $adminCount = User::role('admin')->count();
+    //     $todaysticket = Tickets::whereDate('created_at', Carbon::today())->count();
+    //     $highprior = Tickets::where('priority', 'High')->count();
+    //     $assignedtoyou = Tickets::where('executor_id', auth()->id())->count();
+    //     $finishedtickettoyou = Tickets::whereNotNull('finished')
+    //         ->where('executor_id', auth()->id())
+    //         ->count();
+    //     $onprogressticket = Tickets::where('status', 'Progress')->count();
+    //     $opentickets = Tickets::where('status', 'Open')->count();
+    //     $closedtickets = Tickets::where('status', 'Closed')->count();
+
+    //     $closedticket = Tickets::whereNotNull('finished')->count();
+
+    //     $overdueticket = Tickets::where('status', 'Overdue')->count();
+
+    //     $totalSlaTickets = Tickets::whereNotNull('executor_id')
+    //         ->whereNotNull('estimation')
+    //         ->whereNotNull('finished')
+    //         ->count();
+
+    //     $slaCompliantTickets = Tickets::whereNotNull('executor_id')
+    //         ->whereNotNull('estimation')
+    //         ->whereNotNull('finished')
+    //         ->whereColumn('finished', '<=', 'estimation')
+    //         ->count();
+
+    //     $slaCompliance = $totalSlaTickets > 0
+    //         ? round(($slaCompliantTickets / $totalSlaTickets) * 100, 2)
+    //         : 0;
+
+    //     $userhuman = Auth::user();
+
+    //     $alltickethuman = Tickets::where('user_id', auth()->id())
+    //         ->count();
+    //     $overduetickethuman = Tickets::where('user_id', auth()->id())
+    //         ->where('status', 'Overdue')
+    //         ->count();
+    //     $todaystickethuman = Tickets::where('user_id', auth()->id())
+    //         ->whereDate('created_at', Carbon::today())
+    //         ->count();
+    //     $onprogresstickethuman = Tickets::where('user_id', auth()->id())
+    //         ->where('status', 'Progress')
+    //         ->count();
+    //     $closedtickethuman = Tickets::where('user_id', auth()->id())
+    //         ->where('status', 'Closed')
+    //         ->count();
+
+    //     $month     = request('month');
+    //     $quarter   = request('quarter');
+    //     $year      = request('year');
+    //     $dateFrom  = request('from');
+    //     $dateTo    = request('to');
+    //     $category  = request('category');
+    //     $sub_category  = request('sub_category');
+    //     $categories = Tickets::distinct()->pluck('category');
+    //     $sub_categories = Tickets::distinct()->pluck('sub_category');
+
+    //     $ticketBase = Tickets::query();
+
+    //     if ($month) {
+    //         $ticketBase->whereYear('created_at', substr($month, 0, 4))
+    //             ->whereMonth('created_at', substr($month, 5, 2));
+    //     }
+
+    //     if ($quarter && $year) {
+    //         $qMonths = [
+    //             'Q1' => [1, 2, 3],
+    //             'Q2' => [4, 5, 6],
+    //             'Q3' => [7, 8, 9],
+    //             'Q4' => [10, 11, 12],
+    //         ];
+    //         $ticketBase->whereYear('created_at', $year)
+    //             ->whereIn(DB::raw('MONTH(created_at)'), $qMonths[$quarter]);
+    //     }
+
+    //     if ($dateFrom && $dateTo) {
+    //         $ticketBase->whereBetween('created_at', [
+    //             $dateFrom . ' 00:00:00',
+    //             $dateTo   . ' 23:59:59',
+    //         ]);
+    //     } elseif ($dateFrom) {
+    //         $ticketBase->where('created_at', '>=', $dateFrom . ' 00:00:00');
+    //     } elseif ($dateTo) {
+    //         $ticketBase->where('created_at', '<=', $dateTo . ' 23:59:59');
+    //     }
+
+    //     if ($category) {
+    //         $ticketBase->where('category', $category);
+    //     }
+    //     if ($sub_category) {
+    //         $ticketBase->where('sub_category', $sub_category);
+    //     }
+
+    //     $executorIds = DB::connection('mysql')
+    //         ->table('model_has_roles')
+    //         ->join('roles', 'roles.id', '=', 'model_has_roles.role_id')
+    //         ->where('roles.name', 'executor')
+    //         ->pluck('model_id');
+
+    //     $executors = User::on('hrx')
+    //         ->with('employee')
+    //         ->whereIn('id', $executorIds)
+    //         ->get();
+
+    //     $avgResponseRaw = (clone $ticketBase)
+    //         ->whereNotNull('progressed_at')
+    //         ->whereNotNull('executor_id')
+    //         ->select(
+    //             'executor_id',
+    //             'priority',
+    //             DB::raw('AVG(TIMESTAMPDIFF(MINUTE, created_at, progressed_at)) as avg_minutes'),
+    //             DB::raw('COUNT(*) as total_ticket')
+    //         )
+    //         ->groupBy('executor_id', 'priority')
+    //         ->get()
+    //         ->groupBy('executor_id');
+
+    //     $avgResolutionRaw = (clone $ticketBase)
+    //         ->whereNotNull('progressed_at')
+    //         ->whereNotNull('finished')
+    //         ->whereNotNull('executor_id')
+    //         ->select(
+    //             'executor_id',
+    //             'priority',
+    //             DB::raw('AVG(TIMESTAMPDIFF(MINUTE, progressed_at, finished)) as avg_minutes'),
+    //             DB::raw('COUNT(*) as total_ticket')
+    //         )
+    //         ->groupBy('executor_id', 'priority')
+    //         ->get()
+    //         ->groupBy('executor_id');
+
+    //     $order = ["Low", "Medium", "High"];
+    //     $priorities = Tickets::distinct()
+    //         ->pluck('priority')
+    //         ->sort(fn($a, $b) => array_search($a, $order) <=> array_search($b, $order))
+    //         ->values();
+
+    //     $executorStats = $executors->map(function ($user) use ($avgResponseRaw, $avgResolutionRaw, $priorities) {
+    //         $responseRows = collect($avgResponseRaw[$user->id] ?? [])->keyBy('priority');
+    //         $resolutionRows = collect($avgResolutionRaw[$user->id] ?? [])->keyBy('priority');
+
+    //         $responseByPriority = collect($priorities)->mapWithKeys(
+    //             fn($p) =>
+    //             [$p => [
+    //                 'avg'   => round($responseRows[$p]->avg_minutes ?? 0, 1),
+    //                 'total' => $responseRows[$p]->total_ticket ?? 0,
+    //             ]]
+    //         );
+
+    //         $resolutionByPriority = collect($priorities)->mapWithKeys(
+    //             fn($p) =>
+    //             [$p => [
+    //                 'avg'   => round($resolutionRows[$p]->avg_minutes ?? 0, 1),
+    //                 'total' => $resolutionRows[$p]->total_ticket ?? 0,
+    //             ]]
+    //         );
+
+    //         return [
+    //             'id'                     => $user->id,
+    //             'username'               => $user->username,
+    //             'name'                   => optional($user->employee)->employee_name ?? $user->username,
+    //             'response_by_priority'   => $responseByPriority,
+    //             'resolution_by_priority' => $resolutionByPriority,
+    //         ];
+    //     });
+
+    //     return view('pages.dashboard', compact(
+    //         'userhuman',
+    //         'closedtickets',
+    //         'alltickethuman',
+    //         'overduetickethuman',
+    //         'todaystickethuman',
+    //         'finishedtickettoyou',
+    //         'onprogresstickethuman',
+    //         'user',
+    //         'assignedtoyou',
+    //         'todaysticket',
+    //         'onprogressticket',
+    //         'opentickets',
+    //         'closedticket',
+    //         'overdueticket',
+    //         'adminCount',
+    //         'slaCompliance',
+    //         'executors',
+    //         'priorities',
+    //         'categories',
+    //         'sub_categories',
+    //         'closedtickethuman',
+    //         'executorStats'
+    //     ));
+    // }
+     public function dashboardPage()
     {
-        $user = Auth::user();
-        $adminCount = User::role('admin')->count();
-        $todaysticket = Tickets::whereDate('created_at', Carbon::today())->count();
-        $highprior = Tickets::where('priority', 'High')->count();
-        $assignedtoyou = Tickets::where('executor_id', auth()->id())->count();
+        $user      = Auth::user();
+        $userhuman = Auth::user();
+
+        // ---------------------------------------------------------------------
+        // Ticket Counts — Global
+        // ---------------------------------------------------------------------
+        $adminCount       = User::role('admin')->count();
+        $todaysticket     = Tickets::whereDate('created_at', Carbon::today())->count();
+        $highprior        = Tickets::where('priority', 'High')->count();
+        $onprogressticket = Tickets::where('status', 'Progress')->count();
+        $opentickets      = Tickets::where('status', 'Open')->count();
+        $closedtickets    = Tickets::where('status', 'Closed')->count();
+        $closedticket     = Tickets::whereNotNull('finished')->count();
+        $overdueticket    = Tickets::where('status', 'Overdue')->count();
+
+        // ---------------------------------------------------------------------
+        // Ticket Counts — Assigned to Current Executor
+        // ---------------------------------------------------------------------
+        $assignedtoyou      = Tickets::where('executor_id', auth()->id())->count();
         $finishedtickettoyou = Tickets::whereNotNull('finished')
             ->where('executor_id', auth()->id())
             ->count();
-        $onprogressticket = Tickets::where('status', 'Progress')->count();
-        $opentickets = Tickets::where('status', 'Open')->count();
-        $closedtickets = Tickets::where('status', 'Closed')->count();
 
-        $closedticket = Tickets::whereNotNull('finished')->count();
+        // ---------------------------------------------------------------------
+        // SLA Compliance — Hanya untuk Executor yang Login
+        // ---------------------------------------------------------------------
+        $executorId = auth()->id();
 
-        $overdueticket = Tickets::where('status', 'Overdue')->count();
-
-        $totalSlaTickets = Tickets::whereNotNull('executor_id')
+        $totalSlaTickets = Tickets::where('executor_id', $executorId)
             ->whereNotNull('estimation')
+            ->whereNotNull('estimation_to')
             ->whereNotNull('finished')
             ->count();
 
-        $slaCompliantTickets = Tickets::whereNotNull('executor_id')
+        $slaCompliantTickets = Tickets::where('executor_id', $executorId)
             ->whereNotNull('estimation')
+            ->whereNotNull('estimation_to')
             ->whereNotNull('finished')
-            ->whereColumn('finished', '<=', 'estimation')
+            ->whereColumn('finished', '<=', 'estimation_to')
             ->count();
 
         $slaCompliance = $totalSlaTickets > 0
             ? round(($slaCompliantTickets / $totalSlaTickets) * 100, 2)
             : 0;
 
-        $userhuman = Auth::user();
+        // ---------------------------------------------------------------------
+        // Ticket Counts — Milik User (Human) yang Login
+        // ---------------------------------------------------------------------
+        $alltickethuman      = Tickets::where('user_id', auth()->id())->count();
+        $overduetickethuman  = Tickets::where('user_id', auth()->id())->where('status', 'Overdue')->count();
+        $todaystickethuman   = Tickets::where('user_id', auth()->id())->whereDate('created_at', Carbon::today())->count();
+        $onprogresstickethuman = Tickets::where('user_id', auth()->id())->where('status', 'Progress')->count();
+        $closedtickethuman   = Tickets::where('user_id', auth()->id())->where('status', 'Closed')->count();
 
-        $alltickethuman = Tickets::where('user_id', auth()->id())
-            ->count();
-        $overduetickethuman = Tickets::where('user_id', auth()->id())
-            ->where('status', 'Overdue')
-            ->count();
-        $todaystickethuman = Tickets::where('user_id', auth()->id())
-            ->whereDate('created_at', Carbon::today())
-            ->count();
-        $onprogresstickethuman = Tickets::where('user_id', auth()->id())
-            ->where('status', 'Progress')
-            ->count();
-        $closedtickethuman = Tickets::where('user_id', auth()->id())
-            ->where('status', 'Closed')
-            ->count();
+        // ---------------------------------------------------------------------
+        // Filter Request Parameters
+        // ---------------------------------------------------------------------
+        $month    = request('month');
+        $quarter  = request('quarter');
+        $year     = request('year');
+        $dateFrom = request('from');
+        $dateTo   = request('to');
+        $category = request('category');
 
-        $month     = request('month');
-        $quarter   = request('quarter');
-        $year      = request('year');
-        $dateFrom  = request('from');
-        $dateTo    = request('to');
-        $category  = request('category');
-        $sub_category  = request('sub_category');
         $categories = Tickets::distinct()->pluck('category');
-        $sub_categories = Tickets::distinct()->pluck('sub_category');
 
+        // ---------------------------------------------------------------------
+        // Base Query dengan Filter
+        // ---------------------------------------------------------------------
         $ticketBase = Tickets::query();
 
         if ($month) {
-            $ticketBase->whereYear('created_at', substr($month, 0, 4))
+            $ticketBase
+                ->whereYear('created_at', substr($month, 0, 4))
                 ->whereMonth('created_at', substr($month, 5, 2));
         }
 
@@ -85,7 +291,8 @@ class dashboardController extends Controller
                 'Q3' => [7, 8, 9],
                 'Q4' => [10, 11, 12],
             ];
-            $ticketBase->whereYear('created_at', $year)
+            $ticketBase
+                ->whereYear('created_at', $year)
                 ->whereIn(DB::raw('MONTH(created_at)'), $qMonths[$quarter]);
         }
 
@@ -103,10 +310,10 @@ class dashboardController extends Controller
         if ($category) {
             $ticketBase->where('category', $category);
         }
-        if ($sub_category) {
-            $ticketBase->where('sub_category', $sub_category);
-        }
 
+        // ---------------------------------------------------------------------
+        // Executor List (dari Role)
+        // ---------------------------------------------------------------------
         $executorIds = DB::connection('mysql')
             ->table('model_has_roles')
             ->join('roles', 'roles.id', '=', 'model_has_roles.role_id')
@@ -118,6 +325,9 @@ class dashboardController extends Controller
             ->whereIn('id', $executorIds)
             ->get();
 
+        // ---------------------------------------------------------------------
+        // Avg Response Time per Executor per Priority
+        // ---------------------------------------------------------------------
         $avgResponseRaw = (clone $ticketBase)
             ->whereNotNull('progressed_at')
             ->whereNotNull('executor_id')
@@ -131,6 +341,9 @@ class dashboardController extends Controller
             ->get()
             ->groupBy('executor_id');
 
+        // ---------------------------------------------------------------------
+        // Avg Resolution Time per Executor per Priority
+        // ---------------------------------------------------------------------
         $avgResolutionRaw = (clone $ticketBase)
             ->whereNotNull('progressed_at')
             ->whereNotNull('finished')
@@ -145,64 +358,68 @@ class dashboardController extends Controller
             ->get()
             ->groupBy('executor_id');
 
-        $order = ["Low", "Medium", "High"];
+        // ---------------------------------------------------------------------
+        // Priority Order: Low → Medium → High
+        // ---------------------------------------------------------------------
+        $order      = ['Low', 'Medium', 'High'];
         $priorities = Tickets::distinct()
             ->pluck('priority')
             ->sort(fn($a, $b) => array_search($a, $order) <=> array_search($b, $order))
             ->values();
 
+        // ---------------------------------------------------------------------
+        // Executor Stats (Response & Resolution per Priority)
+        // ---------------------------------------------------------------------
         $executorStats = $executors->map(function ($user) use ($avgResponseRaw, $avgResolutionRaw, $priorities) {
-            $responseRows = collect($avgResponseRaw[$user->id] ?? [])->keyBy('priority');
+            $responseRows   = collect($avgResponseRaw[$user->id]   ?? [])->keyBy('priority');
             $resolutionRows = collect($avgResolutionRaw[$user->id] ?? [])->keyBy('priority');
 
-            $responseByPriority = collect($priorities)->mapWithKeys(
-                fn($p) =>
-                [$p => [
-                    'avg'   => round($responseRows[$p]->avg_minutes ?? 0, 1),
-                    'total' => $responseRows[$p]->total_ticket ?? 0,
-                ]]
-            );
+            $responseByPriority = collect($priorities)->mapWithKeys(fn($p) => [
+                $p => [
+                    'avg'   => round($responseRows[$p]->avg_minutes   ?? 0, 1),
+                    'total' => $responseRows[$p]->total_ticket         ?? 0,
+                ],
+            ]);
 
-            $resolutionByPriority = collect($priorities)->mapWithKeys(
-                fn($p) =>
-                [$p => [
-                    'avg'   => round($resolutionRows[$p]->avg_minutes ?? 0, 1),
-                    'total' => $resolutionRows[$p]->total_ticket ?? 0,
-                ]]
-            );
+            $resolutionByPriority = collect($priorities)->mapWithKeys(fn($p) => [
+                $p => [
+                    'avg'   => round($resolutionRows[$p]->avg_minutes  ?? 0, 1),
+                    'total' => $resolutionRows[$p]->total_ticket        ?? 0,
+                ],
+            ]);
 
             return [
-                'id'                     => $user->id,
-                'username'               => $user->username,
-                'name'                   => optional($user->employee)->employee_name ?? $user->username,
-                'response_by_priority'   => $responseByPriority,
-                'resolution_by_priority' => $resolutionByPriority,
+                'id'                    => $user->id,
+                'username'              => $user->username,
+                'name'                  => optional($user->employee)->employee_name ?? $user->username,
+                'response_by_priority'  => $responseByPriority,
+                'resolution_by_priority'=> $resolutionByPriority,
             ];
         });
 
         return view('pages.dashboard', compact(
+            'user',
             'userhuman',
+            'adminCount',
+            'todaysticket',
+            'highprior',
+            'assignedtoyou',
+            'finishedtickettoyou',
+            'onprogressticket',
+            'opentickets',
             'closedtickets',
+            'closedticket',
+            'overdueticket',
+            'slaCompliance',
             'alltickethuman',
             'overduetickethuman',
             'todaystickethuman',
-            'finishedtickettoyou',
             'onprogresstickethuman',
-            'user',
-            'assignedtoyou',
-            'todaysticket',
-            'onprogressticket',
-            'opentickets',
-            'closedticket',
-            'overdueticket',
-            'adminCount',
-            'slaCompliance',
+            'closedtickethuman',
             'executors',
+            'executorStats',
             'priorities',
             'categories',
-            'sub_categories',
-            'closedtickethuman',
-            'executorStats'
         ));
     }
 

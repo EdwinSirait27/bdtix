@@ -1139,13 +1139,7 @@
                 @enderror
             </div>
 
-            {{-- ============================================================
-                 DURATION SECTION
-                 - Status Open     → form duration (executor mengisi)
-                 - Status Progress / Overdue → read-only info panel
-            ============================================================ --}}
-            @if ($ticket->status === 'Open')
-                {{-- Form Duration: hanya saat Take Ticket --}}
+             @if ($ticket->status === 'Open')
                 <div class="mt-4">
                     <label for="duration_type"
                         class="block text-sm font-semibold text-slate-300 mb-2 flex items-center space-x-2">
@@ -1187,13 +1181,19 @@
                                 <option value="">Choose duration...</option>
                             </select>
 
-                            {{-- <input type="text" id="duration_hour_time"
-                                class="hidden w-full bg-slate-800 border border-slate-700 rounded-xl text-white"
-                                placeholder="Pick a time..."> --}}
-                                <div id="duration_hour_wrapper" class="hidden">
+                                {{-- <div id="duration_hour_wrapper" class="hidden">
     <input type="text" id="duration_hour_time"
         class="w-full bg-slate-800 border border-slate-700 rounded-xl text-white"
         placeholder="Pick a time">
+</div> --}}
+<div id="duration_hour_wrapper" class="hidden">
+    <input 
+        type="time" 
+        id="duration_hour_time"
+        class="w-full bg-slate-800 border border-slate-700 rounded-xl text-white px-3 py-2"
+        placeholder="Pick a time"
+        step="3600"
+    >
 </div>
 
                             <p id="duration-hour-help" class="mt-2 text-xs text-slate-500 hidden">
@@ -1560,131 +1560,8 @@
             @endif
         </script>
 
-        {{-- Script duration: hanya aktif saat status Open --}}
+       
         {{-- @if ($ticket->status === 'Open')
-        <script>
-            document.addEventListener('DOMContentLoaded', function () {
-                const durationType        = document.getElementById('duration_type');
-                const durationValueSelect = document.getElementById('duration_value_select');
-                const durationHourTime    = document.getElementById('duration_hour_time');
-                const durationValueInput  = document.getElementById('duration_value');
-                const estimationInput     = document.getElementById('estimation');
-                const estimationToInput   = document.getElementById('estimation_to');
-                const durationHourHelp    = document.getElementById('duration-hour-help');
-
-                if (!durationType || !durationValueSelect || !durationHourTime || !durationValueInput || !estimationInput || !estimationToInput) return;
-
-                const ranges = {
-                    hour: { min: 1,  max: 24, label: 'Hour' },
-                    day:  { min: 2,  max: 6,  label: 'Day'  },
-                    week: { min: 1,  max: 4,  label: 'Week' }
-                };
-
-                const fmt = (d) => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}T${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
-
-                // Estimation FROM = now() saat halaman dimuat (otomatis)
-                estimationInput.value = fmt(new Date());
-
-                const buildOpts = () => {
-                    const type = durationType.value;
-                    durationValueSelect.innerHTML = '';
-                    if (!ranges[type]) {
-                        durationValueSelect.appendChild(new Option('Choose duration...', ''));
-                        return;
-                    }
-                    durationValueSelect.appendChild(new Option('Choose duration...', ''));
-                    for (let i = ranges[type].min; i <= ranges[type].max; i++) {
-                        const opt = new Option(`${i} ${ranges[type].label}`, i);
-                        // ✅ Restore old value jika ada
-                        if (String(i) === String('{{ old('duration_value') }}')) opt.selected = true;
-                        durationValueSelect.appendChild(opt);
-                    }
-                };
-
-                const syncVal = () => {
-                    const type = durationType.value;
-                    if (type === 'hour') {
-                        const v = fpHour.input.value;
-                        if (!v) { durationValueInput.value = ''; return; }
-                        const start = new Date(estimationInput.value);
-                        const h = parseInt(v.split(':')[0] || '0', 10);
-                        if (isNaN(start.getTime()) || isNaN(h)) { durationValueInput.value = ''; return; }
-                        let diff = h - start.getHours();
-                        if (diff <= 0) diff += 24;
-                        durationValueInput.value = String(diff);
-                        return;
-                    }
-                    durationValueInput.value = durationValueSelect.value || '';
-                };
-
-                const syncReq = () => {
-                    const type = durationType.value;
-                    if (type === 'hour') {
-                        durationValueSelect.required = false;
-                        durationHourHelp?.classList.remove('hidden');
-                    } else {
-                        durationValueSelect.required = true;
-                        durationHourHelp?.classList.add('hidden');
-                    }
-                };
-
-                const calcEnd = () => {
-                    const type = durationType.value;
-                    const val  = parseInt(durationValueInput.value || '0', 10);
-                    if (!type || !val || !estimationInput.value) return;
-                    const start = new Date(estimationInput.value);
-                    if (isNaN(start.getTime())) return;
-                    const mins = type === 'hour' ? val * 60 : type === 'day' ? val * 1440 : val * 10080;
-                    estimationToInput.value = fmt(new Date(start.getTime() + mins * 60000));
-                };
-
-                // Flatpickr untuk input jam (Hour)
-                const fpHour = flatpickr(durationHourTime, {
-                    enableTime: true,
-                    noCalendar: true,
-                    dateFormat: "H:i",
-                    time_24hr: true,
-                    minuteIncrement: 60,
-                    onReady: function(selectedDates, dateStr, instance) {
-                        instance.calendarContainer.style.zIndex = "99999";
-                    },
-                    onChange: function() {
-                        syncVal();
-                        calcEnd();
-                    }
-                });
-
-                // ✅ FIX 1: Jadikan named function agar bisa dipanggil saat init
-                function onDurationTypeChange() {
-                    const type = durationType.value;
-                    if (type === 'hour') {
-                        durationValueSelect.classList.add('hidden');
-                        durationHourTime.classList.remove('hidden');
-                    } else {
-                        durationValueSelect.classList.remove('hidden');
-                        durationHourTime.classList.add('hidden');
-                        buildOpts();
-                    }
-                    syncReq();
-                    syncVal();
-                    calcEnd();
-                }
-
-                // ✅ FIX 2: Dengarkan 'select2:select' DAN 'change' agar trigger di mobile & desktop
-                $('#duration_type').on('select2:select change', onDurationTypeChange);
-
-                durationValueSelect.addEventListener('change', () => { syncVal(); calcEnd(); });
-
-                // ✅ FIX 3: Panggil onDurationTypeChange() saat init agar state awal sinkron
-                onDurationTypeChange();
-                syncVal();
-                calcEnd();
-
-                // ✅ FIX 4: Trigger manual setelah Select2 selesai init (extra safety untuk mobile)
-                setTimeout(() => { $('#duration_type').trigger('change'); }, 100);
-            });
-        </script> --}}
-        @if ($ticket->status === 'Open')
             <script>
                 document.addEventListener('DOMContentLoaded', function() {
                     const durationType = document.getElementById('duration_type');
@@ -1796,20 +1673,7 @@
                         }
                     });
 
-                    // function onDurationTypeChange() {
-                    //     const type = durationType.value;
-                    //     if (type === 'hour') {
-                    //         durationValueSelect.classList.add('hidden');
-                    //         durationHourTime.classList.remove('hidden');
-                    //     } else {
-                    //         durationValueSelect.classList.remove('hidden');
-                    //         durationHourTime.classList.add('hidden');
-                    //         buildOpts();
-                    //     }
-                    //     syncReq();
-                    //     syncVal();
-                    //     calcEnd();
-                    // }
+                  
                     function onDurationTypeChange() {
     const type = durationType.value;
     if (type === 'hour') {
@@ -1825,11 +1689,8 @@
     calcEnd();
 }
 
-                    // ✅ KEY FIX: Listen ke native 'change' pada elemen <select> langsung
-                    // Ini bekerja di mobile tanpa bergantung pada Select2 event
                     durationType.addEventListener('change', onDurationTypeChange);
 
-                    // ✅ Select2 event sebagai fallback tambahan untuk desktop
                     $('#duration_type').on('select2:select', onDurationTypeChange);
 
                     durationValueSelect.addEventListener('change', () => {
@@ -1837,13 +1698,135 @@
                         calcEnd();
                     });
 
-                    // ✅ Init state awal — tidak pakai setTimeout, langsung panggil
                     onDurationTypeChange();
                 });
             </script>
-        @endif
+        @endif --}}
+        @if ($ticket->status === 'Open')
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const durationType      = document.getElementById('duration_type');
+    const durationValueSelect = document.getElementById('duration_value_select');
+    const durationHourTime  = document.getElementById('duration_hour_time');
+    const durationHourWrapper = document.getElementById('duration_hour_wrapper');
+    const durationValueInput = document.getElementById('duration_value');
+    const estimationInput   = document.getElementById('estimation');
+    const estimationToInput = document.getElementById('estimation_to');
+    const durationHourHelp  = document.getElementById('duration-hour-help');
 
-        {{-- Script upload executor: hanya aktif saat Progress atau Overdue --}}
+    if (!durationType || !durationValueSelect || !durationHourTime ||
+        !durationValueInput || !estimationInput || !estimationToInput) return;
+
+    const ranges = {
+        hour:  { min: 1, max: 24, label: 'Hour' },
+        day:   { min: 2, max: 6,  label: 'Day'  },
+        week:  { min: 1, max: 4,  label: 'Week' }
+    };
+
+    const fmt = (d) =>
+        `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}` +
+        `T${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
+
+    // Set estimation awal = sekarang
+    const now = new Date();
+    estimationInput.value = fmt(now);
+
+    const buildOpts = () => {
+        const type = durationType.value;
+        durationValueSelect.innerHTML = '';
+        if (!ranges[type]) {
+            durationValueSelect.appendChild(new Option('Choose duration...', ''));
+            return;
+        }
+        durationValueSelect.appendChild(new Option('Choose duration...', ''));
+        for (let i = ranges[type].min; i <= ranges[type].max; i++) {
+            const opt = new Option(`${i} ${ranges[type].label}`, i);
+            if (String(i) === String('{{ old('duration_value') }}')) opt.selected = true;
+            durationValueSelect.appendChild(opt);
+        }
+    };
+
+    const syncVal = () => {
+        const type = durationType.value;
+        if (type === 'hour') {
+            const v = durationHourTime.value; // format "HH:MM" dari native input
+            if (!v) {
+                durationValueInput.value = '';
+                return;
+            }
+            const start  = new Date(estimationInput.value);
+            const hInput = parseInt(v.split(':')[0], 10);
+            if (isNaN(start.getTime()) || isNaN(hInput)) {
+                durationValueInput.value = '';
+                return;
+            }
+            let diff = hInput - start.getHours();
+            if (diff <= 0) diff += 24;
+            durationValueInput.value = String(diff);
+            return;
+        }
+        durationValueInput.value = durationValueSelect.value || '';
+    };
+
+    const syncReq = () => {
+        const type = durationType.value;
+        if (type === 'hour') {
+            durationValueSelect.required = false;
+            durationHourHelp?.classList.remove('hidden');
+        } else {
+            durationValueSelect.required = true;
+            durationHourHelp?.classList.add('hidden');
+        }
+    };
+
+    const calcEnd = () => {
+        const type = durationType.value;
+        const val  = parseInt(durationValueInput.value || '0', 10);
+        if (!type || !val || !estimationInput.value) return;
+        const start = new Date(estimationInput.value);
+        if (isNaN(start.getTime())) return;
+        const mins = type === 'hour' ? val * 60 : type === 'day' ? val * 1440 : val * 10080;
+        estimationToInput.value = fmt(new Date(start.getTime() + mins * 60000));
+    };
+
+    // ✅ Native time input — works on mobile & desktop
+    durationHourTime.addEventListener('change', () => {
+        syncVal();
+        calcEnd();
+    });
+    // Fallback: input event untuk beberapa mobile browser
+    durationHourTime.addEventListener('input', () => {
+        syncVal();
+        calcEnd();
+    });
+
+    function onDurationTypeChange() {
+        const type = durationType.value;
+        if (type === 'hour') {
+            durationValueSelect.classList.add('hidden');
+            durationHourWrapper.classList.remove('hidden');
+        } else {
+            durationValueSelect.classList.remove('hidden');
+            durationHourWrapper.classList.add('hidden');
+            buildOpts();
+        }
+        syncReq();
+        syncVal();
+        calcEnd();
+    }
+
+    durationType.addEventListener('change', onDurationTypeChange);
+    $('#duration_type').on('select2:select', onDurationTypeChange);
+    durationValueSelect.addEventListener('change', () => {
+        syncVal();
+        calcEnd();
+    });
+
+    onDurationTypeChange();
+});
+</script>
+@endif
+
         @if (in_array($ticket->status, ['Progress', 'Overdue']))
             <script>
                 (function() {
