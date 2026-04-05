@@ -1195,7 +1195,7 @@
                                 <div id="duration_hour_wrapper" class="hidden">
     <input type="text" id="duration_hour_time"
         class="w-full bg-slate-800 border border-slate-700 rounded-xl text-white"
-        placeholder="Pick a time...">
+        placeholder="Pick a time">
 </div>
 
                             <p id="duration-hour-help" class="mt-2 text-xs text-slate-500 hidden">

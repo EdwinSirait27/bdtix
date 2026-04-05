@@ -8,8 +8,6 @@ use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Str;
-use App\Services\NextcloudService;
 use Illuminate\Support\Facades\Http;
 class dashboardController extends Controller
 {
@@ -494,9 +492,7 @@ class dashboardController extends Controller
             'duration_value' => $isOpenStatus ? 'required|integer|min:1' : 'nullable|integer|min:1',
         ]);
 
-        // =============================
-        // VALIDASI DURASI & AUTO PRIORITY
-        // =============================
+      
         if ($isOpenStatus) {
             $durationLimits = [
                 'hour' => 24,
@@ -514,7 +510,6 @@ class dashboardController extends Controller
                 return back()->withErrors(['duration_value' => 'Duration tidak valid untuk tipe tersebut'])->withInput();
             }
 
-            // ✅ Auto-set priority berdasarkan duration_type
             $autoPriority = match($durationType) {
                 'hour' => 'Low',
                 'day'  => 'Medium',
@@ -523,15 +518,10 @@ class dashboardController extends Controller
             };
 
         } else {
-            // Saat Close/Overdue: ambil dari database
             $durationType  = $ticket->duration_type;
             $durationValue = $ticket->duration_value;
-            $autoPriority  = $ticket->priority; // pertahankan priority yang sudah ada
+            $autoPriority  = $ticket->priority;
         }
-
-        // =============================
-        // STATUS SYNC
-        // =============================
         if ($ticket->status === 'Closed') {
             abort(403, 'Ticket sudah closed');
         }
@@ -593,7 +583,7 @@ class dashboardController extends Controller
                 'executor_id'    => auth()->id(),
                 'duration_type'  => $durationType,
                 'duration_value' => $durationValue,
-                'priority'       => $autoPriority, // ✅ auto priority
+                'priority'       => $autoPriority, 
             ];
 
             if ($oldStatus === 'Open' && $status === 'Progress') {

@@ -20,11 +20,9 @@ class GoogleDriveAuth extends Command
         $client->addScope(Drive::DRIVE);
         $client->setAccessType('offline');
         $client->setPrompt('consent');
-
         $authUrl = $client->createAuthUrl();
         $this->info('Buka URL ini di browser:');
         $this->line($authUrl);
-
         $code = $this->ask('Masukkan authorization code');
         $token = $client->fetchAccessTokenWithAuthCode($code);
 
