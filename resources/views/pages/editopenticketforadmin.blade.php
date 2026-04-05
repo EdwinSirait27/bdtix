@@ -1159,55 +1159,7 @@
                         <span class="text-red-400">*</span>
                     </label>
 
-                    {{-- ✅ FIX: Gunakan grid-cols-1 saja agar ukuran sama dengan kolom lain di mobile --}}
-                    {{-- <div class="space-y-3">
-                        <div>
-                            <select id="duration_type" name="duration_type"
-                                class="select2-duration w-full bg-slate-800 border border-slate-700 rounded-xl text-white" required>
-                                <option value="">Choose Type</option>
-                                <option value="hour" {{ old('duration_type') == 'hour' ? 'selected' : '' }}>Hour</option>
-                                <option value="day" {{ old('duration_type') == 'day' ? 'selected' : '' }}>Day</option>
-                                <option value="week" {{ old('duration_type') == 'week' ? 'selected' : '' }}>Week</option>
-                            </select>
-                            @error('duration_type')
-                                <p class="mt-2 text-sm text-red-400 flex items-center space-x-1">
-                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd"
-                                            d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
-                                            clip-rule="evenodd" />
-                                    </svg>
-                                    <span>{{ $message }}</span>
-                                </p>
-                            @enderror
-                        </div>
-
-                        <div>
-                            <select id="duration_value_select">
-                                <option value="">Choose duration...</option>
-                            </select>
-
-                            <input type="text" id="duration_hour_time"
-                                class="hidden w-full bg-slate-800 border border-slate-700 rounded-xl text-white"
-                                placeholder="Pick a time...">
-
-                            <p id="duration-hour-help" class="mt-2 text-xs text-slate-500 hidden">
-                                Select the desired time. The duration is automatically calculated from the current time..
-                            </p>
-
-                            <input type="hidden" id="duration_value" name="duration_value" value="{{ old('duration_value') }}">
-
-                            @error('duration_value')
-                                <p class="mt-2 text-sm text-red-400 flex items-center space-x-1">
-                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd"
-                                            d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
-                                            clip-rule="evenodd" />
-                                    </svg>
-                                    <span>{{ $message }}</span>
-                                </p>
-                            @enderror
-                        </div>
-                    </div> --}}
+                   
                     <div class="space-y-3">
                         <div>
                             <select id="duration_type" name="duration_type"
@@ -1237,9 +1189,14 @@
                                 <option value="">Choose duration...</option>
                             </select>
 
-                            <input type="text" id="duration_hour_time"
+                            {{-- <input type="text" id="duration_hour_time"
                                 class="hidden w-full bg-slate-800 border border-slate-700 rounded-xl text-white"
-                                placeholder="Pick a time...">
+                                placeholder="Pick a time..."> --}}
+                                <div id="duration_hour_wrapper" class="hidden">
+    <input type="text" id="duration_hour_time"
+        class="w-full bg-slate-800 border border-slate-700 rounded-xl text-white"
+        placeholder="Pick a time...">
+</div>
 
                             <p id="duration-hour-help" class="mt-2 text-xs text-slate-500 hidden">
                                 Select the desired time. The duration is automatically calculated from the current time.
@@ -1735,6 +1692,7 @@
                     const durationType = document.getElementById('duration_type');
                     const durationValueSelect = document.getElementById('duration_value_select');
                     const durationHourTime = document.getElementById('duration_hour_time');
+                    const durationHourWrapper = document.getElementById('duration_hour_wrapper');
                     const durationValueInput = document.getElementById('duration_value');
                     const estimationInput = document.getElementById('estimation');
                     const estimationToInput = document.getElementById('estimation_to');
@@ -1840,20 +1798,34 @@
                         }
                     });
 
+                    // function onDurationTypeChange() {
+                    //     const type = durationType.value;
+                    //     if (type === 'hour') {
+                    //         durationValueSelect.classList.add('hidden');
+                    //         durationHourTime.classList.remove('hidden');
+                    //     } else {
+                    //         durationValueSelect.classList.remove('hidden');
+                    //         durationHourTime.classList.add('hidden');
+                    //         buildOpts();
+                    //     }
+                    //     syncReq();
+                    //     syncVal();
+                    //     calcEnd();
+                    // }
                     function onDurationTypeChange() {
-                        const type = durationType.value;
-                        if (type === 'hour') {
-                            durationValueSelect.classList.add('hidden');
-                            durationHourTime.classList.remove('hidden');
-                        } else {
-                            durationValueSelect.classList.remove('hidden');
-                            durationHourTime.classList.add('hidden');
-                            buildOpts();
-                        }
-                        syncReq();
-                        syncVal();
-                        calcEnd();
-                    }
+    const type = durationType.value;
+    if (type === 'hour') {
+        durationValueSelect.classList.add('hidden');
+        durationHourWrapper.classList.remove('hidden'); // ← bukan durationHourTime
+    } else {
+        durationValueSelect.classList.remove('hidden');
+        durationHourWrapper.classList.add('hidden');    // ← bukan durationHourTime
+        buildOpts();
+    }
+    syncReq();
+    syncVal();
+    calcEnd();
+}
 
                     // ✅ KEY FIX: Listen ke native 'change' pada elemen <select> langsung
                     // Ini bekerja di mobile tanpa bergantung pada Select2 event
