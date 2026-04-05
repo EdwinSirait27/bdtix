@@ -1186,13 +1186,22 @@
         class="w-full bg-slate-800 border border-slate-700 rounded-xl text-white"
         placeholder="Pick a time">
 </div> --}}
-<div id="duration_hour_wrapper" class="hidden">
+{{-- <div id="duration_hour_wrapper" class="hidden" style="display:none;">
     <input 
         type="time" 
         id="duration_hour_time"
-        class="w-full bg-slate-800 border border-slate-700 rounded-xl text-white px-3 py-2"
-        placeholder="Pick a time"
+        class="w-full bg-slate-800 border border-slate-700 rounded-xl text-white px-3 py-2 text-base"
         step="3600"
+        style="color-scheme: dark;"
+    >
+</div> --}}
+<div id="duration_hour_wrapper" style="display:none;">
+    <input 
+        type="time" 
+        id="duration_hour_time"
+        class="w-full bg-slate-800 border border-slate-700 rounded-xl text-white px-3 py-2 text-base"
+        step="3600"
+        style="color-scheme: dark;"
     >
 </div>
 
@@ -1702,43 +1711,38 @@
                 });
             </script>
         @endif --}}
-        @if ($ticket->status === 'Open')
+       @if ($ticket->status === 'Open')
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const durationType      = document.getElementById('duration_type');
+    const durationType        = document.getElementById('duration_type');
     const durationValueSelect = document.getElementById('duration_value_select');
-    const durationHourTime  = document.getElementById('duration_hour_time');
+    const durationHourTime    = document.getElementById('duration_hour_time');
     const durationHourWrapper = document.getElementById('duration_hour_wrapper');
-    const durationValueInput = document.getElementById('duration_value');
-    const estimationInput   = document.getElementById('estimation');
-    const estimationToInput = document.getElementById('estimation_to');
-    const durationHourHelp  = document.getElementById('duration-hour-help');
+    const durationValueInput  = document.getElementById('duration_value');
+    const estimationInput     = document.getElementById('estimation');
+    const estimationToInput   = document.getElementById('estimation_to');
+    const durationHourHelp    = document.getElementById('duration-hour-help');
 
     if (!durationType || !durationValueSelect || !durationHourTime ||
         !durationValueInput || !estimationInput || !estimationToInput) return;
 
     const ranges = {
-        hour:  { min: 1, max: 24, label: 'Hour' },
-        day:   { min: 2, max: 6,  label: 'Day'  },
-        week:  { min: 1, max: 4,  label: 'Week' }
+        hour: { min: 1, max: 24, label: 'Hour' },
+        day:  { min: 2, max: 6,  label: 'Day'  },
+        week: { min: 1, max: 4,  label: 'Week' }
     };
 
     const fmt = (d) =>
         `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}` +
         `T${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
 
-    // Set estimation awal = sekarang
-    const now = new Date();
-    estimationInput.value = fmt(now);
+    estimationInput.value = fmt(new Date());
 
     const buildOpts = () => {
         const type = durationType.value;
         durationValueSelect.innerHTML = '';
-        if (!ranges[type]) {
-            durationValueSelect.appendChild(new Option('Choose duration...', ''));
-            return;
-        }
         durationValueSelect.appendChild(new Option('Choose duration...', ''));
+        if (!ranges[type]) return;
         for (let i = ranges[type].min; i <= ranges[type].max; i++) {
             const opt = new Option(`${i} ${ranges[type].label}`, i);
             if (String(i) === String('{{ old('duration_value') }}')) opt.selected = true;
@@ -1749,33 +1753,16 @@ document.addEventListener('DOMContentLoaded', function() {
     const syncVal = () => {
         const type = durationType.value;
         if (type === 'hour') {
-            const v = durationHourTime.value; // format "HH:MM" dari native input
-            if (!v) {
-                durationValueInput.value = '';
-                return;
-            }
+            const v = durationHourTime.value;
+            if (!v) { durationValueInput.value = ''; return; }
             const start  = new Date(estimationInput.value);
             const hInput = parseInt(v.split(':')[0], 10);
-            if (isNaN(start.getTime()) || isNaN(hInput)) {
-                durationValueInput.value = '';
-                return;
-            }
+            if (isNaN(start.getTime()) || isNaN(hInput)) { durationValueInput.value = ''; return; }
             let diff = hInput - start.getHours();
             if (diff <= 0) diff += 24;
             durationValueInput.value = String(diff);
-            return;
-        }
-        durationValueInput.value = durationValueSelect.value || '';
-    };
-
-    const syncReq = () => {
-        const type = durationType.value;
-        if (type === 'hour') {
-            durationValueSelect.required = false;
-            durationHourHelp?.classList.remove('hidden');
         } else {
-            durationValueSelect.required = true;
-            durationHourHelp?.classList.add('hidden');
+            durationValueInput.value = durationValueSelect.value || '';
         }
     };
 
@@ -1789,39 +1776,52 @@ document.addEventListener('DOMContentLoaded', function() {
         estimationToInput.value = fmt(new Date(start.getTime() + mins * 60000));
     };
 
-    // ✅ Native time input — works on mobile & desktop
-    durationHourTime.addEventListener('change', () => {
-        syncVal();
-        calcEnd();
-    });
-    // Fallback: input event untuk beberapa mobile browser
-    durationHourTime.addEventListener('input', () => {
-        syncVal();
-        calcEnd();
-    });
+    // ✅ Event listener untuk native time input (mobile & desktop)
+    durationHourTime.addEventListener('change', () => { syncVal(); calcEnd(); });
+    durationHourTime.addEventListener('input',  () => { syncVal(); calcEnd(); });
+
+    // ✅ Event listener untuk select dropdown (day/week)
+    durationValueSelect.addEventListener('change', () => { syncVal(); calcEnd(); });
 
     function onDurationTypeChange() {
         const type = durationType.value;
+
+        // Cari Select2 wrapper yang di-generate untuk durationValueSelect
+        // Select2 biasanya inject span.select2 sebagai sibling setelah select asli
+        const select2Container = document.querySelector('#duration_value_select + .select2');
+
         if (type === 'hour') {
-            durationValueSelect.classList.add('hidden');
-            durationHourWrapper.classList.remove('hidden');
+            // Sembunyikan select + select2 wrapper
+            durationValueSelect.style.display = 'none';
+            if (select2Container) select2Container.style.display = 'none';
+
+            // Tampilkan time input
+            durationHourWrapper.style.display = 'block';
+            durationHourHelp?.style && (durationHourHelp.style.display = 'block');
+
+            durationValueSelect.required = false;
         } else {
-            durationValueSelect.classList.remove('hidden');
-            durationHourWrapper.classList.add('hidden');
+            // Tampilkan select + select2 wrapper
+            durationValueSelect.style.display = '';
+            if (select2Container) select2Container.style.display = '';
+
+            // Sembunyikan time input
+            durationHourWrapper.style.display = 'none';
+            durationHourHelp?.style && (durationHourHelp.style.display = 'none');
+
+            durationValueSelect.required = true;
             buildOpts();
         }
-        syncReq();
+
         syncVal();
         calcEnd();
     }
 
+    // ✅ Hanya 1x binding, tidak duplikat
+    $('#duration_type').on('select2:select select2:unselect', onDurationTypeChange);
     durationType.addEventListener('change', onDurationTypeChange);
-    $('#duration_type').on('select2:select', onDurationTypeChange);
-    durationValueSelect.addEventListener('change', () => {
-        syncVal();
-        calcEnd();
-    });
 
+    // Inisialisasi awal
     onDurationTypeChange();
 });
 </script>
