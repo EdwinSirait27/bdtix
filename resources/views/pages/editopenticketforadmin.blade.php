@@ -902,22 +902,26 @@
             background: #1e293b !important;
             border: 1px solid #334155 !important;
             border-radius: 0.75rem !important;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.4) !important;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4) !important;
             z-index: 99999 !important;
         }
+
         .flatpickr-time input,
         .flatpickr-time .flatpickr-time-separator,
         .flatpickr-time .flatpickr-am-pm {
             color: #e5e7eb !important;
             background: #1e293b !important;
         }
+
         .flatpickr-time input:hover,
         .flatpickr-time input:focus {
             background: #334155 !important;
         }
+
         .numInputWrapper:hover {
             background: #334155 !important;
         }
+
         .flatpickr-input {
             background-color: #1e293b !important;
             border: 1px solid #334155 !important;
@@ -928,10 +932,11 @@
             font-size: 0.875rem !important;
             cursor: pointer !important;
         }
+
         .flatpickr-input:focus {
             outline: none !important;
             border-color: #3b82f6 !important;
-            box-shadow: 0 0 0 2px rgba(59,130,246,0.3) !important;
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3) !important;
         }
 
         /* ✅ FIX: Samakan style dropdown duration_value_select dengan Select2 */
@@ -953,11 +958,13 @@
             cursor: pointer;
             transition: border-color 0.2s, box-shadow 0.2s;
         }
+
         #duration_value_select:focus {
             outline: none;
             border-color: #3b82f6;
-            box-shadow: 0 0 0 2px rgba(59,130,246,0.3);
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3);
         }
+
         #duration_value_select option {
             background-color: #1e293b;
             color: #e5e7eb;
@@ -977,7 +984,8 @@
                     <h3 class="text-sm font-semibold text-blue-400 mb-1">Tickets from
                         {{ optional($ticket->user->employee)->employee_name }}</h3>
                     <p class="text-xs text-slate-400 leading-relaxed">Date : {{ $createdat }}</p>
-                    <p class="text-xs text-slate-400 leading-relaxed">Queue Number : {{ optional($ticket)->queue_number }}</p>
+                    <p class="text-xs text-slate-400 leading-relaxed">Queue Number : {{ optional($ticket)->queue_number }}
+                    </p>
                 </div>
             </div>
         </div>
@@ -1024,10 +1032,16 @@
                     <select id="category" name="category" required
                         class="select2 w-full bg-slate-800 border border-slate-700 rounded-xl text-white">
                         <option value="">Choose Categories...</option>
-                        <option value="Hardware & Software" {{ old('category', $ticket->category) == 'Hardware & Software' ? 'selected' : '' }}>Hardware & Software</option>
-                        <option value="Network" {{ old('category', $ticket->category) == 'Network' ? 'selected' : '' }}>Network</option>
-                        <option value="Account & Access" {{ old('category', $ticket->category) == 'Account & Access' ? 'selected' : '' }}>Account & Access</option>
-                        <option value="Others" {{ old('category', $ticket->category) == 'Others' ? 'selected' : '' }}>Others</option>
+                        <option value="Hardware & Software"
+                            {{ old('category', $ticket->category) == 'Hardware & Software' ? 'selected' : '' }}>Hardware &
+                            Software</option>
+                        <option value="Network" {{ old('category', $ticket->category) == 'Network' ? 'selected' : '' }}>
+                            Network</option>
+                        <option value="Account & Access"
+                            {{ old('category', $ticket->category) == 'Account & Access' ? 'selected' : '' }}>Account &
+                            Access</option>
+                        <option value="Others" {{ old('category', $ticket->category) == 'Others' ? 'selected' : '' }}>
+                            Others</option>
                     </select>
                 </div>
                 @error('category')
@@ -1041,8 +1055,9 @@
                     </p>
                 @enderror
             </div>
-              <div>
-                <label for="sub_category" class="block text-sm font-semibold text-slate-300 mb-2 flex items-center space-x-2">
+            <div>
+                <label for="sub_category"
+                    class="block text-sm font-semibold text-slate-300 mb-2 flex items-center space-x-2">
                     <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
@@ -1054,9 +1069,14 @@
                     <select id="sub_category" name="sub_category" required
                         class="select2 w-full bg-slate-800 border border-slate-700 rounded-xl text-white">
                         <option value="">Choose Sub Categories...</option>
-                        <option value="Maintenance" {{ old('sub_category', $ticket->sub_category) == 'Maintenance' ? 'selected' : '' }}>Maintenance</option>
-                        <option value="Renovation" {{ old('sub_category', $ticket->sub_category) == 'Renovation' ? 'selected' : '' }}>Renovation</option>
-                        <option value="Others" {{ old('sub_category', $ticket->sub_category) == 'Others' ? 'selected' : '' }}>Others</option>
+                        <option value="Maintenance"
+                            {{ old('sub_category', $ticket->sub_category) == 'Maintenance' ? 'selected' : '' }}>Maintenance
+                        </option>
+                        <option value="Renovation"
+                            {{ old('sub_category', $ticket->sub_category) == 'Renovation' ? 'selected' : '' }}>Renovation
+                        </option>
+                        <option value="Others"
+                            {{ old('sub_category', $ticket->sub_category) == 'Others' ? 'selected' : '' }}>Others</option>
                     </select>
                 </div>
                 @error('sub_category')
@@ -1073,9 +1093,11 @@
 
             {{-- Description --}}
             <div>
-                <label for="description" class="block text-sm font-semibold text-slate-300 mb-2 flex items-center space-x-2">
+                <label for="description"
+                    class="block text-sm font-semibold text-slate-300 mb-2 flex items-center space-x-2">
                     <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 6h16M4 12h16M4 18h7" />
                     </svg>
                     <span>Problem Description</span>
                     <span class="text-red-400">*</span>
@@ -1091,9 +1113,11 @@
 
             {{-- Notes Executor --}}
             <div class="-mt-4">
-                <label for="notes_executor" class="block text-sm font-semibold text-slate-300 mb-2 flex items-center space-x-2">
+                <label for="notes_executor"
+                    class="block text-sm font-semibold text-slate-300 mb-2 flex items-center space-x-2">
                     <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 6h16M4 12h16M4 18h7" />
                     </svg>
                     <span>Notes Executor</span>
                     <span class="text-red-400">*</span>
@@ -1125,7 +1149,8 @@
             @if ($ticket->status === 'Open')
                 {{-- Form Duration: hanya saat Take Ticket --}}
                 <div class="mt-4">
-                    <label for="duration_type" class="block text-sm font-semibold text-slate-300 mb-2 flex items-center space-x-2">
+                    <label for="duration_type"
+                        class="block text-sm font-semibold text-slate-300 mb-2 flex items-center space-x-2">
                         <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M8 7V3m8 4V3M3 11h18M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
@@ -1135,13 +1160,11 @@
                     </label>
 
                     {{-- ✅ FIX: Gunakan grid-cols-1 saja agar ukuran sama dengan kolom lain di mobile --}}
-                    <div class="space-y-3">
-                        {{-- Dropdown 1: Choose Type --}}
+                    {{-- <div class="space-y-3">
                         <div>
                             <select id="duration_type" name="duration_type"
                                 class="select2-duration w-full bg-slate-800 border border-slate-700 rounded-xl text-white" required>
                                 <option value="">Choose Type</option>
-                                <option value="">Choose</option>
                                 <option value="hour" {{ old('duration_type') == 'hour' ? 'selected' : '' }}>Hour</option>
                                 <option value="day" {{ old('duration_type') == 'day' ? 'selected' : '' }}>Day</option>
                                 <option value="week" {{ old('duration_type') == 'week' ? 'selected' : '' }}>Week</option>
@@ -1158,14 +1181,11 @@
                             @enderror
                         </div>
 
-                        {{-- Dropdown 2: Choose Duration Value --}}
                         <div>
-                            {{-- Day/Week → Select dropdown (styled sama dengan Select2) --}}
                             <select id="duration_value_select">
                                 <option value="">Choose duration...</option>
                             </select>
 
-                            {{-- Hour → Flatpickr time picker --}}
                             <input type="text" id="duration_hour_time"
                                 class="hidden w-full bg-slate-800 border border-slate-700 rounded-xl text-white"
                                 placeholder="Pick a time...">
@@ -1187,17 +1207,68 @@
                                 </p>
                             @enderror
                         </div>
+                    </div> --}}
+                    <div class="space-y-3">
+                        <div>
+                            <select id="duration_type" name="duration_type"
+                                class="select2-duration w-full bg-slate-800 border border-slate-700 rounded-xl text-white"
+                                required>
+                                <option value="">Choose Type</option>
+                                <option value="hour" {{ old('duration_type') == 'hour' ? 'selected' : '' }}>Hour
+                                </option>
+                                <option value="day" {{ old('duration_type') == 'day' ? 'selected' : '' }}>Day</option>
+                                <option value="week" {{ old('duration_type') == 'week' ? 'selected' : '' }}>Week
+                                </option>
+                            </select>
+                            @error('duration_type')
+                                <p class="mt-2 text-sm text-red-400 flex items-center space-x-1">
+                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd"
+                                            d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                                            clip-rule="evenodd" />
+                                    </svg>
+                                    <span>{{ $message }}</span>
+                                </p>
+                            @enderror
+                        </div>
+
+                        <div>
+                            <select id="duration_value_select">
+                                <option value="">Choose duration...</option>
+                            </select>
+
+                            <input type="text" id="duration_hour_time"
+                                class="hidden w-full bg-slate-800 border border-slate-700 rounded-xl text-white"
+                                placeholder="Pick a time...">
+
+                            <p id="duration-hour-help" class="mt-2 text-xs text-slate-500 hidden">
+                                Select the desired time. The duration is automatically calculated from the current time.
+                            </p>
+
+                            <input type="hidden" id="duration_value" name="duration_value"
+                                value="{{ old('duration_value') }}">
+
+                            @error('duration_value')
+                                <p class="mt-2 text-sm text-red-400 flex items-center space-x-1">
+                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd"
+                                            d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                                            clip-rule="evenodd" />
+                                    </svg>
+                                    <span>{{ $message }}</span>
+                                </p>
+                            @enderror
+                        </div>
                     </div>
 
                     {{-- Hidden fields untuk estimation (dihitung otomatis di JS) --}}
-                    <input type="datetime-local" id="estimation" name="estimation"
-                        value="{{ old('estimation') }}" class="hidden">
+                    <input type="datetime-local" id="estimation" name="estimation" value="{{ old('estimation') }}"
+                        class="hidden">
                     <div class="hidden">
                         <input type="datetime-local" id="estimation_to" name="estimation_to"
                             value="{{ old('estimation_to') }}">
                     </div>
                 </div>
-
             @else
                 {{-- Read-only Estimation Fields: saat Progress / Overdue --}}
                 <input type="hidden" name="duration_type" value="{{ $ticket->duration_type }}">
@@ -1209,7 +1280,8 @@
                         {{-- Estimation (Started At) --}}
                         <div>
                             <label class="block text-sm font-semibold text-slate-300 mb-2 flex items-center space-x-2">
-                                <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M8 7V3m8 4V3M3 11h18M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                                 </svg>
@@ -1224,7 +1296,8 @@
                         {{-- Estimation To (Est. Deadline) --}}
                         <div>
                             <label class="block text-sm font-semibold text-slate-300 mb-2 flex items-center space-x-2">
-                                <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M8 7V3m8 4V3M3 11h18M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                                 </svg>
@@ -1246,22 +1319,23 @@
 
             {{-- Status Dropdown: hanya saat Overdue --}}
             @if ($ticket->status === 'Overdue')
-            <div>
-                <label for="statusSelect" class="block text-sm font-semibold text-slate-300 mb-2 flex items-center space-x-2">
-                    <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    <span>Status</span>
-                    <span class="text-red-400">*</span>
-                </label>
-                <select id="statusSelect" name="status"
-                    class="select2-status w-full bg-slate-800 border border-slate-700 rounded-xl text-white">
-                    <option value="" disabled selected>Overdue — Choose action...</option>
-                    <option value="Progress">Back to Progress</option>
-                    <option value="Closed">Close this Ticket</option>
-                </select>
-            </div>
+                <div>
+                    <label for="statusSelect"
+                        class="block text-sm font-semibold text-slate-300 mb-2 flex items-center space-x-2">
+                        <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <span>Status</span>
+                        <span class="text-red-400">*</span>
+                    </label>
+                    <select id="statusSelect" name="status"
+                        class="select2-status w-full bg-slate-800 border border-slate-700 rounded-xl text-white">
+                        <option value="" disabled selected>Overdue — Choose action...</option>
+                        <option value="Progress">Back to Progress</option>
+                        <option value="Closed">Close this Ticket</option>
+                    </select>
+                </div>
             @elseif ($ticket->status === 'Progress')
                 <input type="hidden" name="status" id="ticketStatusInput" value="Closed">
             @endif
@@ -1280,8 +1354,10 @@
                         <ul class="space-y-2">
                             @foreach ($ticket->attachments as $file)
                                 <li class="flex items-center gap-2">
-                                    <svg class="w-4 h-4 text-slate-400 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                                        <path d="M8 2a4 4 0 00-4 4v8a6 6 0 0012 0V6a2 2 0 10-4 0v7a1 1 0 102 0V6a4 4 0 00-8 0v8a4 4 0 008 0V6" />
+                                    <svg class="w-4 h-4 text-slate-400 flex-shrink-0" fill="currentColor"
+                                        viewBox="0 0 20 20">
+                                        <path
+                                            d="M8 2a4 4 0 00-4 4v8a6 6 0 0012 0V6a2 2 0 10-4 0v7a1 1 0 102 0V6a4 4 0 00-8 0v8a4 4 0 008 0V6" />
                                     </svg>
                                     @if ($file->drive_file_id && $file->status === 'uploaded')
                                         <button type="button"
@@ -1324,8 +1400,10 @@
                             <ul class="space-y-2">
                                 @foreach ($ticket->executorAttachments as $file)
                                     <li class="flex items-center gap-2">
-                                        <svg class="w-4 h-4 text-slate-400 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                                            <path d="M8 2a4 4 0 00-4 4v8a6 6 0 0012 0V6a2 2 0 10-4 0v7a1 1 0 102 0V6a4 4 0 00-8 0v8a4 4 0 008 0V6" />
+                                        <svg class="w-4 h-4 text-slate-400 flex-shrink-0" fill="currentColor"
+                                            viewBox="0 0 20 20">
+                                            <path
+                                                d="M8 2a4 4 0 00-4 4v8a6 6 0 0012 0V6a2 2 0 10-4 0v7a1 1 0 102 0V6a4 4 0 00-8 0v8a4 4 0 008 0V6" />
                                         </svg>
                                         @if ($file->drive_file_id && $file->status === 'uploaded')
                                             <button type="button"
@@ -1346,7 +1424,8 @@
                     @else
                         @if (in_array($ticket->status, ['Progress', 'Overdue']))
                             <div class="border border-slate-700 rounded-xl p-4 bg-slate-800/40 mb-3">
-                                <p class="text-sm text-slate-500">Belum ada attachment. Upload bukti pengerjaan sebelum menutup ticket.</p>
+                                <p class="text-sm text-slate-500">Belum ada attachment. Upload bukti pengerjaan sebelum
+                                    menutup ticket.</p>
                             </div>
                         @endif
                     @endif
@@ -1397,14 +1476,14 @@
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                         </svg>
-                        <span id="btn-close-label">{{ $ticket->status === 'Overdue' ? 'Choose Status First...' : 'Close this Ticket' }}</span>
+                        <span
+                            id="btn-close-label">{{ $ticket->status === 'Overdue' ? 'Choose Status First...' : 'Close this Ticket' }}</span>
                     </button>
                 @endif
             </div>
 
             {{-- Hidden form upload executor --}}
-            <form id="admin-executor-attachments-form"
-                action="{{ route('executor.attachments.store', $ticket->id) }}"
+            <form id="admin-executor-attachments-form" action="{{ route('executor.attachments.store', $ticket->id) }}"
                 method="POST" enctype="multipart/form-data" class="hidden">
                 @csrf
             </form>
@@ -1412,28 +1491,38 @@
     </div>
 
     {{-- Modal: Pilih Sumber --}}
-    <div id="executorSourceModal" class="fixed inset-0 bg-black/70 hidden items-center justify-center" style="z-index:9999;">
+    <div id="executorSourceModal" class="fixed inset-0 bg-black/70 hidden items-center justify-center"
+        style="z-index:9999;">
         <div class="bg-slate-900 rounded-xl p-6 w-80 text-center border border-slate-800 shadow-2xl">
             <h3 class="text-lg font-semibold mb-4 text-white">Pilih Sumber</h3>
-            <button type="button" id="executorOpenCamera" class="w-full mb-3 px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white transition">Open Camera</button>
-            <button type="button" id="executorOpenFiles" class="w-full mb-3 px-4 py-2 rounded-lg bg-slate-700 hover:bg-slate-600 text-white transition">Upload Files</button>
-            <button type="button" id="executorCloseSource" class="w-full px-4 py-2 text-slate-400 hover:text-white transition">Abort</button>
+            <button type="button" id="executorOpenCamera"
+                class="w-full mb-3 px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white transition">Open
+                Camera</button>
+            <button type="button" id="executorOpenFiles"
+                class="w-full mb-3 px-4 py-2 rounded-lg bg-slate-700 hover:bg-slate-600 text-white transition">Upload
+                Files</button>
+            <button type="button" id="executorCloseSource"
+                class="w-full px-4 py-2 text-slate-400 hover:text-white transition">Abort</button>
         </div>
     </div>
 
     {{-- Modal: Preview Attachment --}}
-    <div id="previewModal" class="fixed inset-0 bg-black/80 hidden items-center justify-center p-4" style="z-index:9999;">
-        <div class="bg-slate-900 rounded-2xl w-full max-w-3xl border border-slate-700 flex flex-col shadow-2xl" style="max-height:90vh;">
+    <div id="previewModal" class="fixed inset-0 bg-black/80 hidden items-center justify-center p-4"
+        style="z-index:9999;">
+        <div class="bg-slate-900 rounded-2xl w-full max-w-3xl border border-slate-700 flex flex-col shadow-2xl"
+            style="max-height:90vh;">
             <div class="flex items-center justify-between p-4 border-b border-slate-700 flex-shrink-0">
                 <h3 id="previewModalTitle" class="text-sm font-semibold text-slate-200 truncate pr-4"></h3>
-                <button type="button" onclick="closePreviewModal()" class="text-slate-400 hover:text-white flex-shrink-0 transition">
+                <button type="button" onclick="closePreviewModal()"
+                    class="text-slate-400 hover:text-white flex-shrink-0 transition">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                     </svg>
                 </button>
             </div>
             <div class="flex-1 overflow-hidden">
-                <iframe id="previewModalIframe" src="" class="w-full" style="height:75vh;" frameborder="0" allowfullscreen></iframe>
+                <iframe id="previewModalIframe" src="" class="w-full" style="height:75vh;" frameborder="0"
+                    allowfullscreen></iframe>
             </div>
         </div>
     </div>
@@ -1448,7 +1537,7 @@
         <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
         <script>
-            $(document).ready(function () {
+            $(document).ready(function() {
                 // Select2: Category
                 $('#category').select2({
                     placeholder: 'Choose Category...',
@@ -1462,29 +1551,29 @@
                 });
 
                 @if ($ticket->status === 'Open')
-                // Select2: Duration Type
-                $('#duration_type').select2({
-                    placeholder: 'Choose Type...',
-                    width: '100%',
-                    dropdownParent: $('#duration_type').parent(),
-                    minimumResultsForSearch: Infinity
-                });
+                    // Select2: Duration Type
+                    $('#duration_type').select2({
+                        placeholder: 'Choose Type...',
+                        width: '100%',
+                        dropdownParent: $('#duration_type').parent(),
+                        minimumResultsForSearch: Infinity
+                    });
                 @endif
 
                 @if ($ticket->status === 'Overdue')
-                // Select2: Status
-                $('#statusSelect').select2({
-                    placeholder: 'Overdue — Choose action...',
-                    width: '100%',
-                    dropdownParent: $('#statusSelect').parent(),
-                    minimumResultsForSearch: Infinity
-                });
+                    // Select2: Status
+                    $('#statusSelect').select2({
+                        placeholder: 'Overdue — Choose action...',
+                        width: '100%',
+                        dropdownParent: $('#statusSelect').parent(),
+                        minimumResultsForSearch: Infinity
+                    });
                 @endif
             });
         </script>
 
         <script>
-            document.addEventListener('DOMContentLoaded', function () {
+            document.addEventListener('DOMContentLoaded', function() {
                 const desc = document.getElementById('description');
                 const descCount = document.getElementById('descCharCount');
                 if (desc && descCount) {
@@ -1502,13 +1591,22 @@
         </script>
 
         <script>
-            toastr.options = { closeButton: true, progressBar: true, positionClass: "toast-top-right", timeOut: "3000" };
-            @if (session('success')) toastr.success(@json(session('success'))); @endif
-            @if (session('error')) toastr.error(@json(session('error'))); @endif
+            toastr.options = {
+                closeButton: true,
+                progressBar: true,
+                positionClass: "toast-top-right",
+                timeOut: "3000"
+            };
+            @if (session('success'))
+                toastr.success(@json(session('success')));
+            @endif
+            @if (session('error'))
+                toastr.error(@json(session('error')));
+            @endif
         </script>
 
         {{-- Script duration: hanya aktif saat status Open --}}
-        @if ($ticket->status === 'Open')
+        {{-- @if ($ticket->status === 'Open')
         <script>
             document.addEventListener('DOMContentLoaded', function () {
                 const durationType        = document.getElementById('duration_type');
@@ -1630,40 +1728,192 @@
                 // ✅ FIX 4: Trigger manual setelah Select2 selesai init (extra safety untuk mobile)
                 setTimeout(() => { $('#duration_type').trigger('change'); }, 100);
             });
-        </script>
+        </script> --}}
+        @if ($ticket->status === 'Open')
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    const durationType = document.getElementById('duration_type');
+                    const durationValueSelect = document.getElementById('duration_value_select');
+                    const durationHourTime = document.getElementById('duration_hour_time');
+                    const durationValueInput = document.getElementById('duration_value');
+                    const estimationInput = document.getElementById('estimation');
+                    const estimationToInput = document.getElementById('estimation_to');
+                    const durationHourHelp = document.getElementById('duration-hour-help');
+
+                    if (!durationType || !durationValueSelect || !durationHourTime || !durationValueInput || !
+                        estimationInput || !estimationToInput) return;
+
+                    const ranges = {
+                        hour: {
+                            min: 1,
+                            max: 24,
+                            label: 'Hour'
+                        },
+                        day: {
+                            min: 2,
+                            max: 6,
+                            label: 'Day'
+                        },
+                        week: {
+                            min: 1,
+                            max: 4,
+                            label: 'Week'
+                        }
+                    };
+
+                    const fmt = (d) =>
+                        `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}T${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
+
+                    estimationInput.value = fmt(new Date());
+
+                    const buildOpts = () => {
+                        const type = durationType.value;
+                        durationValueSelect.innerHTML = '';
+                        if (!ranges[type]) {
+                            durationValueSelect.appendChild(new Option('Choose duration...', ''));
+                            return;
+                        }
+                        durationValueSelect.appendChild(new Option('Choose duration...', ''));
+                        for (let i = ranges[type].min; i <= ranges[type].max; i++) {
+                            const opt = new Option(`${i} ${ranges[type].label}`, i);
+                            if (String(i) === String('{{ old('duration_value') }}')) opt.selected = true;
+                            durationValueSelect.appendChild(opt);
+                        }
+                    };
+
+                    const syncVal = () => {
+                        const type = durationType.value;
+                        if (type === 'hour') {
+                            const v = fpHour.input.value;
+                            if (!v) {
+                                durationValueInput.value = '';
+                                return;
+                            }
+                            const start = new Date(estimationInput.value);
+                            const h = parseInt(v.split(':')[0] || '0', 10);
+                            if (isNaN(start.getTime()) || isNaN(h)) {
+                                durationValueInput.value = '';
+                                return;
+                            }
+                            let diff = h - start.getHours();
+                            if (diff <= 0) diff += 24;
+                            durationValueInput.value = String(diff);
+                            return;
+                        }
+                        durationValueInput.value = durationValueSelect.value || '';
+                    };
+
+                    const syncReq = () => {
+                        const type = durationType.value;
+                        if (type === 'hour') {
+                            durationValueSelect.required = false;
+                            durationHourHelp?.classList.remove('hidden');
+                        } else {
+                            durationValueSelect.required = true;
+                            durationHourHelp?.classList.add('hidden');
+                        }
+                    };
+
+                    const calcEnd = () => {
+                        const type = durationType.value;
+                        const val = parseInt(durationValueInput.value || '0', 10);
+                        if (!type || !val || !estimationInput.value) return;
+                        const start = new Date(estimationInput.value);
+                        if (isNaN(start.getTime())) return;
+                        const mins = type === 'hour' ? val * 60 : type === 'day' ? val * 1440 : val * 10080;
+                        estimationToInput.value = fmt(new Date(start.getTime() + mins * 60000));
+                    };
+
+                    // Flatpickr untuk input jam (Hour)
+                    const fpHour = flatpickr(durationHourTime, {
+                        enableTime: true,
+                        noCalendar: true,
+                        dateFormat: "H:i",
+                        time_24hr: true,
+                        minuteIncrement: 60,
+                        onReady: function(selectedDates, dateStr, instance) {
+                            instance.calendarContainer.style.zIndex = "99999";
+                        },
+                        onChange: function() {
+                            syncVal();
+                            calcEnd();
+                        }
+                    });
+
+                    function onDurationTypeChange() {
+                        const type = durationType.value;
+                        if (type === 'hour') {
+                            durationValueSelect.classList.add('hidden');
+                            durationHourTime.classList.remove('hidden');
+                        } else {
+                            durationValueSelect.classList.remove('hidden');
+                            durationHourTime.classList.add('hidden');
+                            buildOpts();
+                        }
+                        syncReq();
+                        syncVal();
+                        calcEnd();
+                    }
+
+                    // ✅ KEY FIX: Listen ke native 'change' pada elemen <select> langsung
+                    // Ini bekerja di mobile tanpa bergantung pada Select2 event
+                    durationType.addEventListener('change', onDurationTypeChange);
+
+                    // ✅ Select2 event sebagai fallback tambahan untuk desktop
+                    $('#duration_type').on('select2:select', onDurationTypeChange);
+
+                    durationValueSelect.addEventListener('change', () => {
+                        syncVal();
+                        calcEnd();
+                    });
+
+                    // ✅ Init state awal — tidak pakai setTimeout, langsung panggil
+                    onDurationTypeChange();
+                });
+            </script>
         @endif
 
         {{-- Script upload executor: hanya aktif saat Progress atau Overdue --}}
         @if (in_array($ticket->status, ['Progress', 'Overdue']))
-        <script>
-            (function () {
-                const MAX_FILES      = 10;
-                const addBtn         = document.getElementById('admin-executor-add-btn');
-                const eraseBtn       = document.getElementById('admin-executor-erase-btn');
-                const container      = document.getElementById('admin-executor-attachment-container');
-                const sourceModal    = document.getElementById('executorSourceModal');
-                const openCameraBtn  = document.getElementById('executorOpenCamera');
-                const openFilesBtn   = document.getElementById('executorOpenFiles');
-                const closeSourceBtn = document.getElementById('executorCloseSource');
-                const btnClose       = document.getElementById('btn-close-ticket');
-                const CSRF           = document.querySelector('meta[name="csrf-token"]')?.content ?? document.querySelector('input[name="_token"]')?.value;
-                const UPLOAD_URL     = "{{ route('executor.attachments.store', $ticket->id) }}";
-                const existingCount  = {{ $ticket->executorAttachments->count() }};
+            <script>
+                (function() {
+                    const MAX_FILES = 10;
+                    const addBtn = document.getElementById('admin-executor-add-btn');
+                    const eraseBtn = document.getElementById('admin-executor-erase-btn');
+                    const container = document.getElementById('admin-executor-attachment-container');
+                    const sourceModal = document.getElementById('executorSourceModal');
+                    const openCameraBtn = document.getElementById('executorOpenCamera');
+                    const openFilesBtn = document.getElementById('executorOpenFiles');
+                    const closeSourceBtn = document.getElementById('executorCloseSource');
+                    const btnClose = document.getElementById('btn-close-ticket');
+                    const CSRF = document.querySelector('meta[name="csrf-token"]')?.content ?? document.querySelector(
+                        'input[name="_token"]')?.value;
+                    const UPLOAD_URL = "{{ route('executor.attachments.store', $ticket->id) }}";
+                    const existingCount = {{ $ticket->executorAttachments->count() }};
 
-                let attachmentCount = 0;
-                let uploadedCount   = 0;
-                let activeInputId   = null;
-                let isUploading     = false;
+                    let attachmentCount = 0;
+                    let uploadedCount = 0;
+                    let activeInputId = null;
+                    let isUploading = false;
 
-                const openModal  = () => { sourceModal.classList.remove('hidden'); sourceModal.classList.add('flex'); };
-                const closeModal = () => { sourceModal.classList.add('hidden'); sourceModal.classList.remove('flex'); };
+                    const openModal = () => {
+                        sourceModal.classList.remove('hidden');
+                        sourceModal.classList.add('flex');
+                    };
+                    const closeModal = () => {
+                        sourceModal.classList.add('hidden');
+                        sourceModal.classList.remove('flex');
+                    };
 
-                function addAttachment() {
-                    if (attachmentCount >= MAX_FILES) { toastr.warning('Maximum 10 files allowed.'); return; }
-                    attachmentCount++;
-                    const id = `exec_att_${attachmentCount}`;
-                    document.getElementById('admin-executor-empty-text')?.remove();
-                    container?.insertAdjacentHTML('beforeend', `
+                    function addAttachment() {
+                        if (attachmentCount >= MAX_FILES) {
+                            toastr.warning('Maximum 10 files allowed.');
+                            return;
+                        }
+                        attachmentCount++;
+                        const id = `exec_att_${attachmentCount}`;
+                        document.getElementById('admin-executor-empty-text')?.remove();
+                        container?.insertAdjacentHTML('beforeend', `
                         <div class="relative mb-3" id="wrap_${id}">
                             <input type="file" id="${id}" accept=".jpg,.jpeg,.png,.gif,.pdf,.doc,.docx,.xls,.xlsx,.zip,.txt" class="hidden">
                             <label class="flex items-center justify-center w-full px-4 py-8 bg-slate-800 border-2 border-dashed border-slate-700 rounded-xl cursor-pointer hover:border-blue-500 hover:bg-slate-800/50 transition-all duration-200 group"
@@ -1678,92 +1928,125 @@
                                 </div>
                             </label>
                         </div>`);
-                    document.getElementById(id)?.addEventListener('change', () => handleChange(id));
-                }
-
-                function eraseAttachment() {
-                    if (attachmentCount <= 0) return;
-                    document.getElementById(`wrap_exec_att_${attachmentCount}`)?.remove();
-                    attachmentCount--;
-                    if (attachmentCount === 0 && container && !document.getElementById('admin-executor-empty-text'))
-                        container.insertAdjacentHTML('beforeend', '<p id="admin-executor-empty-text" class="text-sm text-slate-500">No files selected</p>');
-                }
-
-                window.showExecutorSourceModal = (id) => { activeInputId = id; openModal(); };
-
-                async function handleChange(id) {
-                    const input = document.getElementById(id);
-                    const label = document.getElementById(`fileName_${id}`);
-                    const prev  = document.getElementById(`prev_${id}`);
-                    if (!input?.files?.length) return;
-                    const file = input.files[0];
-                    if (label) label.textContent = file.name;
-                    if (prev)  prev.textContent  = 'Uploading...';
-                    await upload(file, prev);
-                }
-
-                async function upload(file, prevEl) {
-                    if (isUploading) { toastr.warning('Please wait, upload in progress.'); return; }
-                    isUploading = true;
-                    const fd = new FormData();
-                    fd.append('files[]', file);
-                    try {
-                        const res  = await fetch(UPLOAD_URL, { method:'POST', headers:{'X-CSRF-TOKEN':CSRF,'Accept':'application/json'}, body:fd, credentials:'same-origin' });
-                        const data = await res.json();
-                        if (!res.ok) throw new Error(data?.message || 'Upload failed.');
-                        if (prevEl) prevEl.textContent = '✅ Uploaded';
-                        uploadedCount++;
-                        toastr.success(data?.message || 'Upload successful!');
-                    } catch (err) {
-                        if (prevEl) prevEl.textContent = '❌ Upload failed';
-                        toastr.error(err.message || 'Upload failed.');
-                    } finally { isUploading = false; }
-                }
-
-                function submitWithAttachmentCheck() {
-                    const total = existingCount + uploadedCount;
-                    if (total === 0) {
-                        toastr.error('Wajib upload minimal 1 attachment bukti pengerjaan sebelum menutup ticket.');
-                        document.getElementById('admin-executor-attachment-container')?.scrollIntoView({ behavior: 'smooth' });
-                        return;
+                        document.getElementById(id)?.addEventListener('change', () => handleChange(id));
                     }
-                    btnClose.closest('form').submit();
-                }
 
-                @if ($ticket->status === 'Overdue')
-                const statusSelect = document.getElementById('statusSelect');
-                const btnLabel     = document.getElementById('btn-close-label');
+                    function eraseAttachment() {
+                        if (attachmentCount <= 0) return;
+                        document.getElementById(`wrap_exec_att_${attachmentCount}`)?.remove();
+                        attachmentCount--;
+                        if (attachmentCount === 0 && container && !document.getElementById('admin-executor-empty-text'))
+                            container.insertAdjacentHTML('beforeend',
+                                '<p id="admin-executor-empty-text" class="text-sm text-slate-500">No files selected</p>');
+                    }
 
-                $(document).ready(function () {
-                    $('#statusSelect').on('change', function () {
-                        if (this.value === 'Progress') {
-                            btnLabel.textContent = 'Back to Progress';
-                        } else if (this.value === 'Closed') {
-                            btnLabel.textContent = 'Close this Ticket';
+                    window.showExecutorSourceModal = (id) => {
+                        activeInputId = id;
+                        openModal();
+                    };
+
+                    async function handleChange(id) {
+                        const input = document.getElementById(id);
+                        const label = document.getElementById(`fileName_${id}`);
+                        const prev = document.getElementById(`prev_${id}`);
+                        if (!input?.files?.length) return;
+                        const file = input.files[0];
+                        if (label) label.textContent = file.name;
+                        if (prev) prev.textContent = 'Uploading...';
+                        await upload(file, prev);
+                    }
+
+                    async function upload(file, prevEl) {
+                        if (isUploading) {
+                            toastr.warning('Please wait, upload in progress.');
+                            return;
                         }
-                    });
-                });
-
-                btnClose?.addEventListener('click', function () {
-                    if (!statusSelect?.value) {
-                        toastr.error('Please choose a status first.');
-                        statusSelect?.scrollIntoView({ behavior: 'smooth' });
-                        return;
+                        isUploading = true;
+                        const fd = new FormData();
+                        fd.append('files[]', file);
+                        try {
+                            const res = await fetch(UPLOAD_URL, {
+                                method: 'POST',
+                                headers: {
+                                    'X-CSRF-TOKEN': CSRF,
+                                    'Accept': 'application/json'
+                                },
+                                body: fd,
+                                credentials: 'same-origin'
+                            });
+                            const data = await res.json();
+                            if (!res.ok) throw new Error(data?.message || 'Upload failed.');
+                            if (prevEl) prevEl.textContent = '✅ Uploaded';
+                            uploadedCount++;
+                            toastr.success(data?.message || 'Upload successful!');
+                        } catch (err) {
+                            if (prevEl) prevEl.textContent = '❌ Upload failed';
+                            toastr.error(err.message || 'Upload failed.');
+                        } finally {
+                            isUploading = false;
+                        }
                     }
-                    submitWithAttachmentCheck();
-                });
-                @else
-                btnClose?.addEventListener('click', submitWithAttachmentCheck);
-                @endif
 
-                addBtn?.addEventListener('click', addAttachment);
-                eraseBtn?.addEventListener('click', eraseAttachment);
-                openCameraBtn?.addEventListener('click', () => { const i=document.getElementById(activeInputId); i?.setAttribute('capture','environment'); i?.click(); closeModal(); });
-                openFilesBtn?.addEventListener('click',  () => { const i=document.getElementById(activeInputId); i?.removeAttribute('capture'); i?.click(); closeModal(); });
-                closeSourceBtn?.addEventListener('click', closeModal);
-                sourceModal?.addEventListener('click', (e) => { if (e.target===sourceModal) closeModal(); });
-            })();
-        </script>
+                    function submitWithAttachmentCheck() {
+                        const total = existingCount + uploadedCount;
+                        if (total === 0) {
+                            toastr.error('Wajib upload minimal 1 attachment bukti pengerjaan sebelum menutup ticket.');
+                            document.getElementById('admin-executor-attachment-container')?.scrollIntoView({
+                                behavior: 'smooth'
+                            });
+                            return;
+                        }
+                        btnClose.closest('form').submit();
+                    }
+
+                    @if ($ticket->status === 'Overdue')
+                        const statusSelect = document.getElementById('statusSelect');
+                        const btnLabel = document.getElementById('btn-close-label');
+
+                        $(document).ready(function() {
+                            $('#statusSelect').on('change', function() {
+                                if (this.value === 'Progress') {
+                                    btnLabel.textContent = 'Back to Progress';
+                                } else if (this.value === 'Closed') {
+                                    btnLabel.textContent = 'Close this Ticket';
+                                }
+                            });
+                        });
+
+                        btnClose?.addEventListener('click', function() {
+                            if (!statusSelect?.value) {
+                                toastr.error('Please choose a status first.');
+                                statusSelect?.scrollIntoView({
+                                    behavior: 'smooth'
+                                });
+                                return;
+                            }
+                            submitWithAttachmentCheck();
+                        });
+                    @else
+                        btnClose?.addEventListener('click', submitWithAttachmentCheck);
+                    @endif
+
+                    addBtn?.addEventListener('click', addAttachment);
+                    eraseBtn?.addEventListener('click', eraseAttachment);
+                    openCameraBtn?.addEventListener('click', () => {
+                        const i = document.getElementById(activeInputId);
+                        i?.setAttribute('capture', 'environment');
+                        i?.click();
+                        closeModal();
+                    });
+                    openFilesBtn?.addEventListener('click', () => {
+                        const i = document.getElementById(activeInputId);
+                        i?.removeAttribute('capture');
+                        i?.click();
+                        closeModal();
+                    });
+                    closeSourceBtn?.addEventListener('click', closeModal);
+                    sourceModal?.addEventListener('click', (e) => {
+                        if (e.target === sourceModal) closeModal();
+                    });
+                })();
+            </script>
         @endif
 
         <script>
@@ -1771,14 +2054,19 @@
                 document.getElementById('previewModalTitle').textContent = name;
                 document.getElementById('previewModalIframe').src = url;
                 const m = document.getElementById('previewModal');
-                m.classList.remove('hidden'); m.classList.add('flex');
+                m.classList.remove('hidden');
+                m.classList.add('flex');
             }
+
             function closePreviewModal() {
                 const m = document.getElementById('previewModal');
-                m.classList.add('hidden'); m.classList.remove('flex');
+                m.classList.add('hidden');
+                m.classList.remove('flex');
                 document.getElementById('previewModalIframe').src = '';
             }
-            document.getElementById('previewModal')?.addEventListener('click', function(e) { if(e.target===this) closePreviewModal(); });
+            document.getElementById('previewModal')?.addEventListener('click', function(e) {
+                if (e.target === this) closePreviewModal();
+            });
         </script>
     @endpush
 @endsection
