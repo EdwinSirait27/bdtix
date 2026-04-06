@@ -15,3 +15,6 @@ Schedule::command('ticket:auto-review')
 Schedule::command('tickets:send-overdue-reminder')
     ->dailyAt('15:23')
     ->withoutOverlapping();
+    Schedule::command('ticket:dispatch-open-reminder')
+    ->dailyAt('10:10')
+    ->withoutOverlapping();

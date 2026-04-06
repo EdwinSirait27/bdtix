@@ -8,11 +8,10 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Foundation\Bus\Dispatchable;
 use App\Models\Tickets;
 use App\Models\User;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Http;
 
-class SendOverdueTicketWhatsapp implements ShouldQueue
+class SendOpenTicketWhatsapp implements ShouldQueue
 {
     use Dispatchable, Queueable, SerializesModels;
     public $timeout = 30;
@@ -21,17 +20,14 @@ class SendOverdueTicketWhatsapp implements ShouldQueue
     ) {}
     public function handle(): void
     {
-        Log::info('WA_OVERDUE_JOB_START', [
+        Log::info('WA_OPEN_JOB_START', [
             'ticket_id' => $this->ticketId,
         ]);
-
         $ticket = Tickets::with('executor.employee')
             ->find($this->ticketId)
             ?->fresh();
-
-
-        if (! $ticket || $ticket->status !== 'Overdue') {
-            Log::warning('WA_OVERDUE_JOB_SKIPPED', [
+        if (! $ticket || $ticket->status !== 'Open') {
+            Log::warning('WA_OPEN_JOB_SKIPPED', [
                 'ticket_id' => $this->ticketId,
                 'status'    => $ticket?->status,
             ]);
@@ -42,46 +38,31 @@ class SendOverdueTicketWhatsapp implements ShouldQueue
             0,
             8
         );
-        $user = User::with('employee.store')->find($ticket->user_id);
-        $adminUrl  = route('editopenticketforadmin', $hash);
-        $employee = $user?->employee;
-        $store = $employee?->store;
-        $phoneNumber  = $employee->telp_number ?? '-';
-
-        $estimation = $ticket->estimation
-            ? $ticket->estimation->timezone('Asia/Makassar')->format('d-m-Y H:i')
-            : '-';
-        $estimationTo = $ticket->estimation_to
-            ? $ticket->estimation_to->timezone('Asia/Makassar')->format('d-m-Y H:i')
-            : '-';
-        $priorities = $ticket->priority ?? '-';
-        $notesit = $ticket->notes_executor ?? '-';
+        $user       = User::with('employee.store')->find($ticket->user_id);
+        $adminUrl   = route('editopenticketforadmin', $hash);
+        $employee   = $user?->employee;
+        $store      = $employee?->store;
+        $phoneNumber = $employee->telp_number ?? '-';
         $createdAt = optional($ticket->created_at)
             ->timezone('Asia/Makassar')
             ->format('d-m-Y H:i');
-        $executorName = $ticket->executor?->employee?->employee_name ?? '-';
+        $hoursOpen = (int) now('Asia/Makassar')
+            ->diffInHours($ticket->created_at->timezone('Asia/Makassar'));
+        $priorities = $ticket->priority ?? '-';
         $message = implode("\n", [
-            "WARNING BD TICKET OVERDUE ALERT",
+            "BD OPEN TICKET REMINDER",
             "Queue: {$ticket->queue_number}",
-            "Date: {$createdAt}",
+            "Date Created: {$createdAt}",
+            "Hours Open: {$hoursOpen} jam",
             "User: {$employee->employee_name}",
             "Location: {$store->name}",
             "Phone Number: {$phoneNumber}",
             "Title: {$ticket->title}",
             "Categories: {$ticket->category}",
             "Sub Categories: {$ticket->sub_category}",
-            "Dificulty: {$priorities}",
-            "Executor: {$executorName}",
-            "Progress: " . (
-                $ticket->progressed_at
-                ? $ticket->progressed_at->timezone('Asia/Makassar')->format('d-m-Y H:i')
-                : '-'
-            ),
-            "BD Notes: {$notesit}",
-            "Estimation: {$estimation}",
-            "Estimation To: {$estimationTo}",
+            "Priority: {$priorities}",
             "Ticket Link: {$adminUrl}",
-            "dibantu tim BD!!!.",
+            "Ticket ini belum diproses, tolong dibantu ya tim!",
         ]);
         Http::timeout(10)->post(
             'http://127.0.0.1:3001/send-message',
@@ -90,8 +71,13 @@ class SendOverdueTicketWhatsapp implements ShouldQueue
                 'text'     => $message,
             ]
         );
-        Log::info('WA_OVERDUE_JOB_SENT', [
-            'ticket_id' => $ticket->id,
+        Log::info('WA_OPEN_JOB_SENT', [
+            'ticket_id'  => $ticket->id,
+            'hours_open' => $hoursOpen,
         ]);
+        // self::dispatch($this->ticketId)
+        //     ->delay(now()->addHour());
+        self::dispatch($this->ticketId)
+    ->delay(now()->addMinutes(5));
     }
 }
