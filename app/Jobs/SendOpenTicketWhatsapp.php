@@ -17,7 +17,9 @@ class SendOpenTicketWhatsapp implements ShouldQueue
     public $timeout = 30;
     public function __construct(
         public string $ticketId
-    ) {}
+  ) {
+    $this->onQueue('whatsappopen');
+}
     public function handle(): void
     {
         Log::info('WA_OPEN_JOB_START', [
