@@ -80,6 +80,6 @@ class SendOpenTicketWhatsapp implements ShouldQueue
         // self::dispatch($this->ticketId)
         //     ->delay(now()->addHour());
         self::dispatch($this->ticketId)
-    ->delay(now()->addMinutes(5));
+    ->delay(now()->addMinutes(30));
     }
 }
