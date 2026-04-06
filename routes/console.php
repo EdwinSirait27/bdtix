@@ -2,6 +2,9 @@
 
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Support\Facades\Artisan;
+use App\Models\Tickets;
+use App\Jobs\SendOpenTicketWhatsapp;
+
 use Illuminate\Support\Facades\Schedule;
 Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
@@ -16,6 +19,8 @@ Schedule::command('tickets:send-overdue-reminder')
     ->dailyAt('15:23')
     ->withoutOverlapping();
 
-    Schedule::command('ticket:dispatch-open-reminder')
-    ->everyTenMinutes()
-    ->withoutOverlapping();
+    Schedule::call(function () {
+    Tickets::where('status', 'Open')->each(function ($ticket) {
+        SendOpenTicketWhatsapp::dispatch($ticket->id);
+    });
+})->everyTenMinutes();

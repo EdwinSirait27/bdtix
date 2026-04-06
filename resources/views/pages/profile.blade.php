@@ -157,7 +157,6 @@
                                 <line x1="7" y1="15" x2="11" y2="15" stroke-width="2"
                                     stroke-linecap="round" stroke-linejoin="round" />
                             </svg>
-
                         </div>
                         <div>
                             <div class="text-xs text-slate-500">NIP</div>
