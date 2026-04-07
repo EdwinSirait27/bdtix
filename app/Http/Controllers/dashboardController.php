@@ -1146,7 +1146,7 @@ class dashboardController extends Controller
             ->select([
                 'id', 'user_id', 'queue_number', 'title', 'description',
                 'progressed_at', 'estimation', 'estimation_to',
-                'executor_id', 'category', 'priority',
+                'executor_id', 'category','sub_category', 'priority',
                 'finished', 'status', 'created_at',
             ]);
 
@@ -1158,6 +1158,7 @@ class dashboardController extends Controller
                   ->orWhere('title',       'like', "%{$search}%")
                   ->orWhere('description', 'like', "%{$search}%")
                   ->orWhere('category',    'like', "%{$search}%")
+                  ->orWhere('sub_category',    'like', "%{$search}%")
                   ->orWhere('status',      'like', "%{$search}%");
             });
         }
@@ -1393,7 +1394,8 @@ class dashboardController extends Controller
         $isOpenStatus = $ticket->status === 'Open';
 
         $validated = $request->validate([
-            'category'       => 'required|in:Hardware & Software,Network,Account & Access,Others',
+                   'category'       => 'required|in:Plumbing,Building,Mechanical Engineering,Others',
+            'sub_category'       => 'required|in:Maintenance,Renovation,Others',
             'notes_executor' => 'required|string|min:5|max:500',
             'finished'       => 'nullable|date',
             'estimation'     => 'nullable|date',
@@ -1489,6 +1491,7 @@ class dashboardController extends Controller
 
             $data = [
                 'category'       => $validated['category'],
+                'sub_category'       => $validated['sub_category'],
                 'notes_executor' => $validated['notes_executor'],
                 'status'         => $status,
                 'finished'       => $finished,
