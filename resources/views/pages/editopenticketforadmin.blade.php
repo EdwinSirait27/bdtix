@@ -988,7 +988,7 @@
     @endpush
 @endsection --}}
 @extends('layouts.app')
-@section('company', 'IT Departments')
+@section('company', 'BD Departments')
 @section('header', 'Edit Ticket')
 @section('subtitle', 'Answer problem or request from users')
 @section('content')
