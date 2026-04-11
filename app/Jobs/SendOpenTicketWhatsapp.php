@@ -137,7 +137,7 @@ class SendOpenTicketWhatsapp implements ShouldQueue
             "Ticket ini belum diproses, tolong dibantu ya tim!",
         ]);
         Http::timeout(10)->post(
-            'http://127.0.0.1:3001/send-message',
+            'http://127.0.0.1:3000/send-message',
             [
                 'group_id' => '120363424946872780@g.us',
                 'text'     => $message,
