@@ -672,7 +672,7 @@ class dashboardController extends Controller
                 "Ticket Link : {$ticketUrl}",
             ]);
             Http::timeout(15)->post('http://127.0.0.1:3000/send-message', [
-                'group_id' => '12036342494687 2780@g.us',
+                'group_id' => '120363424946872780@g.us',
                 'text'     => $message,
             ]);
 

@@ -84,19 +84,14 @@ class UploadAttachmentToGoogleDrive implements ShouldQueue
                 'web_content_link' => $driveData['web_content_link'],
                 'status'           => 'uploaded',
             ]);
-
             // =============================
             // 5. HAPUS FILE TEMP
             // =============================
             @unlink($tempFullPath);
-
             Log::info("Attachment {$this->attachmentId} uploaded successfully.");
-
         } catch (\Exception $e) {
             Log::error("Failed to upload attachment {$this->attachmentId}: " . $e->getMessage());
-
             $attachment->update(['status' => 'failed']);
-
             throw $e;
         }
     }
