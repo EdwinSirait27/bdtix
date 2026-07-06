@@ -428,13 +428,13 @@
             </div>
         </div>
 
-@if (count($user->all_roles_tix ?? []) > 1)
+@if (count($user->all_roles_bdtix ?? []) > 1)
 <form method="POST" action="{{ route('profile.update-active-role') }}">
     @csrf
-    <label for="active_role_tix" class="text-sm text-white">Select Active Role</label>
-    <select name="role" id="active_role_tix" class="mt-1 block w-full rounded-lg bg-slate-800 text-white p-2 border border-slate-700">
-        @foreach ($user->all_roles_tix ?? [] as $role)
-            <option value="{{ $role }}" {{ $user->active_role_tix == $role ? 'selected' : '' }}>
+    <label for="active_role_bdtix" class="text-sm text-white">Select Active Role</label>
+    <select name="role" id="active_role_bdtix" class="mt-1 block w-full rounded-lg bg-slate-800 text-white p-2 border border-slate-700">
+        @foreach ($user->all_roles_bdtix ?? [] as $role)
+            <option value="{{ $role }}" {{ $user->active_role_bdtix == $role ? 'selected' : '' }}>
                 {{ ucfirst($role) }}
             </option>
         @endforeach
