@@ -12,6 +12,89 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Http;
 
+// class SendOverdueTicketWhatsapp implements ShouldQueue
+// {
+//     use Dispatchable, Queueable, SerializesModels;
+//     public $timeout = 30;
+//     public function __construct(
+//         public string $ticketId
+//     ) {}
+//     public function handle(): void
+//     {
+//         Log::info('WA_OVERDUE_JOB_START', [
+//             'ticket_id' => $this->ticketId,
+//         ]);
+
+//         $ticket = Tickets::with('executor.employee')
+//             ->find($this->ticketId)
+//             ?->fresh();
+
+
+//         if (! $ticket || $ticket->status !== 'Overdue') {
+//             Log::warning('WA_OVERDUE_JOB_SKIPPED', [
+//                 'ticket_id' => $this->ticketId,
+//                 'status'    => $ticket?->status,
+//             ]);
+//             return;
+//         }
+//         $hash = substr(
+//             hash('sha256', $ticket->id . config('app.key')),
+//             0,
+//             8
+//         );
+//         $user = User::with('employee.store')->find($ticket->user_id);
+//         $adminUrl  = route('editopenticketforadmin', $hash);
+//         $employee = $user?->employee;
+//         $store = $employee?->store;
+//         $phoneNumber  = $employee->telp_number ?? '-';
+
+//         $estimation = $ticket->estimation
+//             ? $ticket->estimation->timezone('Asia/Makassar')->format('d-m-Y H:i')
+//             : '-';
+//         $estimationTo = $ticket->estimation_to
+//             ? $ticket->estimation_to->timezone('Asia/Makassar')->format('d-m-Y H:i')
+//             : '-';
+//         $priorities = $ticket->priority ?? '-';
+//         $notesit = $ticket->notes_executor ?? '-';
+//         $createdAt = optional($ticket->created_at)
+//             ->timezone('Asia/Makassar')
+//             ->format('d-m-Y H:i');
+//         $executorName = $ticket->executor?->employee?->employee_name ?? '-';
+//         $message = implode("\n", [
+//             "WARNING BD TICKET OVERDUE ALERT",
+//             "Queue: {$ticket->queue_number}",
+//             "Date: {$createdAt}",
+//             "User: {$employee->employee_name}",
+//             "Location: {$store->name}",
+//             "Phone Number: {$phoneNumber}",
+//             "Title: {$ticket->title}",
+//             "Categories: {$ticket->category}",
+//             "Sub Categories: {$ticket->sub_category}",
+//             "Dificulty: {$priorities}",
+//             "Executor: {$executorName}",
+//             "Progress: " . (
+//                 $ticket->progressed_at
+//                 ? $ticket->progressed_at->timezone('Asia/Makassar')->format('d-m-Y H:i')
+//                 : '-'
+//             ),
+//             "BD Notes: {$notesit}",
+//             "Estimation: {$estimation}",
+//             "Estimation To: {$estimationTo}",
+//             "Ticket Link: {$adminUrl}",
+//             "dibantu tim BD!!!.",
+//         ]);
+//         Http::timeout(10)->post(
+//             'http://127.0.0.1:3000/send-message',
+//             [
+//                 'group_id' => '120363424946872780@g.us',
+//                 'text'     => $message,
+//             ]
+//         );
+//         Log::info('WA_OVERDUE_JOB_SENT', [
+//             'ticket_id' => $ticket->id,
+//         ]);
+//     }
+// }
 class SendOverdueTicketWhatsapp implements ShouldQueue
 {
     use Dispatchable, Queueable, SerializesModels;
@@ -24,7 +107,6 @@ class SendOverdueTicketWhatsapp implements ShouldQueue
         Log::info('WA_OVERDUE_JOB_START', [
             'ticket_id' => $this->ticketId,
         ]);
-
         $ticket = Tickets::with('executor.employee')
             ->find($this->ticketId)
             ?->fresh();
@@ -45,7 +127,7 @@ class SendOverdueTicketWhatsapp implements ShouldQueue
         $user = User::with('employee.store')->find($ticket->user_id);
         $adminUrl  = route('editopenticketforadmin', $hash);
         $employee = $user?->employee;
-        $store = $employee?->store;
+        $store = $ticket->store?->name;
         $phoneNumber  = $employee->telp_number ?? '-';
 
         $estimation = $ticket->estimation
@@ -65,7 +147,7 @@ class SendOverdueTicketWhatsapp implements ShouldQueue
             "Queue: {$ticket->queue_number}",
             "Date: {$createdAt}",
             "User: {$employee->employee_name}",
-            "Location: {$store->name}",
+            "Location: {$store}",
             "Phone Number: {$phoneNumber}",
             "Title: {$ticket->title}",
             "Categories: {$ticket->category}",
@@ -81,7 +163,7 @@ class SendOverdueTicketWhatsapp implements ShouldQueue
             "Estimation: {$estimation}",
             "Estimation To: {$estimationTo}",
             "Ticket Link: {$adminUrl}",
-            "dibantu tim BD!!!.",
+            "dibantu ya tim BD!!!.",
         ]);
         Http::timeout(10)->post(
             'http://127.0.0.1:3000/send-message',

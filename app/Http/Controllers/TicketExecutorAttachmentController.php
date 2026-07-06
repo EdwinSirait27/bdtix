@@ -10,83 +10,276 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use App\Helpers\DriveHelper;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
+use App\Jobs\DeleteAttachmentFromS3ForExecutor;
+use App\Jobs\UploadAttachmentToS3ForExecutor;
+use App\Helpers\StorageHelper;
 
+// class TicketExecutorAttachmentController extends Controller
+// {
+//     public function store(Request $request, $ticketId): JsonResponse
+//     {
+//         $request->validate([
+//             'files'   => ['required', 'array', 'max:10'],
+//             'files.*' => [
+//                 'file',
+//                 'max:20480',
+//                 'mimes:jpg,jpeg,png,gif,pdf,doc,docx,xls,xlsx,zip,txt',
+//             ],
+//         ]);
+
+//         $ticket = Tickets::findOrFail($ticketId);
+//         $isAdmin = Auth::user()?->hasRole('admin');
+//         if (!$isAdmin && $ticket->executor_id !== Auth::id()) {
+//             abort(403, 'You are not allowed to upload executor attachments for this ticket.');
+//         }
+//         $owner = $ticket->user;
+//         $folderIdentity = DriveHelper::getFolderIdentity($owner);
+//         $filePrefix = DriveHelper::getFilePrefix(Auth::user());
+//         $category = $ticket->category;
+//         $attachments = [];
+
+//         foreach ($request->file('files') as $file) {
+//             $tempPath = $file->store('temp-attachments', 'local');
+
+//             $attachment = TicketExecutorAttachment::create([
+//                 'id'            => (string) Str::uuid(),
+//                 'ticket_id'     => $ticketId,
+//                 'executor_id'   => Auth::id(),
+//                 'file_name'     => $file->getClientOriginalName(),
+//                 'file_path'     => $tempPath,
+//                 'original_name' => $file->getClientOriginalName(),
+//                 'mime_type'     => $file->getMimeType(),
+//                 'size'          => $file->getSize(),
+//                 'status'        => 'pending',
+//             ]);
+
+//             UploadAttachmentToGoogleDrive::dispatch(
+//                 $attachment->id,
+//                 $tempPath,
+//                 $folderIdentity,
+//                 $category,
+//                 'executor',
+//                 'executor',
+//                 $filePrefix
+//             )->onQueue('ticket-heavy');
+
+//             $attachments[] = [
+//                 'id'            => $attachment->id,
+//                 'original_name' => $attachment->original_name,
+//                 'mime_type'     => $attachment->mime_type,
+//                 'size'          => $attachment->size,
+//                 'status'        => 'pending',
+//                 'uploaded_at'   => $attachment->created_at->toDateTimeString(),
+//                 'drive_file_id' => $attachment->drive_file_id,
+//             ];
+//         }
+
+//         return response()->json([
+//             'message'     => 'Bukti pengerjaan berhasil diupload.',
+//             'attachments' => $attachments,
+//         ], 201);
+//     }
+
+//     public function destroy($ticketId, $attachmentId): JsonResponse
+//     {
+//         $attachment = TicketExecutorAttachment::findOrFail($attachmentId);
+//         $ticket = $attachment->ticket;
+//         $isAdmin = Auth::user()?->hasRole('admin');
+//         if (!$ticket || (!$isAdmin && $ticket->executor_id !== Auth::id())) {
+//             abort(403, 'You are not allowed to delete this attachment.');
+//         }
+//         $attachment->delete();
+
+//         return response()->json(['message' => 'Attachment berhasil dihapus.']);
+//     }
+// }
 class TicketExecutorAttachmentController extends Controller
 {
-    public function store(Request $request, $ticketId): JsonResponse
-    {
-        $request->validate([
-            'files'   => ['required', 'array', 'max:10'],
-            'files.*' => [
-                'file',
-                'max:20480',
-                'mimes:jpg,jpeg,png,gif,pdf,doc,docx,xls,xlsx,zip,txt',
-            ],
-        ]);
+  public function store(Request $request, $ticketId): JsonResponse
+{
+    /** @var \App\Models\User $user */
+    $user = Auth::user();
 
-        $ticket = Tickets::findOrFail($ticketId);
-        $isAdmin = Auth::user()?->hasRole('admin');
-        if (!$isAdmin && $ticket->executor_id !== Auth::id()) {
-            abort(403, 'You are not allowed to upload executor attachments for this ticket.');
+    // Hanya admin dan executor yang boleh upload
+    if (!$user->hasAnyRole(['admin', 'executor'])) {
+        abort(403, 'You are not allowed to upload executor attachments.');
+    }
+
+    $request->validate([
+        'files'   => ['nullable', 'array', 'max:10'],
+        'files.*' => [
+            'file',
+            'max:5048',
+            'mimes:jpg,jpeg,png,gif,pdf,doc,docx,xls,xlsx,zip,txt',
+        ],
+    ]);
+
+    $ticket = Tickets::findOrFail($ticketId);
+
+    // Executor hanya boleh upload ke tiket yang dia handle
+    // Admin boleh upload ke tiket manapun
+    if ($user->hasRole('executor') && $ticket->executor_id !== $user->id) {
+        abort(403, 'You are not allowed to upload executor attachments for this ticket.');
+    }
+
+    $username    = Str::slug($user->username ?? $user->id);
+    $s3Folder    = "bdtix-executor-attachments/{$username}";
+    $attachments = [];
+
+    foreach ($request->file('files', []) as $index => $file) {
+        $date     = now()->format('Y-m-d');
+        $title    = Str::slug($ticket->title);
+        $ext      = $file->getClientOriginalExtension();
+        $suffix   = $index + 1;
+        $fileName = "{$username}-{$date}-{$title}-{$suffix}.{$ext}";
+
+        $tempPath = Storage::disk('local')->putFileAs(
+            "temp-attachments/{$username}",
+            $file,
+            $fileName
+        );
+
+        if (!$tempPath) {
+            Log::error('EXECUTOR_ATTACHMENT_TEMP_FAILED', [
+                'ticket_id'     => $ticketId,
+                'original_name' => $file->getClientOriginalName(),
+            ]);
+            continue;
         }
-        $owner = $ticket->user;
-        $folderIdentity = DriveHelper::getFolderIdentity($owner);
-        $filePrefix = DriveHelper::getFilePrefix(Auth::user());
-        $category = $ticket->category;
-        $attachments = [];
 
-        foreach ($request->file('files') as $file) {
-            $tempPath = $file->store('temp-attachments', 'local');
-
+        try {
             $attachment = TicketExecutorAttachment::create([
                 'id'            => (string) Str::uuid(),
                 'ticket_id'     => $ticketId,
-                'executor_id'   => Auth::id(),
-                'file_name'     => $file->getClientOriginalName(),
-                'file_path'     => $tempPath,
+                'executor_id'   => $user->id,
+                'file_name'     => $fileName,
+                'file_path'     => "{$s3Folder}/{$fileName}",
                 'original_name' => $file->getClientOriginalName(),
                 'mime_type'     => $file->getMimeType(),
                 'size'          => $file->getSize(),
                 'status'        => 'pending',
             ]);
-
-            UploadAttachmentToGoogleDrive::dispatch(
-                $attachment->id,
-                $tempPath,
-                $folderIdentity,
-                $category,
-                'executor',
-                'executor',
-                $filePrefix
-            )->onQueue('ticket-heavy');
-
-            $attachments[] = [
-                'id'            => $attachment->id,
-                'original_name' => $attachment->original_name,
-                'mime_type'     => $attachment->mime_type,
-                'size'          => $attachment->size,
-                'status'        => 'pending',
-                'uploaded_at'   => $attachment->created_at->toDateTimeString(),
-                'drive_file_id' => $attachment->drive_file_id,
-            ];
+        } catch (\Throwable $e) {
+            Log::error('EXECUTOR_ATTACHMENT_CREATE_FAILED', [
+                'ticket_id' => $ticketId,
+                'error'     => $e->getMessage(),
+            ]);
+            continue;
         }
+        UploadAttachmentToS3ForExecutor::dispatch(
+            $attachment->id,
+            $tempPath,
+            $s3Folder,
+            $fileName
+        )->onQueue('ticket-heavy');
 
-        return response()->json([
-            'message'     => 'Bukti pengerjaan berhasil diupload.',
-            'attachments' => $attachments,
-        ], 201);
+        Log::info('EXECUTOR_ATTACHMENT_QUEUED', [
+            'ticket_id'     => $ticketId,
+            'attachment_id' => $attachment->id,
+            'file_name'     => $fileName,
+            'user_id'       => $user->id,
+        ]);
+
+        $attachments[] = [
+            'id'            => $attachment->id,
+            'original_name' => $attachment->original_name,
+            'mime_type'     => $attachment->mime_type,
+            'size'          => $attachment->size,
+            'status'        => 'pending',
+            'uploaded_at'   => $attachment->created_at->toDateTimeString(),
+        ];
     }
 
-    public function destroy($ticketId, $attachmentId): JsonResponse
-    {
-        $attachment = TicketExecutorAttachment::findOrFail($attachmentId);
-        $ticket = $attachment->ticket;
-        $isAdmin = Auth::user()?->hasRole('admin');
-        if (!$ticket || (!$isAdmin && $ticket->executor_id !== Auth::id())) {
-            abort(403, 'You are not allowed to delete this attachment.');
-        }
-        $attachment->delete();
-
-        return response()->json(['message' => 'Attachment berhasil dihapus.']);
-    }
+    return response()->json([
+        'message'     => 'Bukti pengerjaan berhasil diupload.',
+        'attachments' => $attachments,
+    ], 201);
 }
+
+public function destroy($attachmentId): JsonResponse
+{
+    /** @var \App\Models\User $user */
+    $user = Auth::user();
+
+    if (!$user->hasAnyRole(['admin', 'executor'])) {
+        abort(403, 'You are not allowed to delete executor attachments.');
+    }
+
+    $attachment = TicketExecutorAttachment::findOrFail($attachmentId);
+    $ticket     = $attachment->ticket;
+
+    if (!$ticket) {
+        abort(404, 'Ticket not found.');
+    }
+
+    if ($user->hasRole('executor') && $attachment->executor_id !== $user->id) {
+        abort(403, 'You are not allowed to delete this attachment.');
+    }
+
+    $filePath = $attachment->file_path;
+    $attachment->delete();
+
+    DeleteAttachmentFromS3ForExecutor::dispatch($filePath)->onQueue('ticket-heavy');
+
+    Log::info('EXECUTOR_ATTACHMENT_DELETED', [
+        'attachment_id' => $attachmentId,
+        'ticket_id'     => $ticket->id, // ambil dari relasi
+        'file_path'     => $filePath,
+        'user_id'       => $user->id,
+    ]);
+
+    return response()->json(['success' => true, 'message' => 'Attachment berhasil dihapus.']);
+}
+//  public function signedUrlForExecutor(string $attachmentId)
+// {
+//     /** @var \App\Models\User $user */
+//     $user = Auth::user();
+
+//     $attachment = TicketExecutorAttachment::where('id', $attachmentId)
+//         ->where('status', 'uploaded')
+//         ->firstOrFail();
+
+//     // Boleh akses kalau: pemilik attachment, atau admin/executor
+//     if ($attachment->user_id !== $user->id && !$user->hasAnyRole(['admin', 'executor'])) {
+//         abort(403);
+//     }
+
+//     $url = Storage::disk('s3')->temporaryUrl(
+//         $attachment->file_path,
+//         now()->addMinutes(5)
+//     );
+
+//     return response()->json([
+//         'url'       => $url,
+//         'file_name' => $attachment->original_name ?? $attachment->file_name,
+//         'mime_type' => $attachment->mime_type,
+//     ]);
+// }
+public function signedUrlForExecutor(string $attachmentId)
+{
+    /** @var \App\Models\User $user */
+    $user = Auth::user();
+
+    $attachment = TicketExecutorAttachment::where('id', $attachmentId)
+        ->where('status', 'uploaded')
+        ->firstOrFail();
+
+    $isTicketOwner = $attachment->ticket?->user_id === $user->id;
+
+    if (!$isTicketOwner && !$user->hasAnyRole(['admin', 'executor', 'human'])) {
+        abort(403);
+    }
+
+    // $url = StorageHelper::temporaryPublicUrl($attachment->file_path, 5);
+$url = StorageHelper::publicUrl($attachment->file_path);
+
+    return response()->json([
+        'url'       => $url,
+        'file_name' => $attachment->original_name ?? $attachment->file_name,
+        'mime_type' => $attachment->mime_type,
+    ]);
+}
+}
+

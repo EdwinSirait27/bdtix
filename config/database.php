@@ -65,7 +65,7 @@ return [
         'hrx' => [
             'driver' => env('DB_HRX_CONNECTION'),
             'host' => env('DB_HRX_HOST'),
-            'port' => env('DB_HRX_PORT', 3306),
+            'port' => env('DB_HRX_PORT'),
             'database' => env('DB_HRX_DATABASE'),
             'username' => env('DB_HRX_USERNAME'),
             'password' => env('DB_HRX_PASSWORD'),

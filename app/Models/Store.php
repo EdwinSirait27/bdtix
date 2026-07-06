@@ -15,3 +15,5 @@ class Store extends Model
         'name',
     ];
 }
+
+

@@ -15,7 +15,6 @@ class AutoReviewService
             ->whereNull('review') 
             ->where('finished', '<=', Carbon::now()->subDay())
             ->get();
-
         foreach ($tickets as $ticket) {
             $ticket->review()->create([
                 'id'          => (string) Str::uuid(),
