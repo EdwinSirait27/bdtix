@@ -1169,208 +1169,444 @@ $stores = Store::orderBy('name')->get();
 
     // UPDATE TICKET
 
+    // public function update(Request $request, string $hash)
+    // {
+    //     /** @var \App\Models\User $user */
+    //     $user = Auth::user();
+
+    //     $ticket    = $this->findTicketByHash($hash);
+    //     $oldStatus = $ticket->status;
+
+    //     Log::info('TICKET_UPDATE_START', [
+    //         'ticket_id' => $ticket->id,
+    //         'user_id'   => $user->id,
+    //         'ip'        => $request->ip(),
+    //     ]);
+
+    //     // Validation
+    //     $isOpenStatus = $ticket->status === 'Open';
+
+    //     $validated = $request->validate([
+    //         'category'       => 'required|in:Plumbing,Building,Mechanical Engineering,Others',
+    //         'sub_category'       => 'required|in:Maintenance,Renovation,Others',
+    //         'notes_executor' => 'required|string|min:5|max:500',
+    //         'finished'       => 'nullable|date',
+    //         'estimation'     => 'nullable|date',
+    //         'estimation_to'  => 'nullable|date',
+    //         'duration_type'  => $isOpenStatus ? 'required|in:hour,day,week' : 'nullable|in:hour,day,week',
+    //         'duration_value' => $isOpenStatus ? 'required|integer|min:1'    : 'nullable|integer|min:1',
+    //     ]);
+
+    //     // Duration & Auto Priority (hanya saat status Open)
+    //     if ($isOpenStatus) {
+    //         $durationLimits = ['hour' => 24, 'day' => 6, 'week' => 4];
+    //         $durationType   = $validated['duration_type'];
+    //         $durationValue  = (int) $validated['duration_value'];
+
+    //         if (!isset($durationLimits[$durationType])) {
+    //             return back()->withErrors(['duration_type' => 'Duration type tidak valid'])->withInput();
+    //         }
+
+    //         $minDuration = $durationType === 'day' ? 2 : 1;
+    //         if ($durationValue < $minDuration || $durationValue > $durationLimits[$durationType]) {
+    //             return back()->withErrors(['duration_value' => 'Duration tidak valid'])->withInput();
+    //         }
+
+    //         // Auto Priority: hour = Low, day = Medium, week = High
+    //         $autoPriority = match ($durationType) {
+    //             'hour'  => 'Low',
+    //             'day'   => 'Medium',
+    //             'week'  => 'High',
+    //             default => 'Low',
+    //         };
+
+    //         Log::info('AUTO_PRIORITY_SET', [
+    //             'ticket_id'      => $ticket->id,
+    //             'duration_type'  => $durationType,
+    //             'duration_value' => $durationValue,
+    //             'auto_priority'  => $autoPriority,
+    //         ]);
+    //     } else {
+    //         $durationType  = $ticket->duration_type;
+    //         $durationValue = $ticket->duration_value;
+    //         $autoPriority  = $ticket->priority;
+    //     }
+
+    //     // Status Transition
+    //     if ($ticket->status === 'Closed') {
+    //         abort(403, 'Ticket sudah closed');
+    //     }
+
+    //     if ($ticket->status === 'Open') {
+    //         $status         = 'Progress';
+    //         $finished       = null;
+    //         $progressedAt   = now();
+    //         $autoEstimation = now();
+    //     } elseif ($ticket->status === 'Progress') {
+    //         $status         = 'Closed';
+    //         $finished       = now();
+    //         $progressedAt   = $ticket->progressed_at;
+    //         $autoEstimation = null;
+    //     } elseif ($ticket->status === 'Overdue') {
+    //         $status         = 'Progress';
+    //         $finished       = null;
+    //         $progressedAt   = $ticket->progressed_at;
+    //         $autoEstimation = null;
+    //     } else {
+    //         abort(403, 'Status ticket tidak valid');
+    //     }
+
+    //     // Database Transaction
+    //     DB::transaction(function () use (
+    //         $validated,
+    //         $ticket,
+    //         $status,
+    //         $finished,
+    //         $progressedAt,
+    //         $oldStatus,
+    //         $durationType,
+    //         $durationValue,
+    //         $autoEstimation,
+    //         $autoPriority
+    //     ) {
+    //         if ($oldStatus === 'Open') {
+    //             $estimation   = $autoEstimation;
+    //             $estimationTo = match ($durationType) {
+    //                 'hour'  => $estimation->copy()->addHours($durationValue),
+    //                 'day'   => $estimation->copy()->addDays($durationValue),
+    //                 'week'  => $estimation->copy()->addWeeks($durationValue),
+    //                 default => $estimation->copy()->addHours($durationValue),
+    //             };
+    //         } else {
+    //             $estimation   = $ticket->estimation;
+    //             $estimationTo = $ticket->estimation_to;
+    //         }
+    //         $user = Auth::user();
+
+    //         $data = [
+    //             'category'       => $validated['category'],
+    //             'sub_category'       => $validated['sub_category'],
+    //             'notes_executor' => $validated['notes_executor'],
+    //             'status'         => $status,
+    //             'finished'       => $finished,
+    //             'estimation'     => $estimation,
+    //             'estimation_to'  => $estimationTo,
+    //             'executor_id'    => $user->id,
+    //             'duration_type'  => $durationType,
+    //             'duration_value' => $durationValue,
+    //             'priority'       => $autoPriority,
+    //         ];
+
+    //         if ($oldStatus === 'Open' && $status === 'Progress') {
+    //             $data['progressed_at'] = $progressedAt;
+    //         }
+
+    //         $ticket->update($data);
+
+    //         Log::info('TICKET_UPDATED', [
+    //             'ticket_id'     => $ticket->id,
+    //             'old_status'    => $oldStatus,
+    //             'new_status'    => $status,
+    //             'priority'      => $autoPriority,
+    //             'estimation_to' => $estimationTo,
+    //             'finished'      => $finished,
+    //         ]);
+    //     });
+    //     $ticket->refresh();
+    //     // WhatsApp Notification
+    //     $user = Auth::user();
+
+    //     try {
+    //         $hash             = $this->generateTicketHash($ticket->id);
+    //         $adminUrl         = route('editopenticketforadmin', $hash);
+    //         $reviewUrl        = route('reviewtickets', $hash);
+    //         $executorName     = $user->employee->employee_name ?? $user->username;
+    //         $formattedDate    = $ticket->created_at?->timezone('Asia/Makassar')?->format('d-m-Y H:i') ?? '-';
+    //         $finishedDate     = $ticket->finished?->timezone('Asia/Makassar')?->format('d-m-Y H:i') ?? '-';
+    //         $estimationDate   = $ticket->estimation?->timezone('Asia/Makassar')?->format('d-m-Y H:i') ?? '-';
+    //         $estimationToDate = $ticket->estimation_to?->timezone('Asia/Makassar')?->format('d-m-Y H:i') ?? '-';
+    //         $userName         = $ticket->user->employee->employee_name;
+    //         $locationName     = $ticket->store?->name ?? '-';
+    //         $phoneNumber      = $ticket->user->employee->telp_number ?? '-';
+    //         $isProgressToClosed  = $oldStatus === 'Progress' && $ticket->status === 'Closed';
+    //         $isOverdueToProgress = $oldStatus === 'Overdue'  && $ticket->status === 'Progress';
+    //         $titleMessage = 'BD Ticket Updated';
+    //         $ticketUrl    = $adminUrl;
+    //         if ($isProgressToClosed) {
+    //             $titleMessage = 'BD Ticket Closed Review';
+    //             $ticketUrl    = $reviewUrl;
+    //         }
+    //         if ($isOverdueToProgress) {
+    //             $titleMessage = 'BD Ticket Overdue to Progress';
+    //             $ticketUrl    = $adminUrl;
+    //         }
+    //         $message = implode("\n", [
+    //             $titleMessage,
+    //             "Date : {$formattedDate}",
+    //             "Queue : {$ticket->queue_number}",
+    //             "User : {$userName}",
+    //             "Location : {$locationName}",
+    //             "Phone : {$phoneNumber}",
+    //             "Title : {$ticket->title}",
+    //             "Category : {$ticket->category}",
+    //             "Sub Category : {$ticket->sub_category}",
+    //             "Priority : {$ticket->priority}",
+    //             "Executor : {$executorName}",
+    //             "BD Notes : {$ticket->notes_executor}",
+    //             "Started At : {$estimationDate}",
+    //             "Est. Deadline : {$estimationToDate}",
+    //             "Finished : {$finishedDate}",
+    //             "Status : {$ticket->status}",
+    //             "Tickets Link : {$ticketUrl}",
+    //         ]);
+    //         Http::timeout(15)->post('http://127.0.0.1:3000/send-message', [
+    //             'group_id' => '120363424946872780@g.us',
+    //             'text'     => $message,
+    //         ]);
+
+    //         Log::info('WA_UPDATE_SUCCESS', [
+    //             'ticket_id' => $ticket->id,
+    //             'type'      => $isProgressToClosed ? 'REVIEW' : 'UPDATE',
+    //         ]);
+    //     } catch (\Throwable $e) {
+    //         Log::warning('WA_UPDATE_FAILED', ['error' => $e->getMessage()]);
+    //     }
+    //     return redirect()->route('dashboard')->with('success', 'Ticket successfully updated');
+    // }
     public function update(Request $request, string $hash)
-    {
-        /** @var \App\Models\User $user */
-        $user = Auth::user();
+{
+    /** @var \App\Models\User $user */
+    $user = Auth::user();
 
-        $ticket    = $this->findTicketByHash($hash);
-        $oldStatus = $ticket->status;
+    $ticket    = $this->findTicketByHash($hash);
+    $oldStatus = $ticket->status;
 
-        Log::info('TICKET_UPDATE_START', [
-            'ticket_id' => $ticket->id,
-            'user_id'   => $user->id,
-            'ip'        => $request->ip(),
-        ]);
+    Log::info('TICKET_UPDATE_START', [
+        'ticket_id' => $ticket->id,
+        'user_id'   => $user->id,
+        'ip'        => $request->ip(),
+    ]);
 
-        // Validation
-        $isOpenStatus = $ticket->status === 'Open';
+    $isOpenStatus    = $ticket->status === 'Open';
+    $isOverdueStatus = $ticket->status === 'Overdue';
 
-        $validated = $request->validate([
-            'category'       => 'required|in:Plumbing,Building,Mechanical Engineering,Others',
-            'sub_category'       => 'required|in:Maintenance,Renovation,Others',
-            'notes_executor' => 'required|string|min:5|max:500',
-            'finished'       => 'nullable|date',
-            'estimation'     => 'nullable|date',
-            'estimation_to'  => 'nullable|date',
-            'duration_type'  => $isOpenStatus ? 'required|in:hour,day,week' : 'nullable|in:hour,day,week',
-            'duration_value' => $isOpenStatus ? 'required|integer|min:1'    : 'nullable|integer|min:1',
-        ]);
+    $validated = $request->validate([
+        'status'         => $isOverdueStatus ? 'required|in:Progress,Closed' : 'nullable',
+        'category'       => 'required|in:Plumbing,Building,Mechanical Engineering,Others',
+        'sub_category'   => 'required|in:Maintenance,Renovation,Others',
+        'notes_executor' => 'required|string|min:5|max:500',
+        'finished'       => 'nullable|date',
+        'estimation'     => 'nullable|date',
+        'estimation_to'  => 'nullable|date',
+        'duration_type'  => $isOpenStatus ? 'required|in:hour,day,week' : 'nullable|in:hour,day,week',
+        'duration_value' => $isOpenStatus ? 'required|integer|min:1'    : 'nullable|integer|min:1',
+    ]);
 
-        // Duration & Auto Priority (hanya saat status Open)
-        if ($isOpenStatus) {
-            $durationLimits = ['hour' => 24, 'day' => 6, 'week' => 4];
-            $durationType   = $validated['duration_type'];
-            $durationValue  = (int) $validated['duration_value'];
+    // Duration & Auto Priority (hanya saat status Open)
+    if ($isOpenStatus) {
+        $durationLimits = ['hour' => 24, 'day' => 6, 'week' => 4];
+        $durationType   = $validated['duration_type'];
+        $durationValue  = (int) $validated['duration_value'];
 
-            if (!isset($durationLimits[$durationType])) {
-                return back()->withErrors(['duration_type' => 'Duration type tidak valid'])->withInput();
-            }
-
-            $minDuration = $durationType === 'day' ? 2 : 1;
-            if ($durationValue < $minDuration || $durationValue > $durationLimits[$durationType]) {
-                return back()->withErrors(['duration_value' => 'Duration tidak valid'])->withInput();
-            }
-
-            // Auto Priority: hour = Low, day = Medium, week = High
-            $autoPriority = match ($durationType) {
-                'hour'  => 'Low',
-                'day'   => 'Medium',
-                'week'  => 'High',
-                default => 'Low',
-            };
-
-            Log::info('AUTO_PRIORITY_SET', [
-                'ticket_id'      => $ticket->id,
-                'duration_type'  => $durationType,
-                'duration_value' => $durationValue,
-                'auto_priority'  => $autoPriority,
-            ]);
-        } else {
-            $durationType  = $ticket->duration_type;
-            $durationValue = $ticket->duration_value;
-            $autoPriority  = $ticket->priority;
+        if (!isset($durationLimits[$durationType])) {
+            return back()->withErrors(['duration_type' => 'Duration type tidak valid'])->withInput();
         }
 
-        // Status Transition
-        if ($ticket->status === 'Closed') {
-            abort(403, 'Ticket sudah closed');
+        $minDuration = $durationType === 'day' ? 2 : 1;
+        if ($durationValue < $minDuration || $durationValue > $durationLimits[$durationType]) {
+            return back()->withErrors(['duration_value' => 'Duration tidak valid'])->withInput();
         }
 
-        if ($ticket->status === 'Open') {
-            $status         = 'Progress';
-            $finished       = null;
-            $progressedAt   = now();
-            $autoEstimation = now();
-        } elseif ($ticket->status === 'Progress') {
+        $autoPriority = match ($durationType) {
+            'hour'  => 'Low',
+            'day'   => 'Medium',
+            'week'  => 'High',
+            default => 'Low',
+        };
+
+        Log::info('AUTO_PRIORITY_SET', [
+            'ticket_id'      => $ticket->id,
+            'duration_type'  => $durationType,
+            'duration_value' => $durationValue,
+            'auto_priority'  => $autoPriority,
+        ]);
+    } else {
+        $durationType  = $ticket->duration_type;
+        $durationValue = $ticket->duration_value;
+        $autoPriority  = $ticket->priority;
+    }
+
+    // Status Transition
+    if ($ticket->status === 'Closed') {
+        abort(403, 'Ticket sudah closed');
+    }
+
+    if ($ticket->status === 'Open') {
+        $status         = 'Progress';
+        $finished       = null;
+        $progressedAt   = now();
+        $autoEstimation = now();
+
+    } elseif ($ticket->status === 'Progress') {
+        $status         = 'Closed';
+        $finished       = now();
+        $progressedAt   = $ticket->progressed_at;
+        $autoEstimation = null;
+
+    } elseif ($ticket->status === 'Overdue') {
+        $requestedStatus = $validated['status']; // 'Progress' atau 'Closed' dari select
+
+        if ($requestedStatus === 'Closed') {
             $status         = 'Closed';
             $finished       = now();
             $progressedAt   = $ticket->progressed_at;
             $autoEstimation = null;
-        } elseif ($ticket->status === 'Overdue') {
+        } else {
             $status         = 'Progress';
             $finished       = null;
-            $progressedAt   = $ticket->progressed_at;
+            $progressedAt   = $ticket->progressed_at ?? now();
             $autoEstimation = null;
-        } else {
-            abort(403, 'Status ticket tidak valid');
         }
 
-        // Database Transaction
-        DB::transaction(function () use (
-            $validated,
-            $ticket,
-            $status,
-            $finished,
-            $progressedAt,
-            $oldStatus,
-            $durationType,
-            $durationValue,
-            $autoEstimation,
-            $autoPriority
-        ) {
-            if ($oldStatus === 'Open') {
-                $estimation   = $autoEstimation;
-                $estimationTo = match ($durationType) {
-                    'hour'  => $estimation->copy()->addHours($durationValue),
-                    'day'   => $estimation->copy()->addDays($durationValue),
-                    'week'  => $estimation->copy()->addWeeks($durationValue),
-                    default => $estimation->copy()->addHours($durationValue),
-                };
-            } else {
-                $estimation   = $ticket->estimation;
-                $estimationTo = $ticket->estimation_to;
-            }
-            $user = Auth::user();
+        Log::info('OVERDUE_TRANSITION', [
+            'ticket_id'        => $ticket->id,
+            'requested_status' => $requestedStatus,
+            'new_status'       => $status,
+        ]);
 
-            $data = [
-                'category'       => $validated['category'],
-                'sub_category'       => $validated['sub_category'],
-                'notes_executor' => $validated['notes_executor'],
-                'status'         => $status,
-                'finished'       => $finished,
-                'estimation'     => $estimation,
-                'estimation_to'  => $estimationTo,
-                'executor_id'    => $user->id,
-                'duration_type'  => $durationType,
-                'duration_value' => $durationValue,
-                'priority'       => $autoPriority,
-            ];
+    } else {
+        abort(403, 'Status ticket tidak valid');
+    }
 
-            if ($oldStatus === 'Open' && $status === 'Progress') {
-                $data['progressed_at'] = $progressedAt;
-            }
+    // Database Transaction
+    DB::transaction(function () use (
+        $validated,
+        $ticket,
+        $status,
+        $finished,
+        $progressedAt,
+        $oldStatus,
+        $durationType,
+        $durationValue,
+        $autoEstimation,
+        $autoPriority
+    ) {
+        if ($oldStatus === 'Open') {
+            $estimation   = $autoEstimation;
+            $estimationTo = match ($durationType) {
+                'hour'  => $estimation->copy()->addHours($durationValue),
+                'day'   => $estimation->copy()->addDays($durationValue),
+                'week'  => $estimation->copy()->addWeeks($durationValue),
+                default => $estimation->copy()->addHours($durationValue),
+            };
+        } else {
+            $estimation   = $ticket->estimation;
+            $estimationTo = $ticket->estimation_to;
+        }
 
-            $ticket->update($data);
-
-            Log::info('TICKET_UPDATED', [
-                'ticket_id'     => $ticket->id,
-                'old_status'    => $oldStatus,
-                'new_status'    => $status,
-                'priority'      => $autoPriority,
-                'estimation_to' => $estimationTo,
-                'finished'      => $finished,
-            ]);
-        });
-        $ticket->refresh();
-        // WhatsApp Notification
         $user = Auth::user();
 
-        try {
-            $hash             = $this->generateTicketHash($ticket->id);
-            $adminUrl         = route('editopenticketforadmin', $hash);
-            $reviewUrl        = route('reviewtickets', $hash);
-            $executorName     = $user->employee->employee_name ?? $user->username;
-            $formattedDate    = $ticket->created_at?->timezone('Asia/Makassar')?->format('d-m-Y H:i') ?? '-';
-            $finishedDate     = $ticket->finished?->timezone('Asia/Makassar')?->format('d-m-Y H:i') ?? '-';
-            $estimationDate   = $ticket->estimation?->timezone('Asia/Makassar')?->format('d-m-Y H:i') ?? '-';
-            $estimationToDate = $ticket->estimation_to?->timezone('Asia/Makassar')?->format('d-m-Y H:i') ?? '-';
-            $userName         = $ticket->user->employee->employee_name;
-            $locationName     = $ticket->store?->name ?? '-';
-            $phoneNumber      = $ticket->user->employee->telp_number ?? '-';
-            $isProgressToClosed  = $oldStatus === 'Progress' && $ticket->status === 'Closed';
-            $isOverdueToProgress = $oldStatus === 'Overdue'  && $ticket->status === 'Progress';
-            $titleMessage = 'BD Ticket Updated';
-            $ticketUrl    = $adminUrl;
-            if ($isProgressToClosed) {
-                $titleMessage = 'BD Ticket Closed Review';
-                $ticketUrl    = $reviewUrl;
-            }
-            if ($isOverdueToProgress) {
-                $titleMessage = 'BD Ticket Overdue to Progress';
-                $ticketUrl    = $adminUrl;
-            }
-            $message = implode("\n", [
-                $titleMessage,
-                "Date : {$formattedDate}",
-                "Queue : {$ticket->queue_number}",
-                "User : {$userName}",
-                "Location : {$locationName}",
-                "Phone : {$phoneNumber}",
-                "Title : {$ticket->title}",
-                "Category : {$ticket->category}",
-                "Sub Category : {$ticket->sub_category}",
-                "Priority : {$ticket->priority}",
-                "Executor : {$executorName}",
-                "BD Notes : {$ticket->notes_executor}",
-                "Started At : {$estimationDate}",
-                "Est. Deadline : {$estimationToDate}",
-                "Finished : {$finishedDate}",
-                "Status : {$ticket->status}",
-                "Tickets Link : {$ticketUrl}",
-            ]);
-            Http::timeout(15)->post('http://127.0.0.1:3000/send-message', [
-                'group_id' => '120363424946872780@g.us',
-                'text'     => $message,
-            ]);
+        $data = [
+            'category'       => $validated['category'],
+            'sub_category'   => $validated['sub_category'],
+            'notes_executor' => $validated['notes_executor'],
+            'status'         => $status,
+            'finished'       => $finished,
+            'estimation'     => $estimation,
+            'estimation_to'  => $estimationTo,
+            'executor_id'    => $user->id,
+            'duration_type'  => $durationType,
+            'duration_value' => $durationValue,
+            'priority'       => $autoPriority,
+        ];
 
-            Log::info('WA_UPDATE_SUCCESS', [
-                'ticket_id' => $ticket->id,
-                'type'      => $isProgressToClosed ? 'REVIEW' : 'UPDATE',
-            ]);
-        } catch (\Throwable $e) {
-            Log::warning('WA_UPDATE_FAILED', ['error' => $e->getMessage()]);
+        if ($oldStatus === 'Open' && $status === 'Progress') {
+            $data['progressed_at'] = $progressedAt;
         }
-        return redirect()->route('dashboard')->with('success', 'Ticket successfully updated');
+
+        $ticket->update($data);
+
+        Log::info('TICKET_UPDATED', [
+            'ticket_id'     => $ticket->id,
+            'old_status'    => $oldStatus,
+            'new_status'    => $status,
+            'priority'      => $autoPriority,
+            'estimation_to' => optional($estimationTo)->toDateTimeString(),
+            'finished'      => optional($finished)->toDateTimeString(),
+        ]);
+    });
+
+    $ticket->refresh();
+
+    // WhatsApp Notification
+    $user = Auth::user();
+
+    try {
+        $hash             = $this->generateTicketHash($ticket->id);
+        $adminUrl         = route('editopenticketforadmin', $hash);
+        $reviewUrl        = route('reviewtickets', $hash);
+        $executorName     = $user->employee->employee_name ?? $user->username;
+        $formattedDate    = $ticket->created_at?->timezone('Asia/Makassar')?->format('d-m-Y H:i') ?? '-';
+        $finishedDate     = $ticket->finished?->timezone('Asia/Makassar')?->format('d-m-Y H:i') ?? '-';
+        $estimationDate   = $ticket->estimation?->timezone('Asia/Makassar')?->format('d-m-Y H:i') ?? '-';
+        $estimationToDate = $ticket->estimation_to?->timezone('Asia/Makassar')?->format('d-m-Y H:i') ?? '-';
+        $userName         = $ticket->user->employee->employee_name;
+        $locationName     = $ticket->store?->name ?? '-';
+        $phoneNumber      = $ticket->user->employee->telp_number ?? '-';
+
+        // Semua kondisi transition
+        $isProgressToClosed  = $oldStatus === 'Progress' && $ticket->status === 'Closed';
+        $isOverdueToClosed   = $oldStatus === 'Overdue'  && $ticket->status === 'Closed';
+        $isOverdueToProgress = $oldStatus === 'Overdue'  && $ticket->status === 'Progress';
+
+        $titleMessage = 'BD Ticket Updated';
+        $ticketUrl    = $adminUrl;
+
+        if ($isProgressToClosed || $isOverdueToClosed) {
+            $titleMessage = 'BD Ticket Closed Review';
+            $ticketUrl    = $reviewUrl;
+        }
+        if ($isOverdueToProgress) {
+            $titleMessage = 'BD Ticket Overdue to Progress';
+            $ticketUrl    = $adminUrl;
+        }
+
+        $message = implode("\n", [
+            $titleMessage,
+            "Date : {$formattedDate}",
+            "Queue : {$ticket->queue_number}",
+            "User : {$userName}",
+            "Location : {$locationName}",
+            "Phone : {$phoneNumber}",
+            "Title : {$ticket->title}",
+            "Category : {$ticket->category}",
+            "Sub Category : {$ticket->sub_category}",
+            "Priority : {$ticket->priority}",
+            "Executor : {$executorName}",
+            "BD Notes : {$ticket->notes_executor}",
+            "Started At : {$estimationDate}",
+            "Est. Deadline : {$estimationToDate}",
+            "Finished : {$finishedDate}",
+            "Status : {$ticket->status}",
+            "Tickets Link : {$ticketUrl}",
+        ]);
+
+        Http::timeout(15)->post('http://127.0.0.1:3000/send-message', [
+            'group_id' => '120363424946872780@g.us',
+            'text'     => $message,
+        ]);
+
+        Log::info('WA_UPDATE_SUCCESS', [
+            'ticket_id' => $ticket->id,
+            'old_status' => $oldStatus,
+            'new_status' => $ticket->status,
+            'type'       => $isProgressToClosed || $isOverdueToClosed ? 'REVIEW' : 'UPDATE',
+        ]);
+
+    } catch (\Throwable $e) {
+        Log::warning('WA_UPDATE_FAILED', ['error' => $e->getMessage()]);
     }
+
+    return redirect()->route('dashboard')->with('success', 'Ticket successfully updated');
+}
 }
