@@ -134,7 +134,7 @@
         @endif
         @if ($ticket->executorAttachments && $ticket->executorAttachments->count())
             <div class="bg-white dark:bg-slate-900 rounded-2xl shadow-lg p-4 sm:p-6">
-                <h3 class="text-base sm:text-lg font-bold mb-4 text-slate-900 dark:text-white">Executor Attachments : {{ $ticket->executor->employee->employee_name }}</h3>
+                <h3 class="text-base sm:text-lg font-bold mb-4 text-slate-900 dark:text-white">Executor Attachments : {{ $executor->employee->employee_name }}</h3>
                 <ul class="space-y-2">
                     @foreach ($ticket->executorAttachments as $file)
                         <li class="flex items-center gap-2">
