@@ -343,45 +343,48 @@
 
 
 
-        <div id="previewModal" class="fixed inset-0 bg-black/80 hidden items-center justify-center z-50 p-4">
-            <div class="bg-slate-900 rounded-2xl w-full max-w-3xl border border-slate-700 flex flex-col"
-                style="max-height:90vh;">
-                <div class="flex items-center justify-between p-4 border-b border-slate-700 flex-shrink-0">
-                    <h3 id="previewModalTitle" class="text-sm font-semibold text-slate-200 truncate pr-4"></h3>
-                    <button type="button" onclick="closePreviewModal()"
-                        class="text-slate-400 hover:text-white flex-shrink-0">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                    </button>
-                </div>
-                <div class="flex-1 overflow-hidden">
-                    <iframe id="previewModalIframe" src="" class="w-full" style="height:75vh;" frameborder="0"
-                        allowfullscreen></iframe>
-                </div>
-            </div>
+       
+    {{-- Modal Preview Attachment --}}
+   
+<div id="previewModal" class="fixed inset-0 bg-black/80 hidden items-center justify-center z-50 p-4" onclick="if(event.target===this)closePreviewModal()">
+    <div class="relative inline-flex flex-col items-center">
+        <p id="previewModalTitle" class="text-xs text-slate-400 mb-2 self-start truncate max-w-sm"></p>
+        <div class="relative">
+            <button type="button" onclick="closePreviewModal()"
+                class="absolute -top-2 -right-2 z-10 bg-slate-700 hover:bg-red-500 text-white rounded-full p-1 transition shadow-lg">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+            </button>
+            <img id="previewModalImg" src="" alt=""
+                class="hidden rounded-xl shadow-2xl object-contain"
+                style="max-width:70vw; max-height:80vh;">
+            <iframe id="previewModalIframe" src="" frameborder="0" allowfullscreen
+                class="hidden rounded-xl shadow-2xl"
+                style="width:70vw; height:80vh;"></iframe>
         </div>
+    </div>
+</div>
 
-        {{-- Modal Preview Executor Attachment --}}
-        <div id="previewModalForExecutor" class="fixed inset-0 bg-black/80 hidden items-center justify-center p-4"
-            style="z-index:9999;">
-            <div class="bg-slate-900 rounded-2xl w-full max-w-3xl border border-slate-700 flex flex-col shadow-2xl"
-                style="max-height:90vh;">
-                <div class="flex items-center justify-between p-4 border-b border-slate-700 flex-shrink-0">
-                    <h3 id="previewModalForExecutorTitle" class="text-sm font-semibold text-slate-200 truncate pr-4"></h3>
-                    <button type="button" onclick="closePreviewModalForExecutor()"
-                        class="text-slate-400 hover:text-white flex-shrink-0 transition">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                    </button>
-                </div>
-                <div class="flex-1 overflow-hidden">
-                    <iframe id="previewModalForExecutorIframe" src="" class="w-full" style="height:75vh;"
-                        frameborder="0" allowfullscreen></iframe>
-                </div>
-            </div>
+<div id="previewModalForExecutor" class="fixed inset-0 bg-black/80 hidden items-center justify-center z-50 p-4" onclick="if(event.target===this)closePreviewModalForExecutor()">
+    <div class="relative inline-flex flex-col items-center">
+        <p id="previewModalForExecutorTitle" class="text-xs text-slate-400 mb-2 self-start truncate max-w-sm"></p>
+        <div class="relative">
+            <button type="button" onclick="closePreviewModalForExecutor()"
+                class="absolute -top-2 -right-2 z-10 bg-slate-700 hover:bg-red-500 text-white rounded-full p-1 transition shadow-lg">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+            </button>
+            <img id="previewModalForExecutorImg" src="" alt=""
+                class="hidden rounded-xl shadow-2xl object-contain"
+                style="max-width:70vw; max-height:80vh;">
+            <iframe id="previewModalForExecutorIframe" src="" frameborder="0" allowfullscreen
+                class="hidden rounded-xl shadow-2xl"
+                style="width:70vw; height:80vh;"></iframe>
         </div>
+    </div>
+</div>
         @push('scripts')
             <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
             <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
@@ -411,85 +414,119 @@
                 @if (session('error'))
                     toastr.error(@json(session('error')));
                 @endif
-                async function openSignedUrl(attachmentId) {
-                    try {
-                        const res = await fetch(`/attachments/${attachmentId}/signed-url`, {
-                            headers: {
-                                'Accept': 'application/json'
-                            },
-                            credentials: 'same-origin',
-                        });
-                        const data = await res.json();
-                        if (!res.ok) throw new Error(data.message || 'Failed to get URL');
+                   async function openSignedUrl(attachmentId) {
+    try {
+        const res = await fetch(`/attachments/${attachmentId}/signed-url`, {
+            headers: { 'Accept': 'application/json' },
+            credentials: 'same-origin',
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.message || 'Failed to get URL');
 
-                        const previewableMimes = ['image/jpeg', 'image/png', 'image/gif', 'application/pdf'];
-                        if (previewableMimes.includes(data.mime_type)) {
-                            document.getElementById('previewModalTitle').textContent = data.file_name ?? 'Attachment';
-                            document.getElementById('previewModalIframe').src = data.url;
-                            const modal = document.getElementById('previewModal');
-                            modal.classList.remove('hidden');
-                            modal.classList.add('flex');
-                        } else {
-                            const a = document.createElement('a');
-                            a.href = data.url;
-                            a.download = data.file_name ?? 'attachment';
-                            a.click();
-                        }
-                    } catch (e) {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Failed',
-                            text: e.message || 'Failed to open file.',
-                            background: '#0f172a',
-                            color: '#e2e8f0'
-                        });
-                    }
-                }
+        const img = document.getElementById('previewModalImg');
+        const iframe = document.getElementById('previewModalIframe');
+        const title = document.getElementById('previewModalTitle');
+        const modal = document.getElementById('previewModal');
 
-                function closePreviewModal() {
-                    document.getElementById('previewModal').classList.add('hidden');
-                    document.getElementById('previewModal').classList.remove('flex');
-                    document.getElementById('previewModalIframe').src = '';
-                }
+        title.textContent = data.file_name ?? 'Attachment';
 
-                document.getElementById('previewModal')?.addEventListener('click', function(e) {
-                    if (e.target === this) closePreviewModal();
-                });
+        const imageMimes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+
+        if (imageMimes.includes(data.mime_type)) {
+            img.src = data.url;
+            img.classList.remove('hidden');
+            iframe.classList.add('hidden');
+            iframe.src = '';
+        } else if (data.mime_type === 'application/pdf') {
+            iframe.src = data.url;
+            iframe.classList.remove('hidden');
+            img.classList.add('hidden');
+            img.src = '';
+        } else {
+            // Download langsung kalau bukan gambar/pdf
+            const a = document.createElement('a');
+            a.href = data.url;
+            a.download = data.file_name ?? 'attachment';
+            a.click();
+            return;
+        }
+
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+    } catch (e) {
+        Swal.fire({ icon: 'error', title: 'Failed', text: e.message || 'Failed to open file.', background: '#0f172a', color: '#e2e8f0' });
+    }
+}
+
+function closePreviewModal() {
+    const modal = document.getElementById('previewModal');
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+    document.getElementById('previewModalImg').src = '';
+    document.getElementById('previewModalImg').classList.add('hidden');
+    document.getElementById('previewModalIframe').src = '';
+    document.getElementById('previewModalIframe').classList.add('hidden');
+}
+
+            document.getElementById('previewModal')?.addEventListener('click', function(e) {
+                if (e.target === this) closePreviewModal();
+            });
+
 
                 // Executor attachment
-                async function openSignedUrlForExecutor(fileId) {
-                    try {
-                        const res = await fetch(`/attachmentsforexecutor/${fileId}/signed-url-for-executor`, {
-                            headers: {
-                                'Accept': 'application/json',
-                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content
-                            },
-                            credentials: 'same-origin'
-                        });
-                        const data = await res.json();
-                        if (!data.url) throw new Error('No URL returned');
+               async function openSignedUrlForExecutor(attachmentId) {
+    try {
+        const res = await fetch(`/attachmentsforexecutor/${attachmentId}/signed-url-for-executor`, {
+            headers: { 'Accept': 'application/json' },
+            credentials: 'same-origin',
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.message || 'Failed to get URL');
 
-                        document.getElementById('previewModalForExecutorTitle').textContent = data.file_name ?? 'Preview';
-                        document.getElementById('previewModalForExecutorIframe').src = data.url;
-                        const modal = document.getElementById('previewModalForExecutor');
-                        modal.classList.remove('hidden');
-                        modal.classList.add('flex');
-                    } catch (err) {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Failed',
-                            text: err.message || 'Failed to open file.',
-                            background: '#0f172a',
-                            color: '#e2e8f0'
-                        });
-                    }
-                }
+        const img = document.getElementById('previewModalForExecutorImg');
+        const iframe = document.getElementById('previewModalForExecutorIframe');
+        const title = document.getElementById('previewModalForExecutorTitle');
+        const modal = document.getElementById('previewModalForExecutor');
 
-                function closePreviewModalForExecutor() {
-                    document.getElementById('previewModalForExecutor').classList.add('hidden');
-                    document.getElementById('previewModalForExecutor').classList.remove('flex');
-                    document.getElementById('previewModalForExecutorIframe').src = '';
-                }
+        title.textContent = data.file_name ?? 'Attachment';
+
+        const imageMimes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+
+        if (imageMimes.includes(data.mime_type)) {
+            img.src = data.url;
+            img.classList.remove('hidden');
+            iframe.classList.add('hidden');
+            iframe.src = '';
+        } else if (data.mime_type === 'application/pdf') {
+            iframe.src = data.url;
+            iframe.classList.remove('hidden');
+            img.classList.add('hidden');
+            img.src = '';
+        } else {
+            // Download langsung kalau bukan gambar/pdf
+            const a = document.createElement('a');
+            a.href = data.url;
+            a.download = data.file_name ?? 'attachment';
+            a.click();
+            return;
+        }
+
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+    } catch (e) {
+        Swal.fire({ icon: 'error', title: 'Failed', text: e.message || 'Failed to open file.', background: '#0f172a', color: '#e2e8f0' });
+    }
+}
+
+function closePreviewModalForExecutor() {
+    const modal = document.getElementById('previewModalForExecutor');
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+    document.getElementById('previewModalForExecutorImg').src = '';
+    document.getElementById('previewModalForExecutorImg').classList.add('hidden');
+    document.getElementById('previewModalForExecutorIframe').src = '';
+    document.getElementById('previewModalForExecutorIframe').classList.add('hidden');
+}
 
                 document.getElementById('previewModalForExecutor')?.addEventListener('click', function(e) {
                     if (e.target === this) closePreviewModalForExecutor();
