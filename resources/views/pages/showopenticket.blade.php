@@ -277,24 +277,40 @@
             </div>
         </div>
     </div> --}}
-    <div id="previewModal" class="fixed inset-0 bg-black/90 hidden items-center justify-center z-50 p-4">
+    {{-- <div id="previewModal" class="fixed inset-0 bg-black/90 hidden items-center justify-center z-50 p-4">
     <div class="relative flex flex-col items-center justify-center max-w-full max-h-full">
-        {{-- Tombol close --}}
         <button type="button" onclick="closePreviewModal()"
             class="absolute -top-3 -right-3 z-10 bg-slate-700 hover:bg-red-500 text-white rounded-full p-1.5 transition shadow-lg">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
             </svg>
         </button>
-        {{-- Title --}}
         <p id="previewModalTitle" class="text-xs text-slate-400 mb-2 self-start truncate max-w-full"></p>
-        {{-- Image / iframe container --}}
         <div id="previewModalContent" class="rounded-xl overflow-hidden shadow-2xl">
             <img id="previewModalImg" src="" alt="" 
                 class="hidden max-w-[90vw] max-h-[85vh] object-contain rounded-xl">
             <iframe id="previewModalIframe" src="" frameborder="0" allowfullscreen
                 class="hidden rounded-xl"
                 style="width:80vw; height:85vh;"></iframe>
+        </div>
+    </div>
+</div> --}}
+<div id="previewModal" class="fixed inset-0 bg-black/80 hidden items-center justify-center z-50 p-4" onclick="if(event.target===this)closePreviewModal()">
+    <div class="relative inline-flex flex-col items-center">
+        <p id="previewModalTitle" class="text-xs text-slate-400 mb-2 self-start truncate max-w-sm"></p>
+        <div class="relative">
+            <button type="button" onclick="closePreviewModal()"
+                class="absolute -top-2 -right-2 z-10 bg-slate-700 hover:bg-red-500 text-white rounded-full p-1 transition shadow-lg">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+            </button>
+            <img id="previewModalImg" src="" alt=""
+                class="hidden rounded-xl shadow-2xl object-contain"
+                style="max-width:70vw; max-height:80vh;">
+            <iframe id="previewModalIframe" src="" frameborder="0" allowfullscreen
+                class="hidden rounded-xl shadow-2xl"
+                style="width:70vw; height:80vh;"></iframe>
         </div>
     </div>
 </div>
@@ -330,24 +346,40 @@
         </div>
     </div>
 </div> --}}
-<div id="previewModalForExecutor" class="fixed inset-0 bg-black/90 hidden items-center justify-center z-50 p-4">
+{{-- <div id="previewModalForExecutor" class="fixed inset-0 bg-black/90 hidden items-center justify-center z-50 p-4">
     <div class="relative flex flex-col items-center justify-center max-w-full max-h-full">
-        {{-- Tombol close --}}
         <button type="button" onclick="closePreviewModalForExecutor()"
             class="absolute -top-3 -right-3 z-10 bg-slate-700 hover:bg-red-500 text-white rounded-full p-1.5 transition shadow-lg">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
             </svg>
         </button>
-        {{-- Title --}}
         <p id="previewModalForExecutorTitle" class="text-xs text-slate-400 mb-2 self-start truncate max-w-full"></p>
-        {{-- Image / iframe container --}}
         <div id="previewModalForExecutorContent" class="rounded-xl overflow-hidden shadow-2xl">
             <img id="previewModalForExecutorImg" src="" alt="" 
                 class="hidden max-w-[90vw] max-h-[85vh] object-contain rounded-xl">
             <iframe id="previewModalForExecutorIframe" src="" frameborder="0" allowfullscreen
                 class="hidden rounded-xl"
                 style="width:80vw; height:85vh;"></iframe>
+        </div>
+    </div>
+</div> --}}
+<div id="previewModalForExecutor" class="fixed inset-0 bg-black/80 hidden items-center justify-center z-50 p-4" onclick="if(event.target===this)closePreviewModalForExecutor()">
+    <div class="relative inline-flex flex-col items-center">
+        <p id="previewModalForExecutorTitle" class="text-xs text-slate-400 mb-2 self-start truncate max-w-sm"></p>
+        <div class="relative">
+            <button type="button" onclick="closePreviewModalForExecutor()"
+                class="absolute -top-2 -right-2 z-10 bg-slate-700 hover:bg-red-500 text-white rounded-full p-1 transition shadow-lg">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+            </button>
+            <img id="previewModalForExecutorImg" src="" alt=""
+                class="hidden rounded-xl shadow-2xl object-contain"
+                style="max-width:70vw; max-height:80vh;">
+            <iframe id="previewModalForExecutorIframe" src="" frameborder="0" allowfullscreen
+                class="hidden rounded-xl shadow-2xl"
+                style="width:70vw; height:80vh;"></iframe>
         </div>
     </div>
 </div>
