@@ -260,7 +260,7 @@
 
 
     {{-- Modal Preview Attachment --}}
-    <div id="previewModal" class="fixed inset-0 bg-black/80 hidden items-center justify-center z-50 p-4">
+    {{-- <div id="previewModal" class="fixed inset-0 bg-black/80 hidden items-center justify-center z-50 p-4">
         <div class="bg-slate-900 rounded-2xl w-full max-w-3xl border border-slate-700 flex flex-col"
             style="max-height: 90vh">
             <div class="flex items-center justify-between p-4 border-b border-slate-700 flex-shrink-0">
@@ -276,10 +276,28 @@
                     allowfullscreen></iframe>
             </div>
         </div>
+    </div> --}}
+    <div id="previewModal" class="fixed inset-0 bg-black/90 hidden items-center justify-center z-50 p-2">
+    <div class="bg-slate-900 rounded-xl w-full h-full max-w-6xl border border-slate-700 flex flex-col" 
+         style="max-height: 96vh">
+        <div class="flex items-center justify-between px-4 py-3 border-b border-slate-700 flex-shrink-0">
+            <h3 id="previewModalTitle" class="text-sm font-semibold text-slate-200 truncate pr-4"></h3>
+            <button type="button" onclick="closePreviewModal()" 
+                class="text-slate-400 hover:text-white flex-shrink-0 p-1 hover:bg-slate-700 rounded-lg transition">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+        <div class="flex-1 overflow-hidden">
+            <iframe id="previewModalIframe" src="" class="w-full h-full" 
+                frameborder="0" allowfullscreen></iframe>
+        </div>
     </div>
+</div>
 
     {{-- Modal Preview Executor Attachment --}}
-<div id="previewModalForExecutor" class="fixed inset-0 bg-black/80 hidden items-center justify-center p-4" style="z-index:9999;">
+{{-- <div id="previewModalForExecutor" class="fixed inset-0 bg-black/80 hidden items-center justify-center p-4" style="z-index:9999;">
     <div class="bg-slate-900 rounded-2xl w-full max-w-3xl border border-slate-700 flex flex-col shadow-2xl" style="max-height:90vh;">
         <div class="flex items-center justify-between p-4 border-b border-slate-700 flex-shrink-0">
             <h3 id="previewModalForExecutorTitle" class="text-sm font-semibold text-slate-200 truncate pr-4"></h3>
@@ -291,6 +309,21 @@
         </div>
         <div class="flex-1 overflow-hidden">
             <iframe id="previewModalForExecutorIframe" src="" class="w-full" style="height:75vh;" frameborder="0" allowfullscreen></iframe>
+        </div>
+    </div>
+</div> --}}
+<div id="previewModalForExecutor" class="fixed inset-0 bg-black/90 hidden items-center justify-center p-2" style="z-index:9999;">
+    <div class="bg-slate-900 rounded-xl w-full h-full max-w-6xl border border-slate-700 flex flex-col shadow-2xl" style="max-height:96vh;">
+        <div class="flex items-center justify-between px-4 py-3 border-b border-slate-700 flex-shrink-0">
+            <h3 id="previewModalForExecutorTitle" class="text-sm font-semibold text-slate-200 truncate pr-4"></h3>
+            <button type="button" onclick="closePreviewModalForExecutor()" class="text-slate-400 hover:text-white flex-shrink-0 p-1 hover:bg-slate-700 rounded-lg transition">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+        <div class="flex-1 overflow-hidden">
+            <iframe id="previewModalForExecutorIframe" src="" class="w-full h-full" frameborder="0" allowfullscreen></iframe>
         </div>
     </div>
 </div>
