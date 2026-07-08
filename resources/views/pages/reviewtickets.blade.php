@@ -520,11 +520,17 @@
             </div>
 
             <div class="grid grid-cols-2 gap-4 pt-4 border-t border-slate-700">
-                <div>
+                {{-- <div>
                     <p class="text-xs text-slate-500 mb-1">Handled By</p>
                     <p class="text-sm font-medium text-slate-300">
                         {{ optional($ticket->executor->employee)->employee_name ?? 'N/A' }}</p>
-                </div>
+                </div> --}}
+                <div>
+    <p class="text-xs text-slate-500 mb-1">Handled By</p>
+    <p class="text-sm font-medium text-slate-300">
+        {{ $ticket->executor?->employee?->employee_name ?? 'N/A' }}
+    </p>
+</div>
                 <div>
                     <p class="text-xs text-slate-500 mb-1">Category</p>
                     <p class="text-sm font-medium text-slate-300">{{ $ticket->category }}</p>
