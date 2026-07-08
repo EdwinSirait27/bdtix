@@ -1393,7 +1393,7 @@ class TicketController extends Controller
         'user' => $user->id,
     ]);
 
-    $query = Tickets::with(['user.employee', 'attachments','executorAttachments']);
+    $query = Tickets::with(['user.employee', 'attachments','executorAttachments','executor']);
 
     if ($user->hasRole('human')) {
         $query->where('user_id', $user->id);

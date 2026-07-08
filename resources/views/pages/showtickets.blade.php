@@ -97,7 +97,9 @@
                                     d="M8 2a4 4 0 00-4 4v8a6 6 0 0012 0V6a2 2 0 10-4 0v7a1 1 0 102 0V6a4 4 0 00-8 0v8a4 4 0 008 0V6" />
                             </svg>
                             <span class="text-blue-500 hover:underline text-sm">
-                                {{ $file->original_name ?? $file->file_name }}
+                                {{-- {{ $file->original_name ?? $file->file_name }} --}}
+                                {{ $file->file_name }}
+
                             </span>
                             @if (!empty($file->human_size))
                                 <span class="text-xs text-slate-500">({{ $file->human_size }})</span>

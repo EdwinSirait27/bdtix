@@ -331,11 +331,15 @@
                             @if ($file->status === 'uploaded')
                                 <button type="button" onclick="openSignedUrl('{{ $file->id }}')"
                                     class="text-sm text-blue-400 hover:underline text-left truncate">
-                                    {{ $file->original_name ?? $file->file_name }}
+                                    {{-- {{ $file->original_name ?? $file->file_name }} --}}
+                                    {{ $file->file_name }}
+
                                 </button>
                             @else
                                 <span class="text-sm text-slate-400 truncate">
-                                    {{ $file->original_name ?? ($file->file_name ?? '-') }}
+                                    {{-- {{ $file->original_name ?? ($file->file_name ?? '-') }} --}}
+                                    {{ $file->file_name ?? '-' }}
+
                                     <span class="text-xs text-yellow-500">(processing...)</span>
                                 </span>
                             @endif
@@ -364,11 +368,15 @@
                                     <button type="button" onclick="openSignedUrlForExecutor('{{ $file->id }}')"
 
                                     class="text-sm text-blue-400 hover:underline text-left truncate">
-                                    {{ $file->original_name ?? $file->file_name }}
+                                    {{-- {{ $file->original_name ?? $file->file_name }} --}}
+                                    {{ $file->file_name }}
+
                                 </button>
                             @else
                                 <span class="text-sm text-slate-400 truncate">
-                                    {{ $file->original_name ?? ($file->file_name ?? '-') }}
+                                    {{-- {{ $file->original_name ?? ($file->file_name ?? '-') }} --}}
+                                    {{ $file->file_name ?? '-' }}
+
                                     <span class="text-xs text-yellow-500">(processing...)</span>
                                 </span>
                             @endif
