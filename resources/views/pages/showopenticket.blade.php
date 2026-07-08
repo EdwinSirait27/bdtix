@@ -406,14 +406,14 @@ function closePreviewModal() {
     }
 }
 
-function closePreviewModal() {
-    const modal = document.getElementById('previewModal');
+function closePreviewModalForExecutor() {
+    const modal = document.getElementById('previewModalForExecutor');
     modal.classList.add('hidden');
     modal.classList.remove('flex');
-    document.getElementById('previewModalImg').src = '';
-    document.getElementById('previewModalImg').classList.add('hidden');
-    document.getElementById('previewModalIframe').src = '';
-    document.getElementById('previewModalIframe').classList.add('hidden');
+    document.getElementById('previewModalForExecutorImg').src = '';
+    document.getElementById('previewModalForExecutorImg').classList.add('hidden');
+    document.getElementById('previewModalForExecutorIframe').src = '';
+    document.getElementById('previewModalForExecutorIframe').classList.add('hidden');
 }
 
     function deleteAttachmentForExecutor(fileId) {
