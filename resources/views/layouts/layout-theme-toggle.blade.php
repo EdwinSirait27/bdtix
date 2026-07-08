@@ -62,41 +62,11 @@
                             </li>
                             @role('admin|executor')
 
-                            {{-- <li>
-                                <a href="{{ route('alltickets') }}"
-                                    class="group flex gap-x-3 rounded-lg p-3 text-sm leading-6 font-semibold transition-all
-                                   {{ request()->routeIs('alltickets')
-                                       ? 'bg-gradient-to-r from-blue-500 to-cyan-500 text-white shadow-md'
-                                       : 'text-slate-300 hover:bg-slate-800' }}">
-                                    <svg class="h-6 w-6 shrink-0" fill="none" stroke="currentColor"
-                                        viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2">
-                                        </path>
-                                    </svg>
-                                    All Tickets
-                                </a>
-                            </li> --}}
+                          
                             @endrole
                             @role('human')
 
-                            {{-- <li>
-                                <a href="{{ route('mytickets') }}"
-                                    class="group flex gap-x-3 rounded-lg p-3 text-sm leading-6 font-semibold transition-all
-                                   {{ request()->routeIs('mytickets')
-                                       ? 'bg-gradient-to-r from-blue-500 to-cyan-500 text-white shadow-md'
-                                       : 'text-slate-300 hover:bg-slate-800' }}">
-                                    <svg class="h-6 w-6 shrink-0" fill="none" stroke="currentColor"
-                                        viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2">
-                                        </path>
-                                    </svg>
-                                    My Tickets
-                                    <span
-                                        class="ml-auto inline-flex items-center rounded-full bg-blue-900 px-2.5 py-0.5 text-xs font-bold text-blue-300">{{ $openTicketCount ?? 0 }}</span>
-                                </a>
-                            </li> --}}
+                          
                             @endrole
                             @role('admin')
 

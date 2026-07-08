@@ -8,6 +8,7 @@
         .dataTables_wrapper {
             font-family: inherit;
         }
+
         .dataTables_wrapper .dataTables_length,
         .dataTables_wrapper .dataTables_filter,
         .dataTables_wrapper .dataTables_info,
@@ -747,11 +748,11 @@
             else if (status === 'Closed') cls = 'bg-slate-600';
 
             return `
-                                        <span class="inline-flex items-center gap-2 px-3 py-1 text-xs font-semibold text-white rounded-full ${cls}">
-                                            <span class="w-2 h-2 rounded-full bg-white"></span>
-                                            ${status}
-                                        </span>
-                                    `;
+                                                <span class="inline-flex items-center gap-2 px-3 py-1 text-xs font-semibold text-white rounded-full ${cls}">
+                                                    <span class="w-2 h-2 rounded-full bg-white"></span>
+                                                    ${status}
+                                                </span>
+                                            `;
         })()}
     </div>
 </div>                             

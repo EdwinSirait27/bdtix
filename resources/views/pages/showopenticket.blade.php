@@ -144,17 +144,14 @@
                             </svg>
 
                             @if ($file->status === 'uploaded')
-                                {{-- <button type="button" onclick="openSignedUrl('{{ $file->id }}')" --}}
                                     <button type="button" onclick="openSignedUrlForExecutor('{{ $file->id }}')"
 
                                     class="text-sm text-blue-400 hover:underline text-left truncate">
-                                    {{-- {{ $file->original_name ?? $file->file_name }} --}}
                                     {{ $file->file_name }}
 
                                 </button>
                             @else
                                 <span class="text-sm text-slate-400 truncate">
-                                    {{-- {{ $file->original_name ?? ($file->file_name ?? '-') }} --}}
                                     {{ $file->file_name ?? '-' }}
 
                                     <span class="text-xs text-yellow-500">(processing...)</span>
@@ -260,41 +257,7 @@
 
 
     {{-- Modal Preview Attachment --}}
-    {{-- <div id="previewModal" class="fixed inset-0 bg-black/80 hidden items-center justify-center z-50 p-4">
-        <div class="bg-slate-900 rounded-2xl w-full max-w-3xl border border-slate-700 flex flex-col"
-            style="max-height: 90vh">
-            <div class="flex items-center justify-between p-4 border-b border-slate-700 flex-shrink-0">
-                <h3 id="previewModalTitle" class="text-sm font-semibold text-slate-200 truncate pr-4"></h3>
-                <button type="button" onclick="closePreviewModal()" class="text-slate-400 hover:text-white flex-shrink-0">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                </button>
-            </div>
-            <div class="flex-1 overflow-hidden">
-                <iframe id="previewModalIframe" src="" class="w-full" style="height: 75vh" frameborder="0"
-                    allowfullscreen></iframe>
-            </div>
-        </div>
-    </div> --}}
-    {{-- <div id="previewModal" class="fixed inset-0 bg-black/90 hidden items-center justify-center z-50 p-4">
-    <div class="relative flex flex-col items-center justify-center max-w-full max-h-full">
-        <button type="button" onclick="closePreviewModal()"
-            class="absolute -top-3 -right-3 z-10 bg-slate-700 hover:bg-red-500 text-white rounded-full p-1.5 transition shadow-lg">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-            </svg>
-        </button>
-        <p id="previewModalTitle" class="text-xs text-slate-400 mb-2 self-start truncate max-w-full"></p>
-        <div id="previewModalContent" class="rounded-xl overflow-hidden shadow-2xl">
-            <img id="previewModalImg" src="" alt="" 
-                class="hidden max-w-[90vw] max-h-[85vh] object-contain rounded-xl">
-            <iframe id="previewModalIframe" src="" frameborder="0" allowfullscreen
-                class="hidden rounded-xl"
-                style="width:80vw; height:85vh;"></iframe>
-        </div>
-    </div>
-</div> --}}
+   
 <div id="previewModal" class="fixed inset-0 bg-black/80 hidden items-center justify-center z-50 p-4" onclick="if(event.target===this)closePreviewModal()">
     <div class="relative inline-flex flex-col items-center">
         <p id="previewModalTitle" class="text-xs text-slate-400 mb-2 self-start truncate max-w-sm"></p>
@@ -315,55 +278,6 @@
     </div>
 </div>
 
-    {{-- Modal Preview Executor Attachment --}}
-{{-- <div id="previewModalForExecutor" class="fixed inset-0 bg-black/80 hidden items-center justify-center p-4" style="z-index:9999;">
-    <div class="bg-slate-900 rounded-2xl w-full max-w-3xl border border-slate-700 flex flex-col shadow-2xl" style="max-height:90vh;">
-        <div class="flex items-center justify-between p-4 border-b border-slate-700 flex-shrink-0">
-            <h3 id="previewModalForExecutorTitle" class="text-sm font-semibold text-slate-200 truncate pr-4"></h3>
-            <button type="button" onclick="closePreviewModalForExecutor()" class="text-slate-400 hover:text-white flex-shrink-0 transition">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-            </button>
-        </div>
-        <div class="flex-1 overflow-hidden">
-            <iframe id="previewModalForExecutorIframe" src="" class="w-full" style="height:75vh;" frameborder="0" allowfullscreen></iframe>
-        </div>
-    </div>
-</div> --}}
-{{-- <div id="previewModalForExecutor" class="fixed inset-0 bg-black/90 hidden items-center justify-center p-2" style="z-index:9999;">
-    <div class="bg-slate-900 rounded-xl w-full h-full max-w-6xl border border-slate-700 flex flex-col shadow-2xl" style="max-height:96vh;">
-        <div class="flex items-center justify-between px-4 py-3 border-b border-slate-700 flex-shrink-0">
-            <h3 id="previewModalForExecutorTitle" class="text-sm font-semibold text-slate-200 truncate pr-4"></h3>
-            <button type="button" onclick="closePreviewModalForExecutor()" class="text-slate-400 hover:text-white flex-shrink-0 p-1 hover:bg-slate-700 rounded-lg transition">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-            </button>
-        </div>
-        <div class="flex-1 overflow-hidden">
-            <iframe id="previewModalForExecutorIframe" src="" class="w-full h-full" frameborder="0" allowfullscreen></iframe>
-        </div>
-    </div>
-</div> --}}
-{{-- <div id="previewModalForExecutor" class="fixed inset-0 bg-black/90 hidden items-center justify-center z-50 p-4">
-    <div class="relative flex flex-col items-center justify-center max-w-full max-h-full">
-        <button type="button" onclick="closePreviewModalForExecutor()"
-            class="absolute -top-3 -right-3 z-10 bg-slate-700 hover:bg-red-500 text-white rounded-full p-1.5 transition shadow-lg">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-            </svg>
-        </button>
-        <p id="previewModalForExecutorTitle" class="text-xs text-slate-400 mb-2 self-start truncate max-w-full"></p>
-        <div id="previewModalForExecutorContent" class="rounded-xl overflow-hidden shadow-2xl">
-            <img id="previewModalForExecutorImg" src="" alt="" 
-                class="hidden max-w-[90vw] max-h-[85vh] object-contain rounded-xl">
-            <iframe id="previewModalForExecutorIframe" src="" frameborder="0" allowfullscreen
-                class="hidden rounded-xl"
-                style="width:80vw; height:85vh;"></iframe>
-        </div>
-    </div>
-</div> --}}
 <div id="previewModalForExecutor" class="fixed inset-0 bg-black/80 hidden items-center justify-center z-50 p-4" onclick="if(event.target===this)closePreviewModalForExecutor()">
     <div class="relative inline-flex flex-col items-center">
         <p id="previewModalForExecutorTitle" class="text-xs text-slate-400 mb-2 self-start truncate max-w-sm"></p>
@@ -388,49 +302,7 @@
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script>
             // for human
-            // async function openSignedUrl(attachmentId) {
-            //     try {
-            //         const res = await fetch(`/attachments/${attachmentId}/signed-url`, {
-            //             headers: {
-            //                 'Accept': 'application/json'
-            //             },
-            //             credentials: 'same-origin',
-            //         });
-            //         const data = await res.json();
-            //         if (!res.ok) throw new Error(data.message || 'Failed to get URL');
-
-            //         const previewableMimes = ['image/jpeg', 'image/png', 'image/gif', 'application/pdf'];
-
-            //         if (previewableMimes.includes(data.mime_type)) {
-            //             document.getElementById('previewModalTitle').textContent = data.file_name ?? 'Attachment';
-            //             document.getElementById('previewModalIframe').src = data.url;
-            //             const modal = document.getElementById('previewModal');
-            //             modal.classList.remove('hidden');
-            //             modal.classList.add('flex');
-            //         } else {
-            //             // File tidak bisa di-preview, langsung download
-            //             const a = document.createElement('a');
-            //             a.href = data.url;
-            //             a.download = data.file_name ?? 'attachment';
-            //             a.click();
-            //         }
-            //     } catch (e) {
-            //         Swal.fire({
-            //             icon: 'error',
-            //             title: 'Failed',
-            //             text: e.message || 'Failed to open file.',
-            //             background: '#0f172a',
-            //             color: '#e2e8f0',
-            //         });
-            //     }
-            // }
-
-            // function closePreviewModal() {
-            //     const modal = document.getElementById('previewModal');
-            //     modal.classList.add('hidden');
-            //     modal.classList.remove('flex');
-            //     document.getElementById('previewModalIframe').src = '';
-            // }
+       
             async function openSignedUrl(attachmentId) {
     try {
         const res = await fetch(`/attachments/${attachmentId}/signed-url`, {
@@ -543,39 +415,6 @@ function closePreviewModal() {
     document.getElementById('previewModalIframe').src = '';
     document.getElementById('previewModalIframe').classList.add('hidden');
 }
-// function openSignedUrlForExecutor(fileId) {
-//     const url = `/attachmentsforexecutor/${fileId}/signed-url-for-executor`;
-//     fetch(url, {
-//         headers: {
-//             'Accept': 'application/json',
-//             'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content
-//         },
-//         credentials: 'same-origin'
-//     })
-//     .then(res => res.json())
-//     .then(data => {
-//         if (!data.url) throw new Error('No URL returned');
-//         document.getElementById('previewModalForExecutorTitle').textContent = data.file_name ?? 'Preview';
-//         document.getElementById('previewModalForExecutorIframe').src = data.url;
-//         const modal = document.getElementById('previewModalForExecutor');
-//         modal.classList.remove('hidden');
-//         modal.classList.add('flex');
-//     })
-//     .catch(err => Swal.fire({
-//         icon: 'error',
-//         title: 'Failed',
-//         text: err.message || 'Failed to open file.',
-//         background: '#0f172a',
-//         color: '#e2e8f0',
-//     }));
-// }
-
-//     function closePreviewModalForExecutor() {
-//         const modal = document.getElementById('previewModalForExecutor');
-//         modal.classList.add('hidden');
-//         modal.classList.remove('flex');
-//         document.getElementById('previewModalForExecutorIframe').src = '';
-//     }
 
     function deleteAttachmentForExecutor(fileId) {
         if (!confirm('Delete this attachment?')) return;

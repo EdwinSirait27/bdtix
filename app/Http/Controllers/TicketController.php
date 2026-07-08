@@ -1339,51 +1339,7 @@ class TicketController extends Controller
         $ticket->badge_class = $map[$status] ?? 'bg-slate-500 text-white';
         return view('pages.showmytickets', compact('ticket', 'estimationDate', 'estimationToDate', 'finishedat'));
     }
-    // public function reviewticket($hash)
-    // {
-    //      /** @var \App\Models\User $user */
-        
-    //     $userId = Auth::user();
-    //     $user   = Auth::user();
-    //     Log::info('Access review ticket page - start', [
-    //         'hash'  => $hash,
-    //         'user'  => $userId,
-    //     ]);
-    //     $query = Tickets::with([
-    //         'user.employee',
-    //         'attachments',
-    //     ]);
-    //      /** @var \App\Models\User $user */
-    //     if ($user->hasRole('human')) {
-    //         $query->where('user_id', $userId);
-    //     }
-
-    //     $ticket = $query->get()->first(function ($ticket) use ($hash) {
-    //         $hashedId = substr(
-    //             hash('sha256', $ticket->id . config('app.key')),
-    //             0,
-    //             8
-    //         );
-    //         return hash_equals($hashedId, $hash);
-    //     });
-
-    //     if (! $ticket) {
-    //         Log::warning('Review ticket access failed - ticket not found', [
-    //             'hash' => $hash,
-    //             'user' => $userId,
-    //         ]);
-
-    //         abort(404, 'Ticket not found');
-    //     }
-
-    //     Log::info('Review ticket page loaded', [
-    //         'ticket_id' => $ticket->id,
-    //         'status'    => $ticket->status,
-    //         'user'      => $userId,
-    //     ]);
-
-    //     return view('pages.reviewtickets', compact('ticket'));
-    // }
+   
     public function reviewticket($hash)
 {
     /** @var \App\Models\User $user */
@@ -1512,7 +1468,7 @@ class TicketController extends Controller
 
     private function findTicketByHash(string $hash): Tickets
     {
-        $ticket = Tickets::with('user.employee', 'executorAttachments')
+        $ticket = Tickets::with('user.employee', 'attachments','executorAttachments')
             ->whereRaw(
                 "SUBSTRING(SHA2(CONCAT(id, ?), 256), 1, 8) = ?",
                 [config('app.key'), $hash]

@@ -327,7 +327,8 @@
                         <span>Executor Attachments</span>
                     </label>
                     <div class="border border-slate-700 rounded-xl p-5 bg-slate-800/40 min-h-[80px]">
-                        {{-- @if ($ticket->executorAttachments->count())
+
+                        @if ($ticket->executorAttachments->count())
                             <ul class="space-y-2 text-sm text-slate-300">
                                 @foreach ($ticket->executorAttachments as $file)
                                     <li class="flex items-center gap-2">
@@ -336,53 +337,28 @@
                                             <path
                                                 d="M8 2a4 4 0 00-4 4v8a6 6 0 0012 0V6a2 2 0 10-4 0v7a1 1 0 102 0V6a4 4 0 00-8 0v8a4 4 0 008 0V6" />
                                         </svg>
-                                        @if ($file->drive_file_id && $file->status === 'uploaded')
+                                        @if ($file->status === 'uploaded')
                                             <button type="button"
-                                                onclick="openPreviewModal('https://drive.google.com/file/d/{{ $file->drive_file_id }}/preview', '{{ addslashes($file->original_name ?? $file->file_name) }}')"
-                                                class="text-sm text-blue-400 hover:underline text-left">
-                                                {{ $file->original_name ?? $file->file_name }}
+                                                onclick="openSignedUrlForExecutor('{{ $file->id }}')"
+                                                class="text-sm text-blue-400 hover:underline text-left truncate">
+                                                {{ $file->file_name }}
                                             </button>
                                         @else
-                                            <span class="text-sm text-slate-400">
-                                                {{ $file->original_name ?? $file->file_name }}
+                                            <span class="text-sm text-slate-400 truncate">
+                                                {{ $file->file_name }}
                                                 <span class="text-xs text-yellow-500">(processing...)</span>
                                             </span>
                                         @endif
-                                        <span class="text-xs text-slate-500">({{ $file->human_size }})</span>
+                                        @if (!empty($file->human_size))
+                                            <span
+                                                class="text-xs text-slate-500 flex-shrink-0">({{ $file->human_size }})</span>
+                                        @endif
                                     </li>
                                 @endforeach
                             </ul>
                         @else
                             <p class="text-sm text-slate-500">No executor attachments yet</p>
-                        @endif --}}
-                        @if ($ticket->executorAttachments->count())
-    <ul class="space-y-2 text-sm text-slate-300">
-        @foreach ($ticket->executorAttachments as $file)
-            <li class="flex items-center gap-2">
-                <svg class="w-4 h-4 text-slate-400 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M8 2a4 4 0 00-4 4v8a6 6 0 0012 0V6a2 2 0 10-4 0v7a1 1 0 102 0V6a4 4 0 00-8 0v8a4 4 0 008 0V6" />
-                </svg>
-                @if ($file->status === 'uploaded')
-                    <button type="button"
-                        onclick="openSignedUrlForExecutor('{{ $file->id }}')"
-                        class="text-sm text-blue-400 hover:underline text-left truncate">
-                        {{ $file->file_name }}
-                    </button>
-                @else
-                    <span class="text-sm text-slate-400 truncate">
-                        {{ $file->file_name }}
-                        <span class="text-xs text-yellow-500">(processing...)</span>
-                    </span>
-                @endif
-                @if (!empty($file->human_size))
-                    <span class="text-xs text-slate-500 flex-shrink-0">({{ $file->human_size }})</span>
-                @endif
-            </li>
-        @endforeach
-    </ul>
-@else
-    <p class="text-sm text-slate-500">No executor attachments yet</p>
-@endif
+                        @endif
                     </div>
                 </div>
             @endif
@@ -432,7 +408,7 @@
     </div>
 
     {{-- Modal Preview Attachment --}}
-    <div id="previewModal" class="fixed inset-0 bg-black/80 hidden items-center justify-center z-50 p-4">
+    {{-- <div id="previewModal" class="fixed inset-0 bg-black/80 hidden items-center justify-center z-50 p-4">
         <div class="bg-slate-900 rounded-2xl w-full max-w-3xl border border-slate-700 flex flex-col"
             style="max-height: 90vh">
             <div class="flex items-center justify-between p-4 border-b border-slate-700 flex-shrink-0">
@@ -449,7 +425,26 @@
                     allowfullscreen></iframe>
             </div>
         </div>
+    </div> --}}
+    <div id="previewModal" class="fixed inset-0 bg-black/80 hidden items-center justify-center z-50 p-4" onclick="if(event.target===this)closePreviewModal()">
+    <div class="relative inline-flex flex-col items-center">
+        <p id="previewModalTitle" class="text-xs text-slate-400 mb-2 self-start truncate max-w-sm"></p>
+        <div class="relative">
+            <button type="button" onclick="closePreviewModal()"
+                class="absolute -top-2 -right-2 z-10 bg-slate-700 hover:bg-red-500 text-white rounded-full p-1 transition shadow-lg">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+            </button>
+            <img id="previewModalImg" src="" alt=""
+                class="hidden rounded-xl shadow-2xl object-contain"
+                style="max-width:70vw; max-height:80vh;">
+            <iframe id="previewModalIframe" src="" frameborder="0" allowfullscreen
+                class="hidden rounded-xl shadow-2xl"
+                style="width:70vw; height:80vh;"></iframe>
+        </div>
     </div>
+</div>
 
     @push('scripts')
         <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
@@ -646,42 +641,61 @@
 
         {{-- Script Preview Modal --}}
         <script>
-            function openPreviewModal(url, name) {
-                document.getElementById('previewModalTitle').textContent = name;
-                document.getElementById('previewModalIframe').src = url;
-                const modal = document.getElementById('previewModal');
-                modal.classList.remove('hidden');
-                modal.classList.add('flex');
-            }
+       async function openSignedUrl(attachmentId) {
+    try {
+        const res = await fetch(`/attachments/${attachmentId}/signed-url`, {
+            headers: { 'Accept': 'application/json' },
+            credentials: 'same-origin',
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.message || 'Failed to get URL');
 
-            function closePreviewModal() {
-                const modal = document.getElementById('previewModal');
-                modal.classList.add('hidden');
-                modal.classList.remove('flex');
-                document.getElementById('previewModalIframe').src = '';
-            }
+        const img = document.getElementById('previewModalImg');
+        const iframe = document.getElementById('previewModalIframe');
+        const title = document.getElementById('previewModalTitle');
+        const modal = document.getElementById('previewModal');
 
-            document.getElementById('previewModal')?.addEventListener('click', function(e) {
-                if (e.target === this) closePreviewModal();
-            });
-            // via s3
-            // Signed URL preview
-            async function openSignedUrl(attachmentId) {
-                try {
-                    const res = await fetch(`/attachments/${attachmentId}/signed-url`, {
-                        headers: {
-                            'Accept': 'application/json'
-                        },
-                        credentials: 'same-origin',
-                    });
-                    const data = await res.json();
-                    if (!res.ok) throw new Error(data.message || 'Failed to get URL');
-                    window.open(data.url, '_blank');
-                } catch (e) {
-                    toastr.error(e.message || 'Failed to open file.');
-                }
-            }
+        title.textContent = data.file_name ?? 'Attachment';
 
+        const imageMimes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+        if (imageMimes.includes(data.mime_type)) {
+            img.src = data.url;
+            img.classList.remove('hidden');
+            iframe.classList.add('hidden');
+            iframe.src = '';
+        } else if (data.mime_type === 'application/pdf') {
+            iframe.src = data.url;
+            iframe.classList.remove('hidden');
+            img.classList.add('hidden');
+            img.src = '';
+        } else {
+            const a = document.createElement('a');
+            a.href = data.url;
+            a.download = data.file_name ?? 'attachment';
+            a.click();
+            return;
+        }
+
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+    } catch (e) {
+        Swal.fire({ icon: 'error', title: 'Failed', text: e.message || 'Failed to open file.', background: '#0f172a', color: '#e2e8f0' });
+    }
+}
+
+function closePreviewModal() {
+    const modal = document.getElementById('previewModal');
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+    document.getElementById('previewModalImg').src = '';
+    document.getElementById('previewModalImg').classList.add('hidden');
+    document.getElementById('previewModalIframe').src = '';
+    document.getElementById('previewModalIframe').classList.add('hidden');
+}
+
+document.getElementById('previewModal')?.addEventListener('click', function(e) {
+    if (e.target === this) closePreviewModal();
+});
             // Delete attachment
             async function deleteAttachment(attachmentId) {
                 const result = await Swal.fire({

@@ -62,20 +62,15 @@
                 </div>
 
                 <div class="grid grid-cols-2 gap-4 pt-4 border-t border-slate-700">
-                    {{-- <div>
+
+                    <div>
                         <p class="text-xs text-slate-500 mb-1">Handled By</p>
                         <p class="text-sm font-medium text-slate-300">
-                            {{ optional($ticket->executor->employee)->employee_name ?? 'N/A' }}</p>
-                    </div> --}}
-                      <div>
-    <p class="text-xs text-slate-500 mb-1">Handled By</p>
-    <p class="text-sm font-medium text-slate-300">
-        {{ $executor?->employee?->employee_name ?? 'N/A' }}
-                    {{-- {{ $executor?->employee?->employee_name ?? '-' }} --}}
+                            {{ $executor?->employee?->employee_name ?? 'N/A' }}
 
-    </p>
-</div>
-                    
+                        </p>
+                    </div>
+
                     <div>
                         <p class="text-xs text-slate-500 mb-1">Location Problem</p>
                         <p class="text-sm font-medium text-slate-300">
@@ -529,17 +524,13 @@
             </div>
 
             <div class="grid grid-cols-2 gap-4 pt-4 border-t border-slate-700">
-                {{-- <div>
+
+                <div>
                     <p class="text-xs text-slate-500 mb-1">Handled By</p>
                     <p class="text-sm font-medium text-slate-300">
-                        {{ optional($ticket->executor->employee)->employee_name ?? 'N/A' }}</p>
-                </div> --}}
-                <div>
-    <p class="text-xs text-slate-500 mb-1">Handled By</p>
-    <p class="text-sm font-medium text-slate-300">
-        {{ $executor?->employee?->employee_name ?? 'N/A' }}
-    </p>
-</div>
+                        {{ $executor?->employee?->employee_name ?? 'N/A' }}
+                    </p>
+                </div>
                 <div>
                     <p class="text-xs text-slate-500 mb-1">Category</p>
                     <p class="text-sm font-medium text-slate-300">{{ $ticket->category }}</p>
@@ -590,7 +581,7 @@
                         <p class="text-sm text-slate-300">{{ $ticket->notes_executor }}</p>
                     </div>
                 @endif
-              
+
                 @if ($ticket->attachments->count())
                     <div>
                         <p class="text-xs text-slate-500 mb-2">Attachments</p>

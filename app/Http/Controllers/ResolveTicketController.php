@@ -113,9 +113,7 @@ class ResolveTicketController extends Controller
             ->addColumn('store_name', function ($ticket) {
                 return optional($ticket->store)->name ?? '-';
             })
-//               ->addColumn('store_name', function($ticket) =>
-//     optional($t->store)->name ?? '-'
-// )
+
             ->orderColumn('employee_name', function ($query, $order) {})
             
             ->addColumn('action', function ($ticket) {

@@ -22,7 +22,7 @@
                 </div>
             </div>
         </div>
-       
+
         <form action="{{ route('updateusers', request()->route('hash')) }}" method="POST">
             @csrf
             <div>

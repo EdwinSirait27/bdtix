@@ -68,12 +68,15 @@
             border-bottom: 1px solid #ffffff;
             transition: background-color 0.2s;
         }
+
         .dark #users-table tbody tr {
             border-bottom-color: #ffffff;
         }
+
         #users-table tbody tr:hover {
             background-color: #000000;
         }
+
         .dark #users-table tbody tr:hover {
             background-color: #1e293b;
         }
@@ -461,9 +464,9 @@
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
     </style>
-         <div class="space-y-4 md:space-y-6">
-            {{-- Statistics Cards --}}
-           <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
+    <div class="space-y-4 md:space-y-6">
+        {{-- Statistics Cards --}}
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
             <div
                 class="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl md:rounded-2xl p-4 md:p-6 text-white shadow-lg">
                 <div class="flex items-center justify-between mb-2">
@@ -500,12 +503,9 @@
                 </div>
                 {{-- <p class="text-2xl md:text-3xl font-bold mb-1">{{ number_format($avgRating ?? 0, 1) }} / 5</p> --}}
                 <p class="text-2xl md:text-3xl font-bold mb-1">
-                        {{
-                            fmod(round($avgRating ?? 0,1),1) == 0
-                            ? number_format($avgRating, 0)
-                            : number_format($avgRating, 1)
-                        }} / 5
-                    </p>
+                    {{ fmod(round($avgRating ?? 0, 1), 1) == 0 ? number_format($avgRating, 0) : number_format($avgRating, 1) }}
+                    / 5
+                </p>
 
                 <p class="text-purple-100 text-xs">Total Handled : {{ $totalReviewedTickets }} Ticket's</p>
             </div>
@@ -523,125 +523,115 @@
                 <p class="text-orange-100 text-xs">Overdue Ticket</p>
             </div>
         </div>
-            {{-- Main Content Card --}}
-            <div class="bg-slate-800 rounded-xl md:rounded-2xl shadow-lg border border-slate-700 overflow-hidden">
-                {{-- Card Header --}}
-                <div class="px-4 py-4 md:px-6 md:py-5 border-b border-slate-700">
-                    <div class="flex flex-col gap-3 md:gap-4">
-                        <div>
-                            <h2 class="text-lg md:text-xl font-bold text-white">All your closed tickets</h2>
-                            <p class="text-xs md:text-sm text-slate-400 mt-1">Manage and view all your closed ticket's</p>
+        {{-- Main Content Card --}}
+        <div class="bg-slate-800 rounded-xl md:rounded-2xl shadow-lg border border-slate-700 overflow-hidden">
+            {{-- Card Header --}}
+            <div class="px-4 py-4 md:px-6 md:py-5 border-b border-slate-700">
+                <div class="flex flex-col gap-3 md:gap-4">
+                    <div>
+                        <h2 class="text-lg md:text-xl font-bold text-white">All your closed tickets</h2>
+                        <p class="text-xs md:text-sm text-slate-400 mt-1">Manage and view all your closed ticket's</p>
+                    </div>
+
+                    <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 md:gap-3">
+                        {{-- Search Input --}}
+
+                        <div class="flex flex-col gap-1">
+                            <label for="filterCategory" class="text-xs text-slate-300">Category</label>
+
+                            <select id="filterCategory" class="select2">
+                                <option value="">All Category</option>
+                                <option value="Plumbing">Plumbing</option>
+                                <option value="Building">Building</option>
+                                <option value="Mechanical Engineering">Mechanical Engineering</option>
+                                <option value="Others">Others</option>
+                            </select>
+                        </div>
+                        <div class="flex flex-col gap-1">
+                            <label for="filterPriority" class="text-xs text-slate-300">Dificulty</label>
+
+                            <select id="filterPriority" class="select2">
+                                <option value="">All Dificulty</option>
+                                <option value="Low">Low</option>
+                                <option value="Medium">Medium</option>
+                                <option value="High">High</option>
+                            </select>
+                        </div>
+                        <div class="flex flex-col gap-1">
+                            <label for="dateFrom" class="text-xs text-slate-300">Date From</label>
+
+                            <input type="date" id="dateFrom" placeholder="YYYY-MM-DD"
+                                class="px-3 py-2 rounded w-40
+               bg-slate-600 text-white
+               placeholder-white
+               border border-slate-500
+               focus:outline-none focus:ring-2 focus:ring-slate-400">
+                        </div>
+                        <div class="flex flex-col gap-1">
+                            <label for="dateTo" class="text-xs text-slate-300">To</label>
+                            <input placeholder="YYYY-MM-DD" type="date" id="dateTo"
+                                class="px-3 py-2 rounded w-40
+               bg-slate-600 text-white
+               placeholder-white
+               border border-slate-500
+               focus:outline-none focus:ring-2 focus:ring-slate-400">
                         </div>
 
-                        <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 md:gap-3">
-                            {{-- Search Input --}}
-                            {{-- <div class="flex flex-col gap-1">
-                                <label for="filterStatus" class="text-xs text-slate-300">Status</label>
-                                <select id="filterStatus" class="select2">
+                        <div class="flex flex-col gap-1">
+                            <label for="filterStatus" class="text-xs text-slate-300">Filter</label>
 
-                                    <option value="">All Status</option>
-                                    <option value="Open">Open</option>
-                                    <option value="Progress">Progress</option>
-                                    <option value="Closed">Closed</option>
-                                    <option value="OVerdue">OVerdue</option>
-                                </select>
-                            </div> --}}
-                            <div class="flex flex-col gap-1">
-                                <label for="filterCategory" class="text-xs text-slate-300">Category</label>
+                            <button id="btnFilter"
+                                class="px-4 py-2 bg-cyan-600 hover:bg-cyan-700 text-white rounded-lg transition">
+                                Filter
+                            </button>
+                        </div>
+                        <div class="flex flex-col gap-1">
+                            <label for="filterStatus" class="text-xs text-slate-300">Reset Filter</label>
 
-                                <select id="filterCategory" class="select2">
-                                    <option value="">All Category</option>
-                                    <option value="Plumbing">Plumbing</option>
-                                    <option value="Building">Building</option>
-                                    <option value="Mechanical Engineering">Mechanical Engineering</option>
-                                    <option value="Others">Others</option>
-                                </select>
-                            </div>
-                            <div class="flex flex-col gap-1">
-                                <label for="filterPriority" class="text-xs text-slate-300">Dificulty</label>
-
-                                <select id="filterPriority" class="select2">
-                                    <option value="">All Dificulty</option>
-                                    <option value="Low">Low</option>
-                                    <option value="Medium">Medium</option>
-                                    <option value="High">High</option>
-                                </select>
-                            </div>
-                            <div class="flex flex-col gap-1">
-                                <label for="dateFrom" class="text-xs text-slate-300">Date From</label>
-
-                                <input type="date" id="dateFrom" placeholder="YYYY-MM-DD"
-                                   class="px-3 py-2 rounded w-40
-               bg-slate-600 text-white
-               placeholder-white
-               border border-slate-500
-               focus:outline-none focus:ring-2 focus:ring-slate-400">
-                            </div>
-                            <div class="flex flex-col gap-1">
-                                <label for="dateTo" class="text-xs text-slate-300">To</label>
-                                <input placeholder="YYYY-MM-DD" type="date" id="dateTo"
-                                    class="px-3 py-2 rounded w-40
-               bg-slate-600 text-white
-               placeholder-white
-               border border-slate-500
-               focus:outline-none focus:ring-2 focus:ring-slate-400">
-                            </div>
-
-                            <div class="flex flex-col gap-1">
-                                <label for="filterStatus" class="text-xs text-slate-300">Filter</label>
-
-                                <button id="btnFilter"
-                                    class="px-4 py-2 bg-cyan-600 hover:bg-cyan-700 text-white rounded-lg transition">
-                                    Filter
-                                </button>
-                            </div>
-                            <div class="flex flex-col gap-1">
-                                <label for="filterStatus" class="text-xs text-slate-300">Reset Filter</label>
-
-                                <button id="btnReset"
-                                    class="px-4 py-2 bg-slate-600 hover:bg-slate-700 text-white rounded-lg transition">
-                                    Reset
-                                </button>
-                            </div>
-                            <div class="relative flex-1">
-                                <input type="text" id="table-search" placeholder="Search tickes by title"
-                                    class="w-full pl-10 pr-4 py-2 border border-slate-600 rounded-lg bg-slate-700 text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent placeholder-slate-400">
-                                <svg class="absolute left-3 top-2.5 w-5 h-5 text-slate-400" fill="none"
-                                    stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                                </svg>
-                            </div>
+                            <button id="btnReset"
+                                class="px-4 py-2 bg-slate-600 hover:bg-slate-700 text-white rounded-lg transition">
+                                Reset
+                            </button>
+                        </div>
+                        <div class="relative flex-1">
+                            <input type="text" id="table-search" placeholder="Search tickes by title"
+                                class="w-full pl-10 pr-4 py-2 border border-slate-600 rounded-lg bg-slate-700 text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent placeholder-slate-400">
+                            <svg class="absolute left-3 top-2.5 w-5 h-5 text-slate-400" fill="none"
+                                stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                            </svg>
                         </div>
                     </div>
                 </div>
+            </div>
 
-                {{-- Card Body --}}
-                <div class="p-4 md:p-6">
-                    {{-- Loading State --}}
-                    <div id="loading-state" class="flex items-center justify-center py-12">
-                        <div class="text-center">
-                            <svg class="animate-spin h-10 w-10 text-blue-500 mx-auto mb-4" fill="none"
-                                viewBox="0 0 24 24">
-                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
-                                    stroke-width="4"></circle>
-                                <path class="opacity-75" fill="currentColor"
-                                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
-                                </path>
-                            </svg>
-                            <p class="text-slate-400 text-sm">Loading tickets...</p>
-                        </div>
+            {{-- Card Body --}}
+            <div class="p-4 md:p-6">
+                {{-- Loading State --}}
+                <div id="loading-state" class="flex items-center justify-center py-12">
+                    <div class="text-center">
+                        <svg class="animate-spin h-10 w-10 text-blue-500 mx-auto mb-4" fill="none"
+                            viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
+                                stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor"
+                                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                            </path>
+                        </svg>
+                        <p class="text-slate-400 text-sm">Loading tickets...</p>
                     </div>
+                </div>
 
-                    <div id="users-table-wrapper" class="overflow-x-auto -mx-4 md:mx-0" style="display: none;">
-                        <div class="inline-block min-w-full align-middle">
-                            <div class="overflow-hidden">
-                                <table class="min-w-full divide-y divide-slate-700" id="users-table">
-                                    <thead class="bg-slate-900">
-                                        <tr>
-                                            <th class="text-center">Queue</th>
-                                            <th class="text-center">User</th>
-                                            <th class="text-center">Location</th>
+                <div id="users-table-wrapper" class="overflow-x-auto -mx-4 md:mx-0" style="display: none;">
+                    <div class="inline-block min-w-full align-middle">
+                        <div class="overflow-hidden">
+                            <table class="min-w-full divide-y divide-slate-700" id="users-table">
+                                <thead class="bg-slate-900">
+                                    <tr>
+                                        <th class="text-center">Queue</th>
+                                        <th class="text-center">User</th>
+                                        <th class="text-center">Location</th>
                                         <th class="text-center">Title</th>
                                         <th class="text-center">Categories</th>
                                         <th class="text-center">SCat</th>
@@ -652,176 +642,169 @@
                                         <th class="text-center">Action</th>
 
 
-                                        </tr>
-                                    </thead>
-                                    <tbody class="bg-slate-800 divide-y divide-slate-700">
-                                    </tbody>
-                                </table>
-                            </div>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-slate-800 divide-y divide-slate-700">
+                                </tbody>
+                            </table>
                         </div>
                     </div>
+                </div>
 
-                    <div id="mobile-cards-view" style="display: none;">
-                        <div id="mobile-cards-container">
-                        </div>
-                        <div id="mobile-pagination"></div>
-                        <div id="mobile-info" class="mobile-info-text"></div>
+                <div id="mobile-cards-view" style="display: none;">
+                    <div id="mobile-cards-container">
                     </div>
+                    <div id="mobile-pagination"></div>
+                    <div id="mobile-info" class="mobile-info-text"></div>
                 </div>
             </div>
         </div>
+    </div>
 
-        @push('scripts')
-          
-            <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-            <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/plugins/monthSelect/index.js"></script>
-            <script>
-                document.addEventListener('DOMContentLoaded', function() {
-                    flatpickr("#month", {
-                        dateFormat: "Y-m",
-                        plugins: [
-                            new monthSelectPlugin({
-                                shorthand: true,
-                                dateFormat: "Y-m",
-                                altFormat: "F Y"
-                            })
-                        ]
-                    });
+    @push('scripts')
+        <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+        <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/plugins/monthSelect/index.js"></script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                flatpickr("#month", {
+                    dateFormat: "Y-m",
+                    plugins: [
+                        new monthSelectPlugin({
+                            shorthand: true,
+                            dateFormat: "Y-m",
+                            altFormat: "F Y"
+                        })
+                    ]
                 });
-                document.addEventListener('DOMContentLoaded', function() {
-                    flatpickr("#from", {
-                        dateFormat: "Y-m-d",
-                        defaultDate: "{{ request('from') }}",
-                        allowInput: true
-                    });
+            });
+            document.addEventListener('DOMContentLoaded', function() {
+                flatpickr("#from", {
+                    dateFormat: "Y-m-d",
+                    defaultDate: "{{ request('from') }}",
+                    allowInput: true
                 });
-                document.addEventListener('DOMContentLoaded', function() {
-                    flatpickr("#to", {
-                        dateFormat: "Y-m-d",
-                        defaultDate: "{{ request('to') }}",
-                        allowInput: true
-                    });
+            });
+            document.addEventListener('DOMContentLoaded', function() {
+                flatpickr("#to", {
+                    dateFormat: "Y-m-d",
+                    defaultDate: "{{ request('to') }}",
+                    allowInput: true
                 });
-                document.addEventListener('DOMContentLoaded', function() {
-                    flatpickr("#dateFrom", {
-                        dateFormat: "Y-m-d",
-                        defaultDate: "{{ request('dateFrom') }}",
-                        allowInput: true
-                    });
+            });
+            document.addEventListener('DOMContentLoaded', function() {
+                flatpickr("#dateFrom", {
+                    dateFormat: "Y-m-d",
+                    defaultDate: "{{ request('dateFrom') }}",
+                    allowInput: true
                 });
-                document.addEventListener('DOMContentLoaded', function() {
-                    flatpickr("#dateTo", {
-                        dateFormat: "Y-m-d",
-                        defaultDate: "{{ request('dateTo') }}",
-                        allowInput: true
-                    });
+            });
+            document.addEventListener('DOMContentLoaded', function() {
+                flatpickr("#dateTo", {
+                    dateFormat: "Y-m-d",
+                    defaultDate: "{{ request('dateTo') }}",
+                    allowInput: true
                 });
-            </script>
+            });
+        </script>
 
 
 
 
-           
 
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-            <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
-            <script>
-                $(document).ready(function() {
-                    $('#filterCategory').select2({
-                        placeholder: 'Choose Category...',
-                        allowClear: true,
-                        width: '100%',
-                        dropdownParent: $('#filterCategory').parent()
-                    });
-                    // $('#filterStatus').select2({
-                    //     placeholder: 'Choose Status...',
-                    //     allowClear: true,
-                    //     width: '100%',
-                    //     dropdownParent: $('#filterStatus').parent()
-                    // });
-                    $('#filterPriority').select2({
-                        placeholder: 'Choose Dificulty...',
-                        allowClear: true,
-                        width: '100%',
-                        dropdownParent: $('#filterPriority').parent()
-                    });
-                    $('#quarter').select2({
-                        placeholder: 'Choose Quarter...',
-                        allowClear: true,
-                        width: '100%',
-                        dropdownParent: $('#quarter').parent()
-                    });
-                    $('#category').select2({
-                        placeholder: 'Choose Category...',
-                        allowClear: true,
-                        width: '100%',
-                        dropdownParent: $('#category').parent()
-                    });
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+        <script>
+            $(document).ready(function() {
+                $('#filterCategory').select2({
+                    placeholder: 'Choose Category...',
+                    allowClear: true,
+                    width: '100%',
+                    dropdownParent: $('#filterCategory').parent()
                 });
-            </script>
-            <script>
-                toastr.options = {
-                    closeButton: true,
-                    progressBar: true,
-                    positionClass: "toast-top-right",
-                    timeOut: "3000"
-                };
 
-                @if (session('success'))
-                    toastr.success(@json(session('success')));
-                @endif
+                $('#filterPriority').select2({
+                    placeholder: 'Choose Dificulty...',
+                    allowClear: true,
+                    width: '100%',
+                    dropdownParent: $('#filterPriority').parent()
+                });
+                $('#quarter').select2({
+                    placeholder: 'Choose Quarter...',
+                    allowClear: true,
+                    width: '100%',
+                    dropdownParent: $('#quarter').parent()
+                });
+                $('#category').select2({
+                    placeholder: 'Choose Category...',
+                    allowClear: true,
+                    width: '100%',
+                    dropdownParent: $('#category').parent()
+                });
+            });
+        </script>
+        <script>
+            toastr.options = {
+                closeButton: true,
+                progressBar: true,
+                positionClass: "toast-top-right",
+                timeOut: "3000"
+            };
 
-                @if (session('error'))
-                    toastr.error(@json(session('error')));
-                @endif
-            </script>
-            <script>
-                $(function() {
-                    var table = $('#users-table').DataTable({
-                        processing: true,
-                        serverSide: true,
-                        responsive: true,
-                        lengthMenu: [
-                            [10, 25, 50, 100, -1],
-                            [10, 25, 50, 100, "All"]
-                        ],
-                        ajax: {
-                            url: "{{ route('resolveticket.resolveticket') }}",
-                            data: function(d) {
-                                d.status = $('#filterStatus').val();
-                                d.category = $('#filterCategory').val();
-                                d.priority = $('#filterPriority').val();
-                                d.date_from = $('#dateFrom').val();
-                                d.date_to = $('#dateTo').val();
-                            }
+            @if (session('success'))
+                toastr.success(@json(session('success')));
+            @endif
+
+            @if (session('error'))
+                toastr.error(@json(session('error')));
+            @endif
+        </script>
+        <script>
+            $(function() {
+                var table = $('#users-table').DataTable({
+                    processing: true,
+                    serverSide: true,
+                    responsive: true,
+                    lengthMenu: [
+                        [10, 25, 50, 100, -1],
+                        [10, 25, 50, 100, "All"]
+                    ],
+                    ajax: {
+                        url: "{{ route('resolveticket.resolveticket') }}",
+                        data: function(d) {
+                            d.status = $('#filterStatus').val();
+                            d.category = $('#filterCategory').val();
+                            d.priority = $('#filterPriority').val();
+                            d.date_from = $('#dateFrom').val();
+                            d.date_to = $('#dateTo').val();
+                        }
+                    },
+                    columnDefs: [{
+                        targets: '_all',
+                        className: 'dt-center'
+                    }],
+                    columns: [{
+                            data: 'queue_number',
+                            name: 'queue_number',
+                            width: '5%'
                         },
-                        columnDefs: [{
-                            targets: '_all',
-                            className: 'dt-center'
-                        }],
-                        columns: [
-                            {
-                                    data: 'queue_number',
-                                    name: 'queue_number',
-                                    width: '5%'
-                                },
-                              {
-                                data: 'employee_name',
-                                name: 'employees_tables.employee_name',
-                                width: '20%',
-                                className: 'text-center',
-                                orderable: false,
-                                searchable: false
-                            },    
-                             {
-                                    data: 'store_name',
-                                    name: 'store_name',
-                                    width: '10%',
-                                    className: 'text-center',
-                                    orderable: true,
-                                    searchable: false
-                                },
+                        {
+                            data: 'employee_name',
+                            name: 'employees_tables.employee_name',
+                            width: '20%',
+                            className: 'text-center',
+                            orderable: false,
+                            searchable: false
+                        },
+                        {
+                            data: 'store_name',
+                            name: 'store_name',
+                            width: '10%',
+                            className: 'text-center',
+                            orderable: true,
+                            searchable: false
+                        },
 
                         {
                             data: 'title',
@@ -839,7 +822,7 @@
                             width: '10%'
                         },
                         // { data: 'executor', name: 'employees_tables.employee_name', width: '15%' },
-                        
+
                         {
                             data: 'priority',
                             name: 'priority',
@@ -848,7 +831,7 @@
                                 return data ? data : 'empty';
                             }
                         },
-                        
+
                         {
                             data: 'estimation',
                             name: 'estimation',
@@ -857,7 +840,7 @@
                                 return data ? data : 'empty';
                             }
                         },
-                        
+
                         {
                             data: 'finished',
                             name: 'finished',
@@ -866,34 +849,34 @@
                                 return data ? data : 'empty';
                             }
                         },
-                        
-                       {
-                                data: 'status',
-                                name: 'status',
-                                width: '15%',
-                                className: 'text-center',
-                                render: function(data, type, row) {
-                                    if (!data) return '-';
 
-                                    let status = data.toLowerCase();
-                                    let badgeClass = 'bg-slate-500 text-white';
+                        {
+                            data: 'status',
+                            name: 'status',
+                            width: '15%',
+                            className: 'text-center',
+                            render: function(data, type, row) {
+                                if (!data) return '-';
 
-                                    if (status === 'closed') {
-                                        badgeClass = 'bg-green-600 text-white'; // SUCCESS
-                                    } else if (status === 'open') {
-                                        badgeClass = 'bg-blue-600 text-white';
-                                    } else if (status === 'progress') {
-                                        badgeClass = 'bg-yellow-500 text-black';
-                                    } else if (status === 'overdue') {
-                                        badgeClass = 'bg-red-500 text-black';
-                                    }
-                                    return `
+                                let status = data.toLowerCase();
+                                let badgeClass = 'bg-slate-500 text-white';
+
+                                if (status === 'closed') {
+                                    badgeClass = 'bg-green-600 text-white'; // SUCCESS
+                                } else if (status === 'open') {
+                                    badgeClass = 'bg-blue-600 text-white';
+                                } else if (status === 'progress') {
+                                    badgeClass = 'bg-yellow-500 text-black';
+                                } else if (status === 'overdue') {
+                                    badgeClass = 'bg-red-500 text-black';
+                                }
+                                return `
             <span class="px-3 py-1 rounded-full text-xs font-semibold ${badgeClass}">
                 ${data}
             </span>
         `;
-                                }
-                            },
+                            }
+                        },
                         {
                             data: 'action',
                             name: 'action',
@@ -903,77 +886,77 @@
                             className: 'text-center'
                         },
                     ],
-                        language: {
-                            lengthMenu: "_MENU_",
-                            info: "Showing _START_ to _END_ of _TOTAL_ entries",
-                            infoEmpty: "Showing 0 to 0 of 0 entries",
-                            infoFiltered: "(filtered from _MAX_ total entries)",
-                            paginate: {
-                                first: "First",
-                                last: "Last",
-                                next: "Next",
-                                previous: "Prev"
-                            }
-                        },
-                        pageLength: 10,
-                        dom: '<"flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-4"<"length-wrapper"l><"info-wrapper"i>>rtip',
-                        initComplete: function() {
-                            $('#loading-state').hide();
-                            $('#users-table-wrapper').fadeIn();
+                    language: {
+                        lengthMenu: "_MENU_",
+                        info: "Showing _START_ to _END_ of _TOTAL_ entries",
+                        infoEmpty: "Showing 0 to 0 of 0 entries",
+                        infoFiltered: "(filtered from _MAX_ total entries)",
+                        paginate: {
+                            first: "First",
+                            last: "Last",
+                            next: "Next",
+                            previous: "Prev"
+                        }
+                    },
+                    pageLength: 10,
+                    dom: '<"flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-4"<"length-wrapper"l><"info-wrapper"i>>rtip',
+                    initComplete: function() {
+                        $('#loading-state').hide();
+                        $('#users-table-wrapper').fadeIn();
 
-                            var info = this.api().page.info();
-                            $('#total-users').text(info.recordsTotal);
+                        var info = this.api().page.info();
+                        $('#total-users').text(info.recordsTotal);
 
-                            // Initialize mobile view
+                        // Initialize mobile view
+                        renderMobileCards();
+                    },
+                    drawCallback: function() {
+                        var info = this.api().page.info();
+                        $('#total-users').text(info.recordsTotal);
+
+                        // Update mobile view
+                        if ($(window).width() < 768) {
                             renderMobileCards();
-                        },
-                        drawCallback: function() {
-                            var info = this.api().page.info();
-                            $('#total-users').text(info.recordsTotal);
-
-                            // Update mobile view
-                            if ($(window).width() < 768) {
-                                renderMobileCards();
-                            }
                         }
-                    });
-                    $('#btnFilter').on('click', function() {
-                        table.ajax.reload();
-                    });
+                    }
+                });
+                $('#btnFilter').on('click', function() {
+                    table.ajax.reload();
+                });
 
-                    $('#btnReset').on('click', function() {
-                        $('#filterStatus').val('');
-                        $('#filterCategory').val('');
-                        $('#filterPriority').val('');
-                        $('#dateFrom').val('');
-                        $('#dateTo').val('');
-                        table.ajax.reload();
-                    });
+                $('#btnReset').on('click', function() {
+                    $('#filterStatus').val('');
+                    $('#filterCategory').val('');
+                    $('#filterPriority').val('');
+                    $('#dateFrom').val('');
+                    $('#dateTo').val('');
+                    table.ajax.reload();
+                });
 
 
-                    // Custom search functionality
-                    $('#table-search').on('keyup', function() {
-                        table.search(this.value).draw();
-                    });
+                // Custom search functionality
+                $('#table-search').on('keyup', function() {
+                    table.search(this.value).draw();
+                });
 
-                    // Function to render mobile cards
-                    function renderMobileCards() {
-                        if ($(window).width() >= 768) return;
+                // Function to render mobile cards
+                function renderMobileCards() {
+                    if ($(window).width() >= 768) return;
 
-                        var data = table.rows({
-                            page: 'current'
-                        }).data();
-                        var container = $('#mobile-cards-container');
-                        container.empty();
+                    var data = table.rows({
+                        page: 'current'
+                    }).data();
+                    var container = $('#mobile-cards-container');
+                    container.empty();
 
-                        if (data.length === 0) {
-                            container.html('<div class="text-center py-8 text-slate-400">No tickets found</div>');
-                            return;
-                        }
+                    if (data.length === 0) {
+                        container.html('<div class="text-center py-8 text-slate-400">No tickets found</div>');
+                        return;
+                    }
 
-                        data.each(function(ticket) {
-                         var initials = (ticket.title || 'U').substring(0, 2).toUpperCase();
-                            var card = `
+                    data.each(function(ticket) {
+                        var initials = (ticket.title || 'U').substring(0, 2).toUpperCase();
+                        var card = `
                             <div class="user-card">
                                 <div class="user-card-header">
                                     <div class="user-card-avatar">${initials}</div>
@@ -1027,8 +1010,8 @@
                                         else if (status === 'Overdue') cls = 'bg-red-500';
                                         else if (status === 'Closed') cls = 'bg-green-600';
                                         return `
-                                                <span class="inline-flex items-center gap-2 px-3 py-1 text-xs font-semibold text-white rounded-full ${cls}">
-                                                <span class="w-2 h-2 rounded-full bg-white"></span>${status}</span>`;
+                                                        <span class="inline-flex items-center gap-2 px-3 py-1 text-xs font-semibold text-white rounded-full ${cls}">
+                                                        <span class="w-2 h-2 rounded-full bg-white"></span>${status}</span>`;
                                     })()}
                                 </div>
                             </div>
@@ -1037,44 +1020,44 @@
                                 </div>
                             </div>
                         `;
-                            container.append(card);
-                        });
-                        // Update mobile pagination
-                        renderMobilePagination();
-                    }
-                    // Function to render mobile pagination
-                    function renderMobilePagination() {
-                        var info = table.page.info();
-                        var pagination = $('#mobile-pagination');
-                        pagination.empty();
-                        // Previous button
-                        var prevBtn = $('<button class="mobile-page-btn">Prev</button>');
-                        if (info.page === 0) prevBtn.prop('disabled', true);
-                        prevBtn.on('click', function() {
-                            table.page('previous').draw('page');
-                        });
-                        pagination.append(prevBtn);
-                        // Page info
-                        var pageInfo = $(`<span class="mobile-page-btn active">${info.page + 1} / ${info.pages}</span>`);
-                        pagination.append(pageInfo);
-                        // Next button
-                        var nextBtn = $('<button class="mobile-page-btn">Next</button>');
-                        if (info.page >= info.pages - 1) nextBtn.prop('disabled', true);
-                        nextBtn.on('click', function() {
-                            table.page('next').draw('page');
-                        });
-                        pagination.append(nextBtn);
-                        // Info text
-                        $('#mobile-info').text(`Showing ${info.start + 1} to ${info.end} of ${info.recordsTotal} entries`);
-                    }
-
-                    // Handle window resize
-                    $(window).on('resize', function() {
-                        if ($(window).width() < 768) {
-                            renderMobileCards();
-                        }
+                        container.append(card);
                     });
+                    // Update mobile pagination
+                    renderMobilePagination();
+                }
+                // Function to render mobile pagination
+                function renderMobilePagination() {
+                    var info = table.page.info();
+                    var pagination = $('#mobile-pagination');
+                    pagination.empty();
+                    // Previous button
+                    var prevBtn = $('<button class="mobile-page-btn">Prev</button>');
+                    if (info.page === 0) prevBtn.prop('disabled', true);
+                    prevBtn.on('click', function() {
+                        table.page('previous').draw('page');
+                    });
+                    pagination.append(prevBtn);
+                    // Page info
+                    var pageInfo = $(`<span class="mobile-page-btn active">${info.page + 1} / ${info.pages}</span>`);
+                    pagination.append(pageInfo);
+                    // Next button
+                    var nextBtn = $('<button class="mobile-page-btn">Next</button>');
+                    if (info.page >= info.pages - 1) nextBtn.prop('disabled', true);
+                    nextBtn.on('click', function() {
+                        table.page('next').draw('page');
+                    });
+                    pagination.append(nextBtn);
+                    // Info text
+                    $('#mobile-info').text(`Showing ${info.start + 1} to ${info.end} of ${info.recordsTotal} entries`);
+                }
+
+                // Handle window resize
+                $(window).on('resize', function() {
+                    if ($(window).width() < 768) {
+                        renderMobileCards();
+                    }
                 });
-            </script>
-        @endpush
-    @endsection
+            });
+        </script>
+    @endpush
+@endsection

@@ -169,7 +169,8 @@
                             <span class="px-3 py-1 bg-slate-700/50 text-slate-300 text-xs rounded-lg">Hardware</span>
                             <span class="px-3 py-1 bg-slate-700/50 text-slate-300 text-xs rounded-lg">Helpdesk</span>
                             <span class="px-3 py-1 bg-slate-700/50 text-slate-300 text-xs rounded-lg">Network</span>
-                            <span class="px-3 py-1 bg-slate-700/50 text-slate-300 text-xs rounded-lg">Desktop Support</span>
+                            <span class="px-3 py-1 bg-slate-700/50 text-slate-300 text-xs rounded-lg">Desktop
+                                Support</span>
                         </div>
                     </div>
                     <div class="mt-4 flex items-center space-x-3">
@@ -207,7 +208,8 @@
                             </div>
                             <div
                                 class="absolute -bottom-1 -right-1 w-6 h-6 bg-green-500 rounded-full border-3 border-slate-800 flex items-center justify-center">
-                                <svg class="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <svg class="w-3 h-3 text-white" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
                                         d="M5 13l4 4L19 7" />
                                 </svg>
@@ -244,7 +246,8 @@
                         <div class="flex flex-wrap gap-2">
                             <span class="px-3 py-1 bg-slate-700/50 text-slate-300 text-xs rounded-lg">Dev Ops</span>
                             <span class="px-3 py-1 bg-slate-700/50 text-slate-300 text-xs rounded-lg">Full Stack Dev</span>
-                            <span class="px-3 py-1 bg-slate-700/100 text-slate-300 text-xs rounded-lg">Server Administrators</span>
+                            <span class="px-3 py-1 bg-slate-700/100 text-slate-300 text-xs rounded-lg">Server
+                                Administrators</span>
                         </div>
                     </div>
                     <div class="mt-4 flex items-center space-x-3">
@@ -282,14 +285,16 @@
                             </div>
                             <div
                                 class="absolute -bottom-1 -right-1 w-6 h-6 bg-green-500 rounded-full border-3 border-slate-800 flex items-center justify-center">
-                                <svg class="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <svg class="w-3 h-3 text-white" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
                                         d="M5 13l4 4L19 7" />
                                 </svg>
                             </div>
                         </div>
                         <div class="flex-1 min-w-0">
-                            <h4 class="text-lg font-bold text-white group-hover:text-red-400 transition-colors">Jery Andrian</h4>
+                            <h4 class="text-lg font-bold text-white group-hover:text-red-400 transition-colors">Jery
+                                Andrian</h4>
                             <p class="text-sm text-red-400 font-medium">IT Support</p>
                             <div class="flex items-center space-x-2 mt-2">
                                 <span
@@ -362,8 +367,8 @@
                 {{-- Company Info --}}
                 <div class="space-y-3">
                     <div class="flex items-center space-x-2">
-                        <img src="{{ asset('img/AsianBay.png') }}"
-                            class="w-12 h-12 select-none pointer-events-none" draggable="false" alt="icon">
+                        <img src="{{ asset('img/AsianBay.png') }}" class="w-12 h-12 select-none pointer-events-none"
+                            draggable="false" alt="icon">
                         <h3 class="text-sm font-bold text-slate-900 text-white">{{ __('auth.departemen') }}
                         </h3>
                     </div>

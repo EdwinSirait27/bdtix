@@ -70,7 +70,7 @@
                         <option value="Plumbing" class="bg-slate-800">Plumbing</option>
                         <option value="Building" class="bg-slate-800">Building</option>
                         <option value="Mechanical Engineering" class="bg-slate-800">Mechanical Engineering</option>
-                            <option value="Others" class="bg-slate-800">Others</option>
+                        <option value="Others" class="bg-slate-800">Others</option>
                     </select>
                     <div class="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none">
                         <svg class="w-5 h-5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -90,7 +90,8 @@
                 @enderror
             </div>
             <div>
-                <label for="sub_category" class="block text-sm font-semibold text-slate-300 mb-2 flex items-center space-x-2">
+                <label for="sub_category"
+                    class="block text-sm font-semibold text-slate-300 mb-2 flex items-center space-x-2">
                     <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
@@ -104,7 +105,7 @@
                         <option value="" class="bg-slate-800">Choose Sub Categories...</option>
                         <option value="Maintenance" class="bg-slate-800">Maintenance</option>
                         <option value="Renovation" class="bg-slate-800">Renovation</option>
-                            <option value="Others" class="bg-slate-800">Others</option>
+                        <option value="Others" class="bg-slate-800">Others</option>
                     </select>
                     <div class="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none">
                         <svg class="w-5 h-5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -127,7 +128,8 @@
                 <label for="description"
                     class="block text-sm font-semibold text-slate-300 mb-2 flex items-center space-x-2">
                     <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 6h16M4 12h16M4 18h7" />
                     </svg>
                     <span>Problem Description</span>
                     <span class="text-red-400">*</span>
