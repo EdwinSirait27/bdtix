@@ -641,6 +641,7 @@
                                         <tr>
                                             <th class="text-center">Queue</th>
                                             <th class="text-center">User</th>
+                                            <th class="text-center">Location</th>
                                         <th class="text-center">Title</th>
                                         <th class="text-center">Categories</th>
                                         <th class="text-center">SCat</th>
@@ -813,6 +814,14 @@
                                 orderable: false,
                                 searchable: false
                             },    
+                             {
+                                    data: 'store_name',
+                                    name: 'store_name',
+                                    width: '10%',
+                                    className: 'text-center',
+                                    orderable: true,
+                                    searchable: false
+                                },
 
                         {
                             data: 'title',

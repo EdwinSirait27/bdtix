@@ -70,7 +70,9 @@
                       <div>
     <p class="text-xs text-slate-500 mb-1">Handled By</p>
     <p class="text-sm font-medium text-slate-300">
-        {{ $ticket->executor?->employee?->employee_name ?? 'N/A' }}
+        {{ $executor?->employee?->employee_name ?? 'N/A' }}
+                    {{-- {{ $executor?->employee?->employee_name ?? '-' }} --}}
+
     </p>
 </div>
                     
@@ -535,7 +537,7 @@
                 <div>
     <p class="text-xs text-slate-500 mb-1">Handled By</p>
     <p class="text-sm font-medium text-slate-300">
-        {{ $ticket->executor?->employee?->employee_name ?? 'N/A' }}
+        {{ $executor?->employee?->employee_name ?? 'N/A' }}
     </p>
 </div>
                 <div>

@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Tickets;
+use App\Models\User;
 use App\Models\TicketReview;
 use Illuminate\Support\Facades\Log;
 use App\Models\Ticketattachments;
@@ -1393,7 +1394,7 @@ class TicketController extends Controller
         'user' => $user->id,
     ]);
 
-    $query = Tickets::with(['user.employee', 'attachments','executorAttachments','executor','executor.employee']);
+    $query = Tickets::with(['user.employee', 'attachments','executorAttachments','executor','executor.employee','store']);
 
     if ($user->hasRole('human')) {
         $query->where('user_id', $user->id);
@@ -1421,8 +1422,12 @@ class TicketController extends Controller
         'status'    => $ticket->status,
         'user'      => $user->id,
     ]);
+    $executor = $ticket->executor_id 
+    ? User::with('employee')->find($ticket->executor_id)
+    : null;
 
-    return view('pages.reviewtickets', compact('ticket'));
+
+    return view('pages.reviewtickets', compact('ticket','executor'));
 }
 
     public function storeReview(Request $request, $hash)
