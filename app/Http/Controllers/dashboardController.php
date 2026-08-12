@@ -37,34 +37,20 @@ class dashboardController extends Controller
 
         $executorId = $user->id;
 
-        // $totalSlaTickets = Tickets::where('executor_id', $executorId)
-        //     ->whereNotNull('estimation')
-        //     ->whereNotNull('estimation_to')
-        //     ->whereNotNull('finished')
-        //     ->count();
-        $totalSlaTickets = Tickets::whereNotNull('estimation')
-    ->whereNotNull('estimation_to')
-    ->whereNotNull('finished')
-    ->count();
+    //     $totalSlaTickets = Tickets::whereNotNull('estimation')
+    // ->whereNotNull('estimation_to')
+    // ->whereNotNull('finished')
+    // ->count();
 
-        // $slaCompliantTickets = Tickets::where('executor_id', $executorId)
-        //     ->whereNotNull('estimation')
-        //     ->whereNotNull('estimation_to')
-        //     ->whereNotNull('finished')
-        //     ->whereColumn('finished', '<=', 'estimation_to')
-        //     ->count();
-        $slaCompliantTickets = Tickets::whereNotNull('estimation')
-    ->whereNotNull('estimation_to')
-    ->whereNotNull('finished')
-    ->whereColumn('finished', '<=', 'estimation_to')
-    ->count();
+    //     $slaCompliantTickets = Tickets::whereNotNull('estimation')
+    // ->whereNotNull('estimation_to')
+    // ->whereNotNull('finished')
+    // ->whereColumn('finished', '<=', 'estimation_to')
+    // ->count();
 
-        // $slaCompliance = $totalSlaTickets > 0
-        //     ? round(($slaCompliantTickets / $totalSlaTickets) * 100, 2)
-        //     : 0;
-        $slaCompliance = $totalSlaTickets > 0
-    ? round(($slaCompliantTickets / $totalSlaTickets) * 100, 2)
-    : 0;
+    //     $slaCompliance = $totalSlaTickets > 0
+    // ? round(($slaCompliantTickets / $totalSlaTickets) * 100, 2)
+    // : 0;
 
         $alltickethuman        = Tickets::where('user_id', $user->id)->count();
         $overduetickethuman    = Tickets::where('user_id', $user->id)->where('status', 'Overdue')->count();
@@ -81,6 +67,7 @@ class dashboardController extends Controller
         $categories = Tickets::distinct()->pluck('category');
 
         $ticketBase = Tickets::query();
+
 
         if ($month) {
             $ticketBase
@@ -153,6 +140,22 @@ class dashboardController extends Controller
             ->groupBy('executor_id', 'priority')
             ->get()
             ->groupBy('executor_id');
+            $totalSlaTickets = (clone $ticketBase)
+    ->whereNotNull('estimation')
+    ->whereNotNull('estimation_to')
+    ->whereNotNull('finished')
+    ->count();
+
+$slaCompliantTickets = (clone $ticketBase)
+    ->whereNotNull('estimation')
+    ->whereNotNull('estimation_to')
+    ->whereNotNull('finished')
+    ->whereColumn('finished', '<=', 'estimation_to')
+    ->count();
+
+$slaCompliance = $totalSlaTickets > 0
+    ? round(($slaCompliantTickets / $totalSlaTickets) * 100, 2)
+    : 0;
 
         // Priority Order: Low → Medium → High
         $order      = ['Low', 'Medium', 'High'];
