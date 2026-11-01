@@ -48,6 +48,7 @@ return Application::configure(basePath: dirname(__DIR__))
         // Web middleware group
         $middleware->appendToGroup('web', [
             \App\Http\Middleware\SetLocale::class,
+            \App\Http\Middleware\SecurityHeaders::class,
         ]);
 
         // Alias middleware (WAJIB Laravel 11/12)

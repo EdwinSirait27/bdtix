@@ -120,7 +120,7 @@
                                     {{-- {{ $file->original_name ?? ($file->file_name ?? '-') }} --}}
                                     {{ $file->file_name ?? '-' }}
 
-                                    <span class="text-xs text-yellow-500">(processing...)</span>
+                                    <x-attachment-status :status="$file->status" />
                                 </span>
                             @endif
 
@@ -154,7 +154,7 @@
                                 <span class="text-sm text-slate-400 truncate">
                                     {{ $file->file_name ?? '-' }}
 
-                                    <span class="text-xs text-yellow-500">(processing...)</span>
+                                    <x-attachment-status :status="$file->status" />
                                 </span>
                             @endif
 

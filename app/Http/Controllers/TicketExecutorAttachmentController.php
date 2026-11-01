@@ -53,9 +53,8 @@ class TicketExecutorAttachmentController extends Controller
     foreach ($request->file('files', []) as $index => $file) {
         $date     = now()->format('Y-m-d');
         $title    = Str::slug($ticket->title);
-        $ext      = $file->getClientOriginalExtension();
         $suffix   = $index + 1;
-        $fileName = "{$username}-{$date}-{$title}-{$suffix}.{$ext}";
+        $fileName = StorageHelper::attachmentFileName("{$username}-{$date}-{$title}-{$suffix}", $file);
 
         $tempPath = Storage::disk('local')->putFileAs(
             "temp-attachments/{$username}",
@@ -157,6 +156,28 @@ public function destroy($attachmentId): JsonResponse
 
 public function signedUrlForExecutor(string $attachmentId)
 {
+    $attachment = $this->findViewableAttachment($attachmentId);
+
+    return response()->json([
+        'url'       => route('attachmentsforexecutor.file', $attachment->id, false),
+        'file_name' => $attachment->original_name ?? $attachment->file_name,
+        'mime_type' => $attachment->mime_type,
+    ]);
+}
+
+public function file(string $attachmentId)
+{
+    $attachment = $this->findViewableAttachment($attachmentId);
+
+    return StorageHelper::attachmentResponse(
+        $attachment->file_path,
+        $attachment->file_name,
+        $attachment->mime_type
+    );
+}
+
+private function findViewableAttachment(string $attachmentId): TicketExecutorAttachment
+{
     /** @var \App\Models\User $user */
     $user = Auth::user();
 
@@ -166,18 +187,10 @@ public function signedUrlForExecutor(string $attachmentId)
 
     $isTicketOwner = $attachment->ticket?->user_id === $user->id;
 
-    if (!$isTicketOwner && !$user->hasAnyRole(['admin', 'executor', 'human'])) {
+    if (!$isTicketOwner && !$user->hasAnyRole(['admin', 'executor'])) {
         abort(403);
     }
 
-    // $url = StorageHelper::temporaryPublicUrl($attachment->file_path, 5);
-$url = StorageHelper::publicUrl($attachment->file_path);
-
-    return response()->json([
-        'url'       => $url,
-        'file_name' => $attachment->original_name ?? $attachment->file_name,
-        'mime_type' => $attachment->mime_type,
-    ]);
+    return $attachment;
 }
 }
-

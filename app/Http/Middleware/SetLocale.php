@@ -15,7 +15,7 @@ class SetLocale
      */
     public function handle($request, Closure $next)
 {
-    if (session()->has('applocale')) {
+    if (in_array(session('applocale'), ['en', 'id'], true)) {
         app()->setLocale(session('applocale'));
     }
 

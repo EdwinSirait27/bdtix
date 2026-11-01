@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Models\TicketExecutorAttachment;
+use App\Services\VirusScanner;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -16,7 +17,7 @@ class UploadAttachmentToS3ForExecutor implements ShouldQueue
      use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     public int $tries = 3;
-    public int $backoff = 10;
+    public array $backoff = [30, 120];
 
     public function __construct(
         private string $attachmentId,
@@ -25,7 +26,7 @@ class UploadAttachmentToS3ForExecutor implements ShouldQueue
         private string $fileName,
     ) {}
 
-   public function handle(): void
+   public function handle(VirusScanner $scanner): void
 {
     $attachment = TicketExecutorAttachment::findOrFail($this->attachmentId);
 
@@ -37,6 +38,23 @@ class UploadAttachmentToS3ForExecutor implements ShouldQueue
                 'temp_path'     => $this->tempPath,
             ]);
             $attachment->update(['status' => 'failed']);
+            return;
+        }
+
+        // Gagal scan melempar exception: file tetap tidak dikirim ke S3 dan job dicoba ulang.
+        $signature = $scanner->scanLocalFile($this->tempPath);
+
+        if ($signature !== null) {
+            $attachment->update(['status' => 'infected']);
+            Storage::disk('local')->delete($this->tempPath);
+
+            Log::critical('UploadAttachmentToS3ForExecutor virus detected', [
+                'attachment_id' => $this->attachmentId,
+                'ticket_id'     => $attachment->ticket_id,
+                'file_name'     => $this->fileName,
+                'signature'     => $signature,
+            ]);
+
             return;
         }
 
@@ -81,4 +99,12 @@ class UploadAttachmentToS3ForExecutor implements ShouldQueue
         throw $e;
     }
 }
+
+    /**
+     * Semua percobaan habis: file yang belum lolos scan tidak boleh tertinggal di disk.
+     */
+    public function failed(?\Throwable $e): void
+    {
+        Storage::disk('local')->delete($this->tempPath);
+    }
 }

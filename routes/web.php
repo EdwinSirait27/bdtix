@@ -86,6 +86,7 @@
 //         [TicketController::class, 'storeReview']
 //     )->middleware('throttle:15,1')->name('reviewticketsfromhuman');
 // });
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\dashboardController;
@@ -99,10 +100,15 @@ use App\Http\Controllers\ResolveTicketController;
 
 Route::middleware('throttle:15,1')->group(function () {
     Route::get('/', [AuthController::class, 'loginPage'])->name('login')->middleware('guest');
-    Route::get('/lang/{lang}', function ($lang) {
+    Route::get('/lang/{lang}', function (Request $request, string $lang) {
         session(['applocale' => $lang]);
-        return back();
-    })->name('lang.switch');
+
+        // back() mengikuti header Referer apa adanya, termasuk ke domain lain.
+        $referer = $request->headers->get('referer');
+        $isSameHost = $referer && parse_url($referer, PHP_URL_HOST) === $request->getHost();
+
+        return redirect($isSameHost ? $referer : route('login'));
+    })->whereIn('lang', ['en', 'id'])->name('lang.switch');
     Route::post('/login', [AuthController::class, 'login'])->name('login.post');
     // Route::get('/about', [dashboardController::class, 'aboutUs'])->name('about');
 
@@ -111,13 +117,15 @@ Route::middleware(['auth', 'role:admin|human|executor'])->group(function () {
     Route::get('/dashboard', [dashboardController::class, 'dashboardPage'])->name('dashboard');
     // Route::post('/tickets/{ticketId}/attachments', [TicketAttachmentController::class, 'store'])->name('attachments.store');
     // Route::delete('/tickets/{ticketId}/attachments/{attachmentId}', [TicketAttachmentController::class, 'destroy'])->name('attachments.destroy');
-     Route::post('/attachments/{ticket}', [TicketAttachmentController::class, 'store'])->name('attachments.store');
+     Route::post('/attachments/{ticket}', [TicketAttachmentController::class, 'store'])->middleware('throttle:30,1')->name('attachments.store');
     Route::delete('/attachments/{attachment}', [TicketAttachmentController::class, 'destroy'])->name('attachments.destroy');
     Route::get('/attachments/{attachment}/signed-url', [TicketAttachmentController::class, 'signedUrl'])->name('attachments.signed-url');
+    Route::get('/attachments/{attachment}/file', [TicketAttachmentController::class, 'file'])->middleware('throttle:120,1')->name('attachments.file');
  
-     Route::post('/attachmentsforexecutor/{ticket}', [TicketExecutorAttachmentController::class, 'store'])->name('attachmentsforexecutor.store');
+     Route::post('/attachmentsforexecutor/{ticket}', [TicketExecutorAttachmentController::class, 'store'])->middleware('throttle:30,1')->name('attachmentsforexecutor.store');
     Route::delete('/attachmentsforexecutor/{attachment}', [TicketExecutorAttachmentController::class, 'destroy'])->name('attachmentsforexecutor.destroy');
     Route::get('/attachmentsforexecutor/{attachment}/signed-url-for-executor', [TicketExecutorAttachmentController::class, 'signedUrlForExecutor'])->name('attachmentsforexecutor.signed-url-for-executor');
+    Route::get('/attachmentsforexecutor/{attachment}/file', [TicketExecutorAttachmentController::class, 'file'])->middleware('throttle:120,1')->name('attachmentsforexecutor.file');
 
     // routes/web.php
 Route::get('/dashboard/filteropen', [dashboardController::class, 'dashboardPage'])
@@ -145,7 +153,7 @@ Route::get('/dashboard/filteronprogress', [dashboardController::class, 'dashboar
 
 Route::middleware(['auth', 'role:admin|executor'])->group(function () {
     Route::match(['GET', 'POST'], '/allticketforadmins/allticketforadmins', [dashboardController::class, 'getAllticketforadmins'])->name('allticketforadmins.allticketforadmins');
-    Route::post('/tickets/{ticketId}/executor-attachments', [TicketExecutorAttachmentController::class, 'store'])->name('executor.attachments.store');
+    Route::post('/tickets/{ticketId}/executor-attachments', [TicketExecutorAttachmentController::class, 'store'])->middleware('throttle:30,1')->name('executor.attachments.store');
     Route::delete('/tickets/{ticketId}/executor-attachments/{attachmentId}', [TicketExecutorAttachmentController::class, 'destroy'])->name('executor.attachments.destroy');
   Route::get('/resolvetickets', [ResolveTicketController::class, 'allReview'])->name('resolvetickets');
     Route::match(['GET', 'POST'], '/resolveticket/resolveticket', [ResolveTicketController::class, 'getReviewtickets'])->name('resolveticket.resolveticket');

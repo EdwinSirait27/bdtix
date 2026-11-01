@@ -44,6 +44,14 @@ return [
     'root_folder_id' => env('GOOGLE_DRIVE_FOLDER_ID'),
 ],
 
+    'clamav' => [
+        'enabled' => env('CLAMAV_ENABLED', true),
+        'socket' => env('CLAMAV_SOCKET'),
+        'host' => env('CLAMAV_HOST', '127.0.0.1'),
+        'port' => env('CLAMAV_PORT', 3310),
+        'timeout' => env('CLAMAV_TIMEOUT', 30),
+    ],
+
     'whatsapp' => [
         'enabled' => env('WHATSAPP_ENABLED', false),
         'endpoint' => env('WHATSAPP_ENDPOINT', 'http://127.0.0.1:3000/send-message'),

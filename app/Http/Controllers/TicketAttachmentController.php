@@ -47,9 +47,8 @@ class TicketAttachmentController extends Controller
         foreach ($request->file('files') as $index => $file) {
             $date     = now()->format('Y-m-d');
             $title    = Str::slug($ticket->title);
-            $ext      = $file->getClientOriginalExtension();
             $suffix   = $existingCount + $index + 1;
-            $fileName = "{$username}-{$date}-{$title}-{$suffix}.{$ext}";
+            $fileName = StorageHelper::attachmentFileName("{$username}-{$date}-{$title}-{$suffix}", $file);
             $s3Folder = "bdtix-user-attachments/{$username}";
 
             $tempPath = Storage::disk('local')->putFileAs(
@@ -145,26 +144,41 @@ class TicketAttachmentController extends Controller
         ]);
     }
    
-   public function signedUrl(string $attachmentId)
-{
-    /** @var \App\Models\User $user */
-    $user = Auth::user();
+    public function signedUrl(string $attachmentId)
+    {
+        $attachment = $this->findViewableAttachment($attachmentId);
 
-    $attachment = Ticketattachments::where('id', $attachmentId)
-        ->where('status', 'uploaded')
-        ->firstOrFail();
-
-    if ($attachment->user_id !== $user->id && !$user->hasAnyRole(['admin', 'executor'])) {
-        abort(403);
+        return response()->json([
+            'url'       => route('attachments.file', $attachment->id, false),
+            'file_name' => $attachment->original_name ?? $attachment->file_name,
+            'mime_type' => $attachment->mime_type,
+        ]);
     }
 
-    // $url = StorageHelper::temporaryPublicUrl($attachment->file_path, 5);
-$url = StorageHelper::publicUrl($attachment->file_path);
+    public function file(string $attachmentId)
+    {
+        $attachment = $this->findViewableAttachment($attachmentId);
 
-    return response()->json([
-        'url'       => $url,
-        'file_name' => $attachment->original_name ?? $attachment->file_name,
-        'mime_type' => $attachment->mime_type,
-    ]);
-}
+        return StorageHelper::attachmentResponse(
+            $attachment->file_path,
+            $attachment->file_name,
+            $attachment->mime_type
+        );
+    }
+
+    private function findViewableAttachment(string $attachmentId): Ticketattachments
+    {
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+
+        $attachment = Ticketattachments::where('id', $attachmentId)
+            ->where('status', 'uploaded')
+            ->firstOrFail();
+
+        if ($attachment->user_id !== $user->id && !$user->hasAnyRole(['admin', 'executor'])) {
+            abort(403);
+        }
+
+        return $attachment;
+    }
 }

@@ -1898,9 +1898,8 @@ public function store(Request $request)
     foreach ($request->file('attachments') as $index => $file) {
         $date     = $ticket->created_at->format('Y-m-d');
         $title    = Str::slug($ticket->title);
-        $ext      = $file->getClientOriginalExtension();
         $suffix   = $index + 1;
-        $fileName = "{$username}-{$date}-{$title}-{$suffix}.{$ext}";
+        $fileName = \App\Helpers\StorageHelper::attachmentFileName("{$username}-{$date}-{$title}-{$suffix}", $file);
         $s3Folder = "bdtix-user-attachments/{$username}";
 
         $tempPath = Storage::disk('local')->putFileAs(
