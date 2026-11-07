@@ -4,16 +4,16 @@
 @section('subtitle', 'Report your problem or request')
 @section('content')
     <div class="px-4 space-y-6 pb-8">
-        <div class="bg-gradient-to-r from-blue-500/10 to-cyan-500/10 border border-blue-500/30 rounded-2xl p-4">
+        <div class="border border-blue-500/30 rounded-[10px] p-4 bg-blue-500/10">
             <div class="flex items-start space-x-3">
-                <div class="w-10 h-10 rounded-xl bg-blue-500/20 flex items-center justify-center flex-shrink-0">
+                <div class="w-10 h-10 rounded-[10px] bg-blue-500/20 flex items-center justify-center flex-shrink-0">
                     <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                 </div>
                 <div class="flex-1">
-                    <h3 class="text-sm font-semibold text-blue-400 mb-1">Tips for Making Tickets</h3>
+                    <h3 class="text-sm font-medium text-blue-400 mb-1">Tips for Making Tickets</h3>
                     <p class="text-xs text-slate-400 leading-relaxed">Please describe your issue in detail for a faster
                         response. Our team will respond within 1-2 business hours.</p>
                 </div>
@@ -24,7 +24,7 @@
             @csrf
             <input type="hidden" name="request_uuid" value="{{ old('request_uuid', $requestUuid) }}">
             <div>
-                <label for="store_id" class="block text-sm font-semibold text-slate-300 mb-2 flex items-center space-x-2">
+                <label for="store_id" class="block text-sm font-medium text-slate-300 mb-2 flex items-center space-x-2">
                     <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
@@ -35,7 +35,7 @@
                     <span class="text-red-400">*</span>
                 </label>
                 <select id="store_id" name="store_id" required
-                    class="w-full px-4 py-3.5 bg-slate-800 border border-slate-700 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200">
+                    class="w-full px-4 py-3.5 bg-slate-800 border border-slate-700 rounded-md text-ink focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent transition-colors duration-200">
                     <option value="">Select Location</option>
                     @forelse($stores as $store)
                         <option value="{{ $store->id }}" {{ old('store_id') === $store->id ? 'selected' : '' }}>
@@ -57,7 +57,7 @@
                 @enderror
             </div>
             <div>
-                <label for="title" class="block text-sm font-semibold text-slate-300 mb-2 flex items-center space-x-2">
+                <label for="title" class="block text-sm font-medium text-slate-300 mb-2 flex items-center space-x-2">
                     <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" />
@@ -67,7 +67,7 @@
                 </label>
                 <input type="text" id="title" name="title" required
                     placeholder="Example: Laptop cannot connect to WiFi"
-                    class="w-full px-4 py-3.5 bg-slate-800 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                    class="w-full px-4 py-3.5 bg-slate-800 border border-slate-700 rounded-md text-ink placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent transition-colors duration-200"
                     value="{{ old('title') }}">
                 @error('title')
                     <p class="mt-2 text-sm text-red-400 flex items-center space-x-1">
@@ -81,7 +81,7 @@
                 @enderror
             </div>
             <div>
-                <label for="category" class="block text-sm font-semibold text-slate-300 mb-2 flex items-center space-x-2">
+                <label for="category" class="block text-sm font-medium text-slate-300 mb-2 flex items-center space-x-2">
                     <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
@@ -91,7 +91,7 @@
                 </label>
                 <div class="relative">
                     <select id="category" name="category" required
-                        class="w-full px-4 py-3.5 bg-slate-800 border border-slate-700 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 appearance-none cursor-pointer">
+                        class="w-full px-4 py-3.5 bg-slate-800 border border-slate-700 rounded-md text-ink focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent transition-colors duration-200 appearance-none cursor-pointer">
                         <option value="" class="bg-slate-800">Choose Categories...</option>
 
                         <option value="Plumbing" class="bg-slate-800">Plumbing</option>
@@ -118,7 +118,7 @@
             </div>
             <div>
                 <label for="sub_category"
-                    class="block text-sm font-semibold text-slate-300 mb-2 flex items-center space-x-2">
+                    class="block text-sm font-medium text-slate-300 mb-2 flex items-center space-x-2">
                     <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
@@ -128,7 +128,7 @@
                 </label>
                 <div class="relative">
                     <select id="sub_category" name="sub_category" required
-                        class="w-full px-4 py-3.5 bg-slate-800 border border-slate-700 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 appearance-none cursor-pointer">
+                        class="w-full px-4 py-3.5 bg-slate-800 border border-slate-700 rounded-md text-ink focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent transition-colors duration-200 appearance-none cursor-pointer">
                         <option value="" class="bg-slate-800">Choose Sub Categories...</option>
 
                         <option value="Maintenance" class="bg-slate-800">Maintenance</option>
@@ -155,7 +155,7 @@
 
             <div>
                 <label for="description"
-                    class="block text-sm font-semibold text-slate-300 mb-2 flex items-center space-x-2">
+                    class="block text-sm font-medium text-slate-300 mb-2 flex items-center space-x-2">
                     <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M4 6h16M4 12h16M4 18h7" />
@@ -168,7 +168,7 @@
 - What happened?
 - When did the problem start?
 - What steps have you tried?"
-                    class="w-full px-4 py-3.5 bg-slate-800 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 resize-none">{{ old('description') }}</textarea>
+                    class="w-full px-4 py-3.5 bg-slate-800 border border-slate-700 rounded-md text-ink placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent transition-colors duration-200 resize-none">{{ old('description') }}</textarea>
                 <div class="flex items-center justify-between mt-2">
                     <p class="text-xs text-slate-500">minimum 10 character</p>
                     <p class="text-xs text-slate-500"><span id="charCount">0</span> / 500</p>
@@ -185,7 +185,7 @@
                 @enderror
             </div>
             <div>
-                <label class="block text-sm font-semibold text-slate-300 mb-2 flex items-center space-x-2">
+                <label class="block text-sm font-medium text-slate-300 mb-2 flex items-center space-x-2">
                     <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
@@ -196,12 +196,12 @@
                 <div id="attachmentContainer"></div>
                 <!-- Tombol tambah -->
                 <button type="button" id="btnAddAttachment"
-                    class="mt-3 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm"
+                    class="mt-3 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md text-sm"
                     onclick="addAttachment()">
                     + Add Attachment
                 </button>
                 <button type="button" id="btnEraseAttachment"
-                    class="mt-3 px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg text-sm"
+                    class="mt-3 px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-md text-sm"
                     onclick="eraseAttachment()">
                     - Erase Attachment
                 </button>
@@ -212,7 +212,7 @@
             {{-- Action Buttons --}}
             <div class="flex space-x-3 pt-4">
                 <a href="{{ route('dashboard') }}"
-                    class="flex-1 py-3.5 bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 font-semibold rounded-xl transition-all duration-200 flex items-center justify-center space-x-2">
+                    class="flex-1 py-3.5 bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 font-medium rounded-[10px] transition-colors duration-200 flex items-center justify-center space-x-2">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                     </svg>
@@ -220,13 +220,13 @@
                 </a>
 
                 <button type="submit" id="submitBtn" data-loading="Sending..."
-                    class="flex-1 py-3.5 bg-gradient-to-r from-blue-600 to-cyan-600
-               hover:from-blue-700 hover:to-cyan-700
-               text-white font-semibold rounded-xl
-               shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50
-               transition-all duration-300 transform
-               hover:scale-[1.02] active:scale-[0.98]
-               flex items-center justify-center space-x-2">
+                    class="flex-1 py-3.5   
+                
+                font-medium rounded-[10px]
+                 
+               transition-colors duration-300 
+                
+               flex items-center justify-center space-x-2 bg-accent hover:bg-accent-2 text-accent-ink">
                     <svg id="submitIcon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                     </svg>
@@ -241,17 +241,17 @@
     </div>
     <!-- Modal pilih sumber -->
     <div id="sourceModal" class="fixed inset-0 bg-black/60 hidden items-center justify-center z-50">
-        <div class="bg-slate-900 rounded-xl p-6 w-80 text-center">
-            <h3 class="text-lg font-semibold mb-4 text-white">Choose Source</h3>
+        <div class="bg-slate-900 rounded-[10px] p-6 w-80 text-center">
+            <h3 class="text-lg font-medium mb-4 text-ink">Choose Source</h3>
             <button onclick="openCamera()"
-                class="w-full mb-3 px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white">
+                class="w-full mb-3 px-4 py-2 rounded-md bg-blue-600 hover:bg-blue-700 text-white">
                 Open Camera
             </button>
             <button onclick="openFilePicker()"
-                class="w-full mb-3 px-4 py-2 rounded-lg bg-slate-700 hover:bg-slate-600 text-white">
+                class="w-full mb-3 px-4 py-2 rounded-md bg-slate-700 hover:bg-slate-600 text-ink">
                 Upload Files
             </button>
-            <button onclick="closeModal()" class="w-full px-4 py-2 text-slate-400 hover:text-white">
+            <button onclick="closeModal()" class="w-full px-4 py-2 text-slate-400 hover:text-ink">
                 Abort
             </button>
         </div>
@@ -310,9 +310,9 @@
             onchange="updateFileName('${id}')">
 
         <label onclick="showSourceModal('${id}')"
-            class="flex items-center justify-center w-full px-4 py-8 bg-slate-800 border-2 border-dashed border-slate-700 rounded-xl cursor-pointer hover:border-blue-500 hover:bg-slate-800/50 transition-all duration-200 group">
+            class="flex items-center justify-center w-full px-4 py-8 bg-slate-800 border-2 border-dashed border-slate-700 rounded-md cursor-pointer hover:border-blue-500 hover:bg-slate-800/50 transition-colors duration-200 group">
             <div class="text-center">
-                <svg class="w-12 h-12 mx-auto mb-3 text-slate-600 group-hover:text-blue-500"
+                <svg class="w-12 h-12 mx-auto mb-3 text-slate-500 group-hover:text-blue-500"
                     fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
@@ -323,7 +323,7 @@
                     Click to upload file
                 </p>
 
-                <p class="text-xs text-slate-600 mt-1">
+                <p class="text-xs text-slate-500 mt-1">
                     JPG, PNG, GIF, PDF, DOC, XLS, ZIP, TXT (Max. 5MB)
                 </p>
             </div>

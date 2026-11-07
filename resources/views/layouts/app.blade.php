@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="id" class="dark">
+<html lang="id">
 
 <head>
     <meta charset="utf-8">
@@ -7,12 +7,7 @@
     <title>@yield('title', 'BD Departments Ticketing')</title>
     <link rel="icon" type="image/png" href="{{ Storage::disk('s3')->url('logos/asianbay_logomark.ico') }}">
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.2/css/buttons.dataTables.min.css">
-    <script>
-        (function() {
-            document.documentElement.classList.add('dark');
-            document.documentElement.style.colorScheme = 'dark';
-        })();
-    </script>
+    @include('components.theme-init')
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.8/css/dataTables.bootstrap5.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.bootstrap5.min.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet">
@@ -20,15 +15,7 @@
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/plugins/monthSelect/style.css">
     @vite('resources/css/app.css')
-    <meta name="theme-color" content="#0F172A">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <style>
-        html,
-        body {
-            background-color: #0F172A !important;
-            color: #F1F5F9 !important;
-        }
-    </style>
 </head>
 
 <body class="bg-slate-950 text-gray-100 transition-colors duration-300">
@@ -38,7 +25,7 @@
                 <img src="{{ Storage::disk('s3')->url('logos/asianbay.png') }}"
                     class="h-12 w-12 select-none pointer-events-none" draggable="false" alt="icon">
                 <div class="ml-3">
-                    <h2 class="text-base font-bold text-white">BD Departments</h2>
+                    <h2 class="text-base font-medium text-ink">BD Departments</h2>
                     <p class="text-xs text-slate-400 font-medium">Ticketing System</p>
                 </div>
             </div>
@@ -48,10 +35,10 @@
                         <ul role="list" class="-mx-2 space-y-1">
                             <li>
                                 <a href="{{ route('dashboard') }}"
-                                    class="group flex gap-x-3 rounded-lg p-3 text-sm leading-6 font-semibold transition-all
+                                    class="group flex gap-x-3 rounded-md p-3 text-sm leading-6 font-medium transition-colors
                                    {{ request()->routeIs('dashboard')
-                                       ? 'bg-gradient-to-r from-blue-500 to-cyan-500 text-white shadow-md'
-                                       : 'text-slate-300 hover:bg-slate-800' }}">
+                                       ?'     bg-accent text-accent-ink'
+                                       :'text-slate-300 hover:bg-slate-800' }}">
                                     <svg class="h-6 w-6 shrink-0" fill="none" stroke="currentColor"
                                         viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -63,10 +50,10 @@
                             @role('admin|executor')
                                 <li>
                                     <a href="{{ route('resolvetickets') }}"
-                                        class="group flex gap-x-3 rounded-lg p-3 text-sm leading-6 font-semibold transition-all
+                                        class="group flex gap-x-3 rounded-md p-3 text-sm leading-6 font-medium transition-colors
                                    {{ request()->routeIs('resolvetickets')
-                                       ? 'bg-gradient-to-r from-blue-500 to-cyan-500 text-white shadow-md'
-                                       : 'text-slate-300 hover:bg-slate-800' }}">
+                                       ?'     bg-accent text-accent-ink'
+                                       :'text-slate-300 hover:bg-slate-800' }}">
                                         <svg class="h-6 w-6 shrink-0" fill="none" stroke="currentColor"
                                             viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -81,10 +68,10 @@
                             @role('admin')
                                 <li>
                                     <a href="{{ route('users') }}"
-                                        class="group flex gap-x-3 rounded-lg p-3 text-sm leading-6 font-semibold transition-all
+                                        class="group flex gap-x-3 rounded-md p-3 text-sm leading-6 font-medium transition-colors
                                    {{ request()->routeIs('users')
-                                       ? 'bg-gradient-to-r from-blue-500 to-cyan-500 text-white shadow-md'
-                                       : 'text-slate-300 hover:bg-slate-800' }}">
+                                       ?'     bg-accent text-accent-ink'
+                                       :'text-slate-300 hover:bg-slate-800' }}">
                                         <svg class="h-6 w-6 shrink-0" fill="none" stroke="currentColor"
                                             viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -98,10 +85,10 @@
                             @role('human')
                                 <li>
                                     <a href="{{ route('openticket') }}"
-                                        class="group flex gap-x-3 rounded-lg p-3 text-sm leading-6 font-semibold transition-all
+                                        class="group flex gap-x-3 rounded-md p-3 text-sm leading-6 font-medium transition-colors
                                    {{ request()->routeIs('openticket')
-                                       ? 'bg-gradient-to-r from-blue-500 to-cyan-500 text-white shadow-md'
-                                       : 'text-slate-300 hover:bg-slate-800' }}">
+                                       ?'     bg-accent text-accent-ink'
+                                       :'text-slate-300 hover:bg-slate-800' }}">
                                         <svg class="h-6 w-6 shrink-0" fill="none" stroke="currentColor"
                                             viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -115,15 +102,15 @@
                         </ul>
                     </li>
                     <li>
-                        <div class="text-xs font-semibold leading-6 text-slate-400 uppercase tracking-wider mb-2">
+                        <div class="text-xs font-medium leading-6 text-slate-400 mb-2">
                             Settings</div>
                         <ul role="list" class="-mx-2 space-y-1">
                             <li>
                                 <a href="{{ route('profile') }}"
-                                    class="group flex gap-x-3 rounded-lg p-3 text-sm leading-6 font-semibold transition-all
+                                    class="group flex gap-x-3 rounded-md p-3 text-sm leading-6 font-medium transition-colors
                                    {{ request()->routeIs('profile')
-                                       ? 'bg-gradient-to-r from-blue-500 to-cyan-500 text-white shadow-md'
-                                       : 'text-slate-300 hover:bg-slate-800' }}">
+                                       ?'     bg-accent text-accent-ink'
+                                       :'text-slate-300 hover:bg-slate-800' }}">
                                     <svg class="h-6 w-6 shrink-0" fill="none" stroke="currentColor"
                                         viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -138,10 +125,10 @@
                     </li>
                     @auth
                         <li class="mt-auto">
-                            <div class="flex items-center justify-between p-3 bg-slate-800 rounded-lg">
+                            <div class="flex items-center justify-between p-3 bg-slate-800 rounded-md">
                                 <div class="flex items-center gap-x-3 min-w-0">
                                     <div class="min-w-0 flex-1">
-                                        <p class="text-sm font-semibold text-white truncate">
+                                        <p class="text-sm font-medium text-ink truncate">
                                             {{ Auth::user()->employee->employee_name ?? ' +62 812-3456-9999' }}
                                         </p>
                                         <p class="text-xs text-slate-400 truncate">
@@ -158,30 +145,26 @@
     <div class="lg:pl-72">
         <div
             class="max-w-md lg:max-w-none mx-auto min-h-screen flex flex-col
-         bg-slate-900 lg:bg-slate-950 shadow-2xl lg:shadow-none transition-colors duration-300">
+         bg-slate-900 lg:bg-slate-950 lg:shadow-none transition-colors duration-300">
 
             <header
-                class="sticky top-0 z-40 bg-slate-900 lg:backdrop-blur-sm lg:bg-slate-900/80 border-b border-slate-800 transition-colors duration-300">
+                class="sticky top-0 z-40 bg-slate-900 lg:bg-slate-900/80 border-b border-slate-800 transition-colors duration-300">
                 <div class="px-4 sm:px-6 lg:px-8 py-4 lg:py-6">
                     <div class="flex items-center justify-between mb-4 lg:hidden">
                         <div class="flex items-center space-x-3">
                             <img src="{{ Storage::disk('s3')->url('logos/asianbay.png') }}"
                                 class="w-16 h-16 select-none pointer-events-none" draggable="false" alt="icon">
                             <div>
-                                <h2 class="text-sm font-bold text-white">@yield('company', 'BD Departments')</h2>
+                                <h2 class="text-sm font-medium text-ink">@yield('company', 'BD Departments')</h2>
                                 <p class="text-xs text-slate-400 font-medium">Ticketing</p>
                             </div>
                         </div>
+                        @include('components.theme-toggle')
                     </div>
                     <div class="flex items-center justify-between">
                         <div class="flex items-center space-x-3 lg:space-x-4">
-                            <div
-                                class="hidden lg:block h-10 w-1 bg-gradient-to-b from-blue-500 to-cyan-500 rounded-full">
-                            </div>
-                            <div class="lg:hidden h-6 w-1 bg-gradient-to-b from-blue-500 to-cyan-500 rounded-full">
-                            </div>
                             <div>
-                                <h1 class="text-lg sm:text-xl lg:text-3xl font-bold text-white">
+                                <h1 class="text-lg sm:text-xl lg:text-3xl font-medium text-ink">
                                     @yield('header', 'Dashboard')
                                 </h1>
                                 <p class="text-xs sm:text-sm lg:text-base text-slate-400 mt-0.5">
@@ -191,10 +174,11 @@
                         </div>
                         @auth
                             <div class="hidden lg:flex items-center space-x-3">
+                                @include('components.theme-toggle')
                                 <form action="{{ route('logout.post') }}" method="POST">
                                     @csrf
                                     <button type="submit"
-                                        class="inline-flex items-center px-4 py-2.5 bg-gradient-to-r from-red-500 to-rose-500 text-white rounded-xl font-semibold shadow-lg shadow-red-500/30 hover:shadow-xl hover:shadow-red-500/40 transition-all text-sm">
+                                        class="inline-flex items-center px-4 py-2.5 rounded-md font-medium transition-colors text-sm border border-slate-600 hover:border-red-400 hover:text-red-400 text-ink bg-slate-800">
                                         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor"
                                             viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -212,7 +196,7 @@
 
                 @yield('content')
             </main>
-            <footer class="bg-dark dark:bg-slate-900 mt-auto mb-24 lg:mb-0">
+            <footer class="bg-slate-900 mt-auto mb-24 lg:mb-0">
 
                 <div class="px-4 sm:px-6 lg:px-8 py-6 lg:py-8">
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
@@ -221,17 +205,17 @@
                                 <img src="{{ Storage::disk('s3')->url('logos/asianbay.png') }}"
                                     class="w-12 h-12 select-none pointer-events-none" draggable="false"
                                     alt="icon">
-                                <h3 class="text-sm font-bold text-slate-900 text-white">{{ __('auth.departemen') }}
+                                <h3 class="text-sm font-medium text-ink text-ink">{{ __('auth.departemen') }}
                                 </h3>
                             </div>
-                            <p class="text-xs text-slate-600 dark:text-slate-400">
+                            <p class="text-xs text-slate-400">
                                 {{ __('auth.departemennote') }}
                             </p>
                         </div>
                     </div>
-                    <div class="mt-6 pt-6 border-t border-slate-200 dark:border-slate-800">
+                    <div class="mt-6 pt-6 border-t border-slate-800">
                         <div class="flex flex-col sm:flex-row justify-between items-center space-y-2 sm:space-y-0">
-                            <p class="text-xs text-slate-500 dark:text-slate-400">
+                            <p class="text-xs text-slate-400">
                                 © {{ date('Y') }} SerTix. Developed by Edwin Sirait
                             </p>
                         </div>
@@ -241,14 +225,6 @@
             <div class="lg:hidden">
                 @include('components.bottom-navguest')
             </div>
-        </div>
-    </div>
-    <div class="hidden lg:block fixed inset-0 -z-10 overflow-hidden pointer-events-none">
-        <div
-            class="absolute top-0 right-0 w-[600px] h-[600px] bg-blue-900/10 rounded-full filter blur-3xl transition-colors">
-        </div>
-        <div
-            class="absolute bottom-0 left-72 w-[600px] h-[600px] bg-cyan-900/10 rounded-full filter blur-3xl transition-colors">
         </div>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>

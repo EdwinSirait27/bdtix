@@ -8,16 +8,16 @@
 
     <div class="px-4 space-y-6 pb-8">
         {{-- Quick Info Banner --}}
-        <div class="bg-gradient-to-r from-blue-500/10 to-cyan-500/10 border border-blue-500/30 rounded-2xl p-4">
+        <div class="border border-blue-500/30 rounded-[10px] p-4 bg-blue-500/10">
             <div class="flex items-start space-x-3">
-                <div class="w-10 h-10 rounded-xl bg-blue-500/20 flex items-center justify-center flex-shrink-0">
+                <div class="w-10 h-10 rounded-[10px] bg-blue-500/20 flex items-center justify-center flex-shrink-0">
                     <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                 </div>
                 <div class="flex-1">
-                    <h3 class="text-sm font-semibold text-blue-400 mb-1">Edit Roles Users</h3>
+                    <h3 class="text-sm font-medium text-blue-400 mb-1">Edit Roles Users</h3>
                     <p class="text-xs text-slate-400 leading-relaxed">for administrators only.</p>
                 </div>
             </div>
@@ -26,7 +26,7 @@
         <form action="{{ route('updateusers', request()->route('hash')) }}" method="POST">
             @csrf
             <div>
-                <label for="title" class="block text-sm font-semibold text-slate-300 mb-2 flex items-center space-x-2">
+                <label for="title" class="block text-sm font-medium text-slate-300 mb-2 flex items-center space-x-2">
                     <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" />
@@ -37,7 +37,7 @@
 
             </div>
             <div>
-                <label for="roles" class="block text-sm font-semibold text-slate-300 mb-2 flex items-center space-x-2">
+                <label for="roles" class="block text-sm font-medium text-slate-300 mb-2 flex items-center space-x-2">
                     <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
@@ -73,14 +73,14 @@
 
             <div class="flex space-x-3 pt-4">
                 <a href="{{ route('users') }}"
-                    class="flex-1 py-3.5 bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 font-semibold rounded-xl transition-all duration-200 flex items-center justify-center space-x-2">
+                    class="flex-1 py-3.5 bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 font-medium rounded-[10px] transition-colors duration-200 flex items-center justify-center space-x-2">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                     </svg>
                     <span>Abort</span>
                 </a>
                 <button type="submit"
-                    class="flex-1 py-3.5 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white font-semibold rounded-xl shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center space-x-2">
+                    class="flex-1 py-3.5 font-medium rounded-[10px] transition-colors duration-300 flex items-center justify-center space-x-2 bg-accent hover:bg-accent-2 text-accent-ink">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                     </svg>

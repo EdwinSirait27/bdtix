@@ -1,7 +1,7 @@
-{{-- <nav class="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-slate-900/95 backdrop-blur-xl border-t border-slate-800 shadow-2xl">
+{{-- <nav class="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-slate-900/95 border-t border-slate-800">
     <div class="flex overflow-x-auto scrollbar-hide -webkit-overflow-scrolling-touch px-1" id="main-nav">
 
-        <a href="{{ route('dashboard') }}" class="nav-item {{ request()->routeIs('dashboard') ? 'active' : '' }}">
+        <a href="{{ route('dashboard') }}" class="nav-item {{ request()->routeIs('dashboard') ?'active' :'' }}">
             @if(request()->routeIs('dashboard'))
                 <div class="nav-indicator"></div>
             @endif
@@ -11,7 +11,7 @@
             <span class="nav-label">Home</span>
         </a>
 
-        <a href="{{ route('profile') }}" class="nav-item {{ request()->routeIs('profile') ? 'active' : '' }}">
+        <a href="{{ route('profile') }}" class="nav-item {{ request()->routeIs('profile') ?'active' :'' }}">
             @if(request()->routeIs('profile'))
                 <div class="nav-indicator"></div>
             @endif
@@ -21,7 +21,7 @@
             <span class="nav-label">Profile</span>
         </a>
 
-        <a href="{{ route('tickets.*') }}" class="nav-item {{ request()->routeIs('tickets.*') ? 'active' : '' }}">
+        <a href="{{ route('tickets.*') }}" class="nav-item {{ request()->routeIs('tickets.*') ?'active' :'' }}">
             @if(request()->routeIs('tickets.*'))
                 <div class="nav-indicator"></div>
             @endif
@@ -32,7 +32,7 @@
         </a>  
             @role('Admin')
         
-        <a href="{{ route('roles.index') }}" class="nav-item {{ request()->routeIs('roles.index') ? 'active' : '' }}">
+        <a href="{{ route('roles.index') }}" class="nav-item {{ request()->routeIs('roles.index') ?'active' :'' }}">
             @if(request()->routeIs('roles.index'))
                 <div class="nav-indicator"></div>
             @endif
@@ -66,11 +66,12 @@
         padding: 10px 4px;
         gap: 3px;
         text-decoration: none;
-        color: #64748b;
-        transition: all 0.2s;
+        color: var(--color-muted);
+        transition-property: background-color, border-color, color; transition-duration: 0.2s;
     }
-    .nav-item:hover { color: #94a3b8; }
-    .nav-item.active { color: #60a5fa; }
+    .nav-item:hover { color: var(--color-ink-2); }
+    .nav-item.active { color: var(--color-accent-text); }
+    .nav-item:focus-visible { outline: 2px solid var(--color-focus); outline-offset: -2px; }
 
     .nav-icon {
         width: 22px;
@@ -78,10 +79,10 @@
         flex-shrink: 0;
         transition: transform 0.2s;
     }
-    .nav-item.active .nav-icon { transform: scale(1.1); }
+
 
     .nav-label {
-        font-size: 10px;
+        font-size: 11px;
         font-weight: 500;
         white-space: nowrap;
     }
@@ -95,7 +96,7 @@
         width: 32px;
         height: 3px;
         border-radius: 0 0 4px 4px;
-        background: linear-gradient(90deg, #3b82f6, #06b6d4);
+        background: var(--color-accent);
         animation: slideDown 0.3s ease-out;
     }
 
@@ -111,11 +112,11 @@
     }
 </style> --}}
 
-<nav class="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-slate-900/95 backdrop-blur-xl border-t border-slate-800 shadow-2xl">
+<nav class="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-slate-900/95 border-t border-slate-800">
     <div class="flex overflow-x-auto scrollbar-hide -webkit-overflow-scrolling-touch px-1" id="main-nav">
 
         {{-- Home --}}
-        <a href="{{ route('dashboard') }}" class="nav-item {{ request()->routeIs('dashboard') ? 'active' : '' }}">
+        <a href="{{ route('dashboard') }}" class="nav-item {{ request()->routeIs('dashboard') ?'active' :'' }}">
             @if(request()->routeIs('dashboard'))
                 <div class="nav-indicator"></div>
             @endif
@@ -126,7 +127,7 @@
         </a>
 
         {{-- Profile --}}
-        <a href="{{ route('profile') }}" class="nav-item {{ request()->routeIs('profile') ? 'active' : '' }}">
+        <a href="{{ route('profile') }}" class="nav-item {{ request()->routeIs('profile') ?'active' :'' }}">
             @if(request()->routeIs('profile'))
                 <div class="nav-indicator"></div>
             @endif
@@ -161,11 +162,12 @@
         padding: 10px 4px;
         gap: 3px;
         text-decoration: none;
-        color: #64748b;
-        transition: all 0.2s;
+        color: var(--color-muted);
+        transition-property: background-color, border-color, color; transition-duration: 0.2s;
     }
-    .nav-item:hover { color: #94a3b8; }
-    .nav-item.active { color: #60a5fa; }
+    .nav-item:hover { color: var(--color-ink-2); }
+    .nav-item.active { color: var(--color-accent-text); }
+    .nav-item:focus-visible { outline: 2px solid var(--color-focus); outline-offset: -2px; }
 
     .nav-icon {
         width: 22px;
@@ -173,10 +175,10 @@
         flex-shrink: 0;
         transition: transform 0.2s;
     }
-    .nav-item.active .nav-icon { transform: scale(1.1); }
+
 
     .nav-label {
-        font-size: 10px;
+        font-size: 11px;
         font-weight: 500;
         white-space: nowrap;
     }
@@ -190,7 +192,7 @@
         width: 32px;
         height: 3px;
         border-radius: 0 0 4px 4px;
-        background: linear-gradient(90deg, #3b82f6, #06b6d4);
+        background: var(--color-accent);
         animation: slideDown 0.3s ease-out;
     }
 

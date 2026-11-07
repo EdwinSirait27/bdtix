@@ -5,16 +5,16 @@
 @section('content')
     <style>
         .select2-container--default .select2-selection--single {
-            background-color: #1e293b;
-            border: 1px solid #334155;
-            border-radius: 0.75rem;
+            background-color: var(--color-paper-2);
+            border: 1px solid var(--color-rule);
+            border-radius: var(--radius-card);
             height: 52px;
             display: flex;
             align-items: center;
         }
 
         .select2-container--default .select2-selection--single .select2-selection__rendered {
-            color: #e5e7eb;
+            color: var(--color-ink);
             padding-left: 1rem;
         }
 
@@ -24,28 +24,28 @@
         }
 
         .select2-dropdown {
-            background-color: #1e293b;
-            border: 1px solid #334155;
+            background-color: var(--color-paper-2);
+            border: 1px solid var(--color-rule);
         }
 
         .select2-results__option {
-            background-color: #1e293b !important;
-            color: #e5e7eb !important;
+            background-color: var(--color-paper-2) !important;
+            color: var(--color-ink) !important;
         }
 
         .select2-results__option--highlighted {
-            background-color: #2563eb !important;
-            color: #ffffff !important;
+            background-color: var(--color-accent) !important;
+            color: var(--color-accent-ink) !important;
         }
 
         .select2-results__option[aria-selected="true"] {
-            background-color: #334155 !important;
-            color: #e5e7eb !important;
+            background-color: var(--color-paper-3) !important;
+            color: var(--color-ink) !important;
         }
 
         .select2-results__option[aria-selected="true"]:hover {
-            background-color: #2563eb !important;
-            color: #ffffff !important;
+            background-color: var(--color-accent) !important;
+            color: var(--color-accent-ink) !important;
         }
 
         #executorSourceModal,
@@ -58,34 +58,34 @@
 
         /* ✅ Flatpickr dark theme override */
         .flatpickr-calendar {
-            background: #1e293b !important;
-            border: 1px solid #334155 !important;
-            border-radius: 0.75rem !important;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4) !important;
+            background: var(--color-paper-2) !important;
+            border: 1px solid var(--color-rule) !important;
+            border-radius: var(--radius-card) !important;
+            box-shadow: none !important;
             z-index: 99999 !important;
         }
 
         .flatpickr-time input,
         .flatpickr-time .flatpickr-time-separator,
         .flatpickr-time .flatpickr-am-pm {
-            color: #e5e7eb !important;
-            background: #1e293b !important;
+            color: var(--color-ink) !important;
+            background: var(--color-paper-2) !important;
         }
 
         .flatpickr-time input:hover,
         .flatpickr-time input:focus {
-            background: #334155 !important;
+            background: var(--color-paper-3) !important;
         }
 
         .numInputWrapper:hover {
-            background: #334155 !important;
+            background: var(--color-paper-3) !important;
         }
 
         .flatpickr-input {
-            background-color: #1e293b !important;
-            border: 1px solid #334155 !important;
-            border-radius: 0.75rem !important;
-            color: #e5e7eb !important;
+            background-color: var(--color-paper-2) !important;
+            border: 1px solid var(--color-rule) !important;
+            border-radius: var(--radius-card) !important;
+            color: var(--color-ink) !important;
             padding: 0.75rem 1rem !important;
             width: 100% !important;
             font-size: 0.875rem !important;
@@ -94,22 +94,22 @@
 
         .flatpickr-input:focus {
             outline: none !important;
-            border-color: #3b82f6 !important;
-            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3) !important;
+            border-color: var(--color-cool) !important;
+            box-shadow: none !important;
         }
     </style>
 
     <div class="px-4 space-y-6 pb-8">
-        <div class="bg-gradient-to-r from-blue-500/10 to-cyan-500/10 border border-blue-500/30 rounded-2xl p-4">
+        <div class="border border-blue-500/30 rounded-[10px] p-4 bg-blue-500/10">
             <div class="flex items-start space-x-3">
-                <div class="w-10 h-10 rounded-xl bg-blue-500/20 flex items-center justify-center flex-shrink-0">
+                <div class="w-10 h-10 rounded-[10px] bg-blue-500/20 flex items-center justify-center flex-shrink-0">
                     <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                 </div>
                 <div class="flex-1">
-                    <h3 class="text-sm font-semibold text-blue-400 mb-1">Tickets from
+                    <h3 class="text-sm font-medium text-blue-400 mb-1">Tickets from
                         {{ optional($ticket->user->employee)->employee_name }}</h3>
                     <p class="text-xs text-slate-400 leading-relaxed">Date : {{ $createdat }}</p>
                     <p class="text-xs text-slate-400 leading-relaxed">Queue Number : {{ optional($ticket)->queue_number }}
@@ -132,7 +132,7 @@
             @endif
 
             <div>
-                <label for="store_id" class="block text-sm font-semibold text-slate-300 mb-2 flex items-center space-x-2">
+                <label for="store_id" class="block text-sm font-medium text-slate-300 mb-2 flex items-center space-x-2">
                     <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" />
@@ -143,11 +143,11 @@
 
                 <input type="text" id="store_id" name="store_id" required
                     placeholder="Example: Laptop cannot connect to WiFi"
-                    class="w-full px-4 py-3.5 bg-slate-800 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                    class="w-full px-4 py-3.5 bg-slate-800 border border-slate-700 rounded-md text-ink placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent transition-colors duration-200"
                     value="{{ old('store_id', $ticket->store?->name ?? 'Empty') }}" disabled>
             </div>
             <div>
-                <label for="title" class="block text-sm font-semibold text-slate-300 mb-2 flex items-center space-x-2">
+                <label for="title" class="block text-sm font-medium text-slate-300 mb-2 flex items-center space-x-2">
                     <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" />
@@ -157,12 +157,12 @@
                 </label>
                 <input type="text" id="title" name="title" required
                     placeholder="Example: Laptop cannot connect to WiFi"
-                    class="w-full px-4 py-3.5 bg-slate-800 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                    class="w-full px-4 py-3.5 bg-slate-800 border border-slate-700 rounded-md text-ink placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent transition-colors duration-200"
                     value="{{ old('title', $ticket->title) }}" disabled>
             </div>
 
             <div>
-                <label for="category" class="block text-sm font-semibold text-slate-300 mb-2 flex items-center space-x-2">
+                <label for="category" class="block text-sm font-medium text-slate-300 mb-2 flex items-center space-x-2">
                     <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
@@ -172,7 +172,7 @@
                 </label>
                 <div class="relative">
                     <select id="category" name="category" required
-                        class="select2 w-full bg-slate-800 border border-slate-700 rounded-xl text-white">
+                        class="select2 w-full bg-slate-800 border border-slate-700 rounded-[10px] text-ink">
                         <option value="">Choose Categories...</option>
                         <option value="Plumbing"
                             {{ old('category', $ticket->category) == 'Plumbing' ? 'selected' : '' }}>
@@ -199,7 +199,7 @@
             </div>
             <div>
                 <label for="sub_category"
-                    class="block text-sm font-semibold text-slate-300 mb-2 flex items-center space-x-2">
+                    class="block text-sm font-medium text-slate-300 mb-2 flex items-center space-x-2">
                     <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
@@ -209,7 +209,7 @@
                 </label>
                 <div class="relative">
                     <select id="sub_category" name="sub_category" required
-                        class="select2 w-full bg-slate-800 border border-slate-700 rounded-xl text-white">
+                        class="select2 w-full bg-slate-800 border border-slate-700 rounded-[10px] text-ink">
                         <option value="">Choose Sub Categories...</option>
                         <option value="Maintenance"
                             {{ old('sub_category', $ticket->sub_category) == 'Maintenance' ? 'selected' : '' }}>
@@ -241,7 +241,7 @@
 
             <div>
                 <label for="description"
-                    class="block text-sm font-semibold text-slate-300 mb-2 flex items-center space-x-2">
+                    class="block text-sm font-medium text-slate-300 mb-2 flex items-center space-x-2">
                     <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M4 6h16M4 12h16M4 18h7" />
@@ -251,7 +251,7 @@
                 </label>
                 <textarea id="description" name="description" rows="5" disabled
                     placeholder="Describe your problem in detail..."
-                    class="w-full px-4 py-3.5 bg-slate-800 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 resize-none">{{ old('description', $ticket->description) }}</textarea>
+                    class="w-full px-4 py-3.5 bg-slate-800 border border-slate-700 rounded-md text-ink placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent transition-colors duration-200 resize-none">{{ old('description', $ticket->description) }}</textarea>
                 <div class="flex items-center justify-between mt-2">
                     <p class="text-xs text-slate-500">minimum 10 character</p>
                     <p class="text-xs text-slate-500"><span id="descCharCount">0</span> / 500</p>
@@ -260,7 +260,7 @@
 
             <div class="-mt-4">
                 <label for="notes_executor"
-                    class="block text-sm font-semibold text-slate-300 mb-2 flex items-center space-x-2">
+                    class="block text-sm font-medium text-slate-300 mb-2 flex items-center space-x-2">
                     <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M4 6h16M4 12h16M4 18h7" />
@@ -270,7 +270,7 @@
                 </label>
                 <textarea id="notes_executor" name="notes_executor" rows="5" required
                     placeholder="Describe user's problem in detail..."
-                    class="w-full px-4 py-3.5 bg-slate-800 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 resize-none">{{ old('notes_executor', $ticket->notes_executor) }}</textarea>
+                    class="w-full px-4 py-3.5 bg-slate-800 border border-slate-700 rounded-md text-ink placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent transition-colors duration-200 resize-none">{{ old('notes_executor', $ticket->notes_executor) }}</textarea>
                 <div class="flex items-center justify-between mt-2">
                     <p class="text-xs text-slate-500">minimum 10 character</p>
                     <p class="text-xs text-slate-500"><span id="notesCharCount">0</span> / 500</p>
@@ -290,7 +290,7 @@
             @if ($ticket->status === 'Open')
                 <div class="mt-4">
                     <label for="duration_type"
-                        class="block text-sm font-semibold text-slate-300 mb-2 flex items-center space-x-2">
+                        class="block text-sm font-medium text-slate-300 mb-2 flex items-center space-x-2">
                         <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M8 7V3m8 4V3M3 11h18M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
@@ -303,7 +303,7 @@
                     <div class="space-y-3">
                         <div>
                             <select id="duration_type" name="duration_type"
-                                class="select2-duration w-full bg-slate-800 border border-slate-700 rounded-xl text-white"
+                                class="select2-duration w-full bg-slate-800 border border-slate-700 rounded-[10px] text-ink"
                                 required>
                                 <option value="">Choose Type</option>
                                 <option value="hour" {{ old('duration_type') == 'hour' ? 'selected' : '' }}>Hour
@@ -330,7 +330,7 @@
                             </select>
                             <div id="duration_hour_wrapper" style="display:none;">
                                 <input type="time" id="duration_hour_time"
-                                    class="w-full bg-slate-800 border border-slate-700 rounded-xl text-white px-3 py-2 text-base"
+                                    class="w-full bg-slate-800 border border-slate-700 rounded-md text-ink px-3 py-2 text-base"
                                     step="3600" style="color-scheme: dark;">
                             </div>
 
@@ -369,7 +369,7 @@
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6">
 
                         <div>
-                            <label class="block text-sm font-semibold text-slate-300 mb-2 flex items-center space-x-2">
+                            <label class="block text-sm font-medium text-slate-300 mb-2 flex items-center space-x-2">
                                 <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor"
                                     viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -380,11 +380,11 @@
                             </label>
                             <input type="text" readonly
                                 value="{{ $ticket->estimation ? $ticket->estimation->timezone('Asia/Makassar')->format('Y-m-d H:i') : '-' }}"
-                                class="w-full px-4 py-3.5 bg-slate-800 border border-slate-700 rounded-xl text-white cursor-not-allowed opacity-70 focus:outline-none">
+                                class="w-full px-4 py-3.5 bg-slate-800 border border-slate-700 rounded-md text-ink cursor-not-allowed opacity-70 focus:outline-none">
                         </div>
 
                         <div>
-                            <label class="block text-sm font-semibold text-slate-300 mb-2 flex items-center space-x-2">
+                            <label class="block text-sm font-medium text-slate-300 mb-2 flex items-center space-x-2">
                                 <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor"
                                     viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -398,8 +398,8 @@
                             </label>
                             <input type="text" readonly
                                 value="{{ $ticket->estimation_to ? $ticket->estimation_to->timezone('Asia/Makassar')->format('Y-m-d H:i') : '-' }}"
-                                class="w-full px-4 py-3.5 bg-slate-800 border border-slate-700 rounded-xl cursor-not-allowed opacity-70 focus:outline-none
-                                    {{ $ticket->estimation_to && now()->gt($ticket->estimation_to) ? 'text-red-400' : 'text-white' }}">
+                                class="w-full px-4 py-3.5 bg-slate-800 border border-slate-700 rounded-md cursor-not-allowed opacity-70 focus:outline-none
+                                    {{ $ticket->estimation_to && now()->gt($ticket->estimation_to) ?'text-red-400' :'text-ink' }}">
                         </div>
 
                     </div>
@@ -409,7 +409,7 @@
             @if ($ticket->status === 'Overdue')
                 <div>
                     <label for="statusSelect"
-                        class="block text-sm font-semibold text-slate-300 mb-2 flex items-center space-x-2">
+                        class="block text-sm font-medium text-slate-300 mb-2 flex items-center space-x-2">
                         <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -418,7 +418,7 @@
                         <span class="text-red-400">*</span>
                     </label>
                     <select id="statusSelect" name="status"
-                        class="select2-status w-full bg-slate-800 border border-slate-700 rounded-xl text-white">
+                        class="select2-status w-full bg-slate-800 border border-slate-700 rounded-[10px] text-ink">
                         <option value="" disabled selected>Overdue — Choose action...</option>
                         <option value="Progress">Back to Progress</option>
                         <option value="Closed">Close this Ticket</option>
@@ -429,17 +429,17 @@
             @endif
 
             <div class="mt-4">
-                <label class="block text-sm font-semibold text-slate-300 mb-2 flex items-center space-x-2">
+                <label class="block text-sm font-medium text-slate-300 mb-2 flex items-center space-x-2">
                     <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
                     </svg>
                     <span>User Attachments</span>
                 </label>
-                <div class="border border-slate-700 rounded-xl p-4 bg-slate-800/40 min-h-[80px]">
+                <div class="border border-slate-700 rounded-[10px] p-4 bg-slate-800/40 min-h-[80px]">
                    
                     @if ($ticket->attachments->count())
-                        <div class="border border-slate-700 rounded-xl p-4 bg-slate-800/40 mb-3"
+                        <div class="border border-slate-700 rounded-[10px] p-4 bg-slate-800/40 mb-3"
                             id="existing-attachments">
                             <ul class="space-y-2" id="attachment-list">
                                 @foreach ($ticket->attachments as $file)
@@ -478,7 +478,7 @@
 
             @if ($ticket->status !== 'Open')
                 <div class="mt-4">
-                    <label class="block text-sm font-semibold text-slate-300 mb-2 flex items-center space-x-2">
+                    <label class="block text-sm font-medium text-slate-300 mb-2 flex items-center space-x-2">
                         <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
@@ -492,7 +492,7 @@
 
                   
                     @if ($ticket->executorAttachments->count())
-                        <div class="border border-slate-700 rounded-xl p-4 bg-slate-800/40 mb-3"
+                        <div class="border border-slate-700 rounded-[10px] p-4 bg-slate-800/40 mb-3"
                             id="existing-attachments-for-executor">
                             <ul class="space-y-2" id="attachment-list">
                                 @foreach ($ticket->executorAttachments as $file)
@@ -522,7 +522,7 @@
                                         {{-- Tombol delete --}}
                                         <button type="button"
                                             onclick="deleteAttachmentForExecutor('{{ $file->id }}')"
-                                            class="flex-shrink-0 p-1.5 text-slate-500 hover:text-red-400 hover:bg-red-400/10 rounded-lg transition"
+                                            class="flex-shrink-0 p-1.5 text-slate-500 hover:text-red-400 hover:bg-red-400/10 rounded-md transition"
                                             title="Delete attachment">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor"
                                                 viewBox="0 0 24 24">
@@ -544,11 +544,11 @@
                         </div>
                         <div class="mt-3 flex flex-col sm:flex-row gap-3">
                             <button type="button" id="admin-executor-add-btn"
-                                class="px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition">
+                                class="px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-md transition">
                                 + Add Attachment
                             </button>
                             <button type="button" id="admin-executor-erase-btn"
-                                class="px-4 py-2.5 bg-red-600 hover:bg-red-700 text-white rounded-lg transition">
+                                class="px-4 py-2.5 bg-red-600 hover:bg-red-700 text-white rounded-md transition">
                                 - Erase Attachment
                             </button>
                         </div>
@@ -559,7 +559,7 @@
 
             <div class="flex space-x-3 pt-4">
                 <a href="{{ route('dashboard') }}"
-                    class="flex-1 py-3.5 bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 font-semibold rounded-xl transition-all duration-200 flex items-center justify-center space-x-2">
+                    class="flex-1 py-3.5 bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 font-medium rounded-[10px] transition-colors duration-200 flex items-center justify-center space-x-2">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                     </svg>
@@ -569,7 +569,7 @@
                 @if ($ticket->status === 'Open')
                     <input type="hidden" name="status" value="Progress">
                     <button type="submit" name="action" value="take"
-                        class="flex-1 py-3.5 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white font-semibold rounded-xl shadow-lg shadow-blue-500/30 transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center space-x-2">
+                        class="flex-1 py-3.5 font-medium rounded-[10px] transition-colors duration-300 flex items-center justify-center space-x-2 bg-accent hover:bg-accent-2 text-accent-ink">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                         </svg>
@@ -579,7 +579,7 @@
 
                 @if (in_array($ticket->status, ['Progress', 'Overdue']))
                     <button type="button" id="btn-close-ticket"
-                        class="flex-1 py-3.5 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white font-semibold rounded-xl shadow-lg shadow-blue-500/30 transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center space-x-2">
+                        class="flex-1 py-3.5 font-medium rounded-[10px] transition-colors duration-300 flex items-center justify-center space-x-2 bg-accent hover:bg-accent-2 text-accent-ink">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                         </svg>
@@ -598,27 +598,27 @@
 
     <div id="executorSourceModal" class="fixed inset-0 bg-black/70 hidden items-center justify-center"
         style="z-index:9999;">
-        <div class="bg-slate-900 rounded-xl p-6 w-80 text-center border border-slate-800 shadow-2xl">
-            <h3 class="text-lg font-semibold mb-4 text-white">Pilih Sumber</h3>
+        <div class="bg-slate-900 rounded-[10px] p-6 w-80 text-center border border-slate-800">
+            <h3 class="text-lg font-medium mb-4 text-ink">Pilih Sumber</h3>
             <button type="button" id="executorOpenCamera"
-                class="w-full mb-3 px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white transition">Open
+                class="w-full mb-3 px-4 py-2 rounded-md bg-blue-600 hover:bg-blue-700 text-white transition">Open
                 Camera</button>
             <button type="button" id="executorOpenFiles"
-                class="w-full mb-3 px-4 py-2 rounded-lg bg-slate-700 hover:bg-slate-600 text-white transition">Upload
+                class="w-full mb-3 px-4 py-2 rounded-md bg-slate-700 hover:bg-slate-600 text-ink transition">Upload
                 Files</button>
             <button type="button" id="executorCloseSource"
-                class="w-full px-4 py-2 text-slate-400 hover:text-white transition">Abort</button>
+                class="w-full px-4 py-2 text-slate-400 hover:text-ink transition">Abort</button>
         </div>
     </div>
 
     <div id="previewModalForExecutor" class="fixed inset-0 bg-black/80 hidden items-center justify-center p-4"
         style="z-index:9999;">
-        <div class="bg-slate-900 rounded-2xl w-full max-w-3xl border border-slate-700 flex flex-col shadow-2xl"
+        <div class="bg-slate-900 rounded-[10px] w-full max-w-3xl border border-slate-700 flex flex-col"
             style="max-height:90vh;">
             <div class="flex items-center justify-between p-4 border-b border-slate-700 flex-shrink-0">
-                <h3 id="previewModalForExecutorTitle" class="text-sm font-semibold text-slate-200 truncate pr-4"></h3>
+                <h3 id="previewModalForExecutorTitle" class="text-sm font-medium text-slate-200 truncate pr-4"></h3>
                 <button type="button" onclick="closePreviewModalForExecutor()"
-                    class="text-slate-400 hover:text-white flex-shrink-0 transition">
+                    class="text-slate-400 hover:text-ink flex-shrink-0 transition">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                     </svg>
@@ -632,12 +632,12 @@
     </div>
     <div id="previewModal" class="fixed inset-0 bg-black/80 hidden items-center justify-center p-4"
         style="z-index:9999;">
-        <div class="bg-slate-900 rounded-2xl w-full max-w-3xl border border-slate-700 flex flex-col shadow-2xl"
+        <div class="bg-slate-900 rounded-[10px] w-full max-w-3xl border border-slate-700 flex flex-col"
             style="max-height:90vh;">
             <div class="flex items-center justify-between p-4 border-b border-slate-700 flex-shrink-0">
-                <h3 id="previewModalTitle" class="text-sm font-semibold text-slate-200 truncate pr-4"></h3>
+                <h3 id="previewModalTitle" class="text-sm font-medium text-slate-200 truncate pr-4"></h3>
                 <button type="button" onclick="closePreviewModal()"
-                    class="text-slate-400 hover:text-white flex-shrink-0 transition">
+                    class="text-slate-400 hover:text-ink flex-shrink-0 transition">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                     </svg>
@@ -894,14 +894,14 @@
                         container?.insertAdjacentHTML('beforeend', `
                         <div class="relative mb-3" id="wrap_${id}">
                             <input type="file" id="${id}" accept=".jpg,.jpeg,.png,.gif,.pdf,.doc,.docx,.xls,.xlsx,.zip,.txt" class="hidden">
-                            <label class="flex items-center justify-center w-full px-4 py-8 bg-slate-800 border-2 border-dashed border-slate-700 rounded-xl cursor-pointer hover:border-blue-500 hover:bg-slate-800/50 transition-all duration-200 group"
+                            <label class="flex items-center justify-center w-full px-4 py-8 bg-slate-800 border-2 border-dashed border-slate-700 rounded-md cursor-pointer hover:border-blue-500 hover:bg-slate-800/50 transition-colors duration-200 group"
                                 onclick="window.showExecutorSourceModal('${id}'); return false;">
                                 <div class="text-center pointer-events-none">
-                                    <svg class="w-12 h-12 mx-auto mb-3 text-slate-600 group-hover:text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <svg class="w-12 h-12 mx-auto mb-3 text-slate-500 group-hover:text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
                                     </svg>
                                     <p id="fileName_${id}" class="text-sm font-medium text-slate-400 group-hover:text-blue-400">Click to upload file</p>
-                                    <p class="text-xs text-slate-600 mt-1">JPG, PNG, GIF, PDF, DOC, XLS, ZIP, TXT (Max. 20MB)</p>
+                                    <p class="text-xs text-slate-500 mt-1">JPG, PNG, GIF, PDF, DOC, XLS, ZIP, TXT (Max. 20MB)</p>
                                     <div id="prev_${id}" class="mt-2 text-xs text-slate-400"></div>
                                 </div>
                             </label>

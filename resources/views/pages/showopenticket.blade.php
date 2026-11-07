@@ -6,20 +6,20 @@
     <div class="max-w-10xl mx-auto space-y-12">
 
         {{-- Ticket Info --}}
-        <div class="bg-white dark:bg-slate-900 rounded-2xl shadow p-6">
+        <div class="bg-slate-900 rounded-[10px] p-6">
             <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
                 <div>
-                    <h2 class="text-xl font-bold text-slate-900 dark:text-white">
+                    <h2 class="text-xl font-medium text-ink">
                         Title : {{ $ticket->title ?? '-' }}
                     </h2>
-                    <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">
+                    <p class="text-sm text-slate-400 mt-1">
                         Ticket Queue Number {{ $ticket->queue_number ?? '-' }} • Created
                         {{-- FIX 1: created_at bisa null --}}
                         {{ $ticket->created_at?->format('d F Y H:i') ?? '-' }}
                     </p>
                 </div>
                 <div>
-                    <span class="inline-flex items-center px-4 py-1.5 rounded-full text-sm font-semibold">
+                    <span class="inline-flex items-center px-4 py-1.5 rounded-full text-sm font-medium">
                         Status : {{ strtoupper(str_replace('_', ' ', $ticket->status ?? '-')) }}
                     </span>
                 </div>
@@ -28,41 +28,41 @@
 
         {{-- Ticket Meta --}}
         <div class="grid grid-cols-1 md:grid-cols-5 gap-6">
-            <div class="bg-white dark:bg-slate-900 rounded-xl p-5 shadow">
-                <p class="text-xs text-slate-500 ">Location</p>
-                <p class="font-semibold mt-1">
+            <div class="bg-slate-900 rounded-[10px] p-5">
+                <p class="text-xs text-slate-500">Location</p>
+                <p class="font-medium mt-1">
                     {{-- FIX 2: relasi bertingkat null-safe --}}
                     {{ $ticket->store?->name ?? '-' }}
                 </p>
             </div>
-            <div class="bg-white dark:bg-slate-900 rounded-xl p-5 shadow">
-                <p class="text-xs text-slate-500 ">Created By</p>
-                <p class="font-semibold mt-1">
+            <div class="bg-slate-900 rounded-[10px] p-5">
+                <p class="text-xs text-slate-500">Created By</p>
+                <p class="font-medium mt-1">
                     {{-- FIX 2: relasi bertingkat null-safe --}}
                     {{ $ticket->user?->employee?->employee_name ?? ($ticket->user?->email ?? '-') }}
                 </p>
             </div>
-            <div class="bg-white dark:bg-slate-900 rounded-xl p-5 shadow">
-                <p class="text-xs text-slate-500 ">Priority</p>
-                <p class="font-semibold mt-1">
+            <div class="bg-slate-900 rounded-[10px] p-5">
+                <p class="text-xs text-slate-500">Priority</p>
+                <p class="font-medium mt-1">
                     {{ ucfirst($ticket->priority ?? '-') }}
                 </p>
             </div>
-            <div class="bg-white dark:bg-slate-900 rounded-xl p-5 shadow">
-                <p class="text-xs text-slate-500 ">Category</p>
-                <p class="font-semibold mt-1">
+            <div class="bg-slate-900 rounded-[10px] p-5">
+                <p class="text-xs text-slate-500">Category</p>
+                <p class="font-medium mt-1">
                     {{ $ticket->category ?? '-' }}
                 </p>
             </div>
-            <div class="bg-white dark:bg-slate-900 rounded-xl p-5 shadow">
-                <p class="text-xs text-slate-500 ">Sub Category</p>
-                <p class="font-semibold mt-1">
+            <div class="bg-slate-900 rounded-[10px] p-5">
+                <p class="text-xs text-slate-500">Sub Category</p>
+                <p class="font-medium mt-1">
                     {{ $ticket->sub_category ?? '-' }}
                 </p>
             </div>
-            <div class="bg-white dark:bg-slate-900 rounded-xl p-5 shadow">
-                <p class="text-xs text-slate-500 ">Executor</p>
-                <p class="font-semibold mt-1">
+            <div class="bg-slate-900 rounded-[10px] p-5">
+                <p class="text-xs text-slate-500">Executor</p>
+                <p class="font-medium mt-1">
                     {{-- FIX 3: executor bisa null --}}
                     {{-- {{ $ticket->executor?->employee?->employee_name ?? '-' }} --}}
                     {{ $executor?->employee?->employee_name ?? '-' }}
@@ -70,9 +70,9 @@
                     {{-- {{ dd($ticket->executor_id, $ticket->executor, $ticket->executor?->employee) }} --}}
                 </p>
             </div>
-            <div class="bg-white dark:bg-slate-900 rounded-xl p-5 shadow">
-                <p class="text-xs text-slate-500 ">Finished</p>
-                <p class="font-semibold mt-1">
+            <div class="bg-slate-900 rounded-[10px] p-5">
+                <p class="text-xs text-slate-500">Finished</p>
+                <p class="font-medium mt-1">
                     {{-- FIX 4: finished bisa null --}}
                     {{ $ticket->finished?->format('d F Y H:i') ?? '-' }}
                 </p>
@@ -80,15 +80,15 @@
         </div>
 
         {{-- Description --}}
-        <div class="bg-white dark:bg-slate-900 rounded-2xl shadow p-6">
-            <h3 class="text-lg font-bold mb-3">Description</h3>
+        <div class="bg-slate-900 rounded-[10px] p-6">
+            <h3 class="text-lg font-medium mb-3">Description</h3>
             <div class="prose dark:prose-invert max-w-none text-sm">
                 {!! nl2br(e($ticket->description ?? '-')) !!}
             </div>
         </div>
 
-        <div class="bg-white dark:bg-slate-900 rounded-2xl shadow p-6">
-            <h3 class="text-lg font-bold mb-3">Notes from BD</h3>
+        <div class="bg-slate-900 rounded-[10px] p-6">
+            <h3 class="text-lg font-medium mb-3">Notes from BD</h3>
             <div class="prose dark:prose-invert max-w-none text-sm">
                 {!! nl2br(e($ticket->notes_executor ?? '-')) !!}
             </div>
@@ -98,8 +98,8 @@
         {{-- FIX 5: cek null sebelum count() --}}
         
         @if ($ticket->attachments && $ticket->attachments->count())
-            <div class="bg-white dark:bg-slate-900 rounded-2xl shadow-lg p-4 sm:p-6">
-                <h3 class="text-base sm:text-lg font-bold mb-4 text-slate-900 dark:text-white">Attachments</h3>
+            <div class="bg-slate-900 rounded-[10px] p-4 sm:p-6">
+                <h3 class="text-base sm:text-lg font-medium mb-4 text-ink">Attachments</h3>
                 <ul class="space-y-2">
                     @foreach ($ticket->attachments as $file)
                         <li class="flex items-center gap-2">
@@ -133,8 +133,8 @@
             </div>
         @endif
         @if ($ticket->executorAttachments && $ticket->executorAttachments->count())
-            <div class="bg-white dark:bg-slate-900 rounded-2xl shadow-lg p-4 sm:p-6">
-                <h3 class="text-base sm:text-lg font-bold mb-4 text-slate-900 dark:text-white">Executor Attachments : {{ $executor->employee->employee_name }}</h3>
+            <div class="bg-slate-900 rounded-[10px] p-4 sm:p-6">
+                <h3 class="text-base sm:text-lg font-medium mb-4 text-ink">Executor Attachments : {{ $executor->employee->employee_name }}</h3>
                 <ul class="space-y-2">
                     @foreach ($ticket->executorAttachments as $file)
                         <li class="flex items-center gap-2">
@@ -169,13 +169,13 @@
 
         {{-- Activity --}}
         @if ($ticket->replies && $ticket->replies->count())
-            <div class="bg-white dark:bg-slate-900 rounded-2xl shadow p-6">
-                <h3 class="text-lg font-bold mb-4">Activity</h3>
+            <div class="bg-slate-900 rounded-[10px] p-6">
+                <h3 class="text-lg font-medium mb-4">Activity</h3>
                 <div class="space-y-4">
                     @foreach ($ticket->replies as $reply)
-                        <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-800">
+                        <div class="p-4 rounded-[10px] bg-slate-800">
                             <div class="flex justify-between items-center mb-2">
-                                <p class="text-sm font-semibold">
+                                <p class="text-sm font-medium">
                                     {{-- FIX 6: relasi bertingkat di replies --}}
                                     {{ $reply->user?->employee?->employee_name ?? ($reply->user?->email ?? '-') }}
                                 </p>
@@ -184,7 +184,7 @@
                                     {{ $reply->created_at?->diffForHumans() ?? '-' }}
                                 </p>
                             </div>
-                            <p class="text-sm text-slate-700 dark:text-slate-300">
+                            <p class="text-sm text-slate-300">
                                 {{ $reply->message ?? '-' }}
                             </p>
                         </div>
@@ -195,9 +195,9 @@
 
         {{-- Review --}}
         @if ($ticket->review)
-            <div class="bg-gradient-to-br from-green-900/20 to-emerald-900/20 border border-green-700/30 rounded-2xl p-6">
+            <div class="border border-green-700/30 rounded-[10px] p-6 bg-green-500/10">
                 <div class="flex items-start space-x-3 mb-4">
-                    <div class="w-10 h-10 rounded-xl bg-green-500/20 flex items-center justify-center">
+                    <div class="w-10 h-10 rounded-[10px] bg-green-500/20 flex items-center justify-center">
                         <svg class="w-5 h-5 text-green-400" fill="currentColor" viewBox="0 0 20 20">
                             <path fill-rule="evenodd"
                                 d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
@@ -205,13 +205,13 @@
                         </svg>
                     </div>
                     <div class="flex-1">
-                        <h3 class="text-lg font-bold text-green-400 mb-1">Review Submitted</h3>
+                        <h3 class="text-lg font-medium text-green-400 mb-1">Review Submitted</h3>
                         <p class="text-sm text-slate-400">Thank you for your feedback!</p>
                     </div>
                 </div>
 
                 @if ($ticket->review->rating)
-                    <div class="bg-slate-900/50 rounded-xl p-4 space-y-3">
+                    <div class="bg-slate-900/50 rounded-[10px] p-4 space-y-3">
                         <div>
                             <p class="text-xs text-slate-500 mb-2">Reviewed By :
                                 {{-- FIX 8: user->employee bisa null --}}
@@ -247,9 +247,9 @@
         {{-- Back Button --}}
         <div class="flex justify-end">
             <a href="{{ route('dashboard') }}"
-                class="inline-flex items-center px-5 py-2.5 rounded-xl
-                  bg-slate-200 dark:bg-slate-700 text-slate-800 dark:text-white
-                  hover:bg-slate-300 dark:hover:bg-slate-600 transition">
+                class="inline-flex items-center px-5 py-2.5 rounded-md
+                   bg-slate-700 text-ink
+                   hover:bg-slate-600 transition">
                 Back to Dashboard
             </a>
         </div>
@@ -263,16 +263,16 @@
         <p id="previewModalTitle" class="text-xs text-slate-400 mb-2 self-start truncate max-w-sm"></p>
         <div class="relative">
             <button type="button" onclick="closePreviewModal()"
-                class="absolute -top-2 -right-2 z-10 bg-slate-700 hover:bg-red-500 text-white rounded-full p-1 transition shadow-lg">
+                class="absolute -top-2 -right-2 z-10 bg-slate-700 hover:bg-red-500 text-ink rounded-full p-1 transition">
                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                 </svg>
             </button>
             <img id="previewModalImg" src="" alt=""
-                class="hidden rounded-xl shadow-2xl object-contain"
+                class="hidden rounded-[10px] object-contain"
                 style="max-width:70vw; max-height:80vh;">
             <iframe id="previewModalIframe" src="" frameborder="0" allowfullscreen
-                class="hidden rounded-xl shadow-2xl"
+                class="hidden rounded-[10px]"
                 style="width:70vw; height:80vh;"></iframe>
         </div>
     </div>
@@ -283,16 +283,16 @@
         <p id="previewModalForExecutorTitle" class="text-xs text-slate-400 mb-2 self-start truncate max-w-sm"></p>
         <div class="relative">
             <button type="button" onclick="closePreviewModalForExecutor()"
-                class="absolute -top-2 -right-2 z-10 bg-slate-700 hover:bg-red-500 text-white rounded-full p-1 transition shadow-lg">
+                class="absolute -top-2 -right-2 z-10 bg-slate-700 hover:bg-red-500 text-ink rounded-full p-1 transition">
                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                 </svg>
             </button>
             <img id="previewModalForExecutorImg" src="" alt=""
-                class="hidden rounded-xl shadow-2xl object-contain"
+                class="hidden rounded-[10px] object-contain"
                 style="max-width:70vw; max-height:80vh;">
             <iframe id="previewModalForExecutorIframe" src="" frameborder="0" allowfullscreen
-                class="hidden rounded-xl shadow-2xl"
+                class="hidden rounded-[10px]"
                 style="width:70vw; height:80vh;"></iframe>
         </div>
     </div>

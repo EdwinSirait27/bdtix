@@ -6,14 +6,14 @@
     <style>
         /* Base DataTables Styling */
         .dataTables_wrapper {
-            font-family: inherit;
+            font-family: var(--font-body);
         }
 
         .dataTables_wrapper .dataTables_length,
         .dataTables_wrapper .dataTables_filter,
         .dataTables_wrapper .dataTables_info,
         .dataTables_wrapper .dataTables_paginate {
-            color: #ffffff;
+            color: var(--color-ink);
             font-size: 0.875rem;
         }
 
@@ -21,13 +21,13 @@
         .dark .dataTables_wrapper .dataTables_filter,
         .dark .dataTables_wrapper .dataTables_info,
         .dark .dataTables_wrapper .dataTables_paginate {
-            color: #ffffff;
+            color: var(--color-ink);
         }
 
         .dataTables_wrapper .dataTables_length select,
         .dataTables_wrapper .dataTables_filter input {
-            border: 1px solid #e2e8f0;
-            border-radius: 0.5rem;
+            border: 1px solid var(--color-rule);
+            border-radius: var(--radius-pill);
             padding: 0.5rem;
             font-size: 0.875rem;
             margin: 0 0.5rem;
@@ -35,9 +35,9 @@
 
         .dark .dataTables_wrapper .dataTables_length select,
         .dark .dataTables_wrapper .dataTables_filter input {
-            border-color: #475569;
-            background-color: #334155;
-            color: #f1f5f9;
+            border-color: var(--color-rule-2);
+            background-color: var(--color-paper-3);
+            color: var(--color-ink);
         }
 
         /* Table Styling - Desktop Only */
@@ -46,50 +46,50 @@
         }
 
         #users-table thead {
-            background: linear-gradient(to right, #000000, #000000);
-            color: rgb(255, 255, 255);
+            background: var(--color-paper-3);
+            color: var(--color-ink);
         }
 
         #users-table thead th {
             padding: 1rem;
-            font-weight: 600;
-            /* text-transform: uppercase; */
+            font-weight: 500;
+            /* text-transform: none; */
             font-size: 0.75rem;
-            letter-spacing: 0.05em;
+            letter-spacing: 0;
             border: none;
             white-space: nowrap;
         }
 
         .dark #users-table thead {
-            background: #0F172A;
+            background: var(--color-paper);
         }
 
         #users-table tbody tr {
-            border-bottom: 1px solid #ffffff;
+            border-bottom: 1px solid var(--color-rule);
             transition: background-color 0.2s;
         }
 
         .dark #users-table tbody tr {
-            border-bottom-color: #ffffff;
+            border-bottom-color: var(--color-rule);
         }
 
         #users-table tbody tr:hover {
-            background-color: #000000;
+            background-color: var(--color-paper-3);
         }
 
         .dark #users-table tbody tr:hover {
-            background-color: #1e293b;
+            background-color: var(--color-paper-2);
         }
 
         #users-table tbody td {
             padding: 1rem;
-            color: #ffffff;
+            color: var(--color-ink);
             font-size: 0.875rem;
             vertical-align: middle;
         }
 
         .dark #users-table tbody td {
-            color: #cbd5e1;
+            color: var(--color-ink);
         }
 
         /* Pagination Styling */
@@ -105,29 +105,29 @@
             display: inline-block;
             padding: 0.5rem 0.75rem;
             margin: 0 0.125rem;
-            border: 1px solid #e2e8f0;
-            border-radius: 0.5rem;
-            background-color: white;
-            color: #475569;
+            border: 1px solid var(--color-rule);
+            border-radius: var(--radius-pill);
+            background-color: var(--color-paper-2);
+            color: var(--color-muted);
             font-size: 0.875rem;
             font-weight: 500;
             cursor: pointer;
-            transition: all 0.2s;
+            transition-property: background-color, border-color, color; transition-duration: 0.2s;
             min-width: 2rem;
             text-align: center;
         }
 
         .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
-            background-color: #f1f5f9;
-            border-color: #cbd5e1;
-            color: #1e293b;
+            background-color: var(--color-paper-2);
+            border-color: var(--color-rule);
+            color: var(--color-ink);
         }
 
         .dataTables_wrapper .dataTables_paginate .paginate_button.current {
-            background: linear-gradient(to right, #3b82f6, #06b6d4);
+            background: var(--color-accent);
             border-color: transparent;
-            color: white;
-            box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.3);
+            color: var(--color-accent-ink);
+            box-shadow: none;
         }
 
         .dataTables_wrapper .dataTables_paginate .paginate_button.disabled {
@@ -138,34 +138,34 @@
 
         .dataTables_wrapper .dataTables_paginate .paginate_button.previous,
         .dataTables_wrapper .dataTables_paginate .paginate_button.next {
-            font-weight: 600;
+            font-weight: 500;
         }
 
         /* Dark mode pagination */
         .dark .dataTables_wrapper .dataTables_paginate .paginate_button {
-            background-color: #1e293b;
-            border-color: #334155;
-            color: #cbd5e1;
+            background-color: var(--color-paper-2);
+            border-color: var(--color-rule);
+            color: var(--color-ink);
         }
 
         .dark .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
-            background-color: #334155;
-            border-color: #475569;
-            color: #f1f5f9;
+            background-color: var(--color-paper-3);
+            border-color: var(--color-rule-2);
+            color: var(--color-ink);
         }
 
         .dark .dataTables_wrapper .dataTables_paginate .paginate_button.current {
-            background: linear-gradient(to right, #3b82f6, #06b6d4);
-            color: white;
+            background: var(--color-accent);
+            color: var(--color-accent-ink);
         }
 
         /* Action Buttons */
         .btn-action {
             padding: 0.5rem 0.75rem;
-            border-radius: 0.5rem;
+            border-radius: var(--radius-pill);
             font-size: 0.875rem;
-            font-weight: 600;
-            transition: all 0.2s;
+            font-weight: 500;
+            transition-property: background-color, border-color, color; transition-duration: 0.2s;
             display: inline-flex;
             align-items: center;
             gap: 0.5rem;
@@ -178,25 +178,25 @@
         }
 
         .btn-edit {
-            background: linear-gradient(to right, #3b82f6, #06b6d4);
-            color: white;
+            background: var(--color-accent);
+            color: var(--color-accent-ink);
             border: none;
         }
 
         .btn-edit:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+            box-shadow: none;
         }
 
         .btn-delete {
-            background: linear-gradient(to right, #ef4444, #dc2626);
-            color: white;
+            background: var(--color-bad-solid);
+            color: var(--color-on-solid);
             border: none;
         }
 
         .btn-delete:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
+            box-shadow: none;
         }
 
         .text-center {
@@ -248,13 +248,13 @@
 
         /* Mobile Card Styles */
         .user-card {
-            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-            border: 1px solid #334155;
-            border-radius: 1rem;
+            background: var(--color-paper-2);
+            border: 1px solid var(--color-rule);
+            border-radius: var(--radius-card);
             padding: 1rem;
             margin-bottom: 1rem;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
-            transition: all 0.3s;
+            box-shadow: none;
+            transition-property: background-color, border-color, color; transition-duration: 0.3s;
         }
 
         .user-card:active {
@@ -267,19 +267,19 @@
             justify-content: space-between;
             margin-bottom: 1rem;
             padding-bottom: 0.75rem;
-            border-bottom: 1px solid #334155;
+            border-bottom: 1px solid var(--color-rule);
         }
 
         .user-card-avatar {
             width: 48px;
             height: 48px;
             border-radius: 50%;
-            background: linear-gradient(135deg, #3b82f6, #06b6d4);
+            background: var(--color-accent);
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
-            font-weight: 700;
+            color: var(--color-accent-ink);
+            font-weight: 500;
             font-size: 1.25rem;
             flex-shrink: 0;
         }
@@ -290,14 +290,14 @@
         }
 
         .user-card-name {
-            color: #f1f5f9;
-            font-weight: 700;
+            color: var(--color-ink);
+            font-weight: 500;
             font-size: 1rem;
             margin-bottom: 0.125rem;
         }
 
         .user-card-username {
-            color: #94a3b8;
+            color: var(--color-ink-2);
             font-size: 0.813rem;
         }
 
@@ -312,17 +312,17 @@
         }
 
         .user-card-label {
-            color: #94a3b8;
+            color: var(--color-ink-2);
             font-size: 0.75rem;
-            font-weight: 600;
-            /* text-transform: uppercase; */
-            letter-spacing: 0.05em;
+            font-weight: 500;
+            /* text-transform: none; */
+            letter-spacing: 0;
             min-width: 90px;
             flex-shrink: 0;
         }
 
         .user-card-value {
-            color: #e2e8f0;
+            color: var(--color-ink);
             font-size: 0.875rem;
             flex: 1;
         }
@@ -332,9 +332,9 @@
             padding: 0.25rem 0.625rem;
             border-radius: 9999px;
             font-size: 0.75rem;
-            font-weight: 600;
-            background: linear-gradient(135deg, #8b5cf6, #6366f1);
-            color: white;
+            font-weight: 500;
+            background: var(--color-accent);
+            color: var(--color-accent-ink);
         }
 
         .user-card-actions {
@@ -342,7 +342,7 @@
             gap: 0.5rem;
             margin-top: 1rem;
             padding-top: 0.75rem;
-            border-top: 1px solid #334155;
+            border-top: 1px solid var(--color-rule);
         }
 
         .user-card-actions .btn-action {
@@ -363,14 +363,14 @@
 
         .mobile-page-btn {
             padding: 0.5rem 0.75rem;
-            border: 1px solid #334155;
-            border-radius: 0.5rem;
-            background-color: #1e293b;
-            color: #cbd5e1;
+            border: 1px solid var(--color-rule);
+            border-radius: var(--radius-pill);
+            background-color: var(--color-paper-2);
+            color: var(--color-ink);
             font-size: 0.875rem;
             font-weight: 500;
             cursor: pointer;
-            transition: all 0.2s;
+            transition-property: background-color, border-color, color; transition-duration: 0.2s;
         }
 
         .mobile-page-btn:active {
@@ -378,8 +378,8 @@
         }
 
         .mobile-page-btn.active {
-            background: linear-gradient(to right, #3b82f6, #06b6d4);
-            color: white;
+            background: var(--color-accent);
+            color: var(--color-accent-ink);
             border-color: transparent;
         }
 
@@ -389,7 +389,7 @@
         }
 
         .mobile-info-text {
-            color: #94a3b8;
+            color: var(--color-ink-2);
             font-size: 0.813rem;
             text-align: center;
             margin-top: 0.75rem;
@@ -398,10 +398,10 @@
         /* untuk select 2 */
         /* ===== Select2 Container ===== */
         .select2-container .select2-selection--single {
-            background-color: #5e6f88;
+            background-color: var(--color-accent);
             /* dark-800 */
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 0.5rem;
+            border: 1px solid color-mix(in oklab, var(--color-rule) 60%, transparent);
+            border-radius: var(--radius-pill);
             height: 40px;
             display: flex;
             align-items: center;
@@ -409,19 +409,19 @@
 
         /* warna placeholder */
         .select2-container--default .select2-selection--single .select2-selection__placeholder {
-            color: #ffffff;
+            color: var(--color-ink);
             /* slate-400 */
         }
 
         /* kalau mau beda saat focus */
         .select2-container--open .select2-selection__placeholder {
-            color: #7f8b99;
+            color: var(--color-muted);
             /* slate-300 */
         }
 
 
         .select2-container--default .select2-selection--single .select2-selection__rendered {
-            color: #ffffff;
+            color: var(--color-ink);
             padding-left: 0.75rem;
         }
 
@@ -432,36 +432,36 @@
 
         /* ===== Dropdown ===== */
         .select2-dropdown {
-            background-color: #1f2937;
+            background-color: var(--color-paper-2);
             /* dark */
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid color-mix(in oklab, var(--color-rule) 60%, transparent);
         }
 
         /* option normal */
         .select2-results__option {
-            color: #ffffff;
+            color: var(--color-ink);
             /* text-slate-200 */
         }
 
         /* hover */
         .select2-results__option--highlighted {
-            background-color: #374151 !important;
+            background-color: var(--color-paper-3) !important;
             /* dark-600 */
-            color: #ffffff !important;
+            color: var(--color-ink) !important;
         }
 
         /* selected */
         .select2-results__option--selected {
-            background-color: #2563eb !important;
+            background-color: var(--color-accent) !important;
             /* blue-600 */
-            color: #ffffff !important;
+            color: var(--color-accent-ink) !important;
         }
 
         /* search box */
         .select2-search__field {
-            background-color: #111827;
-            color: #ffffff;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background-color: var(--color-paper);
+            color: var(--color-ink);
+            border: 1px solid color-mix(in oklab, var(--color-rule) 60%, transparent);
         }
     </style>
     @role('executor')
@@ -472,17 +472,17 @@
                 <a href="{{ route('dashboard.filteropen', ['filteropen' => 'Open']) }}" class="block">
 
                     <div
-                        class="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl md:rounded-2xl p-4 md:p-6 text-white shadow-lg">
+                        class="rounded-[10px] md:rounded-[10px] p-4 md:p-6 text-ink bg-slate-800 border border-slate-700">
                         <div class="flex items-center justify-between mb-2">
-                            <h3 class="text-xs md:text-sm font-semibold opacity-90">All Open Tickets</h3>
+                            <h3 class="text-xs md:text-sm font-medium opacity-90">All Open Tickets</h3>
                             <svg class="w-6 h-6 md:w-8 md:h-8 opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z">
                                 </path>
                             </svg>
                         </div>
-                        <p class="text-2xl md:text-3xl font-bold mb-1">{{ $opentickets ?? 0 }}</p>
-                        <p class="text-blue-100 text-xs">Open Tickets</p>
+                        <p class="text-2xl md:text-3xl font-medium mb-1 font-mono tabular-nums">{{ $opentickets ?? 0 }}</p>
+                        <p class="text-slate-400 text-xs">Open Tickets</p>
                     </div>
                 </a>
 
@@ -490,25 +490,25 @@
                 <a href="{{ route('dashboard.filterprogress', ['filterprogress' => 'Progress']) }}" class="block">
 
                     <div
-                        class="bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-xl md:rounded-2xl p-4 md:p-6 text-white shadow-lg">
+                        class="rounded-[10px] md:rounded-[10px] p-4 md:p-6 text-ink bg-slate-800 border border-slate-700">
                         <div class="flex items-center justify-between mb-2">
-                            <h3 class="text-xs md:text-sm font-semibold opacity-90">In Progress</h3>
+                            <h3 class="text-xs md:text-sm font-medium opacity-90">In Progress</h3>
                             <svg class="w-6 h-6 md:w-8 md:h-8 opacity-80" fill="none" stroke="currentColor"
                                 viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                             </svg>
                         </div>
-                        <p class="text-2xl md:text-3xl font-bold mb-1">{{ $onprogressticket ?? 0 }}</p>
-                        <p class="text-emerald-100 text-xs">On Progress Tickets</p>
+                        <p class="text-2xl md:text-3xl font-medium mb-1 font-mono tabular-nums">{{ $onprogressticket ?? 0 }}</p>
+                        <p class="text-slate-400 text-xs">On Progress Tickets</p>
                     </div>
                 </a>
                 <a href="{{ route('dashboard.filterclosed', ['filterclosed' => 'Closed']) }}" class="block">
 
                     <div
-                        class="bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl md:rounded-2xl p-4 md:p-6 text-white shadow-lg">
+                        class="rounded-[10px] md:rounded-[10px] p-4 md:p-6 text-ink bg-slate-800 border border-slate-700">
                         <div class="flex items-center justify-between mb-2">
-                            <h3 class="text-xs md:text-sm font-semibold opacity-90">Closed</h3>
+                            <h3 class="text-xs md:text-sm font-medium opacity-90">Closed</h3>
                             <svg class="w-6 h-6 md:w-8 md:h-8 opacity-80" fill="none" stroke="currentColor"
                                 viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -516,16 +516,16 @@
                                 </path>
                             </svg>
                         </div>
-                        <p class="text-2xl md:text-3xl font-bold mb-1">{{ $closedtickets ?? 0 }}</p>
-                        <p class="text-purple-100 text-xs">Closed Tickets</p>
+                        <p class="text-2xl md:text-3xl font-medium mb-1 font-mono tabular-nums">{{ $closedtickets ?? 0 }}</p>
+                        <p class="text-slate-400 text-xs">Closed Tickets</p>
                     </div>
                 </a>
                 <a href="{{ route('dashboard.filteroverdue', ['filteroverdue' => 'Overdue']) }}" class="block">
 
                     <div
-                        class="bg-gradient-to-br from-red-500 to-red-600 rounded-xl md:rounded-2xl p-4 md:p-6 text-white shadow-lg">
+                        class="rounded-[10px] md:rounded-[10px] p-4 md:p-6 text-ink bg-slate-800 border border-slate-700">
                         <div class="flex items-center justify-between mb-2">
-                            <h3 class="text-xs md:text-sm font-semibold opacity-90">Overdue</h3>
+                            <h3 class="text-xs md:text-sm font-medium opacity-90">Overdue</h3>
                             <svg class="w-6 h-6 md:w-8 md:h-8 opacity-80" fill="none" stroke="currentColor"
                                 viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -533,19 +533,19 @@
                                 </path>
                             </svg>
                         </div>
-                        <p class="text-2xl md:text-3xl font-bold mb-1">{{ $overdueticket ?? 0 }}</p>
-                        <p class="text-orange-100 text-xs">Overdue's Ticket</p>
+                        <p class="text-2xl md:text-3xl font-medium mb-1 font-mono tabular-nums">{{ $overdueticket ?? 0 }}</p>
+                        <p class="text-slate-400 text-xs">Overdue's Ticket</p>
                     </div>
                 </a>
 
             </div>
             <div class="space-y-4">
-                <div class="bg-white/3 p-4 rounded-lg shadow-sm">
-                    <h4 class="font-semibold text-white">SLA Compliance</h4>
+                <div class="bg-slate-800 p-4 rounded-md">
+                    <h4 class="font-medium text-ink">SLA Compliance</h4>
                     <div class="mt-3">
-                        <div class="w-full bg-white/5 rounded-full h-3 overflow-hidden">
+                        <div class="w-full bg-slate-800 rounded-full h-3 overflow-hidden">
                             <div class="h-3 rounded-full"
-                                style="width: {{ $slaCompliance ?? 0 }}%; background: linear-gradient(90deg,#06b6d4,#3b82f6);">
+                                style="width: {{ $slaCompliance ?? 0 }}%; background: var(--color-accent)">
                             </div>
                         </div>
                         <div class="mt-2 text-sm text-slate-300">{{ $slaCompliance ?? 0 }}% Ticket passes SLA</div>
@@ -553,24 +553,24 @@
                 </div>
 
                 <div class="grid grid-cols-2 gap-3 text-sm">
-                    <div class="p-3 rounded-lg bg-blue-500/10">
+                    <div class="p-3 rounded-md bg-blue-500/10">
                         <div class="text-xs text-slate-300">Assigned to Me</div>
-                        <div class="text-xl font-bold text-blue-400">{{ $assignedtoyou ?? 0 }}</div>
+                        <div class="text-xl font-medium text-blue-400 font-mono tabular-nums">{{ $assignedtoyou ?? 0 }}</div>
                     </div>
 
-                    <div class="p-3 rounded-lg bg-indigo-500/10">
+                    <div class="p-3 rounded-md bg-indigo-500/10">
                         <div class="text-xs text-slate-300">New Today</div>
-                        <div class="text-xl font-bold text-indigo-400">{{ $todaysticket ?? 0 }}</div>
+                        <div class="text-xl font-medium text-indigo-400 font-mono tabular-nums">{{ $todaysticket ?? 0 }}</div>
                     </div>
 
-                    <div class="p-3 rounded-lg bg-red-500/10">
+                    <div class="p-3 rounded-md bg-red-500/10">
                         <div class="text-xs text-slate-300">High Priority</div>
-                        <div class="text-xl font-bold text-red-400">{{ $highprior ?? 0 }}</div>
+                        <div class="text-xl font-medium text-red-400 font-mono tabular-nums">{{ $highprior ?? 0 }}</div>
                     </div>
 
-                    <div class="p-3 rounded-lg bg-green-500/10">
+                    <div class="p-3 rounded-md bg-green-500/10">
                         <div class="text-xs text-slate-300">Finished</div>
-                        <div class="text-xl font-bold text-green-400">{{ $finishedtickettoyou ?? 0 }}</div>
+                        <div class="text-xl font-medium text-green-400 font-mono tabular-nums">{{ $finishedtickettoyou ?? 0 }}</div>
                     </div>
                 </div>
                 <form method="GET" class="hidden md:block mb-6">
@@ -579,24 +579,24 @@
 
 
                         <div>
-                            <label for="month" class="text-white block mb-1">Month</label>
+                            <label for="month" class="text-ink block mb-1">Month</label>
 
                             <input type="text" name="month" id="month" value="{{ request('month') }}"
                                 placeholder="YYYY-MM"
                                 class="px-3 py-2 rounded w-40
-               bg-slate-600 text-white
-               placeholder-white
-               border border-slate-500
-               focus:outline-none focus:ring-2 focus:ring-slate-400">
+               bg-slate-950 text-ink
+               placeholder-slate-500
+               border border-slate-600
+               focus:outline-none focus:ring-2 focus:ring-accent">
                         </div>
 
 
 
                         <!-- Quarter -->
                         <div>
-                            <label class="text-white block mb-1">Quarter</label>
+                            <label class="text-ink block mb-1">Quarter</label>
                             <select class="select2"name="quarter" id="quarter"
-                                class="px-3 py-2 rounded bg-gray-800 text-white w-28">
+                                class="px-3 py-2 rounded bg-gray-800 text-ink w-28">
                                 <option value="">—</option>
                                 <option value="Q1" {{ request('quarter') == 'Q1' ? 'selected' : '' }}>Q1</option>
                                 <option value="Q2" {{ request('quarter') == 'Q2' ? 'selected' : '' }}>Q2</option>
@@ -607,50 +607,50 @@
 
 
                         <div>
-                            <label class="text-white block mb-1">Year</label>
+                            <label class="text-ink block mb-1">Year</label>
 
                             <input type="number" min="2025" name="year" id="year"
                                 value="{{ request('year') }}" placeholder="example 2025"
                                 class="px-3 py-2 rounded w-40
-               bg-slate-600 text-white
-               placeholder-white
-               border border-slate-500
-               focus:outline-none focus:ring-2 focus:ring-slate-400">
+               bg-slate-950 text-ink
+               placeholder-slate-500
+               border border-slate-600
+               focus:outline-none focus:ring-2 focus:ring-accent">
                         </div>
 
 
 
                         <div>
-                            <label for="from" class="text-white block mb-1">From</label>
+                            <label for="from" class="text-ink block mb-1">From</label>
 
                             <input type="text" name="from" id="from" value="{{ request('from') }}"
                                 placeholder="YYYY-MM-DD"
                                 class="px-3 py-2 rounded w-40
-               bg-slate-600 text-white
-               placeholder-white
-               border border-slate-500
-               focus:outline-none focus:ring-2 focus:ring-slate-400">
+               bg-slate-950 text-ink
+               placeholder-slate-500
+               border border-slate-600
+               focus:outline-none focus:ring-2 focus:ring-accent">
                         </div>
 
 
 
                         <div>
-                            <label for="to" class="text-white block mb-1">To</label>
+                            <label for="to" class="text-ink block mb-1">To</label>
 
                             <input type="text" name="to" id="to" value="{{ request('to') }}"
                                 placeholder="YYYY-MM-DD"
                                 class="px-3 py-2 rounded w-40
-               bg-slate-600 text-white
-               placeholder-white
-               border border-slate-500
-               focus:outline-none focus:ring-2 focus:ring-slate-400">
+               bg-slate-950 text-ink
+               placeholder-slate-500
+               border border-slate-600
+               focus:outline-none focus:ring-2 focus:ring-accent">
                         </div>
 
                         <!-- Category -->
                         <div>
-                            <label class="text-white block mb-1">Category</label>
+                            <label class="text-ink block mb-1">Category</label>
                             <select class="select2"id="category" name="category"
-                                class="px-3 py-2 rounded bg-gray-800 text-white w-48">
+                                class="px-3 py-2 rounded bg-gray-800 text-ink w-48">
                                 <option value="">— All —</option>
                                 @foreach ($categories as $cat)
                                     <option value="{{ $cat }}" {{ request('category') == $cat ? 'selected' : '' }}>
@@ -670,21 +670,21 @@
                 </form>
                 <div class="hidden md:block space-y-8">
                     <div>
-                        <h3 class="text-white mb-2">📊 Response Time (Open → Progress)</h3>
+                        <h3 class="text-ink font-medium mb-2">Response Time (Open → Progress)</h3>
                         <canvas id="responseChart" height="100"></canvas>
                     </div>
                     <div>
-                        <h3 class="text-white mb-2">📊 Resolution Time (Progress → Closed)</h3>
+                        <h3 class="text-ink font-medium mb-2">Resolution Time (Progress → Closed)</h3>
                         <canvas id="resolutionChart" height="100"></canvas>
                     </div>
                 </div>
                 {{-- Main Content Card --}}
-                <div class="bg-slate-800 rounded-xl md:rounded-2xl shadow-lg border border-slate-700 overflow-hidden">
+                <div class="bg-slate-800 rounded-[10px] md:rounded-[10px] border border-slate-700 overflow-hidden">
                     {{-- Card Header --}}
                     <div class="px-4 py-4 md:px-6 md:py-5 border-b border-slate-700">
                         <div class="flex flex-col gap-3 md:gap-4">
                             <div>
-                                <h2 class="text-lg md:text-xl font-bold text-white">All Tickets</h2>
+                                <h2 class="text-lg md:text-xl font-medium text-ink">All Tickets</h2>
                                 <p class="text-xs md:text-sm text-slate-400 mt-1">Manage and view all tickets users</p>
                             </div>
 
@@ -750,26 +750,26 @@
 
                                     <input type="date" id="dateFrom" placeholder="YYYY-MM-DD"
                                         class="px-3 py-2 rounded w-40
-               bg-slate-600 text-white
-               placeholder-white
-               border border-slate-500
-               focus:outline-none focus:ring-2 focus:ring-slate-400">
+               bg-slate-950 text-ink
+               placeholder-slate-500
+               border border-slate-600
+               focus:outline-none focus:ring-2 focus:ring-accent">
                                 </div>
                                 <div class="flex flex-col gap-1">
                                     <label for="dateTo" class="text-xs text-slate-300">To</label>
                                     <input placeholder="YYYY-MM-DD" type="date" id="dateTo"
                                         class="px-3 py-2 rounded w-40
-               bg-slate-600 text-white
-               placeholder-white
-               border border-slate-500
-               focus:outline-none focus:ring-2 focus:ring-slate-400">
+               bg-slate-950 text-ink
+               placeholder-slate-500
+               border border-slate-600
+               focus:outline-none focus:ring-2 focus:ring-accent">
                                 </div>
 
                                 <div class="flex flex-col gap-1">
                                     <label for="filterStatus" class="text-xs text-slate-300">Filter</label>
 
                                     <button id="btnFilter"
-                                        class="px-4 py-2 bg-cyan-600 hover:bg-cyan-700 text-white rounded-lg transition">
+                                        class="px-4 py-2 bg-cyan-600 hover:bg-cyan-700 text-white rounded-md transition">
                                         Filter
                                     </button>
                                 </div>
@@ -777,13 +777,13 @@
                                     <label for="filterStatus" class="text-xs text-slate-300">Reset Filter</label>
 
                                     <button id="btnReset"
-                                        class="px-4 py-2 bg-slate-600 hover:bg-slate-700 text-white rounded-lg transition">
+                                        class="px-4 py-2 bg-slate-600 hover:bg-slate-700 text-ink rounded-md transition">
                                         Reset
                                     </button>
                                 </div>
                                 <div class="relative flex-1">
                                     <input type="text" id="table-search" placeholder="Search tickes by title"
-                                        class="w-full pl-10 pr-4 py-2 border border-slate-600 rounded-lg bg-slate-700 text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent placeholder-slate-400">
+                                        class="w-full pl-10 pr-4 py-2 border border-slate-600 rounded-md bg-slate-950 text-ink text-sm focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent placeholder-slate-400">
                                     <svg class="absolute left-3 top-2.5 w-5 h-5 text-slate-400" fill="none"
                                         stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -859,6 +859,7 @@
                 <script>
                     document.addEventListener('DOMContentLoaded', function() {
                         flatpickr("#month", {
+                            disableMobile: true, // monthSelect needs the flatpickr calendar; native mobile input has none
                             dateFormat: "Y-m",
                             plugins: [
                                 new monthSelectPlugin({
@@ -1210,7 +1211,7 @@
                                         if (!data) return '-';
 
                                         let status = data.toLowerCase();
-                                        let badgeClass = 'bg-slate-500 text-white';
+                                        let badgeClass = 'bg-slate-700 text-ink';
 
                                         if (status === 'closed') {
                                             badgeClass = 'bg-green-600 text-white'; // SUCCESS
@@ -1222,7 +1223,7 @@
                                             badgeClass = 'bg-red-500 text-black';
                                         }
                                         return `
-            <span class="px-3 py-1 rounded-full text-xs font-semibold ${badgeClass}">
+            <span class="px-3 py-1 rounded text-xs font-medium ${badgeClass}">
                 ${data}
             </span>
         `;
@@ -1410,7 +1411,7 @@
                                         else if (status === 'Closed') cls = 'bg-green-600';
                                     
                                         return `
-                                                                                                                                                                                                                                                            <span class="inline-flex items-center gap-2 px-3 py-1 text-xs font-semibold text-white rounded-full ${cls}">
+                                                                                                                                                                                                                                                            <span class="inline-flex items-center gap-2 px-3 py-1 text-xs font-medium text-ink rounded ${cls}">
                                                                                                                                                                                                                                                             <span class="w-2 h-2 rounded-full bg-white"></span>${status}</span>`;
                                     })()}
                                 </div>
@@ -1473,9 +1474,9 @@
             {{-- Statistics Cards --}}
             <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
                 <div
-                    class="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl md:rounded-2xl p-4 md:p-6 text-white shadow-lg">
+                    class="rounded-[10px] md:rounded-[10px] p-4 md:p-6 text-ink bg-slate-800 border border-slate-700">
                     <div class="flex items-center justify-between mb-2">
-                        <h3 class="text-xs md:text-sm font-semibold opacity-90">My Ticket</h3>
+                        <h3 class="text-xs md:text-sm font-medium opacity-90">My Ticket</h3>
                         <svg class="w-6 h-6 md:w-8 md:h-8 opacity-80" fill="none" stroke="currentColor"
                             viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -1483,27 +1484,27 @@
                             </path>
                         </svg>
                     </div>
-                    <p class="text-2xl md:text-3xl font-bold mb-1"id="total-users"></p>
-                    {{-- <p class="text-2xl md:text-3xl font-bold mb-1" id="total-users"></p> --}}
-                    <p class="text-blue-100 text-xs">All My Tickets</p>
+                    <p class="text-2xl md:text-3xl font-medium mb-1"id="total-users"></p>
+                    {{-- <p class="text-2xl md:text-3xl font-medium mb-1" id="total-users"></p> --}}
+                    <p class="text-slate-400 text-xs">All My Tickets</p>
                 </div>
                 <div
-                    class="bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-xl md:rounded-2xl p-4 md:p-6 text-white shadow-lg">
+                    class="rounded-[10px] md:rounded-[10px] p-4 md:p-6 text-ink bg-slate-800 border border-slate-700">
                     <div class="flex items-center justify-between mb-2">
-                        <h3 class="text-xs md:text-sm font-semibold opacity-90">In Progress</h3>
+                        <h3 class="text-xs md:text-sm font-medium opacity-90">In Progress</h3>
                         <svg class="w-6 h-6 md:w-8 md:h-8 opacity-80" fill="none" stroke="currentColor"
                             viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                         </svg>
                     </div>
-                    <p class="text-2xl md:text-3xl font-bold mb-1">{{ $onprogresstickethuman ?? 0 }}</p>
-                    <p class="text-emerald-100 text-xs">My On Progress Tickets</p>
+                    <p class="text-2xl md:text-3xl font-medium mb-1 font-mono tabular-nums">{{ $onprogresstickethuman ?? 0 }}</p>
+                    <p class="text-slate-400 text-xs">My On Progress Tickets</p>
                 </div>
                 <div
-                    class="bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl md:rounded-2xl p-4 md:p-6 text-white shadow-lg">
+                    class="rounded-[10px] md:rounded-[10px] p-4 md:p-6 text-ink bg-slate-800 border border-slate-700">
                     <div class="flex items-center justify-between mb-2">
-                        <h3 class="text-xs md:text-sm font-semibold opacity-90">Closed</h3>
+                        <h3 class="text-xs md:text-sm font-medium opacity-90">Closed</h3>
                         <svg class="w-6 h-6 md:w-8 md:h-8 opacity-80" fill="none" stroke="currentColor"
                             viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -1511,13 +1512,13 @@
                             </path>
                         </svg>
                     </div>
-                    <p class="text-2xl md:text-3xl font-bold mb-1">{{ $closedtickethuman ?? 0 }}</p>
-                    <p class="text-purple-100 text-xs">My Closed Tickets</p>
+                    <p class="text-2xl md:text-3xl font-medium mb-1 font-mono tabular-nums">{{ $closedtickethuman ?? 0 }}</p>
+                    <p class="text-slate-400 text-xs">My Closed Tickets</p>
                 </div>
                 <div
-                    class="bg-gradient-to-br from-red-500 to-red-600 rounded-xl md:rounded-2xl p-4 md:p-6 text-white shadow-lg">
+                    class="rounded-[10px] md:rounded-[10px] p-4 md:p-6 text-ink bg-slate-800 border border-slate-700">
                     <div class="flex items-center justify-between mb-2">
-                        <h3 class="text-xs md:text-sm font-semibold opacity-90">Overdue</h3>
+                        <h3 class="text-xs md:text-sm font-medium opacity-90">Overdue</h3>
                         <svg class="w-6 h-6 md:w-8 md:h-8 opacity-80" fill="none" stroke="currentColor"
                             viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -1525,17 +1526,17 @@
                             </path>
                         </svg>
                     </div>
-                    <p class="text-2xl md:text-3xl font-bold mb-1">{{ $overdueticket ?? 0 }}</p>
-                    <p class="text-orange-100 text-xs">My Overdue's Ticket</p>
+                    <p class="text-2xl md:text-3xl font-medium mb-1 font-mono tabular-nums">{{ $overdueticket ?? 0 }}</p>
+                    <p class="text-slate-400 text-xs">My Overdue's Ticket</p>
                 </div>
             </div>
             {{-- Main Content Card --}}
-            <div class="bg-slate-800 rounded-xl md:rounded-2xl shadow-lg border border-slate-700 overflow-hidden">
+            <div class="bg-slate-800 rounded-[10px] md:rounded-[10px] border border-slate-700 overflow-hidden">
                 {{-- Card Header --}}
                 <div class="px-4 py-4 md:px-6 md:py-5 border-b border-slate-700">
                     <div class="flex flex-col gap-3 md:gap-4">
                         <div>
-                            <h2 class="text-lg md:text-xl font-bold text-white">All My Tickets</h2>
+                            <h2 class="text-lg md:text-xl font-medium text-ink">All My Tickets</h2>
                             <p class="text-xs md:text-sm text-slate-400 mt-1">Manage and view all my tickets users</p>
                         </div>
 
@@ -1586,26 +1587,26 @@
 
                                 <input type="date" id="dateFrom" placeholder="YYYY-MM-DD"
                                     class="px-3 py-2 rounded w-40
-               bg-slate-600 text-white
-               placeholder-white
-               border border-slate-500
-               focus:outline-none focus:ring-2 focus:ring-slate-400">
+               bg-slate-950 text-ink
+               placeholder-slate-500
+               border border-slate-600
+               focus:outline-none focus:ring-2 focus:ring-accent">
                             </div>
                             <div class="flex flex-col gap-1">
                                 <label for="dateTo" class="text-xs text-slate-300">To</label>
                                 <input placeholder="YYYY-MM-DD" type="date" id="dateTo"
                                     class="px-3 py-2 rounded w-40
-               bg-slate-600 text-white
-               placeholder-white
-               border border-slate-500
-               focus:outline-none focus:ring-2 focus:ring-slate-400">
+               bg-slate-950 text-ink
+               placeholder-slate-500
+               border border-slate-600
+               focus:outline-none focus:ring-2 focus:ring-accent">
                             </div>
 
                             <div class="flex flex-col gap-1">
                                 <label for="filterStatus" class="text-xs text-slate-300">Filter</label>
 
                                 <button id="btnFilter"
-                                    class="px-4 py-2 bg-cyan-600 hover:bg-cyan-700 text-white rounded-lg transition">
+                                    class="px-4 py-2 bg-cyan-600 hover:bg-cyan-700 text-white rounded-md transition">
                                     Filter
                                 </button>
                             </div>
@@ -1613,13 +1614,13 @@
                                 <label for="filterStatus" class="text-xs text-slate-300">Reset Filter</label>
 
                                 <button id="btnReset"
-                                    class="px-4 py-2 bg-slate-600 hover:bg-slate-700 text-white rounded-lg transition">
+                                    class="px-4 py-2 bg-slate-600 hover:bg-slate-700 text-ink rounded-md transition">
                                     Reset
                                 </button>
                             </div>
                             <div class="relative flex-1">
                                 <input type="text" id="table-search" placeholder="Search tickes by title"
-                                    class="w-full pl-10 pr-4 py-2 border border-slate-600 rounded-lg bg-slate-700 text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent placeholder-slate-400">
+                                    class="w-full pl-10 pr-4 py-2 border border-slate-600 rounded-md bg-slate-950 text-ink text-sm focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent placeholder-slate-400">
                                 <svg class="absolute left-3 top-2.5 w-5 h-5 text-slate-400" fill="none"
                                     stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -1694,6 +1695,7 @@
             <script>
                 document.addEventListener('DOMContentLoaded', function() {
                     flatpickr("#month", {
+                        disableMobile: true, // monthSelect needs the flatpickr calendar; native mobile input has none
                         dateFormat: "Y-m",
                         plugins: [
                             new monthSelectPlugin({
@@ -1916,7 +1918,7 @@
                                     if (!data) return '-';
 
                                     let status = data.toLowerCase();
-                                    let badgeClass = 'bg-slate-500 text-white';
+                                    let badgeClass = 'bg-slate-700 text-ink';
 
                                     if (status === 'closed') {
                                         badgeClass = 'bg-green-600 text-white'; // SUCCESS
@@ -1928,7 +1930,7 @@
                                         badgeClass = 'bg-red-500 text-black';
                                     }
                                     return `
-                                       <span class="px-3 py-1 rounded-full text-xs font-semibold ${badgeClass}">
+                                       <span class="px-3 py-1 rounded text-xs font-medium ${badgeClass}">
                                    ${data}
                                    </span>
                                    `;
@@ -2076,7 +2078,7 @@
                                         else if (status === 'Overdue') cls = 'bg-red-500';
                                         else if (status === 'Closed') cls = 'bg-green-600';
                                         return `
-                                                                                                                        <span class="inline-flex items-center gap-2 px-3 py-1 text-xs font-semibold text-white rounded-full ${cls}">
+                                                                                                                        <span class="inline-flex items-center gap-2 px-3 py-1 text-xs font-medium text-ink rounded ${cls}">
                                                                                                                         <span class="w-2 h-2 rounded-full bg-white"></span>${status}</span>`;
                                     })()}
                                 </div>

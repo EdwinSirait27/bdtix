@@ -1,0 +1,198 @@
+/* Hallmark · Console tokens, two colourways: `paper` (light) on :root, `graphite` (dark) on html.dark.
+ * Amber means a person or the one primary action; cool means an instrument (a reading, a version, a time).
+ * Ok and bad exist for status only. Every colour in the app resolves to one of these. */
+
+@theme {
+  --font-sans: "Host Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "Atkinson Hyperlegible Mono", ui-monospace, monospace;
+
+  /* role utilities: bg-paper, text-ink, bg-accent, text-accent-ink, border-rule ... */
+  --color-paper: var(--c-paper);
+  --color-paper-2: var(--c-paper-2);
+  --color-paper-3: var(--c-paper-3);
+  --color-paper-4: var(--c-paper-4);
+  --color-ink: var(--c-ink);
+  --color-ink-2: var(--c-ink-2);
+  --color-muted: var(--c-muted);
+  --color-muted-2: var(--c-muted-2);
+  --color-rule: var(--c-rule);
+  --color-rule-2: var(--c-rule-2);
+  --color-accent: var(--c-accent);
+  --color-accent-2: var(--c-accent-2);
+  --color-accent-ink: var(--c-accent-ink);
+  --color-accent-soft: var(--c-accent-soft);
+  --color-accent-text: var(--c-accent-text);
+  --color-focus: var(--c-accent);
+  --color-cool: var(--c-cool-text);
+  --color-cool-soft: var(--c-cool-soft);
+  --color-ok: var(--c-ok-text);
+  --color-ok-soft: var(--c-ok-soft);
+  --color-ok-solid: var(--c-ok-solid);
+  --color-bad: var(--c-bad-text);
+  --color-bad-soft: var(--c-bad-soft);
+  --color-bad-solid: var(--c-bad-solid);
+  --color-on-solid: var(--c-on-solid);
+
+  --radius-card: 10px;
+  --radius-pill: 6px;
+
+  /* The views were written against Tailwind's palette. Each step now points at a role, so
+   * `bg-slate-800` is "a panel" in both modes and the rainbow collapses to Console's four signals. */
+  --color-white: oklch(100% 0 0);
+  --color-black: var(--c-paper-3);
+
+  --color-slate-50: var(--c-ink);   --color-slate-100: var(--c-ink);   --color-slate-200: var(--c-ink-2);
+  --color-slate-300: var(--c-ink-2); --color-slate-400: var(--c-muted); --color-slate-500: var(--c-muted-2);
+  --color-slate-600: var(--c-rule-2); --color-slate-700: var(--c-rule); --color-slate-800: var(--c-paper-2);
+  --color-slate-900: var(--c-paper); --color-slate-950: var(--c-paper-3);
+  --color-gray-50: var(--c-ink);    --color-gray-100: var(--c-ink);    --color-gray-200: var(--c-ink-2);
+  --color-gray-300: var(--c-ink-2);  --color-gray-400: var(--c-muted);  --color-gray-500: var(--c-muted-2);
+  --color-gray-600: var(--c-rule-2); --color-gray-700: var(--c-rule);  --color-gray-800: var(--c-paper-2);
+  --color-gray-900: var(--c-paper);  --color-gray-950: var(--c-paper-3);
+  --color-zinc-400: var(--c-muted); --color-zinc-500: var(--c-muted-2); --color-zinc-700: var(--c-rule);
+  --color-zinc-800: var(--c-paper-2); --color-zinc-900: var(--c-paper);
+
+  /* amber: yellow, amber, orange */
+  --color-yellow-50: var(--c-accent-soft); --color-yellow-100: var(--c-accent-soft); --color-yellow-200: var(--c-accent-soft);
+  --color-yellow-300: var(--c-accent-text); --color-yellow-400: var(--c-accent-text); --color-yellow-500: var(--c-accent);
+  --color-yellow-600: var(--c-accent); --color-yellow-700: var(--c-accent-2); --color-yellow-800: var(--c-accent-text);
+  --color-yellow-900: var(--c-accent-2); --color-yellow-950: var(--c-accent-2);
+  --color-amber-50: var(--c-accent-soft); --color-amber-100: var(--c-accent-soft); --color-amber-200: var(--c-accent-soft);
+  --color-amber-300: var(--c-accent-text); --color-amber-400: var(--c-accent-text); --color-amber-500: var(--c-accent);
+  --color-amber-600: var(--c-accent); --color-amber-700: var(--c-accent-2); --color-amber-800: var(--c-accent-text);
+  --color-amber-900: var(--c-accent-2); --color-amber-950: var(--c-accent-2);
+  --color-orange-50: var(--c-accent-soft); --color-orange-100: var(--c-accent-soft); --color-orange-200: var(--c-accent-soft);
+  --color-orange-300: var(--c-accent-text); --color-orange-400: var(--c-accent-text); --color-orange-500: var(--c-accent);
+  --color-orange-600: var(--c-accent); --color-orange-700: var(--c-accent-2); --color-orange-800: var(--c-accent-text);
+  --color-orange-900: var(--c-accent-2); --color-orange-950: var(--c-accent-2);
+
+  /* cool: blue, sky, cyan, indigo, violet, purple, fuchsia */
+  --color-blue-50: var(--c-cool-soft); --color-blue-100: var(--c-cool-soft); --color-blue-200: var(--c-cool-soft);
+  --color-blue-300: var(--c-cool-text); --color-blue-400: var(--c-cool-text); --color-blue-500: var(--c-cool-solid);
+  --color-blue-600: var(--c-cool-solid); --color-blue-700: var(--c-cool-solid-2); --color-blue-800: var(--c-cool-text);
+  --color-blue-900: var(--c-cool-solid-2); --color-blue-950: var(--c-cool-solid-2);
+  --color-sky-100: var(--c-cool-soft); --color-sky-300: var(--c-cool-text); --color-sky-400: var(--c-cool-text);
+  --color-sky-500: var(--c-cool-solid); --color-sky-600: var(--c-cool-solid); --color-sky-700: var(--c-cool-solid-2);
+  --color-cyan-50: var(--c-cool-soft); --color-cyan-100: var(--c-cool-soft); --color-cyan-200: var(--c-cool-soft);
+  --color-cyan-300: var(--c-cool-text); --color-cyan-400: var(--c-cool-text); --color-cyan-500: var(--c-cool-solid);
+  --color-cyan-600: var(--c-cool-solid); --color-cyan-700: var(--c-cool-solid-2); --color-cyan-800: var(--c-cool-text);
+  --color-cyan-900: var(--c-cool-solid-2); --color-cyan-950: var(--c-cool-solid-2);
+  --color-indigo-100: var(--c-cool-soft); --color-indigo-300: var(--c-cool-text); --color-indigo-400: var(--c-cool-text);
+  --color-indigo-500: var(--c-cool-solid); --color-indigo-600: var(--c-cool-solid); --color-indigo-700: var(--c-cool-solid-2);
+  --color-indigo-900: var(--c-cool-solid-2);
+  --color-violet-400: var(--c-cool-text); --color-violet-500: var(--c-cool-solid); --color-violet-600: var(--c-cool-solid);
+  --color-purple-50: var(--c-cool-soft); --color-purple-100: var(--c-cool-soft); --color-purple-200: var(--c-cool-soft);
+  --color-purple-300: var(--c-cool-text); --color-purple-400: var(--c-cool-text); --color-purple-500: var(--c-cool-solid);
+  --color-purple-600: var(--c-cool-solid); --color-purple-700: var(--c-cool-solid-2); --color-purple-800: var(--c-cool-text);
+  --color-purple-900: var(--c-cool-solid-2);
+  --color-fuchsia-400: var(--c-cool-text); --color-fuchsia-500: var(--c-cool-solid);
+
+  /* ok: green, emerald, teal, lime */
+  --color-green-50: var(--c-ok-soft); --color-green-100: var(--c-ok-soft); --color-green-200: var(--c-ok-soft);
+  --color-green-300: var(--c-ok-text); --color-green-400: var(--c-ok-text); --color-green-500: var(--c-ok-solid);
+  --color-green-600: var(--c-ok-solid); --color-green-700: var(--c-ok-solid-2); --color-green-800: var(--c-ok-text);
+  --color-green-900: var(--c-ok-solid-2); --color-green-950: var(--c-ok-solid-2);
+  --color-emerald-50: var(--c-ok-soft); --color-emerald-100: var(--c-ok-soft); --color-emerald-200: var(--c-ok-soft);
+  --color-emerald-300: var(--c-ok-text); --color-emerald-400: var(--c-ok-text); --color-emerald-500: var(--c-ok-solid);
+  --color-emerald-600: var(--c-ok-solid); --color-emerald-700: var(--c-ok-solid-2); --color-emerald-800: var(--c-ok-text);
+  --color-emerald-900: var(--c-ok-solid-2);
+  --color-teal-400: var(--c-ok-text); --color-teal-500: var(--c-ok-solid); --color-teal-600: var(--c-ok-solid);
+  --color-lime-400: var(--c-ok-text); --color-lime-500: var(--c-ok-solid);
+
+  /* bad: red, rose, pink */
+  --color-red-50: var(--c-bad-soft); --color-red-100: var(--c-bad-soft); --color-red-200: var(--c-bad-soft);
+  --color-red-300: var(--c-bad-text); --color-red-400: var(--c-bad-text); --color-red-500: var(--c-bad-solid);
+  --color-red-600: var(--c-bad-solid); --color-red-700: var(--c-bad-solid-2); --color-red-800: var(--c-bad-text);
+  --color-red-900: var(--c-bad-solid-2); --color-red-950: var(--c-bad-solid-2);
+  --color-rose-400: var(--c-bad-text); --color-rose-500: var(--c-bad-solid); --color-rose-600: var(--c-bad-solid);
+  --color-pink-400: var(--c-bad-text); --color-pink-500: var(--c-bad-solid);
+
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in: cubic-bezier(0.7, 0, 0.84, 0);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+/* paper: the light colourway */
+:root {
+  color-scheme: light;
+  --c-paper: oklch(97.6% 0.005 85);   /* chrome: header, sidebar */
+  --c-paper-2: oklch(99.6% 0.002 85); /* panels */
+  --c-paper-3: oklch(95.4% 0.006 85); /* the ground, fields, logs */
+  --c-paper-4: oklch(93.5% 0.007 85); /* hover */
+  --c-ink: oklch(21% 0.01 60);
+  --c-ink-2: oklch(33% 0.01 60);
+  --c-muted: oklch(46% 0.012 60);
+  --c-muted-2: oklch(53% 0.012 60);
+  --c-rule: oklch(89.5% 0.008 85);
+  --c-rule-2: oklch(81% 0.01 85);
+
+  --c-accent: oklch(57% 0.15 66);
+  --c-accent-2: oklch(51% 0.14 62);
+  --c-accent-ink: oklch(99% 0.006 85);
+  --c-accent-soft: oklch(94.5% 0.045 85);
+  --c-accent-text: oklch(49% 0.13 62);
+
+  --c-cool-soft: oklch(94.5% 0.03 250);
+  --c-cool-text: oklch(48% 0.14 252);
+  --c-cool-solid: oklch(51% 0.15 252);
+  --c-cool-solid-2: oklch(45% 0.14 252);
+
+  --c-ok-soft: oklch(94.5% 0.04 150);
+  --c-ok-text: oklch(46% 0.12 150);
+  --c-ok-solid: oklch(50% 0.13 150);
+  --c-ok-solid-2: oklch(44% 0.12 150);
+
+  --c-bad-soft: oklch(95% 0.03 25);
+  --c-bad-text: oklch(50% 0.18 27);
+  --c-bad-solid: oklch(54% 0.19 27);
+  --c-bad-solid-2: oklch(48% 0.18 27);
+
+  --c-on-solid: oklch(99% 0.005 85);
+
+  --space-3xs: 2px; --space-2xs: 4px; --space-xs: 8px; --space-sm: 12px; --space-md: 16px; --space-lg: 24px; --space-xl: 40px; --space-2xl: 64px; --space-3xl: 96px;
+  --dur-micro: 120ms; --dur-short: 220ms; --dur-long: 420ms;
+  --z-dropdown: 100; --z-sticky: 200; --z-modal: 400; --z-toast: 500;
+  --rule-hair: 1px;
+  --tracking-display: -0.02em; --display-weight: 500;
+  --font-display: var(--font-sans); --font-body: var(--font-sans); --font-outlier: var(--font-mono);
+  --text-display: 1.875rem; --text-section: 1.25rem; --text-title: 1rem; --text-lead: 1rem;
+  --container: 1440px; --gutter: 32px;
+}
+
+/* graphite: the dark colourway */
+html.dark {
+  color-scheme: dark;
+  --c-paper: oklch(17% 0.008 250);
+  --c-paper-2: oklch(21% 0.009 250);
+  --c-paper-3: oklch(13.5% 0.007 250);
+  --c-paper-4: oklch(25% 0.01 250);
+  --c-ink: oklch(95% 0.005 250);
+  --c-ink-2: oklch(83% 0.008 250);
+  --c-muted: oklch(71% 0.01 250);
+  --c-muted-2: oklch(62% 0.01 250);
+  --c-rule: oklch(29% 0.01 250);
+  --c-rule-2: oklch(40% 0.012 250);
+
+  --c-accent: oklch(82% 0.15 80);
+  --c-accent-2: oklch(76% 0.15 76);
+  --c-accent-ink: oklch(18% 0.04 75);
+  --c-accent-soft: oklch(29% 0.05 80);
+  --c-accent-text: oklch(82% 0.15 80);
+
+  --c-cool-soft: oklch(29% 0.05 245);
+  --c-cool-text: oklch(77% 0.12 245);
+  --c-cool-solid: oklch(55% 0.14 250);
+  --c-cool-solid-2: oklch(49% 0.13 250);
+
+  --c-ok-soft: oklch(26% 0.04 150);
+  --c-ok-text: oklch(76% 0.15 150);
+  --c-ok-solid: oklch(53% 0.13 150);
+  --c-ok-solid-2: oklch(46% 0.12 150);
+
+  --c-bad-soft: oklch(26% 0.045 25);
+  --c-bad-text: oklch(72% 0.16 25);
+  --c-bad-solid: oklch(55% 0.18 27);
+  --c-bad-solid-2: oklch(49% 0.17 27);
+
+  --c-on-solid: oklch(98% 0.005 250);
+}

@@ -1,11 +1,127 @@
+/* Hallmark · shape: app screen · genre: modern-minimal · theme: Console (deal 1/3, seed internal-ticketing-system-business-064c·5ec4930f·2026-11-07·r0) · redesign: restyle
+ * nav: kept (sidebar, header, bottom nav) · signature: the ticket record (id, SLA time, who handled it) set in the measured face · states: kept as built (loading spinners, empty tables, toasts) · console: paper (light) + graphite (dark), by system preference or the toggle
+ * axes: dark/grotesk-sans/chromatic-amber · posture: restrained · contrast: pass · v2.0.0 */
+/* Hallmark · pre-emit critique: P3 H3 E4 S3 R4 V3 · weakest: S, the palette remap keeps every screen's layout, so dense pages still stack many panels; only a full redesign recomposes them */
+@import url("https://fonts.googleapis.com/css2?family=Host+Grotesk:wght@400;500&family=Atkinson+Hyperlegible+Mono:wght@400;500&display=swap");
 @import 'tailwindcss';
+@import "./tokens.css";
+@import "./base.css" layer(base);
 
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
 @source '../**/*.blade.php';
 @source '../**/*.js';
 
-@theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-        'Segoe UI Symbol', 'Noto Color Emoji';
+/* The `dark:` variant follows the class the theme script sets on <html>. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+@layer base {
+  html, body { background-color: var(--color-paper-3); color: var(--color-ink); }
+  body { font-family: var(--font-sans); font-feature-settings: "ss01"; }
+  h1, h2, h3, h4 { font-weight: 500; letter-spacing: var(--tracking-display); max-width: none; }
+  button, a, input, select, textarea, [role="button"] { -webkit-tap-highlight-color: transparent; }
+  :where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+    outline: 2px solid var(--color-focus); outline-offset: 2px; transition: none;
+  }
+  ::placeholder { color: var(--color-muted-2); opacity: 1; }
+  table { font-variant-numeric: tabular-nums; }
+  hr { border-color: var(--color-rule); }
+}
+
+@layer components {
+  /* Light/dark switch in the header. */
+  .theme-toggle {
+    display: inline-flex; align-items: center; justify-content: center; gap: var(--space-xs);
+    min-height: 2.25rem; padding: 0 var(--space-sm);
+    border: 1px solid var(--color-rule-2); border-radius: var(--radius-pill);
+    background: var(--color-paper-2); color: var(--color-ink-2);
+    font-size: 0.875rem; font-weight: 500; cursor: pointer;
+    transition: background-color var(--dur-short) var(--ease-out), color var(--dur-short) var(--ease-out);
+  }
+  .theme-toggle:hover { background: var(--color-paper-4); color: var(--color-ink); }
+  .theme-toggle:active { background: var(--color-rule); }
+  .theme-toggle svg { width: 1rem; height: 1rem; }
+  .theme-toggle .icon-sun { display: none; }
+  html.dark .theme-toggle .icon-sun { display: block; }
+  html.dark .theme-toggle .icon-moon { display: none; }
+}
+
+/* The Asian Bay mark is a white PNG: on the light colourway it is printed in ink. */
+html:not(.dark) img:is([src*="logos/asianbay"], [src*="AsianBay.png"], [src*="cloud.asianbay.co.id"]) { filter: invert(1); }
+
+/* ---------- third-party widgets, in Console's materials ---------- */
+
+/* DataTables (bootstrap5 skin) */
+.dataTables_wrapper, table.dataTable { color: var(--color-ink); }
+table.dataTable { --bs-table-bg: transparent; --bs-table-color: var(--color-ink); --bs-table-striped-bg: var(--color-paper-3); --bs-table-hover-bg: var(--color-paper-4); --bs-border-color: var(--color-rule); border-color: var(--color-rule) !important; }
+table.dataTable > thead > tr > th { font-weight: 500; color: var(--color-muted); text-transform: none; letter-spacing: 0; border-bottom: 1px solid var(--color-rule-2) !important; }
+table.dataTable > tbody > tr > td { border-color: var(--color-rule) !important; }
+.dataTables_wrapper .dataTables_processing { background: var(--color-paper-2); color: var(--color-ink); border: 1px solid var(--color-rule); border-radius: var(--radius-pill); box-shadow: none; }
+.dataTables_wrapper .page-link { background: var(--color-paper-2); color: var(--color-ink-2); border-color: var(--color-rule); }
+.dataTables_wrapper .page-item.active .page-link { background: var(--color-accent); border-color: var(--color-accent); color: var(--color-accent-ink); }
+.dataTables_wrapper .page-item.disabled .page-link { background: var(--color-paper-3); color: var(--color-muted-2); }
+.dataTables_wrapper .dataTables_paginate .paginate_button:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }
+.dt-buttons .dt-button, div.dt-button-collection .dt-button { background: var(--color-paper-2) !important; color: var(--color-ink) !important; border: 1px solid var(--color-rule-2) !important; border-radius: var(--radius-pill) !important; box-shadow: none !important; font-weight: 500; }
+.dt-buttons .dt-button:hover { background: var(--color-paper-4) !important; }
+table.dataTable.dtr-inline.collapsed > tbody > tr > td.dtr-control::before,
+table.dataTable.dtr-inline.collapsed > tbody > tr > th.dtr-control::before { background-color: var(--color-paper-4); color: var(--color-ink); border: 1px solid var(--color-rule-2); box-shadow: none; }
+
+/* Select2 */
+.select2-container--default .select2-selection--single,
+.select2-container--default .select2-selection--multiple { background: var(--color-paper-3) !important; border: 1px solid var(--color-rule-2) !important; border-radius: var(--radius-pill) !important; color: var(--color-ink) !important; }
+.select2-container--default .select2-selection--single .select2-selection__rendered { color: var(--color-ink) !important; }
+.select2-container--default .select2-selection--single .select2-selection__placeholder { color: var(--color-muted-2) !important; }
+.select2-container--default.select2-container--focus .select2-selection--single,
+.select2-container--default.select2-container--open .select2-selection--single { border-color: var(--color-accent) !important; }
+.select2-dropdown { background: var(--color-paper-2) !important; border: 1px solid var(--color-rule-2) !important; border-radius: var(--radius-pill) !important; color: var(--color-ink) !important; box-shadow: none !important; }
+.select2-container--default .select2-search--dropdown .select2-search__field { background: var(--color-paper-3) !important; border: 1px solid var(--color-rule-2) !important; color: var(--color-ink) !important; border-radius: var(--radius-pill); }
+.select2-container--default .select2-results__option { color: var(--color-ink) !important; background: transparent !important; }
+.select2-container--default .select2-results__option--highlighted[aria-selected],
+.select2-container--default .select2-results__option--highlighted.select2-results__option--selectable { background: var(--color-accent-soft) !important; color: var(--color-ink) !important; }
+.select2-container--default .select2-results__option[aria-selected="true"],
+.select2-container--default .select2-results__option--selected { background: var(--color-paper-4) !important; color: var(--color-ink) !important; }
+
+/* Flatpickr */
+.flatpickr-calendar { background: var(--color-paper-2) !important; border: 1px solid var(--color-rule-2) !important; box-shadow: none !important; border-radius: var(--radius-card) !important; color: var(--color-ink) !important; font-family: var(--font-sans); }
+.flatpickr-calendar.arrowTop::before, .flatpickr-calendar.arrowTop::after { border-bottom-color: var(--color-rule-2) !important; }
+.flatpickr-calendar.arrowBottom::before, .flatpickr-calendar.arrowBottom::after { border-top-color: var(--color-rule-2) !important; }
+.flatpickr-months .flatpickr-month, .flatpickr-current-month .flatpickr-monthDropdown-months, .flatpickr-current-month input.cur-year,
+.flatpickr-weekdays, span.flatpickr-weekday { background: transparent !important; color: var(--color-ink) !important; fill: var(--color-ink) !important; }
+.flatpickr-months .flatpickr-prev-month svg, .flatpickr-months .flatpickr-next-month svg { fill: var(--color-ink-2) !important; }
+span.flatpickr-weekday { color: var(--color-muted) !important; font-weight: 500; }
+.flatpickr-day { color: var(--color-ink) !important; border-radius: var(--radius-pill) !important; font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+.flatpickr-day:hover, .flatpickr-day:focus { background: var(--color-paper-4) !important; border-color: var(--color-rule) !important; }
+.flatpickr-day.today { border-color: var(--color-cool) !important; }
+.flatpickr-day.selected, .flatpickr-day.startRange, .flatpickr-day.endRange,
+.flatpickr-day.selected:hover { background: var(--color-accent) !important; border-color: var(--color-accent) !important; color: var(--color-accent-ink) !important; }
+.flatpickr-day.inRange { background: var(--color-accent-soft) !important; border-color: transparent !important; box-shadow: none !important; }
+.flatpickr-day.prevMonthDay, .flatpickr-day.nextMonthDay, .flatpickr-day.flatpickr-disabled { color: var(--color-muted-2) !important; }
+.flatpickr-time, .flatpickr-time input, .flatpickr-time .flatpickr-am-pm, .flatpickr-time .flatpickr-time-separator { background: var(--color-paper-2) !important; color: var(--color-ink) !important; border-color: var(--color-rule) !important; }
+.flatpickr-monthSelect-month { color: var(--color-ink) !important; border-radius: var(--radius-pill) !important; }
+.flatpickr-monthSelect-month:hover { background: var(--color-paper-4) !important; }
+.flatpickr-monthSelect-month.selected { background: var(--color-accent) !important; color: var(--color-accent-ink) !important; }
+
+/* Toastr */
+#toast-container > div { box-shadow: none !important; opacity: 1 !important; border-radius: var(--radius-card) !important; border: 1px solid var(--color-rule-2); background-color: var(--color-paper-2) !important; color: var(--color-ink) !important; font-family: var(--font-sans); padding-left: 3rem !important; }
+#toast-container > div:hover { box-shadow: none !important; }
+#toast-container > .toast-success { border-color: var(--color-ok); }
+#toast-container > .toast-error { border-color: var(--color-bad); }
+#toast-container > .toast-warning { border-color: var(--color-accent); }
+#toast-container > .toast-info { border-color: var(--color-cool); }
+#toast-container > div { background-image: none !important; }
+.toast-progress { background: var(--color-rule-2) !important; opacity: 1 !important; }
+
+/* SweetAlert2: its inline colours are overridden so dialogs follow the mode */
+.swal2-popup { background: var(--color-paper-2) !important; color: var(--color-ink) !important; border: 1px solid var(--color-rule-2); border-radius: var(--radius-card) !important; font-family: var(--font-sans) !important; }
+.swal2-title { color: var(--color-ink) !important; font-weight: 500 !important; }
+.swal2-html-container, .swal2-content { color: var(--color-ink-2) !important; }
+.swal2-styled { border-radius: var(--radius-pill) !important; box-shadow: none !important; font-weight: 500 !important; }
+.swal2-styled.swal2-confirm { background: var(--color-accent) !important; color: var(--color-accent-ink) !important; }
+.swal2-styled.swal2-cancel, .swal2-styled.swal2-deny { background: var(--color-paper-2) !important; color: var(--color-ink) !important; border: 1px solid var(--color-rule-2) !important; }
+.swal2-styled:focus-visible { outline: 2px solid var(--color-focus) !important; outline-offset: 2px; }
+.swal2-input, .swal2-textarea, .swal2-select { background: var(--color-paper-3) !important; color: var(--color-ink) !important; border: 1px solid var(--color-rule-2) !important; box-shadow: none !important; }
+div:where(.swal2-container).swal2-backdrop-show { background: color-mix(in oklab, var(--color-paper-3) 70%, transparent) !important; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
 }

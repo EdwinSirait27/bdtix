@@ -5,20 +5,20 @@
 @section('content')
     <div class="max-w-7xl mx-auto space-y-6 px-4 sm:px-6 lg:px-8">
         {{-- Ticket Info --}}
-        <div class="bg-white dark:bg-slate-900 rounded-2xl shadow-lg p-4 sm:p-6">
+        <div class="bg-slate-900 rounded-[10px] p-4 sm:p-6">
             <div class="flex flex-col space-y-3">
                 <div>
-                    <h2 class="text-lg sm:text-xl font-bold text-slate-900 dark:text-white">
+                    <h2 class="text-lg sm:text-xl font-medium text-ink">
                         Title : {{ $ticket->title ?? '-' }}
                     </h2>
-                    <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
+                    <p class="text-xs sm:text-sm text-slate-400 mt-1">
                         Ticket Queue Number {{ $ticket->queue_number ?? '-' }} • Created
                         {{ $ticket->created_at?->format('d F Y H:i') ?? '-' }}
                     </p>
                 </div>
                 <div>
                     <span
-                        class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs sm:text-sm font-semibold {{ $ticket->badge_class ?? '' }}">
+                        class="inline-flex items-center gap-2 px-4 py-1.5 rounded text-xs sm:text-sm font-medium {{ $ticket->badge_class ??'' }}">
                         <span class="w-2 h-2 rounded-full bg-white"></span>
                         {{ $ticket->status ?? '-' }}
                     </span>
@@ -28,82 +28,82 @@
 
         {{-- Ticket Meta --}}
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-            <div class="bg-white dark:bg-slate-900 rounded-xl p-5 shadow-lg">
-                <p class="text-xs text-slate-500 dark:text-slate-400 ">Created By</p>
-                <p class="font-semibold mt-1 text-slate-900 dark:text-white text-sm sm:text-base">
+            <div class="bg-slate-900 rounded-[10px] p-5">
+                <p class="text-xs text-slate-400">Created By</p>
+                <p class="font-medium mt-1 text-ink text-sm sm:text-base">
                     {{ $ticket->user?->employee?->employee_name ?? ($ticket->user?->email ?? '-') }}
                 </p>
             </div>
-            <div class="bg-white dark:bg-slate-900 rounded-xl p-5 shadow-lg">
-                <p class="text-xs text-slate-500 dark:text-slate-400 ">Category</p>
-                <p class="font-semibold mt-1 text-slate-900 dark:text-white text-sm sm:text-base">
+            <div class="bg-slate-900 rounded-[10px] p-5">
+                <p class="text-xs text-slate-400">Category</p>
+                <p class="font-medium mt-1 text-ink text-sm sm:text-base">
                     {{ $ticket->category ?? '-' }}
                 </p>
             </div>
-            <div class="bg-white dark:bg-slate-900 rounded-xl p-5 shadow-lg">
-                <p class="text-xs text-slate-500 dark:text-slate-400 ">Sub Category</p>
-                <p class="font-semibold mt-1 text-slate-900 dark:text-white text-sm sm:text-base">
+            <div class="bg-slate-900 rounded-[10px] p-5">
+                <p class="text-xs text-slate-400">Sub Category</p>
+                <p class="font-medium mt-1 text-ink text-sm sm:text-base">
                     {{ $ticket->sub_category ?? '-' }}
                 </p>
             </div>
-            <div class="bg-white dark:bg-slate-900 rounded-xl p-5 shadow-lg">
-                <p class="text-xs text-slate-500 dark:text-slate-400 ">Description User</p>
-                <p class="font-semibold mt-1 text-slate-900 dark:text-white text-sm sm:text-base">
+            <div class="bg-slate-900 rounded-[10px] p-5">
+                <p class="text-xs text-slate-400">Description User</p>
+                <p class="font-medium mt-1 text-ink text-sm sm:text-base">
                     {{ $ticket->description ?? '-' }}
                 </p>
             </div>
-            <div class="bg-white dark:bg-slate-900 rounded-xl p-5 shadow-lg">
-                <p class="text-xs text-slate-500 dark:text-slate-400 ">Location User</p>
-                <p class="font-semibold mt-1 text-slate-900 dark:text-white text-sm sm:text-base">
+            <div class="bg-slate-900 rounded-[10px] p-5">
+                <p class="text-xs text-slate-400">Location User</p>
+                <p class="font-medium mt-1 text-ink text-sm sm:text-base">
                     {{ $ticket->store->name ?? '-' }}
                 </p>
             </div>
         </div>
 
         {{-- Executor --}}
-        <div class="bg-white dark:bg-slate-900 rounded-xl p-5 shadow-lg">
-            <p class="text-xs text-slate-500 dark:text-slate-400 ">Executor</p>
-            <p class="font-semibold mt-1 text-slate-900 dark:text-white text-sm sm:text-base">
+        <div class="bg-slate-900 rounded-[10px] p-5">
+            <p class="text-xs text-slate-400">Executor</p>
+            <p class="font-medium mt-1 text-ink text-sm sm:text-base">
                 {{ $executor?->employee?->employee_name ?? '-' }}
             </p>
         </div>
 
         {{-- Notes IT --}}
-        <div class="bg-white dark:bg-slate-900 rounded-xl p-5 shadow-lg">
-            <p class="text-xs text-slate-500 dark:text-slate-400 ">BD Notes</p>
-            <p class="font-semibold mt-1 text-slate-900 dark:text-white text-sm sm:text-base">
+        <div class="bg-slate-900 rounded-[10px] p-5">
+            <p class="text-xs text-slate-400">BD Notes</p>
+            <p class="font-medium mt-1 text-ink text-sm sm:text-base">
                 {{ $ticket->notes_executor ?? '-' }}
             </p>
         </div>
 
         {{-- Progressed At --}}
-        <div class="bg-white dark:bg-slate-900 rounded-xl p-5 shadow-lg">
-            <p class="text-xs text-slate-500 dark:text-slate-400 ">Progressed At</p>
-            <p class="font-semibold mt-1 text-slate-900 dark:text-white text-sm sm:text-base">
+        <div class="bg-slate-900 rounded-[10px] p-5">
+            <p class="text-xs text-slate-400">Progressed At</p>
+            <p class="font-medium mt-1 text-ink text-sm sm:text-base">
                 {{ $ticket->progressed_at?->format('d F Y H:i') ?? '-' }}
             </p>
         </div>
 
         {{-- Estimation --}}
-        <div class="bg-white dark:bg-slate-900 rounded-xl p-5 shadow-lg">
-            <p class="text-xs text-slate-500 dark:text-slate-400 ">Estimation</p>
-            <p class="font-semibold mt-1 text-slate-900 dark:text-white text-sm sm:text-base">
+        <div class="bg-slate-900 rounded-[10px] p-5">
+            <p class="text-xs text-slate-400">Estimation</p>
+            <p class="font-medium mt-1 text-ink text-sm sm:text-base">
                 {{ $estimationDate ?? '-' }}
             </p>
         </div>
 
         {{-- Estimation To --}}
-        <div class="bg-white dark:bg-slate-900 rounded-xl p-5 shadow-lg">
-            <p class="text-xs text-slate-500 dark:text-slate-400 ">Estimation To</p>
-            <p class="font-semibold mt-1 text-slate-900 dark:text-white text-sm sm:text-base">
+        <div class="bg-slate-900 rounded-[10px] p-5">
+            <p class="text-xs text-slate-400">Estimation To</p>
+            <p class="font-medium mt-1 text-ink text-sm sm:text-base">
                 {{ $estimationToDate ?? '-' }}
             </p>
         </div>
 
         {{-- User Attachments --}}
         @if ($ticket->attachments && $ticket->attachments->count())
-            <div class="bg-white dark:bg-slate-900 rounded-2xl shadow-lg p-4 sm:p-6">
-                <h3 class="text-base sm:text-lg font-bold mb-4 text-slate-900 dark:text-white">Attachments</h3>
+            <div class="bg-slate-900 rounded-[10px] p-4 sm:p-6">
+                <h3 class="text-base sm:text-lg font-medium mb-4 text-ink">Attachments</h3>
                 <ul class="space-y-2">
                     @foreach ($ticket->attachments as $file)
                         <li class="flex items-center gap-2">
@@ -138,8 +138,8 @@
 
         {{-- Executor Attachments (hanya tampil jika Closed) --}}
         @if ($ticket->executorAttachments && $ticket->executorAttachments->count())
-            <div class="bg-white dark:bg-slate-900 rounded-2xl shadow-lg p-4 sm:p-6">
-                <h3 class="text-base sm:text-lg font-bold mb-4 text-slate-900 dark:text-white">Executor Attachments</h3>
+            <div class="bg-slate-900 rounded-[10px] p-4 sm:p-6">
+                <h3 class="text-base sm:text-lg font-medium mb-4 text-ink">Executor Attachments</h3>
                 <ul class="space-y-2">
                     @foreach ($ticket->executorAttachments as $file)
                         <li class="flex items-center gap-2">
@@ -174,20 +174,20 @@
 
         {{-- Activity --}}
         @if ($ticket->replies && $ticket->replies->count())
-            <div class="bg-white dark:bg-slate-900 rounded-2xl shadow-lg p-4 sm:p-6">
-                <h3 class="text-base sm:text-lg font-bold mb-4 text-slate-900 dark:text-white">Activity</h3>
+            <div class="bg-slate-900 rounded-[10px] p-4 sm:p-6">
+                <h3 class="text-base sm:text-lg font-medium mb-4 text-ink">Activity</h3>
                 <div class="space-y-3">
                     @foreach ($ticket->replies as $reply)
-                        <div class="p-3 sm:p-4 rounded-xl bg-slate-50 dark:bg-slate-800 shadow">
+                        <div class="p-3 sm:p-4 rounded-[10px] bg-slate-800">
                             <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1 mb-2">
-                                <p class="text-xs sm:text-sm font-semibold text-slate-900 dark:text-white">
+                                <p class="text-xs sm:text-sm font-medium text-ink">
                                     {{ $reply->user?->employee?->employee_name ?? ($reply->user?->email ?? '-') }}
                                 </p>
-                                <p class="text-xs text-slate-500 dark:text-slate-400">
+                                <p class="text-xs text-slate-400">
                                     {{ $reply->created_at?->diffForHumans() ?? '-' }}
                                 </p>
                             </div>
-                            <p class="text-xs sm:text-sm text-slate-700 dark:text-slate-300">
+                            <p class="text-xs sm:text-sm text-slate-300">
                                 {{ $reply->message ?? '-' }}
                             </p>
                         </div>
@@ -199,9 +199,9 @@
         {{-- Back Button --}}
         <div class="flex justify-end pb-4">
             <a href="{{ route('dashboard') }}"
-                class="inline-flex items-center px-4 sm:px-5 py-2.5 rounded-xl text-sm
-                      bg-slate-200 dark:bg-slate-700 text-slate-800 dark:text-white
-                      hover:bg-slate-300 dark:hover:bg-slate-600 transition shadow-md">
+                class="inline-flex items-center px-4 sm:px-5 py-2.5 rounded-md text-sm
+                       bg-slate-700 text-ink
+                       hover:bg-slate-600 transition">
                 Back to Dashboard
             </a>
         </div>
@@ -213,16 +213,16 @@
         <p id="previewModalTitle" class="text-xs text-slate-400 mb-2 self-start truncate max-w-sm"></p>
         <div class="relative">
             <button type="button" onclick="closePreviewModal()"
-                class="absolute -top-2 -right-2 z-10 bg-slate-700 hover:bg-red-500 text-white rounded-full p-1 transition shadow-lg">
+                class="absolute -top-2 -right-2 z-10 bg-slate-700 hover:bg-red-500 text-ink rounded-full p-1 transition">
                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                 </svg>
             </button>
             <img id="previewModalImg" src="" alt=""
-                class="hidden rounded-xl shadow-2xl object-contain"
+                class="hidden rounded-[10px] object-contain"
                 style="max-width:70vw; max-height:80vh;">
             <iframe id="previewModalIframe" src="" frameborder="0" allowfullscreen
-                class="hidden rounded-xl shadow-2xl"
+                class="hidden rounded-[10px]"
                 style="width:70vw; height:80vh;"></iframe>
         </div>
     </div>
@@ -233,16 +233,16 @@
         <p id="previewModalForExecutorTitle" class="text-xs text-slate-400 mb-2 self-start truncate max-w-sm"></p>
         <div class="relative">
             <button type="button" onclick="closePreviewModalForExecutor()"
-                class="absolute -top-2 -right-2 z-10 bg-slate-700 hover:bg-red-500 text-white rounded-full p-1 transition shadow-lg">
+                class="absolute -top-2 -right-2 z-10 bg-slate-700 hover:bg-red-500 text-ink rounded-full p-1 transition">
                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                 </svg>
             </button>
             <img id="previewModalForExecutorImg" src="" alt=""
-                class="hidden rounded-xl shadow-2xl object-contain"
+                class="hidden rounded-[10px] object-contain"
                 style="max-width:70vw; max-height:80vh;">
             <iframe id="previewModalForExecutorIframe" src="" frameborder="0" allowfullscreen
-                class="hidden rounded-xl shadow-2xl"
+                class="hidden rounded-[10px]"
                 style="width:70vw; height:80vh;"></iframe>
         </div>
     </div>

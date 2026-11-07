@@ -6,14 +6,14 @@
     <style>
         /* Base DataTables Styling */
         .dataTables_wrapper {
-            font-family: inherit;
+            font-family: var(--font-body);
         }
 
         .dataTables_wrapper .dataTables_length,
         .dataTables_wrapper .dataTables_filter,
         .dataTables_wrapper .dataTables_info,
         .dataTables_wrapper .dataTables_paginate {
-            color: #ffffff;
+            color: var(--color-ink);
             font-size: 0.875rem;
         }
 
@@ -21,13 +21,13 @@
         .dark .dataTables_wrapper .dataTables_filter,
         .dark .dataTables_wrapper .dataTables_info,
         .dark .dataTables_wrapper .dataTables_paginate {
-            color: #ffffff;
+            color: var(--color-ink);
         }
 
         .dataTables_wrapper .dataTables_length select,
         .dataTables_wrapper .dataTables_filter input {
-            border: 1px solid #e2e8f0;
-            border-radius: 0.5rem;
+            border: 1px solid var(--color-rule);
+            border-radius: var(--radius-pill);
             padding: 0.5rem;
             font-size: 0.875rem;
             margin: 0 0.5rem;
@@ -35,9 +35,9 @@
 
         .dark .dataTables_wrapper .dataTables_length select,
         .dark .dataTables_wrapper .dataTables_filter input {
-            border-color: #475569;
-            background-color: #334155;
-            color: #f1f5f9;
+            border-color: var(--color-rule-2);
+            background-color: var(--color-paper-3);
+            color: var(--color-ink);
         }
 
         /* Table Styling - Desktop Only */
@@ -46,50 +46,50 @@
         }
 
         #users-table thead {
-            background: linear-gradient(to right, #000000, #000000);
-            color: rgb(255, 255, 255);
+            background: var(--color-paper-3);
+            color: var(--color-ink);
         }
 
         #users-table thead th {
             padding: 1rem;
-            font-weight: 600;
-            text-transform: uppercase;
+            font-weight: 500;
+            text-transform: none;
             font-size: 0.75rem;
-            letter-spacing: 0.05em;
+            letter-spacing: 0;
             border: none;
             white-space: nowrap;
         }
 
         .dark #users-table thead {
-            background: #0F172A;
+            background: var(--color-paper);
         }
 
         #users-table tbody tr {
-            border-bottom: 1px solid #ffffff;
+            border-bottom: 1px solid var(--color-rule);
             transition: background-color 0.2s;
         }
 
         .dark #users-table tbody tr {
-            border-bottom-color: #ffffff;
+            border-bottom-color: var(--color-rule);
         }
 
         #users-table tbody tr:hover {
-            background-color: #000000;
+            background-color: var(--color-paper-3);
         }
 
         .dark #users-table tbody tr:hover {
-            background-color: #1e293b;
+            background-color: var(--color-paper-2);
         }
 
         #users-table tbody td {
             padding: 1rem;
-            color: #ffffff;
+            color: var(--color-ink);
             font-size: 0.875rem;
             vertical-align: middle;
         }
 
         .dark #users-table tbody td {
-            color: #cbd5e1;
+            color: var(--color-ink);
         }
 
         /* Pagination Styling */
@@ -105,29 +105,29 @@
             display: inline-block;
             padding: 0.5rem 0.75rem;
             margin: 0 0.125rem;
-            border: 1px solid #e2e8f0;
-            border-radius: 0.5rem;
-            background-color: white;
-            color: #475569;
+            border: 1px solid var(--color-rule);
+            border-radius: var(--radius-pill);
+            background-color: var(--color-paper-2);
+            color: var(--color-muted);
             font-size: 0.875rem;
             font-weight: 500;
             cursor: pointer;
-            transition: all 0.2s;
+            transition-property: background-color, border-color, color; transition-duration: 0.2s;
             min-width: 2rem;
             text-align: center;
         }
 
         .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
-            background-color: #f1f5f9;
-            border-color: #cbd5e1;
-            color: #1e293b;
+            background-color: var(--color-paper-2);
+            border-color: var(--color-rule);
+            color: var(--color-ink);
         }
 
         .dataTables_wrapper .dataTables_paginate .paginate_button.current {
-            background: linear-gradient(to right, #3b82f6, #06b6d4);
+            background: var(--color-accent);
             border-color: transparent;
-            color: white;
-            box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.3);
+            color: var(--color-accent-ink);
+            box-shadow: none;
         }
 
         .dataTables_wrapper .dataTables_paginate .paginate_button.disabled {
@@ -138,34 +138,34 @@
 
         .dataTables_wrapper .dataTables_paginate .paginate_button.previous,
         .dataTables_wrapper .dataTables_paginate .paginate_button.next {
-            font-weight: 600;
+            font-weight: 500;
         }
 
         /* Dark mode pagination */
         .dark .dataTables_wrapper .dataTables_paginate .paginate_button {
-            background-color: #1e293b;
-            border-color: #334155;
-            color: #cbd5e1;
+            background-color: var(--color-paper-2);
+            border-color: var(--color-rule);
+            color: var(--color-ink);
         }
 
         .dark .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
-            background-color: #334155;
-            border-color: #475569;
-            color: #f1f5f9;
+            background-color: var(--color-paper-3);
+            border-color: var(--color-rule-2);
+            color: var(--color-ink);
         }
 
         .dark .dataTables_wrapper .dataTables_paginate .paginate_button.current {
-            background: linear-gradient(to right, #3b82f6, #06b6d4);
-            color: white;
+            background: var(--color-accent);
+            color: var(--color-accent-ink);
         }
 
         /* Action Buttons */
         .btn-action {
             padding: 0.5rem 0.75rem;
-            border-radius: 0.5rem;
+            border-radius: var(--radius-pill);
             font-size: 0.875rem;
-            font-weight: 600;
-            transition: all 0.2s;
+            font-weight: 500;
+            transition-property: background-color, border-color, color; transition-duration: 0.2s;
             display: inline-flex;
             align-items: center;
             gap: 0.5rem;
@@ -178,25 +178,25 @@
         }
 
         .btn-edit {
-            background: linear-gradient(to right, #3b82f6, #06b6d4);
-            color: white;
+            background: var(--color-accent);
+            color: var(--color-accent-ink);
             border: none;
         }
 
         .btn-edit:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+            box-shadow: none;
         }
 
         .btn-delete {
-            background: linear-gradient(to right, #ef4444, #dc2626);
-            color: white;
+            background: var(--color-bad-solid);
+            color: var(--color-on-solid);
             border: none;
         }
 
         .btn-delete:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
+            box-shadow: none;
         }
 
         .text-center {
@@ -248,13 +248,13 @@
 
         /* Mobile Card Styles */
         .user-card {
-            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-            border: 1px solid #334155;
-            border-radius: 1rem;
+            background: var(--color-paper-2);
+            border: 1px solid var(--color-rule);
+            border-radius: var(--radius-card);
             padding: 1rem;
             margin-bottom: 1rem;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
-            transition: all 0.3s;
+            box-shadow: none;
+            transition-property: background-color, border-color, color; transition-duration: 0.3s;
         }
 
         .user-card:active {
@@ -267,19 +267,19 @@
             justify-content: space-between;
             margin-bottom: 1rem;
             padding-bottom: 0.75rem;
-            border-bottom: 1px solid #334155;
+            border-bottom: 1px solid var(--color-rule);
         }
 
         .user-card-avatar {
             width: 48px;
             height: 48px;
             border-radius: 50%;
-            background: linear-gradient(135deg, #3b82f6, #06b6d4);
+            background: var(--color-accent);
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
-            font-weight: 700;
+            color: var(--color-accent-ink);
+            font-weight: 500;
             font-size: 1.25rem;
             flex-shrink: 0;
         }
@@ -290,14 +290,14 @@
         }
 
         .user-card-name {
-            color: #f1f5f9;
-            font-weight: 700;
+            color: var(--color-ink);
+            font-weight: 500;
             font-size: 1rem;
             margin-bottom: 0.125rem;
         }
 
         .user-card-username {
-            color: #94a3b8;
+            color: var(--color-ink-2);
             font-size: 0.813rem;
         }
 
@@ -312,17 +312,17 @@
         }
 
         .user-card-label {
-            color: #94a3b8;
+            color: var(--color-ink-2);
             font-size: 0.75rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
+            font-weight: 500;
+            text-transform: none;
+            letter-spacing: 0;
             min-width: 90px;
             flex-shrink: 0;
         }
 
         .user-card-value {
-            color: #e2e8f0;
+            color: var(--color-ink);
             font-size: 0.875rem;
             flex: 1;
         }
@@ -332,9 +332,9 @@
             padding: 0.25rem 0.625rem;
             border-radius: 9999px;
             font-size: 0.75rem;
-            font-weight: 600;
-            background: linear-gradient(135deg, #8b5cf6, #6366f1);
-            color: white;
+            font-weight: 500;
+            background: var(--color-accent);
+            color: var(--color-accent-ink);
         }
 
         .user-card-actions {
@@ -342,7 +342,7 @@
             gap: 0.5rem;
             margin-top: 1rem;
             padding-top: 0.75rem;
-            border-top: 1px solid #334155;
+            border-top: 1px solid var(--color-rule);
         }
 
         .user-card-actions .btn-action {
@@ -363,14 +363,14 @@
 
         .mobile-page-btn {
             padding: 0.5rem 0.75rem;
-            border: 1px solid #334155;
-            border-radius: 0.5rem;
-            background-color: #1e293b;
-            color: #cbd5e1;
+            border: 1px solid var(--color-rule);
+            border-radius: var(--radius-pill);
+            background-color: var(--color-paper-2);
+            color: var(--color-ink);
             font-size: 0.875rem;
             font-weight: 500;
             cursor: pointer;
-            transition: all 0.2s;
+            transition-property: background-color, border-color, color; transition-duration: 0.2s;
         }
 
         .mobile-page-btn:active {
@@ -378,8 +378,8 @@
         }
 
         .mobile-page-btn.active {
-            background: linear-gradient(to right, #3b82f6, #06b6d4);
-            color: white;
+            background: var(--color-accent);
+            color: var(--color-accent-ink);
             border-color: transparent;
         }
 
@@ -389,7 +389,7 @@
         }
 
         .mobile-info-text {
-            color: #94a3b8;
+            color: var(--color-ink-2);
             font-size: 0.813rem;
             text-align: center;
             margin-top: 0.75rem;
@@ -400,71 +400,71 @@
         {{-- Statistics Cards --}}
         <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
             <div
-                class="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl md:rounded-2xl p-4 md:p-6 text-white shadow-lg">
+                class="rounded-[10px] md:rounded-[10px] p-4 md:p-6 text-ink bg-slate-800 border border-slate-700">
                 <div class="flex items-center justify-between mb-2">
-                    <h3 class="text-xs md:text-sm font-semibold opacity-90">Total Users</h3>
+                    <h3 class="text-xs md:text-sm font-medium opacity-90">Total Users</h3>
                     <svg class="w-6 h-6 md:w-8 md:h-8 opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z">
                         </path>
                     </svg>
                 </div>
-                <p class="text-2xl md:text-3xl font-bold mb-1" id="total-users"></p>
-                <p class="text-blue-100 text-xs">Active accounts</p>
+                <p class="text-2xl md:text-3xl font-medium mb-1" id="total-users"></p>
+                <p class="text-slate-400 text-xs">Active accounts</p>
             </div>
             <div
-                class="bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-xl md:rounded-2xl p-4 md:p-6 text-white shadow-lg">
+                class="rounded-[10px] md:rounded-[10px] p-4 md:p-6 text-ink bg-slate-800 border border-slate-700">
                 <div class="flex items-center justify-between mb-2">
-                    <h3 class="text-xs md:text-sm font-semibold opacity-90">Yang Maha Besar</h3>
+                    <h3 class="text-xs md:text-sm font-medium opacity-90">Yang Maha Besar</h3>
                     <svg class="w-6 h-6 md:w-8 md:h-8 opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                     </svg>
                 </div>
-                <p class="text-2xl md:text-xl font-bold mb-1">Christopher Edwin Sirait, S.Kom</p>
-                <p class="text-emerald-100 text-xs">~bukan sarjana kaleng"</p>
+                <p class="text-2xl md:text-xl font-medium mb-1">Christopher Edwin Sirait, S.Kom</p>
+                <p class="text-slate-400 text-xs">~bukan sarjana kaleng"</p>
             </div>
             <div
-                class="bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl md:rounded-2xl p-4 md:p-6 text-white shadow-lg">
+                class="rounded-[10px] md:rounded-[10px] p-4 md:p-6 text-ink bg-slate-800 border border-slate-700">
                 <div class="flex items-center justify-between mb-2">
-                    <h3 class="text-xs md:text-sm font-semibold opacity-90">1 Thessalonians 5:17</h3>
+                    <h3 class="text-xs md:text-sm font-medium opacity-90">1 Thessalonians 5:17</h3>
                     <svg class="w-6 h-6 md:w-8 md:h-8 opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 2v20M7 7h10" />
                     </svg>
 
                 </div>
-                <p class="text-2xl md:text-3xl font-bold mb-1">pray without ceasing</p>
-                <p class="text-purple-100 text-xs">Christ is King!</p>
+                <p class="text-2xl md:text-3xl font-medium mb-1">pray without ceasing</p>
+                <p class="text-slate-400 text-xs">Christ is King!</p>
             </div>
             <div
-                class="bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl md:rounded-2xl p-4 md:p-6 text-white shadow-lg">
+                class="rounded-[10px] md:rounded-[10px] p-4 md:p-6 text-ink bg-slate-800 border border-slate-700">
                 <div class="flex items-center justify-between mb-2">
-                    <h3 class="text-xs md:text-sm font-semibold opacity-90">Administrators</h3>
+                    <h3 class="text-xs md:text-sm font-medium opacity-90">Administrators</h3>
                     <svg class="w-6 h-6 md:w-8 md:h-8 opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z">
                         </path>
                     </svg>
                 </div>
-                <p class="text-2xl md:text-3xl font-bold mb-1">Edwin Sirait</p>
-                <p class="text-orange-100 text-xs">namanya juga yang buat ya mau gimana</p>
+                <p class="text-2xl md:text-3xl font-medium mb-1">Edwin Sirait</p>
+                <p class="text-slate-400 text-xs">namanya juga yang buat ya mau gimana</p>
             </div>
         </div>
 
         {{-- Main Content Card --}}
-        <div class="bg-slate-800 rounded-xl md:rounded-2xl shadow-lg border border-slate-700 overflow-hidden">
+        <div class="bg-slate-800 rounded-[10px] md:rounded-[10px] border border-slate-700 overflow-hidden">
             {{-- Card Header --}}
             <div class="px-4 py-4 md:px-6 md:py-5 border-b border-slate-700">
                 <div class="flex flex-col gap-3 md:gap-4">
                     <div>
-                        <h2 class="text-lg md:text-xl font-bold text-white">All Users</h2>
+                        <h2 class="text-lg md:text-xl font-medium text-ink">All Users</h2>
                         <p class="text-xs md:text-sm text-slate-400 mt-1">Manage and view all system users</p>
                     </div>
                     <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 md:gap-3">
                         {{-- Search Input --}}
                         <div class="relative flex-1">
                             <input type="text" id="table-search" placeholder="Search users..."
-                                class="w-full pl-10 pr-4 py-2 border border-slate-600 rounded-lg bg-slate-700 text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent placeholder-slate-400">
+                                class="w-full pl-10 pr-4 py-2 border border-slate-600 rounded-md bg-slate-950 text-ink text-sm focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent placeholder-slate-400">
                             <svg class="absolute left-3 top-2.5 w-5 h-5 text-slate-400" fill="none" stroke="currentColor"
                                 viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -497,12 +497,12 @@
                         <div class="overflow-hidden">
                             <div class="flex gap-2 mb-4">
                                 <button id="checkAllBtn"
-                                    class="px-4 py-2 bg-slate-600 text-white rounded hover:bg-slate-700">
+                                    class="px-4 py-2 bg-slate-600 text-ink rounded hover:bg-slate-700">
                                     Check All
                                 </button>
 
                                 <button id="uncheckAllBtn"
-                                    class="px-4 py-2 bg-slate-600 text-white rounded hover:bg-slate-700">
+                                    class="px-4 py-2 bg-slate-600 text-ink rounded hover:bg-slate-700">
                                     Uncheck All
                                 </button>
 

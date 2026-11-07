@@ -6,15 +6,16 @@
     <title>BD Departments Ticketing</title>
     {{-- <link rel="icon" type="image/x-icon" href="{{ asset('img/AsianBaylogomark.ico') }}"> --}}
         <link rel="icon" type="image/png" href="{{ Storage::disk('s3')->url('logos/asianbay_logomark.ico') }}">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    @include('components.theme-init')
+    @vite('resources/css/app.css')
     <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet">
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; }
+        :where(.card *:not(.theme-toggle)) { margin: 0; padding: 0; }
 
         body {
-            font-family: 'Inter', sans-serif;
-            background: #0f172a;
-            color: #cbd5e1;
+            font-family: var(--font-body);
+            background: var(--color-paper-3);
+            color: var(--color-ink);
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -42,8 +43,8 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background: #1e293b;
-            border: 1px solid #334155;
+            background: var(--color-paper-2);
+            border: 1px solid var(--color-rule);
             flex-shrink: 0;
         }
 
@@ -57,38 +58,37 @@
 
         .brand-name {
             font-size: .95rem;
-            font-weight: 600;
-            color: #f1f5f9;
+            font-weight: 500;
+            color: var(--color-ink);
         }
 
         .brand-sub {
             font-size: .72rem;
-            color: #475569;
+            color: var(--color-muted);
             margin-top: 1px;
         }
 
         .heading {
             font-size: 1.4rem;
-            font-weight: 600;
-            color: #f1f5f9;
+            font-weight: 500;
+            color: var(--color-ink);
             letter-spacing: -.02em;
             margin-bottom: .4rem;
         }
 
         .subheading {
-            font-size: .82rem;
-            color: #475569;
+            font-size: .9rem;
+            color: var(--color-muted);
             margin-bottom: 2rem;
             line-height: 1.5;
         }
 
         .label {
             display: block;
-            font-size: .72rem;
+            font-size: .8rem;
             font-weight: 500;
-            color: #64748b;
+            color: var(--color-ink-2);
             margin-bottom: .45rem;
-            letter-spacing: .03em;
         }
 
         .input-wrap {
@@ -99,22 +99,22 @@
         .input {
             width: 100%;
             padding: .7rem .875rem .7rem 2.75rem;
-            background: #1e293b;
-            border: 1px solid #334155;
-            border-radius: 8px;
-            color: #f1f5f9;
-            font-size: .85rem;
-            font-family: 'Inter', sans-serif;
-            outline: none;
-            transition: border-color .15s;
+            background: var(--color-paper-2);
+            border: 1px solid var(--color-rule);
+            border-radius: var(--radius-pill);
+            color: var(--color-ink);
+            font-size: 1rem;
+            font-family: var(--font-body);
+            min-height: 2.75rem;
+            transition: border-color var(--dur-short) var(--ease-out);
         }
 
-        .input:focus {
-            border-color: #38bdf8;
-        }
+        .input:hover { border-color: var(--color-rule-2); }
+        .input:focus { border-color: var(--color-accent); outline: none; }
+        .input:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 1px; }
 
         .input::placeholder {
-            color: #334155;
+            color: var(--color-muted-2);
         }
 
         .field-icon {
@@ -124,7 +124,7 @@
             transform: translateY(-50%);
             width: 16px;
             height: 16px;
-            stroke: #475569;
+            stroke: var(--color-muted);
             fill: none;
             pointer-events: none;
         }
@@ -138,13 +138,16 @@
             border: none;
             cursor: pointer;
             display: flex;
-            padding: 0;
+            padding: 0.25rem;
+            border-radius: 4px;
         }
+        .eye-btn:hover svg { stroke: var(--color-ink); }
+        .eye-btn:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 1px; }
 
         .eye-btn svg {
             width: 16px;
             height: 16px;
-            stroke: #475569;
+            stroke: var(--color-muted);
             fill: none;
         }
 
@@ -152,11 +155,11 @@
             width: 100%;
             margin-top: .25rem;
             padding: .75rem;
-            background: #0ea5e9;
+            background: var(--color-accent);
             border: none;
-            border-radius: 8px;
-            color: #fff;
-            font-family: 'Inter', sans-serif;
+            border-radius: var(--radius-pill);
+            color: var(--color-accent-ink);
+            font-family: var(--font-body);
             font-size: .875rem;
             font-weight: 500;
             cursor: pointer;
@@ -164,15 +167,18 @@
             align-items: center;
             justify-content: center;
             gap: 6px;
-            transition: background .15s;
+            min-height: 2.75rem;
+            transition: background-color var(--dur-short) var(--ease-out);
         }
 
-        .btn:hover { background: #0284c7; }
+        .btn:hover { background: var(--color-accent-2); }
+        .btn:active { background: var(--color-accent-2); transform: translateY(1px); }
+        .btn:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }
 
         .btn svg {
             width: 14px;
             height: 14px;
-            stroke: #fff;
+            stroke: currentColor;
             fill: none;
         }
 
@@ -182,19 +188,22 @@
             align-items: center;
             margin-top: 2rem;
             padding-top: 1.5rem;
-            border-top: 1px solid #1e293b;
+            border-top: 1px solid var(--color-rule);
         }
 
         .flink {
-            font-size: .72rem;
-            color: #334155;
-            text-decoration: none;
-            transition: color .15s;
+            font-size: .8rem;
+            color: var(--color-muted);
+            text-decoration: underline;
+            text-decoration-color: var(--color-rule-2);
+            text-underline-offset: .2em;
+            transition: color var(--dur-short) var(--ease-out);
         }
 
-        .flink:hover { color: #94a3b8; }
+        .flink:hover { color: var(--color-accent-text); }
+        .flink:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }
 
-        .lang { display: flex; gap: 12px; }
+        .lang { display: flex; gap: 12px; align-items: center; }
     </style>
 </head>
 <body>
@@ -250,6 +259,7 @@
 
     <div class="footer-links">
         {{-- <a href="{{ route('about') }}" class="flink">About</a> --}}
+        @include('components.theme-toggle')
         <div class="lang">
             <a href="{{ route('lang.switch', 'id') }}" class="flink">Indonesia</a>
             <a href="{{ route('lang.switch', 'en') }}" class="flink">English</a>
